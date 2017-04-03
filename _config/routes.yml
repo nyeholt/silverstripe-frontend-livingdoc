@@ -1,0 +1,7 @@
+---
+Name: frontendlivingdocroutes
+After: 'framework/routes#coreroutes'
+---
+Director:
+  rules:
+    'FrontendInsertDialog': 'FrontendInsertDialog'
