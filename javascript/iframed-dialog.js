@@ -1,6 +1,4 @@
 ;(function ($) {
-    var mediUrl = 'FrontendInsertDialog/MediaForm';
-    
     
     var element = {
         getEditor: function() {
@@ -14,6 +12,9 @@
     var editorProxy = {
         onopen: function() {
             console.log("editorProxy.onopen");
+        },
+        getContent: function () {
+            return '';
         },
         getSelectedNode: function() {
             console.log("editorProxy.getselectednode");
@@ -44,8 +45,10 @@
             console.log("editorProxy.repaint");
         },
         insertContent: function(content) {
-            alert("Insert " + content);
-            console.log("editorProxy.insertContent");
+            if (window.opener && window.opener.EditSink) {
+                window.opener.EditSink.setContent(content);
+            }
+            return false;
         },
         addUndo: function() {
             console.log("editorProxy.addUndo");
@@ -54,6 +57,9 @@
             alert("Insert link");
             console.log(link);
             console.log("editorProxy.insertLink");
+            if (window.opener && window.opener.EditSink) {
+                window.opener.EditSink.setLinkObject(link);
+            }
         }
     }
     
@@ -61,8 +67,7 @@
 
         $("form.htmleditorfield-form").entwine({
             close: function() {
-                alert('close');
-//                    this.getDialog().close();
+                window.close();
             },
             getEditor: function() {
                 console.log('form.htmleditorfield-form getEditor');
@@ -94,8 +99,7 @@
                 return editorProxy;
             },
             close: function() {
-                alert('close -editorfield-dialog');
-//                    this.getEditor().closeDialog();
+                window.close();
             }
         });
     });
