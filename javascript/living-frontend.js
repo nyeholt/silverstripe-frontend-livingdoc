@@ -21,4 +21,14 @@
         EditSink.currentTarget = $(this);
         EditSink.setLinkObject(null);
     });
+    
+    $(function () {
+        var structure = $('#page-structure').length > 0 ? $('#page-structure').data('structure') : null;
+        if (structure) {
+            console.log(structure);
+        } else {
+            alert("No struct");
+        }
+    })
+    
 })(jQuery);
