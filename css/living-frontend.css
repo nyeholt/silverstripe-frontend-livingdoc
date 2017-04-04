@@ -1,0 +1,19 @@
+
+.livingdocs-toolbar .toolbar-entry {
+  padding: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  margin: 5px;
+  cursor: move;
+
+}
+.livingdocs-toolbar {
+	width: 200px;
+	position: fixed;
+	left: 10px;
+    top: 10px;
+    background-color: #fff;
+}
+
+body.doc-no-selection .livingdocs-toolbar iframe {
+	pointer-events: none;
+}
