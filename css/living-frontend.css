@@ -7,11 +7,16 @@
 
 }
 .livingdocs-toolbar {
-	width: 200px;
+	width: 300px;
 	position: fixed;
 	left: 10px;
     top: 10px;
     background-color: #fff;
+}
+
+.livingdocs-components {
+    height: 300px;
+    overflow: auto;
 }
 
 body.doc-no-selection .livingdocs-toolbar iframe {

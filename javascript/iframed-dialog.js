@@ -1,5 +1,7 @@
 ;(function ($) {
     
+    var windowParent = window.parent;
+    
     var element = {
         getEditor: function() {
             return editorProxy;
@@ -39,14 +41,13 @@
         },
         replaceContent: function(HTML) {
             console.log("editorProxy.replaceContent");
-            alert("Replace with " + HTML)
         },
         repaint: function() {
             console.log("editorProxy.repaint");
         },
         insertContent: function(content) {
-            if (window.opener && window.opener.EditSink) {
-                window.opener.EditSink.setContent(content);
+            if (windowParent && windowParent.ContentWrapper) {
+                windowParent.ContentWrapper.setContent(content);
             }
             return false;
         },
@@ -54,11 +55,8 @@
             console.log("editorProxy.addUndo");
         },
         insertLink: function(link) {
-            alert("Insert link");
-            console.log(link);
-            console.log("editorProxy.insertLink");
-            if (window.opener && window.opener.EditSink) {
-                window.opener.EditSink.setLinkObject(link);
+            if (windowParent && windowParent.ContentWrapper) {
+                windowParent.ContentWrapper.setLinkObject(link);
             }
         }
     }
@@ -67,7 +65,7 @@
 
         $("form.htmleditorfield-form").entwine({
             close: function() {
-                window.close();
+                windowParent.ContentWrapper.closeDialog();
             },
             getEditor: function() {
                 console.log('form.htmleditorfield-form getEditor');
@@ -81,7 +79,6 @@
         });
         $("form.htmleditorfield-linkform button[name=action_remove]").entwine({
             onclick: function(e) {
-                alert('removeLink');
                 e.preventDefault();
                 this.parents("form:first").removeLink();
             }
@@ -89,17 +86,15 @@
 
         $(".htmleditorfield-dialog").entwine({
             onadd: function() {
-                alert('dialog open');
                 this.trigger("ssdialogopen");
                 this.getForm().setElement(element);
                 this._super();
             },
             getEditor: function() {
-                alert('geteditor -editorfield-dialog');
                 return editorProxy;
             },
             close: function() {
-                window.close();
+                windowParent.ContentWrapper.closeDialog();
             }
         });
     });

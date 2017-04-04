@@ -8,6 +8,10 @@
             <div class="livingdocs-actions">
                 $LivingForm
             </div>
+            
+            <div class="livingdocs-item-properties">
+                
+            </div>
             <div class="livingdocs-components"></div>
         </div>
         
