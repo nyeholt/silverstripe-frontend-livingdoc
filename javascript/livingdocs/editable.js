@@ -1080,6 +1080,11 @@ rangy.createModule("DomUtil", function(api, module) {
     }
 
     function isRangeValid(range) {
+        var a = !!range.startContainer && !!range.endContainer;
+        var sorph = isOrphan(range.startContainer);
+        var eorph = isOrphan(range.endContainer);
+        var soff = isValidOffset(range.startContainer, range.startOffset);
+        var eoff = isValidOffset(range.endContainer, range.endOffset);
         return (!!range.startContainer && !!range.endContainer
                 && !isOrphan(range.startContainer)
                 && !isOrphan(range.endContainer)

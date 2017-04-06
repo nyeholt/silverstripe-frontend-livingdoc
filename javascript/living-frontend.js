@@ -12,6 +12,11 @@
         callback: null,
         currentLink: '',
         currentContent: '',
+        dialogFrame: null,
+        linkDialogFrame: null,
+        mediaDialogFrame: null,
+        
+        dialogDiv: null,
 
         setCallback: function (callback) {
             this.callback = callback;
@@ -21,31 +26,71 @@
 
         setLinkObject: function (obj) {
             this.currentLink = obj;
-            this.callback(obj);
+            this.callback.call(this, obj);
         },
         setContent: function (content) {
             this.callback(content);
         },
-        showDialog: function (link) {
-            this.closeDialog();
-            var iframeDialog = $('<iframe>').css({
+        init: function () {
+            this.linkDialogFrame = this.createFrame();
+            this.mediaDialogFrame = this.createFrame();
+            
+            this.linkDialogFrame.attr({'src': linkUrl});
+        },
+        createFrame: function () {
+            var frame = $('<iframe src="about:">');
+            frame.css({
+                'background-color': '#fff',
                 'width': '50%',
                 'height': "50%",
                 'position': "absolute",
                 "z-index": "20001",
                 "top": "100px",
-                "right": "100px"
+                "right": "100px",
+                "display": "none",
             }).attr({
-                'class': "living-dialog",
-                'src': link
+                'class': "living-dialog"
             });
             
-            $('body').append(iframeDialog);
+            $('body').append(frame);
+            return frame;
+        },
+        showDialog: function (type) {
+            this.closeDialog();
+            if (type == 'media') {
+                this.mediaDialogFrame.show();
+            } else {
+                this.linkDialogFrame.show();
+            }
+        },
+        showTestDialog: function (link) {
+            var _this = this;
+            _this.dialogDiv.html('<input type="button" value="clickit" id="clicker" />');
+            _this.dialogDiv.show();
+            return;
+            $.get(link).done(function (html) {
+                _this.dialogDiv.html(html);
+                _this.dialogDiv.show();
+            });
         },
         closeDialog: function () {
-            $('.living-dialog').remove();
+            this.mediaDialogFrame.hide();
+            this.linkDialogFrame.hide();
+//            this.dialogDiv.hide();
         }
     };
+    
+    $(document).on('mousedown', '#clicker', function (e) {
+        e.preventDefault();
+    })
+    
+    $(document).on('click', '#clicker', function () {
+        ContentWrapper.setLinkObject({
+            href: 'link/href', target: '', title: 'linktitle'
+        });
+    });
+    
+    ContentWrapper.init();
 
     $(document).on('click', '.media-insert', function (e) {
 
@@ -111,9 +156,8 @@
             //  - sup/sub
             //  - strike
             //  - text-alignment (an option maybe?) 
-            livingdoc.interactiveView.page.editableController.selection.add(function (view, editableName, selection) {
-                console.log("Selection event : ");
-                console.log(selection);
+            livingdoc.interactiveView.page.editableController.selection.remove(function (view, editableName, selection) {
+console.log("REMOVE selection");
             })
             livingdoc.interactiveView.page.editableController.selection.add(function (view, editableName, selection) {
                 $(".livingdocs_EditorField_Toolbar_textopts").remove()
@@ -127,19 +171,77 @@
                                 e.preventDefault()
                             })
                             .on('click', function () {
+                                                        
+//                                console.log(selection.range);
+//                                var el = selection.host;
+//                                var clonedRange = selection.range.cloneRange();
+//                                
+//                                var rangeStart = selection.range.startContainer;
+//                                var rangeEnd = selection.range.endContainer;
+                                selection.save();
+                                console.log(selection);
+                                var newrange = selection.range.cloneRange();
+                                
+                                selection.host.setAttribute('data-editable-is-pasting', true);
+                                
                                 selectLink(function (linkObj) {
                                     // our selection is lost, so we create a _new_ range and 
                                     // use that for our selection object 
-                                    var el = selection.host;
-                                    var range = rangy.createRange();
-                                    console.log(selection);
-                                    range.setStart(selection.range.startContainer, selection.range.startOffset);
-                                    range.setEnd(selection.range.endContainer, selection.range.endOffset);
-                                    selection.range = range;
+//                                    console.log(selection);
+//                                    
+//                                    var range = rangy.createRange();
+////                                    var range = rangy.createRange();
+//                                    var startNode, endNode;
+//                                    
+//                                    var altRange = selection.range.cloneRange();
+//                                    
+//                                    console.log(altRange);
                                     
+//                                    if (el.childNodes.length == 1) {
+//                                        // we cool
+//                                        startNode = endNode = el.childNodes[0];
+//                                    } else {
+////                                        console.log(clonedRange.startContainer.nodeName);
+//                                        startNode = selection.range.startContainer;
+//                                        endNode = selection.range.endContainer;
+//                                        if (startNode == endNode) {
+//                                            startNode = endNode;
+//                                            console.log("EQ");
+//                                        }
+//                                    }
+                                    
+//                                    range.setStart(el.childNodes[0], selection.range.startOffset);
+//                                    range.setEnd(el.childNodes[0], selection.range.endOffset);
+//                                    var startNode = selection.range.startContainer.childNodes.length ? 
+//                                            selection.range.startContainer.childNodes[0] :
+//                                            selection.range.startContainer;
+//                                    
+//                                    var endNode = selection.range.endContainer.childNodes.length ? 
+//                                            selection.range.endContainer.childNodes[0] :
+//                                            selection.range.endContainer;
+
+//                                    range.selectCharacters(el, selection.range.startOffset, selection.range.endOffset)
+//                                    altRange.setStart(clonedRange.startContainer, clonedRange.startOffset);
+//                                    altRange.setEnd(clonedRange.endContainer, clonedRange.endOffset);
+//
+//                                    selection.range = altRange;
+                                    
+                                    
+                                    
+                                    selection.restore();
+                                    selection.setVisibleSelection();
                                     selection.link(linkObj.href, {target: linkObj.target, title: linkObj.title})
-                                    selection.triggerChange()
+                                    selection.host.setAttribute('data-editable-is-pasting', false);
+                                    selection.triggerChange();
                                 });
+                                
+//                                setTimeout(function () {
+//                                    console.log("Restore selection");
+//                                    selection.updateHost(el);
+//                                    selection.restore();
+//                                    selection.setVisibleSelection();
+//                                }, 1000);
+                                
                             })
                     outer_el.append($el);
                     var $el = $("<button>").text("Bold")
@@ -147,6 +249,7 @@
                                 e.preventDefault()
                             })
                             .on('click', function () {
+                                console.log(selection);
                                 selection.toggleBold()
                                 selection.triggerChange()
                             })
@@ -227,14 +330,15 @@
 
         function selectLink(callback) {
             ContentWrapper.setCallback(callback);
-            ContentWrapper.showDialog(linkUrl);
+            ContentWrapper.showDialog('link');
         }
 
         function selectImage(callback) {
             ContentWrapper.setCallback(function (content) {
                 callback($(content).attr('src'));
             });
-            var mediaDialog = window.open(mediaUrl, "frontend-dialog", windowPrefs);
+            ContentWrapper.showDialog('media');
+//            var mediaDialog = window.open(mediaUrl, "frontend-dialog", windowPrefs);
         }
         
 

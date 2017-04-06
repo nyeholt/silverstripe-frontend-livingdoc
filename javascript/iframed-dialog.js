@@ -1,6 +1,12 @@
 ;(function ($) {
     
     var windowParent = window.parent;
+//    var windowParent = window;
+
+    // prevent deselection of the source page's highlight
+    $(document).on('mousedown', function (e) {
+//        e.preventDefault();
+    })
     
     var element = {
         getEditor: function() {
