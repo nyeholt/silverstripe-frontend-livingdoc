@@ -18,15 +18,9 @@ class LivingPage extends Page
             [
                 'component' => 'p',
                 'content' => [
-                    'text' => "This is the first paragraph"
+                    'text' => "Edit away"
                 ]
             ],
-            [
-                'component' => 'p',
-                'content' => [
-                    'text' => "This is the second paragraph"
-                ]
-            ]
         ],
         'design' => [
             'name' => 'bootstrap3',
@@ -57,6 +51,8 @@ class LivingPage_Controller extends Page_Controller
         Requirements::block(THIRDPARTY_DIR.'/jquery/jquery.js');
 
         Requirements::javascript("//code.jquery.com/jquery-2.1.1.js");
+
+        Requirements::javascript(THIRDPARTY_DIR.'/jquery-form/jquery.form.js');
 
         Requirements::javascript('frontend-livingdoc/javascript/livingdocs/editable.js');
         Requirements::javascript('frontend-livingdoc/javascript/livingdocs/livingdocs-engine.js');

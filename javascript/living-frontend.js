@@ -36,6 +36,7 @@
             this.mediaDialogFrame = this.createFrame();
             
             this.linkDialogFrame.attr({'src': linkUrl});
+            this.mediaDialogFrame.attr({'src': mediaUrl});
         },
         createFrame: function () {
             var frame = $('<iframe src="about:">');
@@ -80,6 +81,8 @@
         }
     };
     
+    ContentWrapper.init();
+    
     $(document).on('mousedown', '#clicker', function (e) {
         e.preventDefault();
     })
@@ -90,15 +93,12 @@
         });
     });
     
-    ContentWrapper.init();
-
-    $(document).on('click', '.media-insert', function (e) {
-
+    $(document).on('submit', 'form#Form_LivingForm', function () {
+        $(this).ajaxSubmit(function (response) {
+            console.log("Subbmitted");
+        });
+        return false;
     });
-
-    $(document).on('click', '#Form_LivingForm_action_save', function (e) {
-
-    })
 
     $(function () {
         var structure = $('#page-structure').length > 0 ? $('#page-structure').data('structure') : null;
@@ -133,10 +133,13 @@
         });
 
         ready.then(function () {
-            var $host = $(DOC_HOLDER)
-
+            var toolbarHolder = $('.livingdocs-toolbar');
+            
             var $components = $('.livingdocs-components');
             var $properties = $('.livingdocs-item-properties');
+            
+//            var $components = toolbarDocument.find('.livingdocs-components');
+//            var $properties = toolbarDocument.find('.livingdocs-item-properties');
 
             for (var i = 0; i < activeDesign.components.length; i++) {
                 var template = activeDesign.components[i];
@@ -156,14 +159,10 @@
             //  - sup/sub
             //  - strike
             //  - text-alignment (an option maybe?) 
-            livingdoc.interactiveView.page.editableController.selection.remove(function (view, editableName, selection) {
-console.log("REMOVE selection");
-            })
             livingdoc.interactiveView.page.editableController.selection.add(function (view, editableName, selection) {
                 $(".livingdocs_EditorField_Toolbar_textopts").remove()
                 var outer_el = $("<div>").addClass("livingdocs_EditorField_Toolbar_textopts")
                 if (selection && selection.isSelection) {
-                    var offset = $host.offset()
                     var rect = selection.getCoordinates()
                     
                     var $el = $("<button>").text("Add Link")
@@ -171,77 +170,16 @@ console.log("REMOVE selection");
                                 e.preventDefault()
                             })
                             .on('click', function () {
-                                                        
-//                                console.log(selection.range);
-//                                var el = selection.host;
-//                                var clonedRange = selection.range.cloneRange();
-//                                
-//                                var rangeStart = selection.range.startContainer;
-//                                var rangeEnd = selection.range.endContainer;
                                 selection.save();
-                                console.log(selection);
-                                var newrange = selection.range.cloneRange();
-                                
+                                // prevents range saving from being cleared on focus lost
                                 selection.host.setAttribute('data-editable-is-pasting', true);
-                                
                                 selectLink(function (linkObj) {
-                                    // our selection is lost, so we create a _new_ range and 
-                                    // use that for our selection object 
-//                                    console.log(selection);
-//                                    
-//                                    var range = rangy.createRange();
-////                                    var range = rangy.createRange();
-//                                    var startNode, endNode;
-//                                    
-//                                    var altRange = selection.range.cloneRange();
-//                                    
-//                                    console.log(altRange);
-                                    
-//                                    if (el.childNodes.length == 1) {
-//                                        // we cool
-//                                        startNode = endNode = el.childNodes[0];
-//                                    } else {
-////                                        console.log(clonedRange.startContainer.nodeName);
-//                                        startNode = selection.range.startContainer;
-//                                        endNode = selection.range.endContainer;
-//                                        if (startNode == endNode) {
-//                                            startNode = endNode;
-//                                            console.log("EQ");
-//                                        }
-//                                    }
-                                    
-//                                    range.setStart(el.childNodes[0], selection.range.startOffset);
-//                                    range.setEnd(el.childNodes[0], selection.range.endOffset);
-//                                    var startNode = selection.range.startContainer.childNodes.length ? 
-//                                            selection.range.startContainer.childNodes[0] :
-//                                            selection.range.startContainer;
-//                                    
-//                                    var endNode = selection.range.endContainer.childNodes.length ? 
-//                                            selection.range.endContainer.childNodes[0] :
-//                                            selection.range.endContainer;
-
-//                                    range.selectCharacters(el, selection.range.startOffset, selection.range.endOffset)
-//                                    altRange.setStart(clonedRange.startContainer, clonedRange.startOffset);
-//                                    altRange.setEnd(clonedRange.endContainer, clonedRange.endOffset);
-//
-//                                    selection.range = altRange;
-                                    
-                                    
-                                    
                                     selection.restore();
                                     selection.setVisibleSelection();
                                     selection.link(linkObj.href, {target: linkObj.target, title: linkObj.title})
                                     selection.host.setAttribute('data-editable-is-pasting', false);
                                     selection.triggerChange();
                                 });
-                                
-//                                setTimeout(function () {
-//                                    console.log("Restore selection");
-//                                    selection.updateHost(el);
-//                                    selection.restore();
-//                                    selection.setVisibleSelection();
-//                                }, 1000);
-                                
                             })
                     outer_el.append($el);
                     var $el = $("<button>").text("Bold")
@@ -338,7 +276,6 @@ console.log("REMOVE selection");
                 callback($(content).attr('src'));
             });
             ContentWrapper.showDialog('media');
-//            var mediaDialog = window.open(mediaUrl, "frontend-dialog", windowPrefs);
         }
         
 
@@ -346,7 +283,7 @@ console.log("REMOVE selection");
             $('#Form_LivingForm').find('[name=PageStructure]').val(livingdoc.toJson());
             $('#Form_LivingForm').find('[name=Content]').val(livingdoc.toHtml());
         }
-
+        
         function draggableComponent(doc, name, $elem) {
             $elem.on('mousedown', function (event) {
                 var newComponent = livingdoc.createComponent(name);

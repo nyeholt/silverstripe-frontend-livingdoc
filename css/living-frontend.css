@@ -1,17 +1,55 @@
 
+.livingdocs-toolbar {
+	width: 300px;
+	position: fixed;
+	left: 0px;
+    top: 0px;
+    background-color: #fff;
+}
+
+.livingdocs-toolbar form {
+    width: auto;
+}
+
+.livingdocs-toolbar form input.text, 
+.livingdocs-toolbar form textarea, 
+.livingdocs-toolbar form select {
+	width: 100%;
+	max-width: 400px;
+	padding: 6px 5px;
+	font-size: 15px;
+	background-color: #fff;
+	border: 1px solid #dad9d9;
+	box-sizing: border-box;
+}
+
+.livingdocs-toolbar .Actions {
+    margin: 0;
+}
+
+.livingdocs-toolbar a.btn, 
+.livingdocs-toolbar button, 
+.livingdocs-toolbar input[type="submit"], 
+.livingdocs-toolbar input[type="reset"], 
+.livingdocs-toolbar .Actions .action {
+    background: #666;
+    float: none;
+}
+
+.livingdocs-toolbar a.btn:hover, 
+.livingdocs-toolbar button:hover, 
+.livingdocs-toolbar input[type="submit"]:hover, 
+.livingdocs-toolbar .Actions .action:hover {
+        background: #777;
+        color: #fff;
+    }
+
 .livingdocs-toolbar .toolbar-entry {
   padding: 10px;
   border: 1px solid rgba(0, 0, 0, 0.5);
   margin: 5px;
   cursor: move;
 
-}
-.livingdocs-toolbar {
-	width: 300px;
-	position: fixed;
-	left: 10px;
-    top: 10px;
-    background-color: #fff;
 }
 
 .livingdocs-components {
