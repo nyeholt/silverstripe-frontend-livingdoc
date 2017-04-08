@@ -229,9 +229,9 @@
                     var curr_style = component.model.template.styles[s_id];
                     
                     var el;
-                    var lbl = $('<label>' + curr_style.label + '</label>');
+                    var lbl = $('<label>').text(curr_style.label);
                     
-                    
+                    var currentVal = component.model.getStyle(s_id);
                     
                     switch (curr_style.type) {
                         case "select":
@@ -241,30 +241,31 @@
                                 el.append($("<option>").val(curr_op.value).text(curr_op.caption))
                             }
                             
-                            console.log(component.model);
-                            console.log(component.model.getStyle(curr_style.name));
-                            
-                            el.val(component.model.getStyle(curr_style.name));
+                            el.val(currentVal);
                             
                             el.on("change", function (value) {
-                                component.setStyle(curr_style.name, $(this).val());
+                                component.model.setStyle(s_id, $(this).val());
                             })
                             break;
                         case "option":
                             el = $("<input>").attr({type: 'checkbox'})
                             el.on("change", function () {
-                                if (el.prop('checked'))
-                                    component.setStyle(curr_style.name, curr_style.value)
-                                else
-                                    component.setStyle(curr_style.name, "")
+                                if (el.prop('checked')) {
+                                    component.model.setStyle(curr_style.name, curr_style.value)
+                                } else {
+                                    component.model.setStyle(curr_style.name, "")
+                                }
                             });
-                            el = $("<label>").text(curr_style.label).prepend(el)
+                            if (curr_style.value == currentVal) {
+                                el.prop('checked', true);
+                            }
                             break;
                         default:
                             break;
                     }
+                    lbl.append(el);
                     options.append(lbl);
-                    options.append(el);
+                    
                 }
 
                 if (component.model.directives.image && component.model.directives.image.length) {
@@ -279,16 +280,14 @@
                     }
                 }
                 $properties.html(options)
+                
+                
                 var $delete_button = $("<button>").text("Remove").on("click", function () {
                     component.model.remove();
                     $("." + PROPS_HOLDER).remove();
                 })
                 
-                var $update_button = $('<button>').text('Updated').on('click', function () {
-                    
-                });
-                
-                options.append($delete_button);
+                $('<div class="Actions">').appendTo(options).append($delete_button);
             })
         });
 
