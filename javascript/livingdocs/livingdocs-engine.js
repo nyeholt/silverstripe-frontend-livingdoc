@@ -6694,7 +6694,10 @@ module.exports = EditableController = (function() {
 
   EditableController.prototype.insert = function(view, editableName, direction, cursor) {
     var copy, defaultParagraph, newView;
-    defaultParagraph = this.page.design.defaultParagraph;
+    var newModel = cursor.host ? dom.findComponentView(cursor.host) : null;
+    
+    defaultParagraph = newModel ? newModel.template : this.page.design.defaultParagraph;
+    
     if (this.hasSingleEditable(view) && (defaultParagraph != null)) {
       copy = defaultParagraph.createModel();
       newView = direction === 'before' ? (view.model.before(copy), view.prev()) : (view.model.after(copy), view.next());
