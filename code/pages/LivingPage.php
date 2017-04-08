@@ -41,32 +41,84 @@ class LivingPage extends Page
 
 class LivingPage_Controller extends Page_Controller
 {
+    private static $allowed_actions = array(
+        'LivingForm'
+    );
+
     public function init() {
 		parent::init();
 
-        $this->data()->PageStructure = json_encode([
-            'data' => LivingPage::config()->default_page
-        ]);
+        if ($this->getRequest()->getVar('edit') && !$this->data()->canEdit()) {
+            // redirect to login
+            return Security::permissionFailure($this);
+        }
 
-        Requirements::block(THIRDPARTY_DIR.'/jquery/jquery.js');
+        if (!strlen($this->data()->PageStructure)) {
+            $this->data()->PageStructure = json_encode([
+                'data' => LivingPage::config()->default_page
+            ]);
+        }
 
-        Requirements::javascript("//code.jquery.com/jquery-2.1.1.js");
+//        $this->data()->PageStructure = json_encode([
+//                'data' => LivingPage::config()->default_page
+//            ]);
 
-        Requirements::javascript(THIRDPARTY_DIR.'/jquery-form/jquery.form.js');
+        if ($this->data()->canEdit()) {
 
-        Requirements::javascript('frontend-livingdoc/javascript/livingdocs/editable.js');
-        Requirements::javascript('frontend-livingdoc/javascript/livingdocs/livingdocs-engine.js');
-        Requirements::javascript('frontend-livingdoc/javascript/livingdocs/bootstrap-design.js');
+            // make sure there's a design version
+            $design = json_decode($this->data()->PageStructure, true);
 
-        Requirements::javascript('frontend-livingdoc/javascript/living-frontend.js');
+            if (!isset($design['data']) && isset($design['content'])) {
+                $design = ['data' => $design];
+            }
 
-        Requirements::css('frontend-livingdoc/css/living-frontend.css');
+            if (!$design) {
+                $design = [
+                    'data' => LivingPage::config()->default_page
+                ];
+            }
+            if (!isset($design['data']['design']['version'])) {
+                $design['data']['design'] = [
+                    'name' => 'bootstrap3',
+                    "version" => "0.0.1",
+                ];
+            }
+
+            $this->data()->PageStructure = json_encode($design);
+
+            Requirements::block(THIRDPARTY_DIR.'/jquery/jquery.js');
+
+            Requirements::javascript("//code.jquery.com/jquery-2.1.1.js");
+
+            Requirements::javascript(THIRDPARTY_DIR.'/jquery-form/jquery.form.js');
+
+            Requirements::javascript('frontend-livingdoc/javascript/livingdocs/editable.js');
+            Requirements::javascript('frontend-livingdoc/javascript/livingdocs/livingdocs-engine.js');
+            Requirements::javascript('frontend-livingdoc/javascript/livingdocs/bootstrap-design.js');
+
+            Requirements::javascript('frontend-livingdoc/javascript/living-frontend.js');
+
+            Requirements::css('frontend-livingdoc/css/living-frontend.css');
+        }
 	}
+
+    public function getEditMode() {
+        if ($this->getRequest()->getVar('edit')) {
+            Session::set('EditMode', 1);
+        }
+
+        $edit = ((int) Session::get('EditMode')) > 0;
+        return $edit;
+    }
+
+    public function endEditing() {
+        Session::clear('EditMode');
+    }
 
     public function LivingForm() {
         $fields = FieldList::create([
-            TextareaField::create('PageStructure', "JSON structure"),
-            TextareaField::create('Content', "HTML structure"),
+            HiddenField::create('PageStructure', "JSON structure"),
+            HiddenField::create('Content', "HTML structure"),
         ]);
 
         $actions = FieldList::create([
@@ -78,6 +130,33 @@ class LivingPage_Controller extends Page_Controller
         }
 
         $form = Form::create($this, 'LivingForm', $fields, $actions);
+        $form->loadDataFrom($this->data());
         return $form;
+    }
+
+    public function save($data, Form $form, $request) {
+        if (!$this->data()->canEdit()) {
+            return $this->httpError(403);
+        }
+
+        $form->saveInto($this->data());
+
+        $this->getResponse()->addHeader('Content-type', 'application/json');
+        if ($this->data()->write()) {
+            $this->getResponse()->addHeader('Content-type', 'application/json');
+            return json_encode(['status' => 'success']);
+        }
+        return $this->httpError(500);
+        return json_encode(['status' => 'fail']);
+    }
+
+    public function publish($data, Form $form, $request) {
+        $res = $this->save($data, $form, $request);
+
+        if (is_string($res) && $json = json_decode($res)) {
+            if (isset($json['status']) && $json['status'] === 'success') {
+                
+            }
+        }
     }
 }

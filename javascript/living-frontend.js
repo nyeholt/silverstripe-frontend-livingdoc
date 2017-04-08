@@ -2,6 +2,8 @@
 (function ($) {
 
     var DOC_HOLDER = '.livingdocs-editor';
+    
+    var PROPS_HOLDER = 'livingdocs_EditorField_Toolbar_options';
 
     var mediaUrl = 'FrontendInsertDialog/MediaForm';
     var linkUrl = 'FrontendInsertDialog/LinkForm';
@@ -15,7 +17,7 @@
         dialogFrame: null,
         linkDialogFrame: null,
         mediaDialogFrame: null,
-        
+
         dialogDiv: null,
 
         setCallback: function (callback) {
@@ -34,7 +36,7 @@
         init: function () {
             this.linkDialogFrame = this.createFrame();
             this.mediaDialogFrame = this.createFrame();
-            
+
             this.linkDialogFrame.attr({'src': linkUrl});
             this.mediaDialogFrame.attr({'src': mediaUrl});
         },
@@ -52,7 +54,7 @@
             }).attr({
                 'class': "living-dialog"
             });
-            
+
             $('body').append(frame);
             return frame;
         },
@@ -80,19 +82,28 @@
 //            this.dialogDiv.hide();
         }
     };
-    
+
     ContentWrapper.init();
-    
+
+    $(document).on('click', function (e) {
+        if ($(e.target).parents('.livingdocs-editor').length <= 0 &&
+                $(e.target).parents('.livingdocs-toolbar').length <= 0) {
+            // remove the properties editing
+            $('.'+PROPS_HOLDER).remove();
+        }
+
+    })
+
     $(document).on('mousedown', '#clicker', function (e) {
         e.preventDefault();
     })
-    
+
     $(document).on('click', '#clicker', function () {
         ContentWrapper.setLinkObject({
             href: 'link/href', target: '', title: 'linktitle'
         });
     });
-    
+
     $(document).on('submit', 'form#Form_LivingForm', function () {
         $(this).ajaxSubmit(function (response) {
             console.log("Subbmitted");
@@ -102,6 +113,7 @@
 
     $(function () {
         var structure = $('#page-structure').length > 0 ? $('#page-structure').data('structure') : null;
+
         if (structure) {
         } else {
             alert("No struct");
@@ -123,6 +135,8 @@
 
         var livingdoc = doc.new(structure);
 
+        updateDataFields();
+
         var activeDesign = doc.design.designs[selectedDesignName];
 
         var ready = livingdoc.createView({
@@ -134,12 +148,9 @@
 
         ready.then(function () {
             var toolbarHolder = $('.livingdocs-toolbar');
-            
+
             var $components = $('.livingdocs-components');
             var $properties = $('.livingdocs-item-properties');
-            
-//            var $components = toolbarDocument.find('.livingdocs-components');
-//            var $properties = toolbarDocument.find('.livingdocs-item-properties');
 
             for (var i = 0; i < activeDesign.components.length; i++) {
                 var template = activeDesign.components[i];
@@ -164,7 +175,7 @@
                 var outer_el = $("<div>").addClass("livingdocs_EditorField_Toolbar_textopts")
                 if (selection && selection.isSelection) {
                     var rect = selection.getCoordinates()
-                    
+
                     var $el = $("<button>").text("Add Link")
                             .on('mousedown', function (e) {
                                 e.preventDefault()
@@ -210,13 +221,18 @@
 
 
             livingdoc.interactiveView.page.focus.componentFocus.add(function (component) {
-                $(".livingdocs_EditorField_Toolbar_options").remove()
-                var options = $("<div>").addClass("livingdocs_EditorField_Toolbar_options")
-                options.append("<h3>").text("Properties")
+                $("." + PROPS_HOLDER).remove()
+                var options = $("<div>").addClass(PROPS_HOLDER)
+                options.append("<h3>Properties</h3>");
 
                 for (var s_id in component.model.template.styles) {
                     var curr_style = component.model.template.styles[s_id];
+                    
                     var el;
+                    var lbl = $('<label>' + curr_style.label + '</label>');
+                    
+                    
+                    
                     switch (curr_style.type) {
                         case "select":
                             el = $("<select>")
@@ -224,10 +240,16 @@
                                 var curr_op = curr_style.options[op_id];
                                 el.append($("<option>").val(curr_op.value).text(curr_op.caption))
                             }
+                            
+                            console.log(component.model);
+                            console.log(component.model.getStyle(curr_style.name));
+                            
+                            el.val(component.model.getStyle(curr_style.name));
+                            
                             el.on("change", function (value) {
-                                component.setStyle(curr_style.name, this.value)
+                                component.setStyle(curr_style.name, $(this).val());
                             })
-                            break
+                            break;
                         case "option":
                             el = $("<input>").attr({type: 'checkbox'})
                             el.on("change", function () {
@@ -237,10 +259,11 @@
                                     component.setStyle(curr_style.name, "")
                             });
                             el = $("<label>").text(curr_style.label).prepend(el)
-
+                            break;
                         default:
                             break;
                     }
+                    options.append(lbl);
                     options.append(el);
                 }
 
@@ -256,11 +279,15 @@
                     }
                 }
                 $properties.html(options)
-                var $delete_button = $("<button>").text("Delete Component").on("click", function () {
-                    component.model.remove()
-                    $(".livingdocs_EditorField_Toolbar_options").remove()
-
+                var $delete_button = $("<button>").text("Remove").on("click", function () {
+                    component.model.remove();
+                    $("." + PROPS_HOLDER).remove();
                 })
+                
+                var $update_button = $('<button>').text('Updated').on('click', function () {
+                    
+                });
+                
                 options.append($delete_button);
             })
         });
@@ -277,13 +304,13 @@
             });
             ContentWrapper.showDialog('media');
         }
-        
+
 
         function updateDataFields() {
             $('#Form_LivingForm').find('[name=PageStructure]').val(livingdoc.toJson());
             $('#Form_LivingForm').find('[name=Content]').val(livingdoc.toHtml());
         }
-        
+
         function draggableComponent(doc, name, $elem) {
             $elem.on('mousedown', function (event) {
                 var newComponent = livingdoc.createComponent(name);

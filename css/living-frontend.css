@@ -1,6 +1,10 @@
 
+body {
+    margin-left: 250px !important;
+}
+
 .livingdocs-toolbar {
-	width: 300px;
+	width: 250px;
 	position: fixed;
 	left: 0px;
     top: 0px;
@@ -52,8 +56,11 @@
 
 }
 
+.livingdocs-actions {
+}
+
 .livingdocs-components {
-    height: 300px;
+    height: 400px;
     overflow: auto;
 }
 
