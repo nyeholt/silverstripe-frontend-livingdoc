@@ -139,6 +139,8 @@ class LivingPage_Controller extends Page_Controller
             return $this->httpError(403);
         }
 
+        $dummyHtmlField = HtmlEditorField::create('Content', 'Content', isset($data['Content']) ? $data['Content'] : '');
+        $form->Fields()->replaceField('Content', $dummyHtmlField);
         $form->saveInto($this->data());
 
         $this->getResponse()->addHeader('Content-type', 'application/json');

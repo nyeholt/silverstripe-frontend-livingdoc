@@ -9,6 +9,7 @@ body {
 	left: 0px;
     top: 0px;
     background-color: #fff;
+    padding: 5px;
 }
 
 .livingdocs-toolbar form {
@@ -46,6 +47,10 @@ body {
 .livingdocs-toolbar .Actions .action:hover {
         background: #777;
         color: #fff;
+    }
+    
+    .livingdocs-toolbar input[type="submit"]:disabled {
+        background: #dad9d9;
     }
 
 .livingdocs-toolbar .toolbar-entry {

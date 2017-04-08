@@ -105,9 +105,18 @@
     });
 
     $(document).on('submit', 'form#Form_LivingForm', function () {
+        var _this = $(this);
+        
         $(this).ajaxSubmit(function (response) {
-            console.log("Subbmitted");
+            _this.find('input.action').each(function () {
+                $(this).prop('disabled', false);
+            });
         });
+        
+        _this.find('input.action').each(function () {
+            $(this).prop('disabled', true);
+        });
+        
         return false;
     });
 
