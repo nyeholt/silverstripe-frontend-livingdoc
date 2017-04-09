@@ -49,8 +49,6 @@
     {
       "label": "Headers",
       "components": [
-        "header",
-        "hero",
         "h1",
         "h2"
       ]
@@ -71,16 +69,14 @@
     {
       "label": "Embeds",
       "components": [
-        "media",
-        "oembed"
+        "media"
       ]
     },
     {
       "label": "Lists",
       "components": [
         "list-group",
-        "list-group-item",
-        "list-group-box-item"
+        "list-group-item"
       ]
     },
     {
@@ -88,18 +84,6 @@
       "components": [
         "panel",
         "well"
-      ]
-    },
-    {
-      "label": "Grid",
-      "components": [
-        "main-and-sidebar"
-      ]
-    },
-    {
-      "label": "Teasers",
-      "components": [
-        "teaser"
       ]
     }
   ],
@@ -121,8 +105,6 @@
       "identifier": "title",
       "type": "text",
       "matches": [
-        "header.title",
-        "hero.title",
         "h1.title",
         "h2.title"
       ]
@@ -138,7 +120,7 @@
   "components": [
     {
       "name": "well",
-      "html": "<div class=\"well\">\n  Look, I&apos;m in a well!\n</div>",
+      "html": "<div class=\"well\" doc-container=\"well\">\n</div>",
       "label": "Well",
       "properties": [
         "well-large"
@@ -156,11 +138,6 @@
       "name": "media",
       "html": "<div class=\"embed-responsive embed-responsive-16by9\" doc-html=\"iframe\"></div>",
       "label": "Media"
-    },
-    {
-      "name": "oembed",
-      "html": "<div class=\"oembed-responsive oembed-responsive-by9 oembed-item\" doc-editable=\"oembedded\"></div>",
-      "label": "OEmbed"
     },
     {
       "name": "main-and-sidebar",

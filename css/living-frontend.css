@@ -69,6 +69,38 @@ body {
     overflow: auto;
 }
 
+iframe.living-dialog {
+    background-color: #fff;
+    width: 50%;
+    height: 50%;
+    position: fixed;
+    z-index: 20001;
+    top: 100px;
+    left: 25%;
+    display: none;
+    
+    -webkit-box-shadow: 0px 0px 65px 4px rgba(68,68,102,1);
+    -moz-box-shadow: 0px 0px 65px 4px rgba(68,68,102,1);
+    box-shadow: 0px 0px 65px 4px rgba(68,68,102,1);
+}
+
+a.dialog-close {
+    display: none;
+    position: fixed;
+    z-index: 20002;
+    top: 80px;
+    right: 24%;
+    background-color: #fff;
+    font-size: 20px;
+    font-weight: bold;
+    color: #222;
+    width: 30px;
+    height: 30px;
+    border-radius: 15px;
+    text-align: center;
+    line-height: 30px;
+}
+
 body.doc-no-selection .livingdocs-toolbar iframe {
 	pointer-events: none;
 }

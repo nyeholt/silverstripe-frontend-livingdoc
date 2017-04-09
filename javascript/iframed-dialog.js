@@ -47,6 +47,10 @@
         },
         replaceContent: function(HTML) {
             console.log("editorProxy.replaceContent");
+            if (windowParent && windowParent.ContentWrapper) {
+                windowParent.ContentWrapper.setContent(HTML);
+            }
+            return false;
         },
         repaint: function() {
             console.log("editorProxy.repaint");

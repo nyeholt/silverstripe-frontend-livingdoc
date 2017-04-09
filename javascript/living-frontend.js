@@ -6,6 +6,7 @@
     var PROPS_HOLDER = 'livingdocs_EditorField_Toolbar_options';
 
     var mediaUrl = 'FrontendInsertDialog/MediaForm';
+    var imageUrl = 'FrontendInsertDialog/ImageForm';
     var linkUrl = 'FrontendInsertDialog/LinkForm';
 
     var windowPrefs = "height=600,width=750,menubar=no,location=no,resizable=no,scrollbars=yes,status=no,titlebar=no,toolbar=no";
@@ -15,6 +16,7 @@
         currentLink: '',
         currentContent: '',
         dialogFrame: null,
+        closer: null,
         linkDialogFrame: null,
         mediaDialogFrame: null,
 
@@ -36,22 +38,22 @@
         init: function () {
             this.linkDialogFrame = this.createFrame();
             this.mediaDialogFrame = this.createFrame();
+            
+            this.closer = $('<a href="#" class="dialog-close">X</a>');
+            this.closer.click(function (e) {
+                e.preventDefault();
+                ContentWrapper.closeDialog();
+                return false;
+            });
+
+            $('body').append(this.closer);
 
             this.linkDialogFrame.attr({'src': linkUrl});
             this.mediaDialogFrame.attr({'src': mediaUrl});
         },
         createFrame: function () {
             var frame = $('<iframe src="about:">');
-            frame.css({
-                'background-color': '#fff',
-                'width': '50%',
-                'height': "50%",
-                'position': "absolute",
-                "z-index": "20001",
-                "top": "100px",
-                "right": "100px",
-                "display": "none",
-            }).attr({
+            frame.attr({
                 'class': "living-dialog"
             });
 
@@ -60,11 +62,27 @@
         },
         showDialog: function (type) {
             this.closeDialog();
-            if (type == 'media') {
-                this.mediaDialogFrame.show();
-            } else {
-                this.linkDialogFrame.show();
+            // we may show a different dialog for images in future
+            switch (type) {
+                case 'media': {
+                    this.mediaDialogFrame.show();
+                    break;
+                }
+                case 'image': {
+                    this.mediaDialogFrame.show();
+                    break;
+                }
+                case 'link': {
+                    this.linkDialogFrame.show();
+                    break;
+                }
             }
+            if (type == 'media') {
+                
+            } else {
+                
+            }
+            this.closer.show();
         },
         showTestDialog: function (link) {
             var _this = this;
@@ -79,6 +97,7 @@
         closeDialog: function () {
             this.mediaDialogFrame.hide();
             this.linkDialogFrame.hide();
+            this.closer.hide();
 //            this.dialogDiv.hide();
         }
     };
@@ -91,7 +110,6 @@
             // remove the properties editing
             $('.'+PROPS_HOLDER).remove();
         }
-
     })
 
     $(document).on('mousedown', '#clicker', function (e) {
@@ -274,7 +292,6 @@
                     }
                     lbl.append(el);
                     options.append(lbl);
-                    
                 }
 
                 if (component.model.directives.image && component.model.directives.image.length) {
@@ -310,7 +327,7 @@
             ContentWrapper.setCallback(function (content) {
                 callback($(content).attr('src'));
             });
-            ContentWrapper.showDialog('media');
+            ContentWrapper.showDialog('image');
         }
 
 
