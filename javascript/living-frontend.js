@@ -298,8 +298,9 @@
                     for (var directive_id in component.model.directives.image) {
                         var curr_img = component.model.directives.image[directive_id];
                         var $image_button = $("<button>").text("Select Image").on("click", function () {
-                            selectImage(function (src) {
-                                component.model.setContent(curr_img.name, {url: src});
+                            selectImage(function (attrs) {
+                                // ComponentView.prototype.set
+                                component.model.setContent(curr_img.name, {url: attrs.src});
                             })
                         })
                         options.append($image_button)
@@ -325,7 +326,20 @@
 
         function selectImage(callback) {
             ContentWrapper.setCallback(function (content) {
-                callback($(content).attr('src'));
+                var attrs = {};
+                var node = $(content)[0];
+                if (!node) {
+                    return;
+                }
+                if (node.nodeName !== 'IMG') {
+                    alert("Image not selected");
+                    return;
+                }
+                var nodeAttrs = node.attributes;
+                for (var i = 0; i < nodeAttrs.length; i++ ) {
+                    attrs[nodeAttrs[i].name] = nodeAttrs[i].value;
+                }
+                callback(attrs);
             });
             ContentWrapper.showDialog('image');
         }

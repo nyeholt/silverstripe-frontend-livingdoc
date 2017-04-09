@@ -166,7 +166,11 @@
     },
     {
       "name": "image",
-      "html": "<figure>\n  <img doc-image=\"image\">\n  <figcaption doc-editable=\"caption\">\n    Image Caption.\n  </figcaption>\n</figure>",
+      "html": "<figure>\n\
+             <img doc-image=\"image\">\n\
+                <figcaption doc-editable=\"caption\">\n\
+                Caption.\n\
+                </figcaption>\n</figure>",
       "label": "Image"
     },
     {
