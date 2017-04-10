@@ -248,6 +248,7 @@
 
 
             livingdoc.interactiveView.page.focus.componentFocus.add(function (component) {
+                console.log(component);
                 $("." + PROPS_HOLDER).remove()
                 var options = $("<div>").addClass(PROPS_HOLDER)
                 options.append("<h3>Properties</h3>");
@@ -297,7 +298,7 @@
                 if (component.model.directives.image && component.model.directives.image.length) {
                     for (var directive_id in component.model.directives.image) {
                         var curr_img = component.model.directives.image[directive_id];
-                        var $image_button = $("<button>").text("Select Image").on("click", function () {
+                        var $image_button = $("<button>").text("Select \"" + curr_img.name +'"').on("click", function () {
                             selectImage(function (attrs) {
                                 // ComponentView.prototype.set
                                 component.model.setContent(curr_img.name, {url: attrs.src});
@@ -306,6 +307,20 @@
                         options.append($image_button)
                     }
                 }
+                
+                if (component.model.directives.link && component.model.directives.link.length) {
+                    for (var linkIndex in component.model.directives.link) {
+                        var _thisLink = component.model.directives.link[linkIndex];
+                        var $link_button = $("<button>").text('Select "' + _thisLink.name + '"').on("click", function () {
+                            selectLink(function (attrs) {
+                                // ComponentView.prototype.set
+                                component.model.setContent(_thisLink.name, attrs.href);
+                            })
+                        })
+                        options.append($link_button)
+                    }
+                }
+                
                 $properties.html(options)
                 
                 

@@ -153,12 +153,12 @@ class LivingPage_Controller extends Page_Controller
     }
 
     public function publish($data, Form $form, $request) {
-        $res = $this->save($data, $form, $request);
 
-        if (is_string($res) && $json = json_decode($res)) {
-            if (isset($json['status']) && $json['status'] === 'success') {
-                
-            }
+        if ($this->data()->canPublish()) {
+            
+            $success = $this->data()->doPublish();
+            $this->getResponse()->addHeader('Content-type', 'application/json');
+            return json_encode(['status' => $success ? 'success' : 'fail']);
         }
     }
 }
