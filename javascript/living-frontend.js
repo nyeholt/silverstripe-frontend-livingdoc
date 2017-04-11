@@ -249,6 +249,7 @@
 
             livingdoc.interactiveView.page.focus.componentFocus.add(function (component) {
                 console.log(component);
+                console.log(JSON.stringify(component.model.dataValues));
                 $("." + PROPS_HOLDER).remove()
                 var options = $("<div>").addClass(PROPS_HOLDER)
                 options.append("<h3>Properties</h3>");
@@ -301,13 +302,17 @@
                         var $image_button = $("<button>").text("Select \"" + curr_img.name +'"').on("click", function () {
                             selectImage(function (attrs) {
                                 // ComponentView.prototype.set
+                                
+                                component.model.setDirectiveAttribute(curr_img.name, 'width', attrs.width);
+                                component.model.setDirectiveAttribute(curr_img.name, 'height', attrs.height);
+                                
                                 component.model.setContent(curr_img.name, {url: attrs.src});
                             })
                         })
                         options.append($image_button)
                     }
                 }
-                
+
                 if (component.model.directives.link && component.model.directives.link.length) {
                     for (var linkIndex in component.model.directives.link) {
                         var _thisLink = component.model.directives.link[linkIndex];

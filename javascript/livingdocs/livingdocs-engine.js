@@ -3366,6 +3366,24 @@ module.exports = ComponentModel = (function() {
       return this.dataValues;
     }
   };
+  
+  ComponentModel.prototype.setDirectiveAttribute = function (name, attr, value) {
+      var attributes, itemAttributes = {};
+      console.log("Seting attributes for " + name + " " + attr);
+      attributes = this.getData('data_attributes');
+      if (!attributes) {
+          attributes = {};
+      }
+      
+      if (attributes[name]) {
+          itemAttributes = attributes[name];
+      }
+      
+      itemAttributes[attr] = value;
+      attributes[name] = itemAttributes;
+      
+      this.setData('data_attributes', attributes);
+  };
 
   ComponentModel.prototype.setData = function(key, value) {
     var _ref;
@@ -7571,6 +7589,8 @@ module.exports = ComponentView = (function() {
   };
 
   ComponentView.prototype.updateContent = function(directiveName) {
+    var attributes, name, _ref, $elem;
+      
     if (directiveName) {
       this.set(directiveName, this.model.content[directiveName]);
     } else {
@@ -7579,6 +7599,27 @@ module.exports = ComponentView = (function() {
     if (!this.hasFocus()) {
       this.displayOptionals();
     }
+    
+    attributes = this.model.getData('data_attributes');
+    _ref = this;
+    
+    var updateElem = function (name) {
+        if (attributes && attributes[name]) {
+           $elem = _ref.directives.$getElem(name);
+           for (var attr in attributes[name]) {
+               $elem.attr(attr, attributes[name][attr]);
+           }
+       }
+    }
+    
+    if (directiveName) {
+        updateElem(directiveName);
+    } else {
+        for (name in this.model.content) {
+            updateElem(name);
+        }
+    }
+    
     return this.stripHtmlIfReadOnly();
   };
 
@@ -7667,8 +7708,9 @@ module.exports = ComponentView = (function() {
   };
 
   ComponentView.prototype.set = function(name, value) {
-    var directive;
+    var directive, attributes, $elem, result;
     directive = this.model.directives.get(name);
+    
     switch (directive.type) {
       case 'editable':
         return this.setEditable(name, value);
