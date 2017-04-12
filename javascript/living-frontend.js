@@ -149,11 +149,17 @@
             });
         });
         
-//        _this.find('input.action').each(function () {
-//            $(this).prop('disabled', true);
-//        });
+        _this.find('input.action').each(function () {
+            $(this).prop('disabled', true);
+        });
         
         return false;
+    });
+    
+    $(window).bind('beforeunload', function(){
+        if ($('#Form_LivingForm').attr('data-changed')) {
+            return "You may have unsaved changes, sure?";
+        }
     });
 
     $(function () {
@@ -207,7 +213,7 @@
             }
 
             livingdoc.model.changed.add(function () {
-                updateDataFields();
+                updateDataFields(true);
             });
 
             // text formatting options
@@ -417,9 +423,12 @@
         }
 
 
-        function updateDataFields() {
+        function updateDataFields(realchange) {
             $('#Form_LivingForm').find('[name=PageStructure]').val(livingdoc.toJson());
             $('#Form_LivingForm').find('[name=Content]').val(livingdoc.toHtml());
+            if (realchange) {
+                $('#Form_LivingForm').attr('data-changed', 1);
+            }
         }
 
         function draggableComponent(doc, name, $elem) {
