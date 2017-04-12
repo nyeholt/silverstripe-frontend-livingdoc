@@ -53,6 +53,11 @@ class LivingPage_Controller extends Page_Controller
             return Security::permissionFailure($this);
         }
 
+        if ($this->getRequest()->getVar('edit') === 'stop') {
+            $this->endEditing();
+            return $this->redirect($this->data()->Link());
+        }
+
         if (!strlen($this->data()->PageStructure)) {
             $this->data()->PageStructure = json_encode([
                 'data' => LivingPage::config()->default_page
@@ -72,14 +77,13 @@ class LivingPage_Controller extends Page_Controller
             }
         }
 
-
         parent::init();
 
 
         if (!$this->getRequest()->getVar('edit') && $this->data()->canEdit() && $this->getEditMode()) {
-
+            $record = $this->editingRecord();
             // make sure there's a design version
-            $design = json_decode($this->data()->PageStructure, true);
+            $design = json_decode($record->PageStructure, true);
 
             if (!isset($design['data']) && isset($design['content'])) {
                 $design = ['data' => $design];
@@ -90,6 +94,7 @@ class LivingPage_Controller extends Page_Controller
                     'data' => LivingPage::config()->default_page
                 ];
             }
+
             if (!isset($design['data']['design']['version'])) {
                 $design['data']['design'] = [
                     'name' => 'bootstrap3',
@@ -97,7 +102,10 @@ class LivingPage_Controller extends Page_Controller
                 ];
             }
 
-            $this->data()->PageStructure = json_encode($design);
+            $record->PageStructure = json_encode($design);
+            
+            $this->failover = $record;
+            $this->dataRecord = $record;
 
             Requirements::block(THIRDPARTY_DIR.'/jquery/jquery.js');
 
@@ -110,13 +118,20 @@ class LivingPage_Controller extends Page_Controller
             Requirements::javascript('frontend-livingdoc/javascript/livingdocs/livingdocs-engine.js');
             Requirements::javascript('frontend-livingdoc/javascript/livingdocs/bootstrap-design.js');
 
-            
-
             Requirements::css('frontend-livingdoc/css/living-frontend.css');
         }
 	}
 
+    protected function editingRecord() {
+        Versioned::reading_stage('Stage');
+        $recordClass = $this->data()->ClassName;
+        return $recordClass::get()->byID($this->data()->ID);
+    }
+
     public function getEditMode() {
+        if (!$this->data()->canEdit()) {
+            return $this->endEditing();
+        }
         if ($this->getRequest()->getVar('edit')) {
             Session::set('EditMode', 1);
         }
@@ -130,6 +145,9 @@ class LivingPage_Controller extends Page_Controller
     }
 
     public function LivingForm() {
+        if (!$this->getEditMode()) {
+            return;
+        }
         $fields = FieldList::create([
             HiddenField::create('PageStructure', "JSON structure"),
             HiddenField::create('Content', "HTML structure"),
@@ -153,12 +171,14 @@ class LivingPage_Controller extends Page_Controller
             return $this->httpError(403);
         }
 
+        $record = $this->editingRecord();
+
         $dummyHtmlField = HtmlEditorField::create('Content', 'Content', isset($data['Content']) ? $data['Content'] : '');
         $form->Fields()->replaceField('Content', $dummyHtmlField);
-        $form->saveInto($this->data());
+        $form->saveInto($record);
 
         $this->getResponse()->addHeader('Content-type', 'application/json');
-        if ($this->data()->write()) {
+        if ($record->write()) {
             $this->getResponse()->addHeader('Content-type', 'application/json');
             return json_encode(['status' => 'success']);
         }
@@ -167,11 +187,14 @@ class LivingPage_Controller extends Page_Controller
     }
 
     public function publish($data, Form $form, $request) {
+        $record = $this->editingRecord();
 
-        if ($this->data()->canPublish()) {
-            $success = $this->data()->doPublish();
-            $this->getResponse()->addHeader('Content-type', 'application/json');
-            return json_encode(['status' => $success ? 'success' : 'fail']);
+        if (!$record->canPublish()) {
+            return $this->httpError(403);
         }
+
+        $success = $record->doPublish();
+        $this->getResponse()->addHeader('Content-type', 'application/json');
+        return json_encode(['status' => $success ? 'success' : 'fail']);
     }
 }
