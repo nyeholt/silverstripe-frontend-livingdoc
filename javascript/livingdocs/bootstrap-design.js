@@ -15,6 +15,21 @@
       "type": "option",
       "value": "well-lg"
     },
+    "column-class": {
+        "label": "Column Styles",
+        "type": "text",
+        "value": "col"
+    },
+    "section-class": {
+        "label": "Section Styles",
+        "type": "text",
+        "value": "page-section"
+    },
+    "row-class": {
+        "label": "Row Styles",
+        "type": "text",
+        "value": "col"
+    },
     "panel-styles": {
       "label": "Panel Styles",
       "type": "select",
@@ -80,9 +95,13 @@
       ]
     },
     {
-      "label": "Boxes",
+      "label": "Layout",
       "components": [
+        "section",
+        "row",
+        "column",
         "panel",
+        "main-and-sidebar",
         "well"
       ]
     }
@@ -125,6 +144,30 @@
       "properties": [
         "well-large"
       ]
+    },
+    {
+        "name": "section",
+        "html": "<section class=\"page-section\" doc-container=\"section\">\n</div>",
+        "label": "Section",
+        "properties": [
+            "section-class"
+        ]
+    },
+    {
+        "name": "row",
+        "html": "<div class=\"row\" doc-container=\"row\">\n</div>",
+        "label": "Row",
+        "properties": [
+            "row-class"
+        ]
+    },
+    {
+        "name": "column",
+        "html": "<div class=\"col\" doc-container=\"column\">\n</div>",
+        "label": "Column",
+        "properties": [
+            "column-class"
+        ]
     },
     {
       "name": "panel",
