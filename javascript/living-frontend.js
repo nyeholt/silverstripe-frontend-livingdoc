@@ -1,5 +1,9 @@
 ;
 (function ($) {
+    
+    if (!window.$) {
+        window.$ = $;
+    }
 
     var DOC_HOLDER = '.livingdocs-editor';
     

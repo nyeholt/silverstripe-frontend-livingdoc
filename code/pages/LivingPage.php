@@ -46,7 +46,7 @@ class LivingPage_Controller extends Page_Controller
     );
 
     public function init() {
-		parent::init();
+		
 
         if ($this->getRequest()->getVar('edit') && !$this->data()->canEdit()) {
             // redirect to login
@@ -63,7 +63,20 @@ class LivingPage_Controller extends Page_Controller
 //                'data' => LivingPage::config()->default_page
 //            ]);
 
-        if ($this->data()->canEdit()) {
+        if ($this->getRequest()->getVar('edit') && $this->data()->canEdit()) {
+            Versioned::reading_stage('Stage');
+
+            // trigger edit mode, so redirect works
+            if ($this->getEditMode()) {
+                return $this->redirect($this->data()->Link());
+            }
+        }
+
+
+        parent::init();
+
+
+        if (!$this->getRequest()->getVar('edit') && $this->data()->canEdit() && $this->getEditMode()) {
 
             // make sure there's a design version
             $design = json_decode($this->data()->PageStructure, true);
@@ -88,15 +101,16 @@ class LivingPage_Controller extends Page_Controller
 
             Requirements::block(THIRDPARTY_DIR.'/jquery/jquery.js');
 
-            Requirements::javascript("//code.jquery.com/jquery-2.1.1.js");
-
             Requirements::javascript(THIRDPARTY_DIR.'/jquery-form/jquery.form.js');
+
+            // will bind $ if not already bound, so that livingdocs doesn't die
+            Requirements::javascript('frontend-livingdoc/javascript/living-frontend.js');
 
             Requirements::javascript('frontend-livingdoc/javascript/livingdocs/editable.js');
             Requirements::javascript('frontend-livingdoc/javascript/livingdocs/livingdocs-engine.js');
             Requirements::javascript('frontend-livingdoc/javascript/livingdocs/bootstrap-design.js');
 
-            Requirements::javascript('frontend-livingdoc/javascript/living-frontend.js');
+            
 
             Requirements::css('frontend-livingdoc/css/living-frontend.css');
         }
@@ -155,7 +169,6 @@ class LivingPage_Controller extends Page_Controller
     public function publish($data, Form $form, $request) {
 
         if ($this->data()->canPublish()) {
-            
             $success = $this->data()->doPublish();
             $this->getResponse()->addHeader('Content-type', 'application/json');
             return json_encode(['status' => $success ? 'success' : 'fail']);
