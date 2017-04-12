@@ -65,7 +65,6 @@
             return frame;
         },
         showDialog: function (type) {
-            this.closeDialog();
             // we may show a different dialog for images in future
             switch (type) {
                 case 'media': {
@@ -102,7 +101,12 @@
             this.mediaDialogFrame.hide();
             this.linkDialogFrame.hide();
             this.closer.hide();
-//            this.dialogDiv.hide();
+            
+            this.linkDialogFrame.attr({'src': 'about:'});
+            this.mediaDialogFrame.attr({'src': 'about:'});
+
+            this.linkDialogFrame.attr({'src': linkUrl});
+            this.mediaDialogFrame.attr({'src': mediaUrl});
         }
     };
 
@@ -125,6 +129,16 @@
             href: 'link/href', target: '', title: 'linktitle'
         });
     });
+    
+    $(document).on('click', 'form#Form_LivingForm input.action', function () { 
+        var parentForm = $(this).parents('form');
+        parentForm.find('input.hidden-action').remove();
+        $('<input class="hidden-action">').attr({
+            'type': 'hidden',
+            'name': $(this).attr('name'),
+            'value': '1'
+        }).appendTo(parentForm);
+    })
 
     $(document).on('submit', 'form#Form_LivingForm', function () {
         var _this = $(this);
@@ -135,9 +149,9 @@
             });
         });
         
-        _this.find('input.action').each(function () {
-            $(this).prop('disabled', true);
-        });
+//        _this.find('input.action').each(function () {
+//            $(this).prop('disabled', true);
+//        });
         
         return false;
     });
@@ -154,7 +168,7 @@
             alert("No design loaded");
             return;
         }
-
+        
         var selectedDesignName = structure.data.design.name;
         var selectedDesign = design[selectedDesignName];
 
@@ -229,7 +243,6 @@
                                 e.preventDefault()
                             })
                             .on('click', function () {
-                                console.log(selection);
                                 selection.toggleBold()
                                 selection.triggerChange()
                             })
@@ -253,7 +266,6 @@
 
             livingdoc.interactiveView.page.focus.componentFocus.add(function (component) {
                 $("." + PROPS_HOLDER).remove()
-                console.log(component);
                 var options = $("<div>").addClass(PROPS_HOLDER)
                 options.append("<h4>" + component.model.componentName + " properties</h4>");
 
