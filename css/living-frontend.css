@@ -1,9 +1,10 @@
 
 body {
-    margin-left: 250px !important;
+    padding-left: 250px !important;
 }
 
 .livingdocs-toolbar {
+    z-index: 3000;
 	width: 250px;
 	position: fixed;
 	left: 0px;
@@ -104,3 +105,4 @@ a.dialog-close {
 body.doc-no-selection .livingdocs-toolbar iframe {
 	pointer-events: none;
 }
+
