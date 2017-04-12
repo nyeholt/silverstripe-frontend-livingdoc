@@ -178,11 +178,6 @@
       ]
     },
     {
-      "name": "media",
-      "html": "<div class=\"embed-responsive embed-responsive-16by9\" doc-html=\"iframe\"></div>",
-      "label": "Media"
-    },
-    {
       "name": "main-and-sidebar",
       "html": "<div class=\"row\">\n  <div class=\"col-md-8\" doc-container=\"main\"></div>\n  <div class=\"col-md-4\" doc-container=\"sidebar\"></div>\n</div>",
       "label": "Main and Sidebar"
@@ -203,11 +198,6 @@
       "label": "Title H1"
     },
     {
-      "name": "hero",
-      "html": "<div class=\"jumbotron\">\n  <h1 doc-editable=\"title\">Hello, world!</h1>\n  <p doc-editable=\"text\">\n    This is a simple hero unit, a simple jumbotron-style component for calling extra attention to featured content or information.\n  </p>\n  <p>\n    <a doc-link=\"featured-page\" doc-editable=\"button\" class=\"btn btn-primary btn-lg\" href=\"#\" role=\"button\">Learn more</a>\n  </p>\n</div>",
-      "label": "Hero Teaser"
-    },
-    {
       "name": "image",
       "html": "<figure>\n\
              <img doc-image=\"image\">\n\
@@ -215,14 +205,6 @@
                 Caption.\n\
                 </figcaption>\n</figure>",
       "label": "Image"
-    },
-    {
-      "name": "list-group-box-item",
-      "html": "<li class=\"list-group-item\">\n  <h4 class=\"list-group-item-heading\" doc-editable=\"title\">List group item heading</h4>\n  <p class=\"list-group-item-text\" doc-editable=\"text\">\n    Donec id elit non mi porta gravida at eget metus.\n    Maecenas sed diam eget risus varius blandit.\n  </p>\n</li>",
-      "label": "List Group Box Item",
-      "allowedParents": [
-        "list-group"
-      ]
     },
     {
       "name": "list-group",
@@ -239,7 +221,7 @@
     },
     {
       "name": "list-group-item",
-      "html": "<li class=\"list-group-item\" doc-editable=\"text\">Cras justo odio</li>",
+      "html": "<li class=\"list-group-item\" doc-editable=\"text\">List item</li>",
       "label": "List Group Item",
       "allowedParents": [
         "list-group"
@@ -247,17 +229,17 @@
     },
     {
       "name": "teaser",
-      "html": "<div class=\"thumbnail\">\n  <a doc-link=\"link\" href=\"#\">\n    <img doc-image=\"image\">\n    <div class=\"caption\">\n      <h3 doc-editable=\"label\">Label</h3>\n      <p doc-editable=\"description\">\n        Lorem Ipsum is simply dummy text of the printing and typesetting industry.\n      </p>\n    </div>\n  </a>\n</div>",
+      "html": "<div class=\"thumbnail\">\n  <a doc-link=\"link\" href=\"#\">\n    <img doc-image=\"image\">\n    <div class=\"caption\">\n      <h3 doc-editable=\"label\">Label</h3>\n      <p doc-editable=\"description\">Description</p></div>\n</a>\n</div>",
       "label": "Teaser"
     },
     {
       "name": "p",
-      "html": "<p doc-editable=\"text\">\n  Studio Ghibli, Inc. is a Japanese animation film studio based in Koganei, Tokyo, Japan. The studio is best known for its anime feature films. Studio Ghibli began in June 1985 after the success of Nausica&#xE4; of the Valley of the Wind with funding by Tokuma Shoten. The company&#x2019;s logo features the character Totoro (a large forest spirit) from Miyazaki&#x2019;s film My Neighbor Totoro. At one time the studio was based in Kichij&#x14D;ji, Musashino, Tokyo.\n</p>",
+      "html": "<p doc-editable=\"text\">Paragraph content</p>",
       "label": "Paragraph"
     },
     {
       "name": "quote",
-      "html": "<blockquote>\n  <p>\n    <span class=\"quotation-mark\">&#x201C;</span><span class=\"quote\" doc-editable=\"text\">We depict hatred, but it is to depict that there are more important things. We depict a curse, to depict the joy of liberation.</span>\n  </p>\n  <footer doc-editable=\"author\">\n    Hayao Miyazaki\n  </footer>\n</blockquote>",
+      "html": "<blockquote>\n  <p>\n    <span class=\"quotation-mark\">&#x201C;</span><span class=\"quote\" doc-editable=\"text\">Quotation</span>\n  </p>\n  <div class=\"caption\" doc-editable=\"author\">Author</div>\n</blockquote>",
       "label": "Quote"
     }
   ]
