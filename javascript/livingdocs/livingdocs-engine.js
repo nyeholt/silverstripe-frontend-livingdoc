@@ -4726,7 +4726,7 @@ module.exports = CssModificatorProperty = (function() {
           var current = currentClasses.split(' ');
           var remove = [];
           for (var i in current) {
-              if (current[i].indexOf('doc-') === 0) {
+              if (current[i].indexOf('doc-') === 0 || current[i].indexOf('js-') === 0) {
                   continue;
               }
               remove.push(current[i]);
