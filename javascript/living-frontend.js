@@ -252,11 +252,10 @@
 
 
             livingdoc.interactiveView.page.focus.componentFocus.add(function (component) {
-                console.log(component);
-                console.log(JSON.stringify(component.model.dataValues));
                 $("." + PROPS_HOLDER).remove()
+                console.log(component);
                 var options = $("<div>").addClass(PROPS_HOLDER)
-                options.append("<h3>Properties</h3>");
+                options.append("<h4>" + component.model.componentName + " properties</h4>");
 
                 for (var s_id in component.model.template.styles) {
                     var curr_style = component.model.template.styles[s_id];
@@ -280,6 +279,13 @@
                                 component.model.setStyle(s_id, $(this).val());
                             })
                             break;
+                        case "text":
+                            el = $("<input>").attr({type: 'text'}).val(currentVal);
+                            el.on("change", function () {
+                                component.model.setStyle(curr_style.name, el.val());
+//                                curr_style.value = el.val();
+                            });
+                            break;
                         case "option":
                             el = $("<input>").attr({type: 'checkbox'})
                             el.on("change", function () {
@@ -299,6 +305,36 @@
                     lbl.append(el);
                     options.append(lbl);
                 }
+                
+                var componentAttrs = component.model.getData('data_attributes');
+                if (componentAttrs) {
+                    options.append("<h4>Attributes</h4>");
+                    
+                    var changeAttribute = function (componentName, name) {
+                        return function () {
+                            componentAttrs[componentName][name] = $(this).val();
+                            if (component.model.componentTree) {
+                                component.model.componentTree.contentChanging(component.model, componentName);
+                            }
+                        }
+                    };
+                    
+                    for (var componentName in componentAttrs) {
+                        var itemAttrs = componentAttrs[componentName];
+                        if (!itemAttrs) {
+                            continue;
+                        }
+                        options.append('<h5>' + componentName + '</h5>');
+                        for (var key in itemAttrs) {
+                            var lbl = $('<label>').text(key);
+                            el = $("<input>").attr({type: 'text'}).val(itemAttrs[key]);
+                            el.on("change", changeAttribute(componentName, key));
+                            lbl.append(el);
+                            options.append(lbl);
+                        }
+                    }
+                }
+                
 
                 if (component.model.directives.image && component.model.directives.image.length) {
                     for (var directive_id in component.model.directives.image) {
