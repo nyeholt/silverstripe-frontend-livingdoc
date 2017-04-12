@@ -4700,12 +4700,16 @@ module.exports = CssModificatorProperty = (function() {
         assert(options, "TemplateStyle error: no 'options' provided");
         this.options = options;
         break;
+    case 'text':
+        assert(value, "TemplateStyle error: no 'value' provided");
+        this.value = value;
+        break;
       default:
         log.error("TemplateStyle error: unknown type '" + this.type + "'");
     }
   }
 
-  CssModificatorProperty.prototype.cssClassChanges = function(value) {
+  CssModificatorProperty.prototype.cssClassChanges = function(value, currentClasses) {
     if (this.validateValue(value)) {
       if (this.type === 'option') {
         return {
@@ -4717,6 +4721,20 @@ module.exports = CssModificatorProperty = (function() {
           remove: this.otherClasses(value),
           add: value
         };
+      } else if (this.type === 'text') {
+          // todo(Marcus) 
+          var current = currentClasses.split(' ');
+          var remove = [];
+          for (var i in current) {
+              if (current[i].indexOf('doc-') === 0) {
+                  continue;
+              }
+              remove.push(current[i]);
+          }
+          return {
+              remove: remove,
+              add: value
+          }
       }
     } else {
       if (this.type === 'option') {
@@ -4740,6 +4758,8 @@ module.exports = CssModificatorProperty = (function() {
       return value === this.value;
     } else if (this.type === 'select') {
       return this.containsOption(value);
+  } else if (this.type === 'text') {
+      return true;
     } else {
       return log.warn("Not implemented: CssModificatorProperty#validateValue() for type " + this.type);
     }
@@ -4984,7 +5004,7 @@ Version = require('./version');
 module.exports = validator = jScheme["new"]();
 
 validator.add('styleType', function(value) {
-  return value === 'option' || value === 'select';
+  return value === 'option' || value === 'select' || value === 'text';
 });
 
 validator.add('semVer', function(value) {
@@ -7860,7 +7880,7 @@ module.exports = ComponentView = (function() {
 
   ComponentView.prototype.setStyle = function(name, className) {
     var changes, removeClass, _i, _len, _ref;
-    changes = this.template.styles[name].cssClassChanges(className);
+    changes = this.template.styles[name].cssClassChanges(className, this.$html.attr('class'));
     if (changes.remove) {
       _ref = changes.remove;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
