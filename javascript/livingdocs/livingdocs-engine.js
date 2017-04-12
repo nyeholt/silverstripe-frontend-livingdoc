@@ -6732,7 +6732,14 @@ module.exports = EditableController = (function() {
 
   EditableController.prototype.insert = function(view, editableName, direction, cursor) {
     var copy, defaultParagraph, newView;
-    var newModel = cursor.host ? dom.findComponentView(cursor.host) : null;
+    
+    var newModel = null;
+    // todo(Marcus) - this needs to use this component type's "insertAfter" attribute
+    // handle LIs 
+    if (cursor.host && cursor.host.nodeName == 'LI') {
+        // duplicate the current type
+        newModel = dom.findComponentView(cursor.host);
+    }
     
     defaultParagraph = newModel ? newModel.template : this.page.design.defaultParagraph;
     
