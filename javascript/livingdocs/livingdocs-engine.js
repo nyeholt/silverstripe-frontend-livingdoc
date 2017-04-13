@@ -4723,7 +4723,7 @@ module.exports = CssModificatorProperty = (function() {
         };
       } else if (this.type === 'text') {
           // todo(Marcus) 
-          var current = currentClasses.split(' ');
+          var current = currentClasses ? currentClasses.split(' ') : [];
           var remove = [];
           for (var i in current) {
               if (current[i].indexOf('doc-') === 0 || current[i].indexOf('js-') === 0) {
