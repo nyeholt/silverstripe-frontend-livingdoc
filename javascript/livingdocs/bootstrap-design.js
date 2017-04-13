@@ -25,16 +25,6 @@
         "type": "text",
         "value": "col"
     },
-    "section-class": {
-        "label": "Section Styles",
-        "type": "text",
-        "value": "page-section"
-    },
-    "row-class": {
-        "label": "Row Styles",
-        "type": "text",
-        "value": "col"
-    },
     "panel-styles": {
       "label": "Panel Styles",
       "type": "select",
@@ -155,7 +145,7 @@
         "html": "<section class=\"page-section\"><div class=\"container\" doc-container=\"section\">\n</div>\n</div>",
         "label": "Section",
         "properties": [
-            "section-class"
+            "custom-class"
         ]
     },
     {
@@ -168,10 +158,7 @@
                 "column"
               ]
             }
-          },
-        "properties": [
-            "row-class"
-        ]
+          }
     },
     {
         "name": "column",
@@ -181,7 +168,7 @@
             "row"
           ],
         "properties": [
-            "column-class"
+            "custom-class"
         ]
     },
     {
@@ -231,7 +218,7 @@
     {
       "name": "image",
       "html": "<figure>\n\
-             <img doc-image=\"image\">\n\
+             <img doc-image=\"image\" class=\"img-responsive\">\n\
                 <figcaption doc-editable=\"caption\">\n\
                 Caption.\n\
                 </figcaption>\n</figure>",
