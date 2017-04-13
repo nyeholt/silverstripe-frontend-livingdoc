@@ -28,6 +28,17 @@ class LivingPage extends Page
         ]
     );
 
+    public function getCMSFields()
+    {
+        $fields = parent::getCMSFields();
+
+        $link = '<div class="field"><a href="' . $this->Link() . '?edit=1" target="_blank">Edit this page in-place</a></div>';
+        $literalContent = LiteralField::create('Content', $link);
+        $fields->replaceField('Content', $literalContent);
+
+        return $fields;
+    }
+
 
     public function onBeforeWrite()
     {
