@@ -15,6 +15,11 @@
       "type": "option",
       "value": "well-lg"
     },
+    "custom-class": {
+        "label": "Custom Styles",
+        "type": "text",
+        "value": "fillitin"
+    },
     "column-class": {
         "label": "Column Styles",
         "type": "text",
