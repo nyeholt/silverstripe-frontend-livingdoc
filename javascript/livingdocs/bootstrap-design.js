@@ -147,7 +147,7 @@
     },
     {
         "name": "section",
-        "html": "<section class=\"page-section\" doc-container=\"section\">\n</div>",
+        "html": "<section class=\"page-section\"><div class=\"container\" doc-container=\"section\">\n</div>\n</div>",
         "label": "Section",
         "properties": [
             "section-class"
@@ -157,6 +157,13 @@
         "name": "row",
         "html": "<div class=\"row\" doc-container=\"row\">\n</div>",
         "label": "Row",
+        "directives": {
+            "row": {
+              "allowedChildren": [
+                "column"
+              ]
+            }
+          },
         "properties": [
             "row-class"
         ]
@@ -165,6 +172,9 @@
         "name": "column",
         "html": "<div class=\"col\" doc-container=\"column\">\n</div>",
         "label": "Column",
+        "allowedParents": [
+            "row"
+          ],
         "properties": [
             "column-class"
         ]
@@ -182,11 +192,7 @@
       "html": "<div class=\"row\">\n  <div class=\"col-md-8\" doc-container=\"main\"></div>\n  <div class=\"col-md-4\" doc-container=\"sidebar\"></div>\n</div>",
       "label": "Main and Sidebar"
     },
-    {
-      "name": "h2",
-      "html": "<h1 class=\"title\" doc-editable=\"title\">\n  Title\n</h1>",
-      "label": "Title H2"
-    },
+    
     {
       "name": "header",
       "html": "<div class=\"page-header\">\n  <h1 doc-editable=\"title\">Example page header Subtext for header</h1>\n</div>",
@@ -196,6 +202,26 @@
       "name": "h1",
       "html": "<h1 class=\"title\" doc-editable=\"title\">\n  Title\n</h1>",
       "label": "Title H1"
+    },
+    {
+      "name": "h2",
+      "html": "<h2 class=\"title\" doc-editable=\"title\">\n  Title\n</h2>",
+      "label": "Title H2"
+    },
+    {
+      "name": "h3",
+      "html": "<h3 class=\"title\" doc-editable=\"title\">\n  Title\n</h3>",
+      "label": "Title H3"
+    },
+    {
+      "name": "h4",
+      "html": "<h4 class=\"title\" doc-editable=\"title\">\n  Title\n</h4>",
+      "label": "Title H4"
+    },
+    {
+      "name": "h5",
+      "html": "<h5 class=\"title\" doc-editable=\"title\">\n  Title\n</h5>",
+      "label": "Title h5"
     },
     {
       "name": "image",
