@@ -276,13 +276,14 @@
 
             livingdoc.interactiveView.page.focus.componentFocus.add(function (component) {
                 $("." + PROPS_HOLDER).remove()
+                console.log(component);
                 var options = $("<div>").addClass(PROPS_HOLDER)
                 options.append("<h4>" + component.model.componentName + " properties</h4>");
 
                 for (var s_id in component.model.template.styles) {
                     var curr_style = component.model.template.styles[s_id];
                     
-                    var el;
+                    var el = null;
                     var lbl = $('<label>').text(curr_style.label);
                     
                     var currentVal = component.model.getStyle(s_id);
@@ -304,6 +305,7 @@
                         case "text":
                             el = $("<input>").attr({type: 'text'}).val(currentVal);
                             el.on("change", function () {
+                                console.log("changing  a thing to " + curr_style.name + " to val " + el.val());
                                 component.model.setStyle(curr_style.name, el.val());
 //                                curr_style.value = el.val();
                             });
@@ -324,8 +326,10 @@
                         default:
                             break;
                     }
-                    lbl.append(el);
-                    options.append(lbl);
+                    if (el) {
+                        lbl.append(el);
+                        options.append(lbl);
+                    }
                 }
                 
                 var componentAttrs = component.model.getData('data_attributes');
@@ -333,8 +337,9 @@
                     options.append("<h4>Attributes</h4>");
                     
                     var changeAttribute = function (componentName, name) {
+                        var _this = $(this);
                         return function () {
-                            componentAttrs[componentName][name] = $(this).val();
+                            componentAttrs[componentName][name] = _this.val();
                             if (component.model.componentTree) {
                                 component.model.componentTree.contentChanging(component.model, componentName);
                             }
@@ -348,11 +353,12 @@
                         }
                         options.append('<h5>' + componentName + '</h5>');
                         for (var key in itemAttrs) {
-                            var lbl = $('<label>').text(key);
-                            el = $("<input>").attr({type: 'text'}).val(itemAttrs[key]);
-                            el.on("change", changeAttribute(componentName, key));
-                            lbl.append(el);
-                            options.append(lbl);
+                            var attrInput = null;
+                            var attrlbl = $('<label>').text(key);
+                            attrInput = $("<input>").attr({type: 'text'}).val(itemAttrs[key]);
+                            attrInput.on("change", changeAttribute(componentName, key));
+                            attrlbl.append(attrInput);
+                            options.append(attrlbl);
                         }
                     }
                 }
