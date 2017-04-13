@@ -337,9 +337,8 @@
                     options.append("<h4>Attributes</h4>");
                     
                     var changeAttribute = function (componentName, name) {
-                        var _this = $(this);
                         return function () {
-                            componentAttrs[componentName][name] = _this.val();
+                            componentAttrs[componentName][name] = $(this).val();
                             if (component.model.componentTree) {
                                 component.model.componentTree.contentChanging(component.model, componentName);
                             }
