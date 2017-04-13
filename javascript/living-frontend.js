@@ -143,6 +143,8 @@
     $(document).on('submit', 'form#Form_LivingForm', function () {
         var _this = $(this);
         
+        _this.removeAttr('data-changed');
+        
         $(this).ajaxSubmit(function (response) {
             _this.find('input.action').each(function () {
                 $(this).prop('disabled', false);
@@ -177,6 +179,8 @@
         
         var selectedDesignName = structure.data.design.name;
         var selectedDesign = design[selectedDesignName];
+        
+        $(document).trigger('updateLivingdocsDesign', selectedDesign);
 
         selectedDesign.assets.basePath = "frontend-livingdoc/javascript/livingdocs/";
 
