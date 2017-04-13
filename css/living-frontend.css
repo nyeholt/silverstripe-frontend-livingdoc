@@ -106,3 +106,6 @@ body.doc-no-selection .livingdocs-toolbar iframe {
 	pointer-events: none;
 }
 
+.row [data-doc-template='bootstrap3.column'] {
+    margin: 4px;
+}
