@@ -276,7 +276,6 @@
 
             livingdoc.interactiveView.page.focus.componentFocus.add(function (component) {
                 $("." + PROPS_HOLDER).remove()
-                console.log(component);
                 var options = $("<div>").addClass(PROPS_HOLDER)
                 options.append("<h4>" + component.model.componentName + " properties</h4>");
 
@@ -437,6 +436,7 @@
             $('#Form_LivingForm').find('[name=Content]').val(livingdoc.toHtml());
             if (realchange) {
                 $('#Form_LivingForm').attr('data-changed', 1);
+                $('#Form_LivingForm').find('[name=action_publish]').prop('disabled', true);
             }
         }
 
