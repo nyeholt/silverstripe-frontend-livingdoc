@@ -20,8 +20,25 @@
         "type": "text",
         "value": "fillitin"
     },
-    "column-class": {
-        "label": "Column Styles",
+    "section-class": {
+        "label": "Section style",
+        "type": "select",
+        "options": [
+        {
+          "caption": "Default"
+        },
+        {
+          "caption": "Container",
+          "value": "container"
+        },
+        {
+          "caption": "Fluid",
+          "value": "container-fluid"
+        }
+      ]
+    },
+    "column-width": {
+        "label": "Width",
         "type": "select",
         "multiple": true,
         "options": [
@@ -33,14 +50,116 @@
           "caption": "None"
         },
         {
-          "caption": "1x",
-          "value": "col-md-1"
-        },
-        {
-          "caption": "2x",
-          "value": "col-md-2"
-        }
+        "caption": "Small 1 wide",
+        "value": "col-sm-1"
+    },
+    {
+        "caption": "Small 2 wide",
+        "value": "col-sm-2"
+    },
+    {
+        "caption": "Small 3 wide",
+        "value": "col-sm-3"
+    },
+    {
+        "caption": "Small 4 wide",
+        "value": "col-sm-4"
+    },
+    {
+        "caption": "Small 5 wide",
+        "value": "col-sm-5"
+    },
+    {
+        "caption": "Small 6 wide",
+        "value": "col-sm-6"
+    },
+    {
+        "caption": "Small 7 wide",
+        "value": "col-sm-7"
+    },
+    {
+        "caption": "Small 8 wide",
+        "value": "col-sm-8"
+    },
+    {
+        "caption": "Medium 1 wide",
+        "value": "col-md-1"
+    },
+    {
+        "caption": "Medium 2 wide",
+        "value": "col-md-2"
+    },
+    {
+        "caption": "Medium 3 wide",
+        "value": "col-md-3"
+    },
+    {
+        "caption": "Medium 4 wide",
+        "value": "col-md-4"
+    },
+    {
+        "caption": "Medium 5 wide",
+        "value": "col-md-5"
+    },
+    {
+        "caption": "Medium 6 wide",
+        "value": "col-md-6"
+    },
+    {
+        "caption": "Medium 7 wide",
+        "value": "col-md-7"
+    },
+    {
+        "caption": "Medium 8 wide",
+        "value": "col-md-8"
+    },
+    {
+        "caption": "Large 1 wide",
+        "value": "col-lg-1"
+    },
+    {
+        "caption": "Large 2 wide",
+        "value": "col-lg-2"
+    },
+    {
+        "caption": "Large 3 wide",
+        "value": "col-lg-3"
+    },
+    {
+        "caption": "Large 4 wide",
+        "value": "col-lg-4"
+    },
+    {
+        "caption": "Large 5 wide",
+        "value": "col-lg-5"
+    },
+    {
+        "caption": "Large 6 wide",
+        "value": "col-lg-6"
+    },
+    {
+        "caption": "Large 7 wide",
+        "value": "col-lg-7"
+    },
+    {
+        "caption": "Large 8 wide",
+        "value": "col-lg-8"
+    }
       ]
+    },
+    "column-float": {
+        "label": "Width",
+        "type": "select",
+        "multiple": true,
+        "options": [
+            {
+                'caption': 'Multiple',
+                'value': "ye"
+            },
+        {
+          "caption": "None"
+        },
+        ]
     },
     "panel-styles": {
       "label": "Panel Styles",
@@ -162,7 +281,8 @@
         "html": "<section class=\"page-section\"><div class=\"container\" doc-container=\"section\">\n</div>\n</div>",
         "label": "Section",
         "properties": [
-            "custom-class"
+            "custom-class",
+            "section-class"
         ]
     },
     {
