@@ -26,7 +26,15 @@
                 "type": "select",
                 "options": [
                     {
+                        'caption': 'Multiple',
+                        'value': "yes"
+                    },
+                    {
                         "caption": "Default"
+                    },
+                    {
+                        "caption": "First",
+                        "value": "first"
                     },
                     {
                         "caption": "Container",
@@ -41,127 +49,34 @@
             "column-width": {
                 "label": "Width",
                 "type": "select",
-                "multiple": true,
                 "options": [
                     {
                         'caption': 'Multiple',
-                        'value': "ye"
+                        'value': "yes"
                     },
                     {
                         "caption": "None"
-                    },
-                    {
-                        "caption": "Small 1 wide",
-                        "value": "col-sm-1"
-                    },
-                    {
-                        "caption": "Small 2 wide",
-                        "value": "col-sm-2"
-                    },
-                    {
-                        "caption": "Small 3 wide",
-                        "value": "col-sm-3"
-                    },
-                    {
-                        "caption": "Small 4 wide",
-                        "value": "col-sm-4"
-                    },
-                    {
-                        "caption": "Small 5 wide",
-                        "value": "col-sm-5"
-                    },
-                    {
-                        "caption": "Small 6 wide",
-                        "value": "col-sm-6"
-                    },
-                    {
-                        "caption": "Small 7 wide",
-                        "value": "col-sm-7"
-                    },
-                    {
-                        "caption": "Small 8 wide",
-                        "value": "col-sm-8"
-                    },
-                    {
-                        "caption": "Medium 1 wide",
-                        "value": "col-md-1"
-                    },
-                    {
-                        "caption": "Medium 2 wide",
-                        "value": "col-md-2"
-                    },
-                    {
-                        "caption": "Medium 3 wide",
-                        "value": "col-md-3"
-                    },
-                    {
-                        "caption": "Medium 4 wide",
-                        "value": "col-md-4"
-                    },
-                    {
-                        "caption": "Medium 5 wide",
-                        "value": "col-md-5"
-                    },
-                    {
-                        "caption": "Medium 6 wide",
-                        "value": "col-md-6"
-                    },
-                    {
-                        "caption": "Medium 7 wide",
-                        "value": "col-md-7"
-                    },
-                    {
-                        "caption": "Medium 8 wide",
-                        "value": "col-md-8"
-                    },
-                    {
-                        "caption": "Large 1 wide",
-                        "value": "col-lg-1"
-                    },
-                    {
-                        "caption": "Large 2 wide",
-                        "value": "col-lg-2"
-                    },
-                    {
-                        "caption": "Large 3 wide",
-                        "value": "col-lg-3"
-                    },
-                    {
-                        "caption": "Large 4 wide",
-                        "value": "col-lg-4"
-                    },
-                    {
-                        "caption": "Large 5 wide",
-                        "value": "col-lg-5"
-                    },
-                    {
-                        "caption": "Large 6 wide",
-                        "value": "col-lg-6"
-                    },
-                    {
-                        "caption": "Large 7 wide",
-                        "value": "col-lg-7"
-                    },
-                    {
-                        "caption": "Large 8 wide",
-                        "value": "col-lg-8"
                     }
                 ]
             },
             "column-float": {
-                "label": "Width",
+                "label": "Float",
                 "type": "select",
                 "multiple": true,
                 "options": [
                     {
                         'caption': 'Multiple',
-                        'value': "ye"
+                        'value': "yes"
                     },
                     {
                         "caption": "None"
-                    },
+                    }
                 ]
             },
+//            "text-styles": {
+//                
+//                
+//            },
             "panel-styles": {
                 "label": "Panel Styles",
                 "type": "select",
@@ -282,7 +197,6 @@
                 "html": "<section class=\"page-section\"><div class=\"container\" doc-container=\"section\">\n</div>\n</div>",
                 "label": "Section",
                 "properties": [
-                    "custom-class",
                     "section-class"
                 ]
             },
@@ -306,8 +220,8 @@
                     "row"
                 ],
                 "properties": [
-                    "custom-class",
-                    "column-class"
+                    "column-width",
+                    'column-float'
                 ]
             },
             {
@@ -401,4 +315,35 @@
         this.design = this.design || {};
         this.design.bootstrap3 = designJSON;
     }
+    
+    // now update the design style options programmatically
+    var sizeLabels = {
+        'sm': 'Small',
+        'md': 'Medium', 
+        'lg': 'Large'
+    };
+    
+    for (var screen in sizeLabels) {
+        for (var i = 1; i < 13; i++) {
+            var opt = {
+                'caption' : sizeLabels[screen] + ' ' + i + ' wide',
+                'value' : 'col-' + screen + '-' + i
+            }
+            designJSON.componentProperties['column-width'].options.push(opt);
+            
+            var pushOpt = {
+                'caption': sizeLabels[screen] + ' push ' + i,
+                'value': 'col-' + screen + '-push-' + i
+            };
+            var pullOpt = {
+                'caption': sizeLabels[screen] + ' pull ' + i,
+                'value': 'col-' + screen + '-pull-' + i
+            };
+            
+            designJSON.componentProperties['column-float'].options.push(pushOpt);
+            designJSON.componentProperties['column-float'].options.push(pullOpt);
+        }
+    }
+
+    
 }).call(this);

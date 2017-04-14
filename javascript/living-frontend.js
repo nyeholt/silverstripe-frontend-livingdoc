@@ -286,7 +286,7 @@
                 $("." + PROPS_HOLDER).remove()
                 var options = $("<div>").addClass(PROPS_HOLDER)
                 options.append("<h4>" + component.model.componentName + " properties</h4>");
-
+                
                 for (var s_id in component.model.template.styles) {
                     var curr_style = component.model.template.styles[s_id];
                     
@@ -313,31 +313,36 @@
                             
                             el.val(currentVal);
 
-                            el.on("change", function (value) {
-                                var selection = $(this).val();
-                                if ((typeof selection) !== 'string' && selection.length) {
-                                    selection = selection.join(' ');
-                                }
-                                component.model.setStyle(s_id, selection);
-                            })
+                            el.on("change", function (styleId) {
+                                return function () {
+                                    var selection = $(this).val();
+                                    if ((typeof selection) !== 'string' && selection.length) {
+                                        selection = selection.join(' ');
+                                    }
+                                    component.model.setStyle(styleId, selection);
+                                };
+                            }(s_id))
                             break;
                         case "text":
                             el = $("<input>").attr({type: 'text'}).val(currentVal);
-                            el.on("change", function () {
-                                console.log("changing  a thing to " + curr_style.name + " to val " + el.val());
-                                component.model.setStyle(curr_style.name, el.val());
+                            el.on("change", function (styleName) {
+                                return function () {
+                                    component.model.setStyle(styleName, el.val());
+                                };
 //                                curr_style.value = el.val();
-                            });
+                            }(curr_style.name));
                             break;
                         case "option":
                             el = $("<input>").attr({type: 'checkbox'})
-                            el.on("change", function () {
-                                if (el.prop('checked')) {
-                                    component.model.setStyle(curr_style.name, curr_style.value)
-                                } else {
-                                    component.model.setStyle(curr_style.name, "")
-                                }
-                            });
+                            el.on("change", function (styleName, styleValue) {
+                                return function () {
+                                    if ($(this).prop('checked')) {
+                                        component.model.setStyle(styleName, styleValue)
+                                    } else {
+                                        component.model.setStyle(styleName, "")
+                                    }
+                                };
+                            }(curr_style.name, curr_style.value));
                             if (curr_style.value == currentVal) {
                                 el.prop('checked', true);
                             }
