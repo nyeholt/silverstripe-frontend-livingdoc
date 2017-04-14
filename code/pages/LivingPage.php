@@ -172,6 +172,8 @@ class LivingPage_Controller extends Page_Controller
             $actions->push(FormAction::create('publish', 'Publish'));
         }
 
+        $actions->push(FormAction::create('live', 'View'));
+
         $form = Form::create($this, 'LivingForm', $fields, $actions);
         $form->loadDataFrom($this->data());
         return $form;

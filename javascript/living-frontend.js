@@ -130,7 +130,15 @@
         });
     });
     
-    $(document).on('click', 'form#Form_LivingForm input.action', function () { 
+    $(document).on('click', 'form#Form_LivingForm input.action', function (e) { 
+        
+        // catuch the "live" click and redirect instead
+        if ($(this).attr('name') == 'action_live') {
+            e.preventDefault();
+            location.href = location.href + '?edit=stop&stage=Live';
+            return false;
+        }
+        
         var parentForm = $(this).parents('form');
         parentForm.find('input.hidden-action').remove();
         $('<input class="hidden-action">').attr({
