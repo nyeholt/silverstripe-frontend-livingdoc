@@ -22,8 +22,25 @@
     },
     "column-class": {
         "label": "Column Styles",
-        "type": "text",
-        "value": "col"
+        "type": "select",
+        "multiple": true,
+        "options": [
+            {
+                'caption': 'Multiple',
+                'value': "ye"
+            },
+        {
+          "caption": "None"
+        },
+        {
+          "caption": "1x",
+          "value": "col-md-1"
+        },
+        {
+          "caption": "2x",
+          "value": "col-md-2"
+        }
+      ]
     },
     "panel-styles": {
       "label": "Panel Styles",
@@ -168,7 +185,8 @@
             "row"
           ],
         "properties": [
-            "custom-class"
+            "custom-class",
+            "column-class"
         ]
     },
     {
@@ -183,12 +201,6 @@
       "name": "main-and-sidebar",
       "html": "<div class=\"row\">\n  <div class=\"col-md-8\" doc-container=\"main\"></div>\n  <div class=\"col-md-4\" doc-container=\"sidebar\"></div>\n</div>",
       "label": "Main and Sidebar"
-    },
-    
-    {
-      "name": "header",
-      "html": "<div class=\"page-header\">\n  <h1 doc-editable=\"title\">Example page header Subtext for header</h1>\n</div>",
-      "label": "Header"
     },
     {
       "name": "h1",

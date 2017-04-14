@@ -297,16 +297,28 @@
                     
                     switch (curr_style.type) {
                         case "select":
-                            el = $("<select>")
+                            el = $("<select>");
+                            
                             for (var op_id in curr_style.options) {
                                 var curr_op = curr_style.options[op_id];
+                                
+                                // todo(Marcus) - this is such a hack
+                                if (curr_op.caption.toLowerCase() == 'multiple') {
+                                    el.attr('size', 3).prop('multiple', true);
+                                    continue;
+                                }
+                                
                                 el.append($("<option>").val(curr_op.value).text(curr_op.caption))
                             }
                             
                             el.val(currentVal);
-                            
+
                             el.on("change", function (value) {
-                                component.model.setStyle(s_id, $(this).val());
+                                var selection = $(this).val();
+                                if ((typeof selection) !== 'string' && selection.length) {
+                                    selection = selection.join(' ');
+                                }
+                                component.model.setStyle(s_id, selection);
                             })
                             break;
                         case "text":
@@ -334,7 +346,7 @@
                             break;
                     }
                     if (el) {
-                        lbl.append(el);
+                        $('<div>').append(el).appendTo(lbl);
                         options.append(lbl);
                     }
                 }

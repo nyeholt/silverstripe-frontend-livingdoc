@@ -4757,7 +4757,18 @@ module.exports = CssModificatorProperty = (function() {
     } else if (this.type === 'option') {
       return value === this.value;
     } else if (this.type === 'select') {
-      return this.containsOption(value);
+        if (this.containsOption(value)) {
+            return true;
+        }
+        if (value.indexOf(' ') >= 0) {
+            var allStyles = value.split(' ');
+            for (var s in allStyles) {
+                if (this.containsOption(allStyles[s])) {
+                    return true;
+                }
+            }
+        }
+        return false;
   } else if (this.type === 'text') {
       return true;
     } else {
