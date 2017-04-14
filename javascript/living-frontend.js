@@ -213,16 +213,49 @@
             var toolbarHolder = $('.livingdocs-toolbar');
 
             var $components = $('.livingdocs-components');
+            var $componentsList = $components.find('ul');
             var $properties = $('.livingdocs-item-properties');
+            var componentGroupMap = {};
+            
+            var addGroup = function (label, num) {
+                var $group = $('<li>');
+                $group.append('<input type="checkbox" checked>');
+                $group.append('<i>');
+                $group.append('<h2>' + label + '</h2>');
+                $group.append('<div class="group-component-holder" id="gch-'+num+'"></div>');
+                
+                $componentsList.append($group);
+                
+            }
+            
+            // use selectedDesign - the template, not active components at this point
+            for (var i = 0; i < selectedDesign.groups.length; i++) {
+                addGroup(selectedDesign.groups[i].label, i);
+                console.log(selectedDesign.groups[i].components);
+                for (var j in selectedDesign.groups[i].components) {
+                    componentGroupMap[selectedDesign.groups[i].components[j]] = 'gch-' + i;
+                }
+            }
 
+            addGroup('Misc', 'misc');
+            
             for (var i = 0; i < activeDesign.components.length; i++) {
                 var template = activeDesign.components[i];
                 var $entry = $('<div class="toolbar-entry">');
                 $entry.html(template.label);
-                $components.append($entry);
+                
+                var groupId = componentGroupMap[template.name];
+                if (!groupId) {
+                    groupId = 'gch-misc';
+                }
+                
+                var $holder = $('#' + groupId);
+                $holder.append($entry);
 
                 draggableComponent(doc, template.name, $entry);
             }
+            
+            delete componentGroupMap;
 
             livingdoc.model.changed.add(function () {
                 updateDataFields(true);

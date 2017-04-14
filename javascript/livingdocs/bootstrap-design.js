@@ -30,7 +30,7 @@
                         'value': "yes"
                     },
                     {
-                        "caption": "Default"
+                        "caption": "None"
                     },
                     {
                         "caption": "First",
@@ -121,7 +121,10 @@
                 "label": "Headers",
                 "components": [
                     "h1",
-                    "h2"
+                    "h2",
+                    "h3",
+                    "h4",
+                    "h5"
                 ]
             },
             {
@@ -134,7 +137,8 @@
             {
                 "label": "Images",
                 "components": [
-                    "image"
+                    "image",
+                    'teaser'
                 ]
             },
             {
@@ -154,6 +158,7 @@
                 "label": "Layout",
                 "components": [
                     "section",
+                    "pagecontainer",
                     "row",
                     "column",
                     "panel",
