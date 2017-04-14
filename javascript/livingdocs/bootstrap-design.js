@@ -9,7 +9,7 @@
                 "./css/base.css"
             ]
         },
-        "wrapper": "<div class='container doc-section'></div>",
+        "wrapper": "<div class='doc-section'></div>",
         "componentProperties": {
             "well-large": {
                 "label": "Large",
@@ -62,7 +62,6 @@
             "column-float": {
                 "label": "Float",
                 "type": "select",
-                "multiple": true,
                 "options": [
                     {
                         'caption': 'Multiple',
@@ -73,10 +72,20 @@
                     }
                 ]
             },
-//            "text-styles": {
-//                
-//                
-//            },
+            "text-styles": {
+                "label": "Text styles",
+                "type": "select",
+                "options": [
+                    {
+                        'caption': 'Multiple',
+                        'value': "yes"
+                    },
+                    {
+                        "caption": "None"
+                    }
+                ]
+                
+            },
             "panel-styles": {
                 "label": "Panel Styles",
                 "type": "select",
@@ -194,8 +203,16 @@
             },
             {
                 "name": "section",
-                "html": "<section class=\"page-section\"><div class=\"container\" doc-container=\"section\">\n</div>\n</div>",
+                "html": "<section class=\"page-section container\" doc-container=\"section\">\n</section>",
                 "label": "Section",
+                "properties": [
+                    "section-class"
+                ]
+            },
+            {
+                "name": "pagecontainer",
+                "html": "<div class=\"container\" doc-container=\"container\">\n</div>",
+                "label": "Simple container",
                 "properties": [
                     "section-class"
                 ]
@@ -300,7 +317,10 @@
             {
                 "name": "p",
                 "html": "<p doc-editable=\"text\">Paragraph content</p>",
-                "label": "Paragraph"
+                "label": "Paragraph",
+                "properties": [
+                    'text-styles'
+                ]
             },
             {
                 "name": "quote",

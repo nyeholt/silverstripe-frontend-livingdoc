@@ -298,25 +298,31 @@
                     switch (curr_style.type) {
                         case "select":
                             el = $("<select>");
-                            
+                            var multi = false;
                             for (var op_id in curr_style.options) {
                                 var curr_op = curr_style.options[op_id];
                                 
                                 // todo(Marcus) - this is such a hack
                                 if (curr_op.caption.toLowerCase() == 'multiple') {
-                                    el.attr('size', 3).prop('multiple', true);
+                                    multi = true;
                                     continue;
                                 }
                                 
                                 el.append($("<option>").val(curr_op.value).text(curr_op.caption))
                             }
                             
+                            if (multi) {
+                                el.attr('size', 3).prop('multiple', true);
+                                if (currentVal) {
+                                    currentVal = currentVal.split(' ');
+                                }
+                            }
                             el.val(currentVal);
 
                             el.on("change", function (styleId) {
                                 return function () {
                                     var selection = $(this).val();
-                                    if ((typeof selection) !== 'string' && selection.length) {
+                                    if (selection && (typeof selection) !== 'string' && selection.length) {
                                         selection = selection.join(' ');
                                     }
                                     component.model.setStyle(styleId, selection);
