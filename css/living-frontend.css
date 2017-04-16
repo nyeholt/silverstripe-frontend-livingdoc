@@ -11,10 +11,12 @@ body {
     top: 0px;
     background-color: #fff;
     padding: 5px;
+    font-size: 14px;
 }
 
 .livingdocs-toolbar form {
     width: auto;
+    margin-bottom: 10px;
 }
 
 .livingdocs-toolbar form input.text, 
@@ -71,6 +73,14 @@ body {
     height: 500px;
     overflow-y: auto;
     overflow-x: hidden;
+}
+
+.structure-options {
+    font-size: 12px;
+}
+
+.structure-options select {
+    width: 70%;
 }
 
 iframe.living-dialog {

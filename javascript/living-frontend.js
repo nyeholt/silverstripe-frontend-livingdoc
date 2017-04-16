@@ -7,6 +7,8 @@
 
     var DOC_HOLDER = '.livingdocs-editor';
     
+    var TOOLBAR_FORM = '#Form_LivingForm';
+    
     var PROPS_HOLDER = 'livingdocs_EditorField_Toolbar_options';
 
     var mediaUrl = 'FrontendInsertDialog/MediaForm';
@@ -130,7 +132,7 @@
         });
     });
     
-    $(document).on('click', 'form#Form_LivingForm input.action', function (e) { 
+    $(document).on('click', 'form' + TOOLBAR_FORM +' input.action', function (e) { 
         
         // catuch the "live" click and redirect instead
         if ($(this).attr('name') == 'action_live') {
@@ -148,7 +150,7 @@
         }).appendTo(parentForm);
     })
 
-    $(document).on('submit', 'form#Form_LivingForm', function () {
+    $(document).on('submit', TOOLBAR_FORM, function () {
         var _this = $(this);
         
         _this.removeAttr('data-changed');
@@ -167,7 +169,7 @@
     });
     
     $(window).bind('beforeunload', function(){
-        if ($('#Form_LivingForm').attr('data-changed')) {
+        if ($(TOOLBAR_FORM).attr('data-changed')) {
             return "You may have unsaved changes, sure?";
         }
     });
@@ -271,6 +273,71 @@
                     });
                 });
             }
+            
+            // add in the structured components
+            if (selectedDesign.structures && selectedDesign.structures.length > 0) {
+                
+                var createComponentList = function (components, parent, containerName) {
+                    for (var i in components) {
+                        // create the new one and set relevant styles
+                        var newComponent = livingdoc.componentTree.getComponent(components[i].type);
+                        
+                        if (components[i].styles) {
+                            for (var j in components[i].styles) {
+                                newComponent.setStyle(j, components[i].styles[j]);
+                            }
+                        }
+                        
+                        if (components[i].data_attributes) {
+                            for (var directive in components[i].data_attributes) {
+                                for (var attrName in components[i].data_attributes[directive]) {
+                                    newComponent.setDirectiveAttribute(directive, attrName, components[i].data_attributes[directive][attrName]);
+                                }
+                            }
+                        }
+                        
+                        // if we don't have a containerName, that means we are most likely adding
+                        // to the root 
+                        if (containerName) {
+                            parent.prepend(containerName, newComponent);
+                        } else {
+                            parent.prepend(newComponent);
+                        }
+                        
+                        
+                        if (components[i].components) {
+                            for (var containerName in components[i].components) {
+                                createComponentList(components[i].components[containerName], newComponent, containerName);
+                            }
+                        }
+                    }
+                };
+                
+                var optionList = $('<select>');
+                optionList.append('<option>-- structures --</option>');
+                for (var i in selectedDesign.structures) {
+                    var item = selectedDesign.structures[i];
+                    optionList.append($('<option value="">').text(item.label).attr('value', item.label));
+                }
+                
+                var structureFields = $('<div class="structure-options">');
+                structureFields.append(optionList);
+                var structureButton = $('<button>Add</button>');
+                structureFields.append(structureButton);
+                $components.prepend(structureFields);
+                
+                structureButton.click(function (e) {
+                    var selected = optionList.val();
+                    for (var i in selectedDesign.structures) {
+                        var item = selectedDesign.structures[i];
+                        if (item.label === selected) {
+                            createComponentList(item.components, livingdoc.componentTree.root);
+                            break;
+                        }
+                    }
+                    optionList.val('');
+                });
+            }
 
             livingdoc.model.changed.add(function () {
                 updateDataFields(true);
@@ -331,7 +398,7 @@
 
 
             livingdoc.interactiveView.page.focus.componentFocus.add(function (component) {
-                $("." + PROPS_HOLDER).remove()
+                $("." + PROPS_HOLDER).remove();
                 var options = $("<div>").addClass(PROPS_HOLDER)
                 options.append("<h4>" + component.model.componentName + " properties</h4>");
                 
@@ -511,11 +578,11 @@
 
         // todo(Marcus) Clean this up in some way
         function updateDataFields(realchange) {
-            $('#Form_LivingForm').find('[name=PageStructure]').val(livingdoc.toJson());
-            $('#Form_LivingForm').find('[name=Content]').val(livingdoc.toHtml());
+            $(TOOLBAR_FORM).find('[name=PageStructure]').val(livingdoc.toJson());
+            $(TOOLBAR_FORM).find('[name=Content]').val(livingdoc.toHtml());
             if (realchange) {
-                $('#Form_LivingForm').attr('data-changed', 1);
-                $('#Form_LivingForm').find('[name=action_publish]').prop('disabled', true);
+                $(TOOLBAR_FORM).attr('data-changed', 1);
+                $(TOOLBAR_FORM).find('[name=action_publish]').prop('disabled', true);
             }
         }
 

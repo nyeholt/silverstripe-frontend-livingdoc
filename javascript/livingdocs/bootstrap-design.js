@@ -337,6 +337,37 @@
                 "html": "<blockquote>\n  <p>\n    <span class=\"quotation-mark\">&#x201C;</span><span class=\"quote\" doc-editable=\"text\">Quotation</span>\n  </p>\n  <div class=\"caption\" doc-editable=\"author\">Author</div>\n</blockquote>",
                 "label": "Quote"
             }
+        ],
+        "structures": [
+            {
+                label: "Section for content",
+                components: [
+                    {
+                        "type": "section",
+                        "styles": {"section-class" : "container"},   /* key value listing */
+                        "data_attributes": {'section': { 'data-sample': 'just an example'}}, /* inner-directive => { }  */
+                        "components": {
+                            "section": [        // the name of the container inside the component to add to
+                                {
+                                    "type": "row",
+                                    "styles": {
+                                        "text-styles": "text-center"
+                                    },
+                                    "data_attributes": {},
+                                    "components": {
+                                        "row": [
+                                            {
+                                                "type": "column",
+                                                "data_attributes": {}
+                                            }
+                                        ]
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                ]
+            }
         ]
     };
     if (typeof module !== 'undefined' && module.exports) {
