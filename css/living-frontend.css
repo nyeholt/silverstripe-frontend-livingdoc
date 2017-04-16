@@ -38,7 +38,9 @@ body {
 .livingdocs-toolbar input[type="submit"], 
 .livingdocs-toolbar input[type="reset"], 
 .livingdocs-toolbar .Actions .action {
-    background: #666;
+    background: #dad9d9;
+    border: 1px solid #333;
+    border-radius: 3px;
     float: none;
 }
 
@@ -51,7 +53,7 @@ body {
     }
     
     .livingdocs-toolbar input[type="submit"]:disabled {
-        background: #dad9d9;
+        background: #666;
     }
 
 .livingdocs-toolbar .toolbar-entry {
@@ -175,7 +177,7 @@ body.doc-no-selection .livingdocs-toolbar iframe {
   position: absolute;
   transform: translate(-6px, 0);
   margin-top: 16px;
-  right: 0;
+  right: 10px;
 }
 .livingdocs-components ul li i:before, ul li i:after {
   content: "";
