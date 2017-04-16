@@ -211,7 +211,8 @@
                 "html": "<section class=\"page-section container\" doc-container=\"section\">\n</section>",
                 "label": "Section",
                 "properties": [
-                    "section-class"
+                    "section-class",
+                    "text-styles"
                 ]
             },
             {
@@ -219,13 +220,17 @@
                 "html": "<div class=\"container\" doc-container=\"container\">\n</div>",
                 "label": "Simple container",
                 "properties": [
-                    "section-class"
+                    "section-class",
+                    "text-styles"
                 ]
             },
             {
                 "name": "row",
                 "html": "<div class=\"row\" doc-container=\"row\">\n</div>",
                 "label": "Row",
+                "properties": [
+                    "text-styles"
+                ],
                 "directives": {
                     "row": {
                         "allowedChildren": [
