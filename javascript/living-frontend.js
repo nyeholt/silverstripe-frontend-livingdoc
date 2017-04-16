@@ -197,6 +197,9 @@
         doc.config({livingdocsCssFile: "frontend-livingdoc/javascript/livingdocs/css/livingdocs.css"});
 
         var livingdoc = doc.new(structure);
+        
+        // todo(Marcus) Remove this, it doesn't need to be global
+        window.livingdoc = livingdoc;
 
         updateDataFields();
 
@@ -225,13 +228,11 @@
                 $group.append('<div class="group-component-holder" id="gch-'+num+'"></div>');
                 
                 $componentsList.append($group);
-                
             }
             
             // use selectedDesign - the template, not active components at this point
             for (var i = 0; i < selectedDesign.groups.length; i++) {
                 addGroup(selectedDesign.groups[i].label, i);
-                console.log(selectedDesign.groups[i].components);
                 for (var j in selectedDesign.groups[i].components) {
                     componentGroupMap[selectedDesign.groups[i].components[j]] = 'gch-' + i;
                 }
@@ -256,11 +257,25 @@
             }
             
             delete componentGroupMap;
+            
+            function draggableComponent(doc, name, $elem) {
+                $elem.on('mousedown', function (event) {
+                    var newComponent = livingdoc.createComponent(name);
+                    doc.startDrag({
+                        componentModel: newComponent,
+                        event: event,
+                        config: {
+                            preventDefault: true,
+                            direct: true
+                        }
+                    });
+                });
+            }
 
             livingdoc.model.changed.add(function () {
                 updateDataFields(true);
             });
-
+            
             // text formatting options
             // @TODO - provide more in-paragraph options
             //  - sup/sub
@@ -394,11 +409,10 @@
                         options.append(lbl);
                     }
                 }
-                
+
                 var componentAttrs = component.model.getData('data_attributes');
                 if (componentAttrs) {
                     options.append("<h4>Attributes</h4>");
-                    
                     var changeAttribute = function (componentName, name) {
                         return function () {
                             componentAttrs[componentName][name] = $(this).val();
@@ -495,6 +509,7 @@
         }
 
 
+        // todo(Marcus) Clean this up in some way
         function updateDataFields(realchange) {
             $('#Form_LivingForm').find('[name=PageStructure]').val(livingdoc.toJson());
             $('#Form_LivingForm').find('[name=Content]').val(livingdoc.toHtml());
@@ -504,19 +519,6 @@
             }
         }
 
-        function draggableComponent(doc, name, $elem) {
-            $elem.on('mousedown', function (event) {
-                var newComponent = livingdoc.createComponent(name);
-                doc.startDrag({
-                    componentModel: newComponent,
-                    event: event,
-                    config: {
-                        preventDefault: true,
-                        direct: true
-                    }
-                });
-            });
-        }
     })
 
 })(jQuery);
