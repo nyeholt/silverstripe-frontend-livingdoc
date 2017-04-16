@@ -3369,7 +3369,6 @@ module.exports = ComponentModel = (function() {
   
   ComponentModel.prototype.setDirectiveAttribute = function (name, attr, value) {
       var attributes, itemAttributes = {};
-      console.log("Seting attributes for " + name + " " + attr);
       attributes = this.getData('data_attributes');
       if (!attributes) {
           attributes = {};
@@ -7653,8 +7652,8 @@ module.exports = ComponentView = (function() {
     if (directiveName) {
         updateElem(directiveName);
     } else {
-        for (name in this.model.content) {
-            updateElem(name);
+        for (var i = 0; i < this.directives.length; i++) {
+            updateElem(this.directives[i].name);
         }
     }
     
