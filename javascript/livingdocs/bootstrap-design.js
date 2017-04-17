@@ -82,9 +82,40 @@
                     },
                     {
                         "caption": "None"
+                    },
+                    {
+                        'caption': 'Centered',
+                        'value': "text-center"
+                    },
+                    {
+                        'caption': 'Left',
+                        'value': "text-left"
+                    },
+                    {
+                        'caption': 'Right',
+                        'value': "text-right"
+                    },
+                    {
+                        'caption': 'Justify',
+                        'value': "text-justify"
+                    },
+                    {
+                        'caption': 'Nowrap',
+                        'value': "text-nowrap"
+                    },
+                    {
+                        'caption': 'Lowercase',
+                        'value': "text-lowercase"
+                    },
+                    {
+                        'caption': 'Uppercase',
+                        'value': "text-uppercase"
+                    },
+                    {
+                        'caption': 'Capitalize',
+                        'value': "text-capitalize"
                     }
                 ]
-                
             },
             "panel-styles": {
                 "label": "Panel Styles",
@@ -340,7 +371,7 @@
         ],
         "structures": [
             {
-                label: "Section for content",
+                label: "Content section",
                 components: [
                     {
                         "type": "section",

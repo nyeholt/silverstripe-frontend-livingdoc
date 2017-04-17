@@ -313,7 +313,7 @@
                     }
                 };
                 
-                var optionList = $('<select>');
+                var optionList = $('<select>').attr('id', 'component-structures');
                 optionList.append('<option>-- structures --</option>');
                 for (var i in selectedDesign.structures) {
                     var item = selectedDesign.structures[i];
@@ -321,6 +321,7 @@
                 }
                 
                 var structureFields = $('<div class="structure-options">');
+                structureFields.append($('<label for="component-structures">Select a pre-defined set of components, or add individual components below</label>'));
                 structureFields.append(optionList);
                 var structureButton = $('<button>Add</button>');
                 structureFields.append(structureButton);
