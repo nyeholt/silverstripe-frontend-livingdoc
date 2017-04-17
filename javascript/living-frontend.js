@@ -306,8 +306,8 @@
                         
                         
                         if (components[i].components) {
-                            for (var containerName in components[i].components) {
-                                createComponentList(components[i].components[containerName], newComponent, containerName);
+                            for (var componentContainerName in components[i].components) {
+                                createComponentList(components[i].components[componentContainerName], newComponent, componentContainerName);
                             }
                         }
                     }
