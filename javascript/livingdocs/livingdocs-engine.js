@@ -3525,7 +3525,11 @@ module.exports = (function() {
       _ref = json.content;
       for (name in _ref) {
         value = _ref[name];
-        assert(model.content.hasOwnProperty(name), "error while deserializing component " + model.componentName + ": unknown content '" + name + "'");
+        if (!model.content.hasOwnProperty(name)) {
+            console.log("Unknown content found while deserializing " + model.componentName + ": unknown content '" + name);
+            continue;
+        }
+//        assert(model.content.hasOwnProperty(name), "error while deserializing component " + model.componentName + ": unknown content '" + name + "'");
         if (model.directives.get(name).type === 'image' && typeof value === 'string') {
           model.content[name] = {
             url: value
