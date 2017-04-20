@@ -299,7 +299,7 @@
                         // if we don't have a containerName, that means we are most likely adding
                         // to the root 
                         if (containerName) {
-                            parent.prepend(containerName, newComponent);
+                            parent.append(containerName, newComponent);
                         } else {
                             parent.prepend(newComponent);
                         }
@@ -541,12 +541,12 @@
                 $properties.html(options)
                 
                 
-                var $delete_button = $("<button>").text("Remove").on("click", function () {
+                var $delete_button = $("<button class='alert alert-danger'>").text("Remove").on("click", function () {
                     component.model.remove();
                     $("." + PROPS_HOLDER).remove();
                 })
                 
-                $('<div class="Actions">').appendTo(options).append($delete_button);
+                $('<div class="Actions">').appendTo($properties).append($delete_button);
             })
         });
 
