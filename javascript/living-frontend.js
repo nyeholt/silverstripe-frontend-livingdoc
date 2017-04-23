@@ -190,6 +190,11 @@
         var selectedDesignName = structure.data.design.name;
         var selectedDesign = design[selectedDesignName];
         
+        if (!selectedDesign) {
+            alert("Selected design " + selectedDesignName + " couldn't be found");
+            return;
+        }
+        
         $(document).trigger('updateLivingdocsDesign', selectedDesign);
 
         selectedDesign.assets.basePath = "frontend-livingdoc/javascript/livingdocs/";

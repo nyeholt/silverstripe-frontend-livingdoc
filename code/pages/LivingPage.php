@@ -11,6 +11,11 @@ class LivingPage extends Page
         'PageStructure' => 'Text',
     ];
 
+    private static $living_designs = [
+        'bootstrap3'        => 'frontend-livingdoc/javascript/livingdocs/bootstrap-design.js',
+    ];
+
+
     private static $default_design_css = '';
     
     private static $default_page = array(
@@ -35,6 +40,13 @@ class LivingPage extends Page
         $link = '<div class="field"><a href="' . $this->Link() . '?edit=1" target="_blank">Edit this page in-place</a></div>';
         $literalContent = LiteralField::create('Content', $link);
         $fields->replaceField('Content', $literalContent);
+
+        if (Permission::check('ADMIN')) {
+            $toggle = ToggleCompositeField::create('LivingPageContent', 'Page options', [
+                TextareaField::create('PageStructure', 'Raw structure')
+            ]);
+            $fields->addFieldToTab('Root.Main', $toggle);
+        }
 
         return $fields;
     }
@@ -113,6 +125,21 @@ class LivingPage_Controller extends Page_Controller
                 ];
             }
 
+            // explicit binding because I'm too lazy right now to add yet another extension
+            if (class_exists('Multisites') && Multisites::inst()->getCurrentSite()->LivingPageTheme) {
+                $design['data']['design']['name'] = Multisites::inst()->getCurrentSite()->LivingPageTheme;
+            }
+
+            $this->data()->extend('updateLivingDesign', $design);
+
+            $designName = $design['data']['design']['name'];
+            $designOptions = LivingPage::config()->living_designs;
+            
+            $designFile = $designOptions[$designName];
+            if (!$designFile) {
+                throw new Exception("Missing design for $designName");
+            }
+
             $record->PageStructure = json_encode($design);
             
             $this->failover = $record;
@@ -127,7 +154,7 @@ class LivingPage_Controller extends Page_Controller
 
             Requirements::javascript('frontend-livingdoc/javascript/livingdocs/editable.js');
             Requirements::javascript('frontend-livingdoc/javascript/livingdocs/livingdocs-engine.js');
-            Requirements::javascript('frontend-livingdoc/javascript/livingdocs/bootstrap-design.js');
+            Requirements::javascript($designFile);
 
             Requirements::css('frontend-livingdoc/css/living-frontend.css');
         }

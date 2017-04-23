@@ -15,7 +15,7 @@
                     <div class="livingdocs-item-properties">
 
                     </div>
-                    <div class="livingdocs-components"></div>
+                    <div class="livingdocs-components"><ul></ul></div>
                 </div>
             </div>
 

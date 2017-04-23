@@ -2783,6 +2783,9 @@ module.exports = ComponentContainer = (function() {
     if (position == null) {
       position = {};
     }
+    if (!this.isAllowedAsChild(component)) {
+        return;
+    }
     assert(this.isAllowedAsChild(component), "Component '" + component.componentName + "' is not allowed as a child of " + (this.getContainerIdentifier()));
     func = (function(_this) {
       return function() {
