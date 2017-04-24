@@ -415,6 +415,16 @@
                 var options = $("<div>").addClass(PROPS_HOLDER)
                 options.append("<h4>" + component.model.componentName + " properties</h4>");
                 
+                var closer = $('<a href="#">X</a>').appendTo(options);
+                closer.css({
+                    'float': 'right'
+                });
+                closer.click(function (e) {
+                    e.preventDefault();
+                    $("." + PROPS_HOLDER).remove();
+                    return false;
+                })
+                
                 for (var s_id in component.model.template.styles) {
                     var curr_style = component.model.template.styles[s_id];
                     
@@ -550,15 +560,15 @@
                     }
                 }
                 
-                $properties.html(options)
-                
-                
                 var $delete_button = $("<button class='alert alert-danger'>").text("Remove").on("click", function () {
                     component.model.remove();
                     $("." + PROPS_HOLDER).remove();
                 })
                 
-                $('<div class="Actions">').appendTo($properties).append($delete_button);
+                $('<div class="Actions">').appendTo(options).append($delete_button);
+                
+                $properties.html(options)
+                
             })
         });
 
