@@ -46,6 +46,35 @@
                     }
                 ]
             },
+            "padded-styles": {
+                "label": "Padding",
+                "type": "select",
+                "options": [
+                    {
+                        'caption': 'Multiple',
+                        'value': "yes"
+                    },
+                    {
+                        "caption": "None"
+                    },
+                    {
+                        "caption": "Top",
+                        'value': "padded-top"
+                    },
+                    {
+                        "caption": "Bottom",
+                        'value': "padded-bottom"
+                    },
+                    {
+                        "caption": "Left",
+                        'value': "padded-left"
+                    },
+                    {
+                        "caption": "Right",
+                        'value': "padded-right"
+                    }
+                ]
+            },
             "column-width": {
                 "label": "Width",
                 "type": "select",
@@ -67,6 +96,15 @@
                         'caption': 'Multiple',
                         'value': "yes"
                     },
+                    {
+                        "caption": "None"
+                    }
+                ]
+            },
+            'background-styles': {
+                'label': 'Background',
+                'type': 'select',
+                'options': [
                     {
                         "caption": "None"
                     }
@@ -243,6 +281,8 @@
                 "label": "Section",
                 "properties": [
                     "section-class",
+                    "background-styles",
+                    "padded-styles",
                     "text-styles"
                 ]
             },
@@ -252,6 +292,8 @@
                 "label": "Simple container",
                 "properties": [
                     "section-class",
+                    "background-styles",
+                    "padded-styles",
                     "text-styles"
                 ]
             },
@@ -260,6 +302,8 @@
                 "html": "<div class=\"row\" doc-container=\"row\">\n</div>",
                 "label": "Row",
                 "properties": [
+                    "background-styles",
+                    "padded-styles",
                     "text-styles"
                 ],
                 "directives": {
@@ -278,6 +322,9 @@
                     "row"
                 ],
                 "properties": [
+                    "background-styles",
+                    "padded-styles",
+                    "text-styles",
                     "column-width",
                     'column-float'
                 ]
