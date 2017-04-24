@@ -486,7 +486,7 @@
                     }
                     if (el) {
                         $('<div>').append(el).appendTo(lbl);
-                        options.append(lbl);
+                        options.append('<div>').append(lbl);
                     }
                 }
 
