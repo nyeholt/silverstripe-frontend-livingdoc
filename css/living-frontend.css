@@ -125,7 +125,7 @@ body.doc-no-selection .livingdocs-toolbar iframe {
 
 
 [data-doc-container="row"], [data-doc-container="section"], [data-doc-container="column"] {
-    border: 2px dotted #ccc;
+    border: 4px dotted #ccc;
     /*padding: 5px;*/
 }
 
