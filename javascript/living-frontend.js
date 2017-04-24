@@ -141,6 +141,13 @@
             return false;
         }
         
+        // catuch the "live" click and redirect instead
+        if ($(this).attr('name') == 'action_preview') {
+            e.preventDefault();
+            location.href = location.href + '?preview=1&stage=Stage';
+            return false;
+        }
+        
         var parentForm = $(this).parents('form');
         parentForm.find('input.hidden-action').remove();
         $('<input class="hidden-action">').attr({

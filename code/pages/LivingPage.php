@@ -170,6 +170,10 @@ class LivingPage_Controller extends Page_Controller
         if (!$this->data()->canEdit()) {
             return $this->endEditing();
         }
+        // one-off preview that does _not_ stop edit mode
+        if ($this->getRequest()->getVar('preview')) {
+            return false;
+        }
         if ($this->getRequest()->getVar('edit')) {
             Session::set('EditMode', 1);
         }
@@ -196,10 +200,11 @@ class LivingPage_Controller extends Page_Controller
         ]);
 
         if ($this->data()->canPublish()) {
-            $actions->push(FormAction::create('publish', 'Publish'));
+            $actions->push(FormAction::create('publish', 'Pub'));
         }
 
-        $actions->push(FormAction::create('live', 'View'));
+        $actions->push(FormAction::create('preview', 'View'));
+        $actions->push(FormAction::create('live', 'Done'));
 
         $form = Form::create($this, 'LivingForm', $fields, $actions);
         $form->loadDataFrom($this->data());
