@@ -373,7 +373,7 @@
                             })
                             .on('click', function () {
                                 selection.save();
-                                // prevents range saving from being cleared on focus lost
+                                // prevents range saving from being cleared on focus lost. @see editable.js pastingAttribute
                                 selection.host.setAttribute('data-editable-is-pasting', true);
                                 selectLink(function (linkObj) {
                                     selection.restore();
@@ -401,10 +401,21 @@
                                 selection.toggleEmphasis()
                                 selection.triggerChange();
                             })
-
                     outer_el.append($el);
+                    
+                    var $el = $('<button>').text('Clean')
+                            .on('mousedown', function (e) {
+                                e.preventDefault();
+                            })
+                            .on("click", function (e) {
+                                selection.removeFormatting();
+                            })
+                    ;
+                    
+                    outer_el.append($el);
+                    
                     $("button", outer_el)
-                    outer_el.css({position: "absolute", left: rect.left, top: rect.top - 80, background: "black", "z-index": 1000})
+                    outer_el.css({position: "absolute", left: rect.left, top: rect.top - 40, background: "transparent", "z-index": 1000})
                     $("body").append(outer_el)
                 }
             });

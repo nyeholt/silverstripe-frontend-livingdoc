@@ -133,6 +133,14 @@ body.doc-no-selection .livingdocs-toolbar iframe {
     overflow: auto;
 }
 
+.livingdocs_EditorField_Toolbar_textopts button {
+    border: 2px;
+}
+
+.livingdocs_EditorField_Toolbar_textopts button:hover {
+    background-color: #e1e1e1;
+}
+
 
 .livingdocs-components h2 {
   font-size: 26px;
