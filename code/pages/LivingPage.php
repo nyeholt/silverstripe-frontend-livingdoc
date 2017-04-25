@@ -70,6 +70,8 @@ class LivingPage_Controller extends Page_Controller
 
     public function init() {
 		
+        // at the top so it can be overridden by user css
+        Requirements::css('frontend-livingdoc/javascript/livingdocs/css/base.css');
 
         if ($this->getRequest()->getVar('edit') && !$this->data()->canEdit()) {
             // redirect to login
@@ -158,6 +160,8 @@ class LivingPage_Controller extends Page_Controller
 
             Requirements::css('frontend-livingdoc/css/living-frontend.css');
         }
+
+        
 	}
 
     protected function editingRecord() {

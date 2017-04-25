@@ -58,21 +58,38 @@
                         "caption": "None"
                     },
                     {
-                        "caption": "Top",
+                        "caption": "Padded Top",
                         'value': "padded-top"
                     },
                     {
-                        "caption": "Bottom",
+                        "caption": "Padded Right",
+                        'value': "padded-right"
+                    },
+                    {
+                        "caption": "Padded Bottom",
                         'value': "padded-bottom"
                     },
                     {
-                        "caption": "Left",
+                        "caption": "Padded Left",
                         'value': "padded-left"
                     },
                     {
-                        "caption": "Right",
-                        'value': "padded-right"
+                        "caption": "Margin Top",
+                        'value': "top-margin"
+                    },
+                    {
+                        "caption": "Margin Right",
+                        'value': "right-margin"
+                    },
+                    {
+                        "caption": "Margin Bottom",
+                        'value': "bottom-margin"
+                    },
+                    {
+                        "caption": "Padded Left",
+                        'value': "left-margin"
                     }
+                    
                 ]
             },
             "column-width": {
