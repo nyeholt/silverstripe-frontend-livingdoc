@@ -90,7 +90,7 @@ body {
 iframe.living-dialog {
     background-color: #fff;
     width: 50%;
-    height: 50%;
+    height: 80%;
     position: fixed;
     z-index: 20001;
     top: 100px;
