@@ -6251,7 +6251,7 @@ module.exports = (function() {
       editableAttr = config.directives.editable.renderedAttr;
       if (node.hasAttribute(editableAttr)) {
         imageName = node.getAttribute(editableAttr);
-        return editableName;
+        return imageName;
       }
     },
     dropTarget: function(node, _arg) {
