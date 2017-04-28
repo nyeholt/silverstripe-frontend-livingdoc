@@ -420,6 +420,45 @@
                 }
             });
 
+            livingdoc.interactiveView.page.htmlElementClick.add(function (component, directiveName, event) {
+                
+                var isEditing = component.$html.attr('data-is-editing');
+                if (isEditing) {
+                    return;
+                }
+                
+                component.$html.attr('data-is-editing', 1);
+                
+                console.log(directiveName);
+                
+                var currentContent = component.model.get(directiveName);
+                console.log(currentContent);
+                
+                var $editor = $('<textarea>');
+                
+                var $actions = $('<div>');
+                var $save = $('<button>Save</button>');
+                var $cancel = $('<button>Cancel</button>');
+                $actions.append($save).append($cancel);
+                
+                $editor.val(currentContent);
+                component.$html.html($editor);
+                component.$html.append($actions);
+                
+                $editor.focus();
+                
+                $cancel.click(function () {
+                    component.$html.html(currentContent);
+                    component.$html.removeAttr('data-is-editing');
+                });
+                
+                $save.click(function () {
+                    var newContent = $editor.val();
+                    component.model.setContent(directiveName, newContent);
+                    component.$html.html(newContent);
+                    component.$html.removeAttr('data-is-editing');
+                })
+            });
 
             livingdoc.interactiveView.page.focus.componentFocus.add(function (component) {
                 $("." + PROPS_HOLDER).remove();

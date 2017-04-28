@@ -217,7 +217,8 @@
                 "label": "Text",
                 "components": [
                     "p",
-                    "quote"
+                    "quote",
+                    "customhtml"
                 ]
             },
             {
@@ -284,6 +285,12 @@
             }
         ],
         "components": [
+            
+            {
+                "name": "customhtml",
+                "html": "<div class=\"customhtml\" doc-html=\"html\">Click to modify...\n</div>",
+                "label": "HTML"
+            },
             {
                 "name": "well",
                 "html": "<div class=\"well\" doc-container=\"well\">\n</div>",
