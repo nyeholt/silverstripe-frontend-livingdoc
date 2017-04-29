@@ -299,42 +299,6 @@
             
             // add in the structured components
             if (selectedDesign.structures && selectedDesign.structures.length > 0) {
-                var createComponentList = function (components, parent, containerName) {
-                    for (var i in components) {
-                        // create the new one and set relevant styles
-                        var newComponent = livingdoc.componentTree.getComponent(components[i].type);
-                        
-                        if (components[i].styles) {
-                            for (var j in components[i].styles) {
-                                newComponent.setStyle(j, components[i].styles[j]);
-                            }
-                        }
-                        
-                        if (components[i].data_attributes) {
-                            for (var directive in components[i].data_attributes) {
-                                for (var attrName in components[i].data_attributes[directive]) {
-                                    newComponent.setDirectiveAttribute(directive, attrName, components[i].data_attributes[directive][attrName]);
-                                }
-                            }
-                        }
-                        
-                        // if we don't have a containerName, that means we are most likely adding
-                        // to the root 
-                        if (containerName) {
-                            parent.append(containerName, newComponent);
-                        } else {
-                            parent.prepend(newComponent);
-                        }
-                        
-                        
-                        if (components[i].components) {
-                            for (var componentContainerName in components[i].components) {
-                                createComponentList(components[i].components[componentContainerName], newComponent, componentContainerName);
-                            }
-                        }
-                    }
-                };
-                
                 var optionList = $('<select>').attr('id', 'component-structures');
                 optionList.append('<option>-- structures --</option>');
                 for (var i in selectedDesign.structures) {
@@ -354,7 +318,7 @@
                     for (var i in selectedDesign.structures) {
                         var item = selectedDesign.structures[i];
                         if (item.label === selected) {
-                            createComponentList(item.components, livingdoc.componentTree.root);
+                            createComponentList(item.components);
                             break;
                         }
                     }
@@ -363,7 +327,13 @@
             }
             
             livingdoc.componentTree.componentAdded.add(function (newComponent) {
-                console.log(arguments);
+                var toCreate = selectedDesign.prefilledComponents[newComponent.componentName];
+                
+                if (toCreate && toCreate.components) {
+                    for (var containerName in toCreate.components) {
+                        createComponentList(toCreate.components[containerName], newComponent, containerName);
+                    }
+                }
             });
 
             // text formatting options
@@ -628,6 +598,53 @@
                 
             })
         });
+        
+        /**
+         * creates components, inside a given parent.
+         * 
+         * @param array components
+         * @param ComponentModel parent
+         * @param string containerName
+         * @returns void
+         */
+        function createComponentList (components, parent, containerName) {
+            if (!parent) {
+                parent = livingdoc.componentTree.root;
+            }
+            for (var i in components) {
+                // create the new one and set relevant styles
+                var newComponent = livingdoc.componentTree.getComponent(components[i].type);
+
+                if (components[i].styles) {
+                    for (var j in components[i].styles) {
+                        newComponent.setStyle(j, components[i].styles[j]);
+                    }
+                }
+
+                if (components[i].data_attributes) {
+                    for (var directive in components[i].data_attributes) {
+                        for (var attrName in components[i].data_attributes[directive]) {
+                            newComponent.setDirectiveAttribute(directive, attrName, components[i].data_attributes[directive][attrName]);
+                        }
+                    }
+                }
+
+                // if we don't have a containerName, that means we are most likely adding
+                // to the root 
+                if (containerName) {
+                    parent.append(containerName, newComponent);
+                } else {
+                    parent.prepend(newComponent);
+                }
+
+
+                if (components[i].components) {
+                    for (var componentContainerName in components[i].components) {
+                        createComponentList(components[i].components[componentContainerName], newComponent, componentContainerName);
+                    }
+                }
+            }
+        };
 
 
         function selectLink(callback) {

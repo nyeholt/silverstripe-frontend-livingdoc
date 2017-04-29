@@ -275,14 +275,6 @@
                 "component": "p"
             }
         ],
-        "prefilledComponents": {
-            "image": {
-                "caption": {
-                    "value": "&nbsp;(all copyright by me)",
-                    "type": "string"
-                }
-            }
-        },
         "metadata": [
             {
                 "identifier": "title",
@@ -401,7 +393,7 @@
             },
             {
                 "name": "tablerow",
-                "html": "<tr doc-container=\"tablerow\"></tr>",
+                "html": "<tr doc-container=\"rowcells\"></tr>",
                 "label": "Table Row",
                 "properties": [
                     "background-styles",
@@ -412,16 +404,17 @@
                     "table"
                 ],
                 "directives": {
-                    "tablerow": {
+                    "rowcells": {
                         "allowedChildren": [
-                            "tablecell"
+                            "tablecell",
+                            "headercell"
                         ]
                     }
                 }
             },
             {
                 "name": "tablecell",
-                "html": "<td doc-container=\"tablecell\"></td>",
+                "html": "<td doc-container=\"cellitems\"></td>",
                 "label": "Table Cell",
                 "properties": [
                     "background-styles",
@@ -434,7 +427,7 @@
             },
             {
                 "name": "headercell",
-                "html": "<th doc-container=\"headercell\"></td>",
+                "html": "<th doc-container=\"cellitems\"></td>",
                 "label": "Table Header Cell",
                 "properties": [
                     "background-styles",
@@ -524,6 +517,60 @@
                 "label": "Quote"
             }
         ],
+        "prefilledComponents": {
+            "table": {
+                "components": {
+                    "tablehead": [
+                        {
+                            "type": "tablerow",
+                            "components": {
+                                "rowcells": [
+                                    {
+                                        type: "headercell"
+                                    },
+                                    {
+                                        type: "headercell"
+                                    }
+                                ]
+                            }
+                        }
+                    ],
+                    "tablebody": [
+                        {
+                            "type": "tablerow",
+                            "components": {
+                                "rowcells": [
+                                    {
+                                        type: "tablecell"
+                                    },
+                                    {
+                                        type: "tablecell"
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                }
+            },
+            "tablecell": {
+                "components": {
+                    "cellitems": [
+                        {
+                            "type": "p"
+                        }
+                    ]
+                }
+            },
+            "headercell": {
+                "components": {
+                    "cellitems": [
+                        {
+                            "type": "p"
+                        }
+                    ]
+                }
+            },
+        },
         "structures": [
             {
                 label: "Content section",
