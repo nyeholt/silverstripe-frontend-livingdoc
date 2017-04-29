@@ -252,6 +252,15 @@
                     "main-and-sidebar",
                     "well"
                 ]
+            },
+            {
+                "label": "Tables",
+                "components": [
+                    "table",
+                    "headercell",
+                    "tablerow",
+                    "tablecell"
+                ]
             }
         ],
         "defaultComponents": {
@@ -266,7 +275,14 @@
                 "component": "p"
             }
         ],
-        "prefilledComponents": {},
+        "prefilledComponents": {
+            "image": {
+                "caption": {
+                    "value": "&nbsp;(all copyright by me)",
+                    "type": "string"
+                }
+            }
+        },
         "metadata": [
             {
                 "identifier": "title",
@@ -359,6 +375,74 @@
                 "label": "Panel",
                 "properties": [
                     "panel-styles"
+                ]
+            },
+            {
+                "name": "table",
+                "html": "<table><thead doc-container=\"tablehead\"></thead><tbody doc-container=\"tablebody\"></tbody></table>",
+                "label": "Table",
+                "properties": [
+                    "background-styles",
+                    "padded-styles",
+                    "text-styles"
+                ],
+                "directives": {
+                    "tablehead": {
+                        "allowedChildren": [
+                            "tablerow"
+                        ]
+                    },
+                    "tablebody": {
+                        "allowedChildren": [
+                            "tablerow"
+                        ]
+                    }
+                }
+            },
+            {
+                "name": "tablerow",
+                "html": "<tr doc-container=\"tablerow\"></tr>",
+                "label": "Table Row",
+                "properties": [
+                    "background-styles",
+                    "padded-styles",
+                    "text-styles"
+                ],
+                "allowedParents": [
+                    "table"
+                ],
+                "directives": {
+                    "tablerow": {
+                        "allowedChildren": [
+                            "tablecell"
+                        ]
+                    }
+                }
+            },
+            {
+                "name": "tablecell",
+                "html": "<td doc-container=\"tablecell\"></td>",
+                "label": "Table Cell",
+                "properties": [
+                    "background-styles",
+                    "padded-styles",
+                    "text-styles"
+                ],
+                "allowedParents": [
+                    "tablerow"
+                ]
+            },
+            {
+                "name": "headercell",
+                "html": "<th doc-container=\"headercell\"></td>",
+                "label": "Table Header Cell",
+                "properties": [
+                    "background-styles",
+                    "padded-styles",
+                    "text-styles"
+                ],
+                "allowedParents": [
+                    "tablerow"
                 ]
             },
             {

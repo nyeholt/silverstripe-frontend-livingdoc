@@ -276,3 +276,26 @@ body.doc-no-selection .livingdocs-toolbar iframe {
     transform: rotateX(0deg);
   }
 }
+
+table.doc-component {
+    border-spacing: 5px;
+    border-collapse: separate;
+}
+
+table.doc-component tr {
+    padding: 5px;
+    background-color:#ffc;
+    display:block;
+}
+
+table.doc-component td:empty, table.doc-component th:empty {
+    padding: 1em;
+    background-color: #ffc;
+}
+
+table.doc-component thead:empty, table.doc-component tbody:empty {
+    min-height: 100px;
+    min-width: 50%;
+    display: block;
+    padding: 5rem;
+}

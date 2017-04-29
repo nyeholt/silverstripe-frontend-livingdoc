@@ -133,7 +133,6 @@
     });
     
     $(document).on('click', 'form' + TOOLBAR_FORM +' input.action', function (e) { 
-        
         // catuch the "live" click and redirect instead
         if ($(this).attr('name') == 'action_live') {
             e.preventDefault();
@@ -208,7 +207,12 @@
 
         doc.design.load(selectedDesign);
 
-        doc.config({livingdocsCssFile: "frontend-livingdoc/javascript/livingdocs/css/livingdocs.css"});
+        doc.config({
+            livingdocsCssFile: "frontend-livingdoc/javascript/livingdocs/css/livingdocs.css",
+            editable: {
+                browserSpellcheck: true
+            }
+        });
 
         var livingdoc = doc.new(structure);
         
@@ -227,6 +231,13 @@
         });
 
         ready.then(function () {
+            
+            // captures model changes that need updating
+            livingdoc.model.changed.add(function () {
+                updateDataFields(true);
+            });
+            
+            
             var toolbarHolder = $('.livingdocs-toolbar');
 
             var $components = $('.livingdocs-components');
@@ -288,7 +299,6 @@
             
             // add in the structured components
             if (selectedDesign.structures && selectedDesign.structures.length > 0) {
-                
                 var createComponentList = function (components, parent, containerName) {
                     for (var i in components) {
                         // create the new one and set relevant styles
@@ -351,11 +361,11 @@
                     optionList.val('');
                 });
             }
-
-            livingdoc.model.changed.add(function () {
-                updateDataFields(true);
-            });
             
+            livingdoc.componentTree.componentAdded.add(function (newComponent) {
+                console.log(arguments);
+            });
+
             // text formatting options
             // @TODO - provide more in-paragraph options
             //  - sup/sub
@@ -429,19 +439,16 @@
                 
                 component.$html.attr('data-is-editing', 1);
                 
-                console.log(directiveName);
-                
                 var currentContent = component.model.get(directiveName);
-                console.log(currentContent);
                 
-                var $editor = $('<textarea>');
+                var $editor = $('<textarea>').css({'width': '100%'}).attr('rows', 10);
                 
                 var $actions = $('<div>');
                 var $save = $('<button>Save</button>');
                 var $cancel = $('<button>Cancel</button>');
                 $actions.append($save).append($cancel);
                 
-                $editor.val(currentContent);
+                $editor.html(currentContent);
                 component.$html.html($editor);
                 component.$html.append($actions);
                 
@@ -659,6 +666,13 @@
             }
         }
 
-    })
+    });
+    
+    var initContentTools = function () {
+        ContentTools.StylePalette.add([
+            new ContentTools.Style('Author', 'author', ['p'])
+        ]);
+
+    };
 
 })(jQuery);
