@@ -17,6 +17,10 @@
 
     var windowPrefs = "height=600,width=750,menubar=no,location=no,resizable=no,scrollbars=yes,status=no,titlebar=no,toolbar=no";
 
+    var TABLE_ROW_COMPONENT = 'tablerow';
+    var TABLE_CELL_COMPONENT = 'tablecell';
+    var HEADER_CELL_COMPONENT = 'headercell';
+
     window.ContentWrapper = {
         callback: null,
         currentLink: '',
@@ -587,6 +591,42 @@
                     }
                 }
                 
+//                console.log(component.componentName);
+                if (component.model.componentName === 'table') {
+                    // add row and add column
+                    
+                    var addRow = $('<button>').text('Add row').on('click',function () {
+                        var currentRow = component.$html.find('tr:first');
+                        var numCells = 0;
+                        if (currentRow.length) {
+                            numCells = currentRow.find('th').length ? 
+                                    currentRow.find('th').length : 
+                                    currentRow.find('td').length;
+                        }
+                        
+                        var newComponent = livingdoc.componentTree.getComponent(TABLE_ROW_COMPONENT);
+                        component.model.append('tablebody', newComponent);
+                        
+                        //create cells
+                        for (var i = 0; i < numCells; i++) {
+                            var newCell = livingdoc.componentTree.getComponent(TABLE_CELL_COMPONENT);
+                            newComponent.append('rowcells', newCell);
+                        }
+                        
+                    });
+                    
+                    var addCol = $('<button>').text('Add column').on('click', function () {
+                        var headerRow = component.model.containers.tablehead.first;
+                        addCellToRows(headerRow, HEADER_CELL_COMPONENT);
+                        
+                        var bodyRow = component.model.containers.tablebody.first;
+                        addCellToRows(bodyRow, TABLE_CELL_COMPONENT);
+                        
+                    });
+                    
+                    $('<div>').append(addRow).append(addCol).appendTo(options);
+                }
+                
                 var $delete_button = $("<button class='alert alert-danger'>").text("Remove").on("click", function () {
                     component.model.remove();
                     $("." + PROPS_HOLDER).remove();
@@ -646,6 +686,23 @@
             }
         };
 
+        /**
+         * Iteratively add cells to all the rows in a given table container
+         * 
+         * @param {type} firstRow
+         * @param {type} cellType
+         * @returns {.firstRow.next.next}
+         */
+        function addCellToRows(firstRow, cellType) {
+            if (firstRow) {
+                while (firstRow && firstRow.componentName == TABLE_ROW_COMPONENT) {
+                    var newCell = livingdoc.componentTree.getComponent(cellType);
+                    firstRow.append('rowcells', newCell);
+                    firstRow = firstRow.next;
+                }
+            }
+            return firstRow;
+        }
 
         function selectLink(callback) {
             ContentWrapper.setCallback(callback);

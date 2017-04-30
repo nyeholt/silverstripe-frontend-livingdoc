@@ -129,6 +129,14 @@ body.doc-no-selection .livingdocs-toolbar iframe {
     /*padding: 5px;*/
 }
 
+[data-doc-container="row"].doc-component-highlight, 
+[data-doc-container="section"].doc-component-highlight, 
+[data-doc-container="column"].doc-component-highlight {
+    border: 4px dotted #FA9E4E;
+    /*padding: 5px;*/
+}
+
+
 [data-doc-container="row"] {
     overflow: auto;
 }
@@ -282,10 +290,19 @@ table.doc-component {
     border-collapse: separate;
 }
 
+table.doc-component:hover {
+    outline: 1px dashed #888;
+}
+
 table.doc-component tr {
     padding: 5px;
     background-color:#ffc;
-    display:block;
+    margin: 4px 0;
+}
+
+table.doc-component tr:empty {
+    display: block;
+    height: 15px;
 }
 
 table.doc-component td:empty, table.doc-component th:empty {
