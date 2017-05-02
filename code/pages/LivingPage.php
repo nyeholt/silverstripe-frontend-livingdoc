@@ -65,7 +65,8 @@ class LivingPage extends Page
 class LivingPage_Controller extends Page_Controller
 {
     private static $allowed_actions = array(
-        'LivingForm'
+        'LivingForm',
+        'rendershortcode'
     );
 
     public function init() {

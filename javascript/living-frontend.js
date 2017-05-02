@@ -216,6 +216,14 @@
             editable: {
                 browserSpellcheck: true
             }
+            ,
+            directives: {
+                dataobject: {
+                    attr: 'doc-dataobject',
+                    renderedAttr: 'calculated in augment_config',
+                    overwritesContent: true
+                }
+            }
         });
 
         var livingdoc = doc.new(structure);
@@ -440,6 +448,10 @@
                     component.$html.removeAttr('data-is-editing');
                 })
             });
+            
+            livingdoc.interactiveView.page.embedItemClick.add(function (component, directiveName, event) {
+                
+            })
 
             livingdoc.interactiveView.page.focus.componentFocus.add(function (component) {
                 $("." + PROPS_HOLDER).remove();
@@ -560,7 +572,8 @@
                     }
                 }
                 
-
+                console.log(component.model);
+                
                 if (component.model.directives.image && component.model.directives.image.length) {
                     for (var directive_id in component.model.directives.image) {
                         var curr_img = component.model.directives.image[directive_id];

@@ -293,7 +293,11 @@
             }
         ],
         "components": [
-            
+            {
+                "name": "embeddeditem",
+                "html": "<div doc-embeditem=\"object\">Select an item...\n</div>",
+                "label": "Embed object"
+            },
             {
                 "name": "customhtml",
                 "html": "<div class=\"customhtml\" doc-html=\"html\">Click to modify...\n</div>",

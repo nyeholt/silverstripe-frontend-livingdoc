@@ -133,7 +133,8 @@ body.doc-no-selection .livingdocs-toolbar iframe {
 [data-doc-container="section"].doc-component-highlight, 
 [data-doc-container="column"].doc-component-highlight {
     border: 4px dotted #FA9E4E;
-    /*padding: 5px;*/
+/*    padding-top: 5px;
+    padding-bottom: 5px;*/
 }
 
 

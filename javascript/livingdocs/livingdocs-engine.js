@@ -2940,7 +2940,7 @@ module.exports = ComponentDirective = (function() {
 
 
 },{}],16:[function(require,module,exports){
-var EditableDirective, HtmlDirective, ImageDirective, LinkDirective, assert, imageService;
+var ComponentDirective, EditableDirective, HtmlDirective, ImageDirective, LinkDirective, EmbedItemDirective, assert, imageService;
 
 assert = require('../modules/logging/assert');
 
@@ -2953,6 +2953,27 @@ ImageDirective = require('./image_directive');
 HtmlDirective = require('./html_directive');
 
 LinkDirective = require('./link_directive');
+
+ComponentDirective = require('./component_directive');
+
+  var __hasProp = {}.hasOwnProperty,
+   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+
+// todo(Marcus) need to re-compile from coffee script really...
+EmbedItemDirective = (function(_super) {
+  __extends(EmbedItemDirective, _super);
+
+  function EmbedItemDirective() {
+    return EmbedItemDirective.__super__.constructor.apply(this, arguments);
+  }
+
+  EmbedItemDirective.prototype.isEmbed = true;
+
+
+  return EmbedItemDirective;
+
+})(ComponentDirective);
 
 module.exports = {
   create: function(_arg) {
@@ -2974,6 +2995,8 @@ module.exports = {
         return HtmlDirective;
       case 'link':
         return LinkDirective;
+    case 'embeditem':
+        return EmbedItemDirective;
       default:
         return assert(false, "Unsupported component directive: " + directiveType);
     }
@@ -2982,7 +3005,7 @@ module.exports = {
 
 
 
-},{"../image_services/image_service":37,"../modules/logging/assert":50,"./editable_directive":20,"./html_directive":22,"./image_directive":23,"./link_directive":24}],17:[function(require,module,exports){
+},{"../image_services/image_service":37,"../modules/logging/assert":50,"./editable_directive":20,"./html_directive":22,"./image_directive":23,"./link_directive":24,"./component_directive":15}],17:[function(require,module,exports){
 var ComponentContainer, ComponentModel, DirectiveCollection, assert, config, deepEqual, directiveFactory, guid, log;
 
 deepEqual = require('deep-equal');
@@ -3036,6 +3059,7 @@ module.exports = ComponentModel = (function() {
         case 'image':
         case 'html':
         case 'link':
+        case 'embeditem':
           this.createComponentDirective(directive);
           this.content || (this.content = {});
           _results.push(this.content[directive.name] = void 0);
@@ -4545,6 +4569,11 @@ module.exports = augmentConfig({
       attr: 'doc-container',
       renderedAttr: 'calculated in augment_config',
       overwritesContent: true
+    },
+    embeditem: {
+        attr: 'doc-embeditem',
+        renderedAttr: 'calculated in augment_config',
+        overwritesContent: true
     },
     editable: {
       attr: 'doc-editable',
@@ -9178,6 +9207,7 @@ module.exports = InteractivePage = (function(_super) {
     this.imageClick = $.Callbacks();
     this.htmlElementClick = $.Callbacks();
     this.linkClick = $.Callbacks();
+    this.embedItemClick = $.Callbacks();
     this.componentWillBeDragged = $.Callbacks();
     this.componentWasDropped = $.Callbacks();
     this.dragBase = new DragBase(this);
@@ -9271,6 +9301,8 @@ module.exports = InteractivePage = (function(_super) {
           return this.linkClick.fire(componentView, directives['link'].name, event);
         } else if (directives['html']) {
           return this.htmlElementClick.fire(componentView, directives['html'].name, event);
+        } else if (directives['embeditem']) {
+            return this.embedItemClick.fire(componentView, directives['embeditem'].name, event);
         }
       }
     } else {
@@ -10086,6 +10118,9 @@ module.exports = Template = (function() {
             return _this.formatContainer(directive.name, directive.elem);
           case 'html':
             return _this.formatHtml(directive.name, directive.elem);
+        case 'embeditem': 
+            console.log (directive);
+            break;
         }
       };
     })(this));
