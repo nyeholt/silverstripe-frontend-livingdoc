@@ -439,13 +439,17 @@
                 $cancel.click(function () {
                     component.$html.html(currentContent);
                     component.$html.removeAttr('data-is-editing');
+                    $editor.remove();
                 });
                 
                 $save.click(function () {
                     var newContent = $editor.val();
-                    component.model.setContent(directiveName, newContent);
-                    component.$html.html(newContent);
+                    var catcher = $('<div>');
+                    catcher.append(newContent);
+                    catcher.find('script').remove();
+                    component.model.setContent(directiveName, catcher.html());
                     component.$html.removeAttr('data-is-editing');
+                    $editor.remove();
                 })
             });
             
