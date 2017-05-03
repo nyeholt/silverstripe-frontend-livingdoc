@@ -576,8 +576,6 @@
                     }
                 }
                 
-                console.log(component.model);
-                
                 if (component.model.directives.image && component.model.directives.image.length) {
                     for (var directive_id in component.model.directives.image) {
                         var curr_img = component.model.directives.image[directive_id];
@@ -608,7 +606,27 @@
                     }
                 }
                 
-//                console.log(component.componentName);
+                if (component.model.directives.embeditem && component.model.directives.embeditem.length) {
+                    for (var index in component.model.directives.embeditem) {
+                        var _thisItem  = component.model.directives.embeditem[index];
+                        
+                        var currentValue = component.model.get(_thisItem.name);
+                        currentValue = currentValue || {source: '', content: null};
+                        
+                        var attrInput = null;
+                        var attrlbl = $('<label>').text(_thisItem.name + ' source');
+                        attrInput = $("<input>").attr({type: 'text', placeholder: 'Source string'}).val(currentValue.source);
+                        attrInput.on("change", function () {
+                            currentValue.source = $(this).val();
+                            currentValue.content = '<!--source 123-->@todo update from an ajax request to source';
+                            component.model.setContent(_thisItem.name, currentValue);
+                        });
+                        attrlbl.append(attrInput);
+                        options.append(attrlbl);
+                    }
+                    
+                }
+                
                 if (component.model.componentName === 'table') {
                     // add row and add column
                     

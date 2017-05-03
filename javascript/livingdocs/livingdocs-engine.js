@@ -7794,6 +7794,8 @@ module.exports = ComponentView = (function() {
           return this.setImage(name, directive.getImageUrl());
         }
         break;
+      case 'embeditem':
+        return this.setEmbedItem(name, value);
       case 'html':
         return this.setHtml(name, value);
       case 'link':
@@ -7868,6 +7870,32 @@ module.exports = ComponentView = (function() {
     this.directivesToReset || (this.directivesToReset = {});
     return this.directivesToReset[name] = name;
   };
+  
+  
+  ComponentView.prototype.setEmbedItem = function (name, value) {
+      var $elem;
+      $elem = this.directives.$getElem(name);
+      
+      value = value || {source: '', content: null};
+      
+      if (!value.content) {
+          value.content = this.template.defaults[name];
+      }
+      
+      $elem.attr('data-embed-source-' + name, value.source);
+      
+      $elem.html(value.content);
+      
+      this.directivesToReset || (this.directivesToReset = {});
+      return this.directivesToReset[name] = name;
+  }
+  
+  
+  ComponentView.prototype.getEmbedItem = function (name) {
+      var $elem;
+      $elem = this.directives.$getElem(name);
+      return $elem.attr('data-embed-' + name);
+  }
 
   ComponentView.prototype.setLink = function(name, value) {
     var $elem;
@@ -10118,9 +10146,9 @@ module.exports = Template = (function() {
             return _this.formatContainer(directive.name, directive.elem);
           case 'html':
             return _this.formatHtml(directive.name, directive.elem);
-        case 'embeditem': 
-            console.log (directive);
-            break;
+          case 'embeditem': 
+              // just doing the same for now
+            return _this.formatHtml(directive.name, directive.elem);  
         }
       };
     })(this));

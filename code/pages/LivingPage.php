@@ -1,5 +1,8 @@
 <?php
 
+use \Wa72\HtmlPageDom\HtmlPageCrawler;
+
+
 /**
  * 
  *
@@ -58,6 +61,25 @@ class LivingPage extends Page
 
         if (!$this->PageStructure) {
             $this->PageStructure = json_encode(self::config()->default_page);
+        }
+
+        // convert relevant bits of the content from the data-embed-source tag
+        // into shortcodes for runtime translation
+        // https://github.com/wasinger/htmlpagedom
+
+        if (strlen($this->Content)) {
+            $c = HtmlPageCrawler::create($this->Content);
+            $toreplace = $c->filter('[data-embed-source-object]');
+
+            foreach ($toreplace as $replaceNode) {
+                $cnode = HtmlPageCrawler::create($replaceNode);
+                $replaceWith = $cnode->attr('data-embed-source-object');
+                $cnode->text("Replaced with " . $replaceWith);
+
+                $text = $cnode->text();
+            }
+
+            $this->Content = $c->saveHTML();
         }
     }
 }

@@ -231,7 +231,7 @@
             {
                 "label": "Embeds",
                 "components": [
-                    "media"
+                    "embeddeditem"
                 ]
             },
             {
