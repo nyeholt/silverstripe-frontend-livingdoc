@@ -186,6 +186,9 @@
 
     $(function () {
         var structure = $('#page-structure').length > 0 ? $('#page-structure').data('structure') : null;
+        
+        var embeds = JSON.parse($('input[name=Embeds]').val());
+        var EMBED_LINK = $('input[name=EmbedLink]').val();
 
         if (structure) {
         } else {
@@ -615,13 +618,41 @@
                         
                         var attrInput = null;
                         var attrlbl = $('<label>').text(_thisItem.name + ' source');
-                        attrInput = $("<input>").attr({type: 'text', placeholder: 'Source string'}).val(currentValue.source);
-                        attrInput.on("change", function () {
-                            currentValue.source = $(this).val();
-                            currentValue.content = '<!--source 123-->@todo update from an ajax request to source';
-                            component.model.setContent(_thisItem.name, currentValue);
+                        
+                        if (embeds) {
+                            attrInput = $('<select>');
+                            attrInput.append('<option>-- select item --</option>');
+                            for (var label in embeds) {
+                                var opt = $('<option>').appendTo(attrInput);
+                                opt.attr('value', label).text(label);
+                            }
+                        } else {
+                            attrInput = $("<input>").attr({type: 'text', placeholder: 'Source string'});
+                        }
+                        
+                        if (attrInput) {
+                            attrInput.val(currentValue.source);
+                        }
+                        
+                        var attrButton = $('<button>✔</button>');
+                        attrButton.on("click", function () {
+                            var selected = attrInput.val();
+                            if (selected) {
+                                $.get(EMBED_LINK, {embed: selected}).success(function (data) {
+                                    component.model.setContent(_thisItem.name, {
+                                        source: selected,
+                                        content: data
+                                    });
+                                });
+                            } else {
+                                component.model.setContent(_thisItem.name, {
+                                    source: '',
+                                    content: ''
+                                });
+                            }
+                            
                         });
-                        attrlbl.append(attrInput);
+                        attrlbl.append(attrInput).append(attrButton);
                         options.append(attrlbl);
                     }
                     
@@ -776,12 +807,5 @@
         }
 
     });
-    
-    var initContentTools = function () {
-        ContentTools.StylePalette.add([
-            new ContentTools.Style('Author', 'author', ['p'])
-        ]);
-
-    };
 
 })(jQuery);

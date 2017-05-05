@@ -12,6 +12,7 @@ class LivingPage extends Page
 {
     private static $db = [
         'PageStructure' => 'Text',
+        'Shortcodes'        => 'MultiValueField',
     ];
 
     private static $living_designs = [
@@ -44,12 +45,15 @@ class LivingPage extends Page
         $literalContent = LiteralField::create('Content', $link);
         $fields->replaceField('Content', $literalContent);
 
+        $pageOptions = [
+            KeyValueField::create('Shortcodes', 'Available shorcodes')
+        ];
         if (Permission::check('ADMIN')) {
-            $toggle = ToggleCompositeField::create('LivingPageContent', 'Page options', [
-                TextareaField::create('PageStructure', 'Raw structure')
-            ]);
-            $fields->addFieldToTab('Root.Main', $toggle);
+            $pageOptions[] = TextareaField::create('PageStructure', 'Raw structure');
         }
+
+        $toggle = ToggleCompositeField::create('LivingPageContent', 'Page options', $pageOptions);
+        $fields->addFieldToTab('Root.Main', $toggle);
 
         return $fields;
     }
@@ -74,12 +78,37 @@ class LivingPage extends Page
             foreach ($toreplace as $replaceNode) {
                 $cnode = HtmlPageCrawler::create($replaceNode);
                 $replaceWith = $cnode->attr('data-embed-source-object');
-                $cnode->text("Replaced with " . $replaceWith);
-
+                $replaceWith = $this->shortcodeFor($replaceWith);
+                $cnode->text("$replaceWith");
                 $text = $cnode->text();
             }
 
             $this->Content = $c->saveHTML();
+        }
+    }
+
+    public function shortcodeFor($label) {
+        $items = $this->Shortcodes->getValues();
+        return isset($items[$label]) ? $items[$label] : null;
+    }
+
+    public static function embeditem_handler($arguments, $content = null, $parser = null) {
+        return print_r($arguments, true);
+    }
+
+    public static function childlist_handler($arguments, $content = null, $parser = null) {
+        $page = null;
+        if (isset($arguments['id'])) {
+            $page = Page::get()->byID($arguments['id']);
+        }
+
+        if (!$page) {
+            $controller = Controller::has_curr() ? Controller::curr() : null;
+            $page = $controller instanceof ContentController ? $controller->data() : null;
+        }
+
+        if ($page) {
+            return $page->renderWith('ListingPage_ChildListing');
         }
     }
 }
@@ -88,7 +117,7 @@ class LivingPage_Controller extends Page_Controller
 {
     private static $allowed_actions = array(
         'LivingForm',
-        'rendershortcode'
+        'renderembed'
     );
 
     public function init() {
@@ -130,19 +159,22 @@ class LivingPage_Controller extends Page_Controller
 
         if (!$this->getRequest()->getVar('edit') && $this->data()->canEdit() && $this->getEditMode()) {
             $record = $this->editingRecord();
-            // make sure there's a design version
+
             $design = json_decode($record->PageStructure, true);
 
+            // check if we're incorrectly nested; supports legacy structures
             if (!isset($design['data']) && isset($design['content'])) {
                 $design = ['data' => $design];
             }
 
+            // create a default page data
             if (!$design) {
                 $design = [
                     'data' => LivingPage::config()->default_page
                 ];
             }
 
+            // make sure there's a design version
             if (!isset($design['data']['design']['version'])) {
                 $design['data']['design'] = [
                     'name' => 'bootstrap3',
@@ -154,6 +186,11 @@ class LivingPage_Controller extends Page_Controller
             if (class_exists('Multisites') && Multisites::inst()->getCurrentSite()->LivingPageTheme) {
                 $design['data']['design']['name'] = Multisites::inst()->getCurrentSite()->LivingPageTheme;
             }
+
+            // @todo(Marcus) Add in logic that will update any embed items to the latest
+            // shortcoded display of things... OR we do it in JS using ajax requests... ? 
+            // $this->updateShortcodeDisplay
+
 
             $this->data()->extend('updateLivingDesign', $design);
 
@@ -183,9 +220,17 @@ class LivingPage_Controller extends Page_Controller
 
             Requirements::css('frontend-livingdoc/css/living-frontend.css');
         }
-
-        
 	}
+
+    public function renderembed() {
+        $item = $this->getRequest()->getVar('embed');
+        $available = $this->data()->Shortcodes->getValues();
+
+        if (isset($available[$item])) {
+            $shortcodeStr = $available[$item];
+            return ShortcodeParser::get_active()->parse($shortcodeStr);
+        }
+    }
 
     protected function editingRecord() {
         Versioned::reading_stage('Stage');
@@ -217,9 +262,14 @@ class LivingPage_Controller extends Page_Controller
         if (!$this->getEditMode()) {
             return;
         }
+
+        $embeds = $this->data()->Shortcodes->getValues();
+
         $fields = FieldList::create([
             HiddenField::create('PageStructure', "JSON structure"),
             HiddenField::create('Content', "HTML structure"),
+            HiddenField::create('Embeds', 'Content embeds', json_encode($embeds)),
+            HiddenField::create('EmbedLink', 'Embed link', $this->data()->Link('renderembed'))
         ]);
 
         $actions = FieldList::create([
