@@ -377,8 +377,6 @@
             //  - strike
             //  - text-alignment (an option maybe?) 
             livingdoc.interactiveView.page.editableController.selection.add(function (view, editableName, selection) {
-                $(".livingdocs_EditorField_Toolbar_textopts").remove()
-                var outer_el = $("<div>").addClass("livingdocs_EditorField_Toolbar_textopts");
                 if (selection && selection.isSelection) {
                     var rect = selection.getCoordinates();
                     
@@ -489,6 +487,7 @@
 
             livingdoc.interactiveView.page.focus.componentFocus.add(function (component) {
                 $("." + PROPS_HOLDER).remove();
+                $(".livingdocs_EditorField_Toolbar_textopts").remove();
                 var options = $("<div>").addClass(PROPS_HOLDER)
                 options.append("<h4>" + component.model.componentName + " properties</h4>");
                 
@@ -687,41 +686,49 @@
                 
                 if (component.model.componentName === 'table') {
                     // add row and add column
-                    
-//                    showButtonBar([
-//                        
-//                    ]);
-                    
-                    var addRow = $('<button>').text('Add row').on('click',function () {
-                        var currentRow = component.$html.find('tr:first');
-                        var numCells = 0;
-                        if (currentRow.length) {
-                            numCells = currentRow.find('th').length ? 
-                                    currentRow.find('th').length : 
-                                    currentRow.find('td').length;
-                        }
+
+                    var tableNode = component.$html[0];
+                    if (tableNode) {
+                        var pos = {
+                            top: tableNode.offsetTop - 20,
+                            left: tableNode.offsetLeft + 20
+                        };
+                        showButtonBar([
+                            {
+                                label: 'Add row',
+                                click: function () {
+                                    var currentRow = component.$html.find('tr:first');
+                                    var numCells = 0;
+                                    if (currentRow.length) {
+                                        numCells = currentRow.find('th').length ?
+                                                currentRow.find('th').length :
+                                                currentRow.find('td').length;
+                                    }
+
+                                    var newComponent = livingdoc.componentTree.getComponent(TABLE_ROW_COMPONENT);
+                                    component.model.append('tablebody', newComponent);
+
+                                    //create cells
+                                    for (var i = 0; i < numCells; i++) {
+                                        var newCell = livingdoc.componentTree.getComponent(TABLE_CELL_COMPONENT);
+                                        newComponent.append('rowcells', newCell);
+                                    }
+                                }
+                            },
+                            {
+                                label: 'Add col',
+                                click: function () {
+                                    var headerRow = component.model.containers.tablehead.first;
+                                    addCellToRows(headerRow, HEADER_CELL_COMPONENT);
+
+                                    var bodyRow = component.model.containers.tablebody.first;
+                                    addCellToRows(bodyRow, TABLE_CELL_COMPONENT);
+                                }
+                            }
+                            
+                        ], pos);
                         
-                        var newComponent = livingdoc.componentTree.getComponent(TABLE_ROW_COMPONENT);
-                        component.model.append('tablebody', newComponent);
-                        
-                        //create cells
-                        for (var i = 0; i < numCells; i++) {
-                            var newCell = livingdoc.componentTree.getComponent(TABLE_CELL_COMPONENT);
-                            newComponent.append('rowcells', newCell);
-                        }
-                        
-                    });
-                    
-                    var addCol = $('<button>').text('Add column').on('click', function () {
-                        var headerRow = component.model.containers.tablehead.first;
-                        addCellToRows(headerRow, HEADER_CELL_COMPONENT);
-                        
-                        var bodyRow = component.model.containers.tablebody.first;
-                        addCellToRows(bodyRow, TABLE_CELL_COMPONENT);
-                        
-                    });
-                    
-                    $('<div>').append(addRow).append(addCol).appendTo(options);
+                    }
                 }
                 
                 var $delete_button = $("<button class='alert alert-danger'>").text("Remove").on("click", function () {

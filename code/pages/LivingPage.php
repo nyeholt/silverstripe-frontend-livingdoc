@@ -83,7 +83,12 @@ class LivingPage extends Page
                 $text = $cnode->text();
             }
 
-            $this->Content = $c->saveHTML();
+            $convertedHtml = $c->saveHTML();
+            
+            // back-convert link shortcodes
+            $convertedHtml = preg_replace('/%5B(.+?)%5D/','[\\1]', $convertedHtml);
+            
+            $this->Content = $convertedHtml;
         }
     }
 
