@@ -350,6 +350,26 @@
                     }
                 }
             });
+            
+            var showButtonBar = function (buttons, loc) {
+                $(".livingdocs_EditorField_Toolbar_textopts").remove()
+                var outer_el = $("<div>").addClass("livingdocs_EditorField_Toolbar_textopts");
+                
+                for (var i = 0; i < buttons.length; i++) {
+                    var b = buttons[i];
+                    var buttonEl = $('<button>').html(b.label);
+                    if (b.title) {
+                        buttonEl.attr('title', b.title);
+                    }
+                    buttonEl.on('mousedown', function (e) { e.preventDefault();})
+                    buttonEl.on('click', b.click);
+                    
+                    outer_el.append(buttonEl);
+                }
+
+                outer_el.css({position: "absolute", left: loc.left, top: loc.top - 40, background: "transparent", "z-index": 1000});
+                $('body').append(outer_el);
+            };
 
             // text formatting options
             // @TODO - provide more in-paragraph options
@@ -358,15 +378,14 @@
             //  - text-alignment (an option maybe?) 
             livingdoc.interactiveView.page.editableController.selection.add(function (view, editableName, selection) {
                 $(".livingdocs_EditorField_Toolbar_textopts").remove()
-                var outer_el = $("<div>").addClass("livingdocs_EditorField_Toolbar_textopts")
+                var outer_el = $("<div>").addClass("livingdocs_EditorField_Toolbar_textopts");
                 if (selection && selection.isSelection) {
-                    var rect = selection.getCoordinates()
-
-                    var $el = $("<button>").text("Add Link")
-                            .on('mousedown', function (e) {
-                                e.preventDefault()
-                            })
-                            .on('click', function () {
+                    var rect = selection.getCoordinates();
+                    
+                    showButtonBar([
+                        {
+                            label: 'Add link',
+                            click: function () {
                                 selection.save();
                                 // prevents range saving from being cleared on focus lost. @see editable.js pastingAttribute
                                 selection.host.setAttribute('data-editable-is-pasting', true);
@@ -377,41 +396,49 @@
                                     selection.host.setAttribute('data-editable-is-pasting', false);
                                     selection.triggerChange();
                                 });
-                            })
-                    outer_el.append($el);
-                    var $el = $("<button>").text("Bold")
-                            .on('mousedown', function (e) {
-                                e.preventDefault()
-                            })
-                            .on('click', function () {
+                            }
+                        },
+                        {
+                            label: '<strong>B</strong>',
+                            title: 'Bold',
+                            click: function () {
                                 selection.toggleBold()
                                 selection.triggerChange()
-                            })
-                    outer_el.append($el);
-                    var $el = $("<button>").text("Italic")
-                            .on("mousedown", function (e) {
-                                e.preventDefault()
-                            })
-                            .on('click', function () {
+                            }
+                        },
+                        {
+                            label: '<em>I</em>',
+                            title: 'Italics',
+                            click: function () {
                                 selection.toggleEmphasis()
                                 selection.triggerChange();
-                            })
-                    outer_el.append($el);
-                    
-                    var $el = $('<button>').text('Clean')
-                            .on('mousedown', function (e) {
-                                e.preventDefault();
-                            })
-                            .on("click", function (e) {
+                            }
+                        },
+                        {
+                            label: '<sub>s</sub>',
+                            title: 'Subscript',
+                            click: function () {
+                                var s = selection.createElement('sub');
+                                selection.toggle(s);
+                                selection.triggerChange();
+                            }
+                        },
+                        {
+                            label: '<sup>s</sup>',
+                            title: 'Superscript',
+                            click: function () {
+                                var s = selection.createElement('sup');
+                                selection.toggle(s);
+                                selection.triggerChange();
+                            }
+                        },
+                        {
+                            label: 'Clear',
+                            click: function () {
                                 selection.removeFormatting();
-                            })
-                    ;
-                    
-                    outer_el.append($el);
-                    
-                    $("button", outer_el)
-                    outer_el.css({position: "absolute", left: rect.left, top: rect.top - 40, background: "transparent", "z-index": 1000})
-                    $("body").append(outer_el)
+                            }
+                        }
+                    ], rect);
                 }
             });
 
@@ -660,6 +687,10 @@
                 
                 if (component.model.componentName === 'table') {
                     // add row and add column
+                    
+//                    showButtonBar([
+//                        
+//                    ]);
                     
                     var addRow = $('<button>').text('Add row').on('click',function () {
                         var currentRow = component.$html.find('tr:first');
