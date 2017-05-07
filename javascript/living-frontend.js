@@ -270,7 +270,8 @@
                 $componentsList.append($group);
             }
             
-            // use selectedDesign - the template, not active components at this point
+            // use selectedDesign - the template, not active components at this point, as it is simpler to 
+            // iterate
             for (var i = 0; i < selectedDesign.groups.length; i++) {
                 addGroup(selectedDesign.groups[i].label, i);
                 for (var j in selectedDesign.groups[i].components) {
@@ -280,6 +281,7 @@
 
             addGroup('Misc', 'misc');
             
+            // Adds in all the components in their appropriate grouping 
             for (var i = 0; i < activeDesign.components.length; i++) {
                 var template = activeDesign.components[i];
                 var $entry = $('<div class="toolbar-entry">');
@@ -298,6 +300,7 @@
             
             delete componentGroupMap;
             
+            // Binds the drag behaviour when a menu item is dragged
             function draggableComponent(doc, name, $elem) {
                 $elem.on('mousedown', function (event) {
                     var newComponent = livingdoc.createComponent(name);
@@ -312,7 +315,7 @@
                 });
             }
             
-            // add in the structured components
+            // add in the structured components that can be chosen to have fully created
             if (selectedDesign.structures && selectedDesign.structures.length > 0) {
                 var optionList = $('<select>').attr('id', 'component-structures');
                 optionList.append('<option>-- structures --</option>');
@@ -341,6 +344,9 @@
                 });
             }
             
+            // when adding a component, see if it has a set of components that should
+            // be immediately created. Useful for something like a table cell that should always
+            // have a paragraph in it when added
             livingdoc.componentTree.componentAdded.add(function (newComponent) {
                 var toCreate = selectedDesign.prefilledComponents[newComponent.componentName];
                 
@@ -351,6 +357,16 @@
                 }
             });
             
+            /**
+             * Show a list of buttons in a toolbar. The button list should be
+             * [
+             *     { label: 'Label', title: 'tooltop', click: function () {} }
+             * ]
+             * 
+             * @param an array of button objects
+             * @param an object with a .left and .top  property that defines where to show the bar
+             * @returns void
+             */
             var showButtonBar = function (buttons, loc) {
                 $(".livingdocs_EditorField_Toolbar_textopts").remove()
                 var outer_el = $("<div>").addClass("livingdocs_EditorField_Toolbar_textopts");
@@ -493,6 +509,7 @@
                 
                 var closer = $('<a href="#">X</a>').appendTo(options);
                 closer.css({
+                    'padding-right': '20px',
                     'float': 'right'
                 });
                 closer.click(function (e) {
