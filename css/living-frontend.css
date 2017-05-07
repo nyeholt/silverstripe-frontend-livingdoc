@@ -59,7 +59,7 @@ body {
     }
 
 .livingdocs-toolbar .toolbar-entry {
-  padding: 10px;
+  padding: 5px;
   border: 1px solid rgba(0, 0, 0, 0.5);
   margin: 5px;
   cursor: move;
@@ -152,8 +152,8 @@ body.doc-no-selection .livingdocs-toolbar iframe {
 
 
 .livingdocs-components h2 {
-  font-size: 26px;
-  line-height: 34px;
+  font-size: 18px;
+  line-height: 24px;
   font-weight: 300;
   letter-spacing: 1px;
   display: block;
@@ -164,15 +164,15 @@ body.doc-no-selection .livingdocs-toolbar iframe {
 
 
 .livingdocs-components div.group-component-holder {
-  font-size: 17px;
-  line-height: 26px;
+  font-size: 14px;
+  line-height: 22px;
   letter-spacing: 1px;
   position: relative;
   overflow: hidden;
   max-height: 800px;
   opacity: 1;
   transform: translate(0, 0);
-  margin-top: 14px;
+  margin-top: 10px;
   z-index: 2;
 }
 
