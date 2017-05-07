@@ -192,10 +192,13 @@ class LivingPage_Controller extends Page_Controller
                 $design['data']['design']['name'] = Multisites::inst()->getCurrentSite()->LivingPageTheme;
             }
 
-            // @todo(Marcus) Add in logic that will update any embed items to the latest
-            // shortcoded display of things... OR we do it in JS using ajax requests... ? 
-            // $this->updateShortcodeDisplay
+            // converts all nodes to current content state where necessary (in particular, embed items)
+            $newContent = [];
+            foreach ($design['data']['content'] as $component) {
+                $newContent[] = $this->convertEmbedNodes($component);
+            }
 
+            $design['data']['content'] = $newContent;
 
             $this->data()->extend('updateLivingDesign', $design);
 
@@ -226,6 +229,35 @@ class LivingPage_Controller extends Page_Controller
             Requirements::css('frontend-livingdoc/css/living-frontend.css');
         }
 	}
+
+    /**
+     * Converts any embeditem shortcode into its current state representation
+     *
+     * @param array $component
+     */
+    protected function convertEmbedNodes(&$component) {
+        if (isset($component['identifier']) && strpos($component['identifier'], 'embeddeditem') && isset($component['content'])) {
+            $p = 1;
+            foreach ($component['content'] as $name => $props) {
+                $shortCode = $this->data()->shortcodeFor($props['source']);
+                if ($shortCode) {
+                    $props['content'] = ShortcodeParser::get_active()->parse($shortCode);
+                }
+                $component['content'][$name] = $props;
+            }
+        }
+        if (isset($component['containers'])) {
+            foreach ($component['containers'] as $name => $items) {
+                $newItems = [];
+                foreach ($component['containers'][$name] as $subComponent) {
+                    $newItems[] = $this->convertEmbedNodes($subComponent);
+                }
+                $component['containers'][$name] = $newItems;
+            }
+        }
+
+        return $component;
+    }
 
     public function renderembed() {
         $item = $this->getRequest()->getVar('embed');
