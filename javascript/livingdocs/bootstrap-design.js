@@ -238,6 +238,7 @@
                 "label": "Lists",
                 "components": [
                     "list-group",
+                    'numbered-list-group',
                     "list-group-item"
                 ]
             },
@@ -484,7 +485,7 @@
             {
                 "name": "list-group",
                 "html": "<ul class=\"list-group\" doc-container=\"list\"></ul>",
-                "label": "List Group",
+                "label": "List",
                 "directives": {
                     "list": {
                         "allowedChildren": [
@@ -495,11 +496,24 @@
                 }
             },
             {
+                "name": "numbered-list-group",
+                "html": "<ol class=\"list-group\" doc-container=\"list\"></ol>",
+                "label": "Ordered List",
+                "directives": {
+                    "list": {
+                        "allowedChildren": [
+                            "list-group-item"
+                        ]
+                    }
+                }
+            },
+            {
                 "name": "list-group-item",
                 "html": "<li class=\"list-group-item\" doc-editable=\"text\">List item</li>",
-                "label": "List Group Item",
+                "label": "List Item",
                 "allowedParents": [
-                    "list-group"
+                    "list-group",
+                    'numbered-list-group'
                 ]
             },
             {
