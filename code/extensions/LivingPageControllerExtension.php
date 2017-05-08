@@ -15,7 +15,7 @@ class LivingPageControllerExtension extends Extension
 
         if ($this->owner->getRequest()->getVar('edit') && !$this->owner->data()->canEdit()) {
             // redirect to login
-            return Security::permissionFailure($this);
+            return Security::permissionFailure($this->owner);
         }
 
         if ($this->owner->getRequest()->getVar('edit') === 'stop') {
