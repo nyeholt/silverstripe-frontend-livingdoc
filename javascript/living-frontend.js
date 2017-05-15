@@ -459,41 +459,93 @@
             livingdoc.interactiveView.page.htmlElementClick.add(function (component, directiveName, event) {
                 
                 var isEditing = component.$html.attr('data-is-editing');
+                component.$html.addClass('js-editor-block');
                 if (isEditing) {
                     return;
                 }
                 
                 component.$html.attr('data-is-editing', 1);
                 
-                var currentContent = component.model.get(directiveName);
+                var currentContent = component.model.getData(directiveName + '-raw');
                 
-                var $editor = $('<textarea>').css({'width': '100%'}).attr('rows', 10);
-                
+                var $edBlock = $('<div>').css({
+                    'width': '100%',
+                    'position': 'absolute',
+                    'top': 0,
+                    'right': 0,
+                    'bottom': '20px',
+                    'left': 0,
+                });
+                var aceeditor = null;
+
                 var $actions = $('<div>');
-                var $save = $('<button>Save</button>');
+                var $save = $('<button>OK</button>');
                 var $cancel = $('<button>Cancel</button>');
-                $actions.append($save).append($cancel);
+                $actions.css({position: 'absolute', 'bottom': 0}).append($save).append($cancel);
                 
-                $editor.html(currentContent);
-                component.$html.html($editor);
+                $edBlock.text(currentContent);
+                component.$html.html($edBlock);
                 component.$html.append($actions);
                 
-                $editor.focus();
+                $edBlock.focus();
+
+                var aceeditor = ace.edit($edBlock[0]);
+                aceeditor.session.setMode('ace/mode/html');
+
+                if (component.$html.hasClass('js-living-markdown')) {
+                    aceeditor.session.setMode('ace/mode/markdown');
+                }
+
+                var cleanUp = function () {
+                    if (aceeditor) {
+                        aceeditor.destroy();
+                    }
+                    $edBlock.remove();
+                    component.$html.removeAttr('data-is-editing');
+                    component.$html.removeClass('js-editor-block');
+                }
                 
                 $cancel.click(function () {
-                    component.$html.html(currentContent);
-                    component.$html.removeAttr('data-is-editing');
-                    $editor.remove();
+                    component.$html.html(component.model.get(directiveName));
+                    cleanUp();
                 });
                 
                 $save.click(function () {
-                    var newContent = $editor.val();
+                    var newContent = $edBlock.html();
+                    if (aceeditor) {
+                        newContent = aceeditor.getValue();
+                    }
+                    
                     var catcher = $('<div>');
-                    catcher.append(newContent);
-                    catcher.find('script').remove();
-                    component.model.setContent(directiveName, catcher.html());
-                    component.$html.removeAttr('data-is-editing');
-                    $editor.remove();
+                    catcher.append(newContent); 
+                    catcher.find('script').remove().find('textarea').remove();
+
+                    var rawContent = catcher.html();
+                    component.model.setData(directiveName + '-raw', rawContent);
+
+                    if (component.$html.hasClass('js-living-markdown')) {
+                        // parse it first
+                        var converter = new showdown.Converter();
+                        rawContent = converter.makeHtml(rawContent);
+                    }
+
+                    // highlight code blocks
+                    catcher.html(rawContent);
+                    catcher.find('pre > code').each (function (i, block) {
+                        hljs.highlightBlock(block);
+                    })
+
+                    rawContent = catcher.html();
+
+                    if (!component.model.setContent(directiveName, rawContent)) {
+                        // we need to force this as the content set by rawContent may not
+                        // be different and trigger the HTML update
+                        if (component.model.componentTree) {
+                            component.model.componentTree.contentChanging(component.model, directiveName);
+                        }
+                    }
+                    
+                    cleanUp();
                 })
             });
             

@@ -317,3 +317,18 @@ table.doc-component thead:empty, table.doc-component tbody:empty {
     display: block;
     padding: 5rem;
 }
+
+.js-editor-block {
+  min-height: 200px;
+  position: relative;
+}
+
+
+.js-editor-block button {
+    border: 1px outset #efefef;
+    font-size: small;
+}
+
+.js-editor-block button:hover {
+    background-color: #dcdcdc;
+}

@@ -3,7 +3,7 @@
         "name": "bootstrap3",
         "label": "Bootstrap 3",
         "version": "0.0.1",
-        "author": "upfront.io",
+        "author": "Marcus Nyeholt",
         "assets": {
             "css": [
                 "./css/base.css"
@@ -218,7 +218,6 @@
                 "components": [
                     "p",
                     "quote",
-                    "markdown",
                     "customhtml"
                 ]
             },
@@ -271,9 +270,6 @@
         },
         "defaultContent": [
             {
-                "component": "header"
-            },
-            {
                 "component": "p"
             }
         ],
@@ -304,11 +300,6 @@
                 "name": "customhtml",
                 "html": "<div class=\"customhtml\" doc-html=\"html\">Click to modify...\n</div>",
                 "label": "HTML"
-            },
-            {
-                "name": "markdown",
-                "html": "<div class=\"customhtml js-living-markdown\" doc-html=\"html\">Click to modify...\n</div>",
-                "label": "Markdown"
             },
             {
                 "name": "well",
@@ -596,72 +587,14 @@
             },
         },
         "structures": [
-            {
-                label: "Content section",
-                components: [
-                    {
-                        "type": "section",
-                        "styles": {"section-class" : "container"},   /* key value listing */
-                        "data_attributes": {'section': { 'data-sample': 'just an example'}}, /* inner-directive => { }  */
-                        "components": {
-                            "section": [        // the name of the container inside the component to add to
-                                {
-                                    "type": "row",
-                                    "styles": {
-                                        "text-styles": "text-center"
-                                    },
-                                    "data_attributes": {},
-                                    "components": {
-                                        "row": [
-                                            {
-                                                "type": "column",
-                                                "data_attributes": {}
-                                            }
-                                        ]
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                ]
-            }
+            
         ]
     };
+
     if (typeof module !== 'undefined' && module.exports) {
         return module.exports = designJSON;
     } else {
         this.design = this.design || {};
         this.design.bootstrap3 = designJSON;
     }
-    
-    // now update the design style options programmatically
-    var sizeLabels = {
-        'sm': 'Small',
-        'md': 'Medium', 
-        'lg': 'Large'
-    };
-    
-    for (var screen in sizeLabels) {
-        for (var i = 1; i < 13; i++) {
-            var opt = {
-                'caption' : sizeLabels[screen] + ' ' + i + ' wide',
-                'value' : 'col-' + screen + '-' + i
-            }
-            designJSON.componentProperties['column-width'].options.push(opt);
-            
-            var pushOpt = {
-                'caption': sizeLabels[screen] + ' push ' + i,
-                'value': 'col-' + screen + '-push-' + i
-            };
-            var pullOpt = {
-                'caption': sizeLabels[screen] + ' pull ' + i,
-                'value': 'col-' + screen + '-pull-' + i
-            };
-            
-            designJSON.componentProperties['column-float'].options.push(pushOpt);
-            designJSON.componentProperties['column-float'].options.push(pullOpt);
-        }
-    }
-
-    
 }).call(this);

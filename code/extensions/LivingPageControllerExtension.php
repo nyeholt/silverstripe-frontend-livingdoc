@@ -13,6 +13,9 @@ class LivingPageControllerExtension extends Extension
         // at the top so it can be overridden by user css
         Requirements::css('frontend-livingdoc/javascript/livingdocs/css/base.css');
 
+        // same with any highlight css needed
+        Requirements::css('frontend-livingdoc/javascript/highlight/googlecode.css');
+
         if ($this->owner->getRequest()->getVar('edit') && !$this->owner->data()->canEdit()) {
             // redirect to login
             return Security::permissionFailure($this->owner);
@@ -110,8 +113,16 @@ class LivingPageControllerExtension extends Extension
 
             Requirements::javascript('frontend-livingdoc/javascript/livingdocs/editable.js');
             Requirements::javascript('frontend-livingdoc/javascript/livingdocs/livingdocs-engine.js');
+
+            Requirements::javascript('frontend-livingdoc/javascript/showdown/showdown.min.js');
+            Requirements::javascript('frontend-livingdoc/javascript/ace/ace.min.js');
+            Requirements::javascript('frontend-livingdoc/javascript/ace/mode-markdown.js');
+            Requirements::javascript('frontend-livingdoc/javascript/ace/mode-html.js');
+            Requirements::javascript('frontend-livingdoc/javascript/highlight/highlight.min.js');
+
             Requirements::javascript($designFile);
 
+            
             Requirements::css('frontend-livingdoc/css/living-frontend.css');
         }
     }
