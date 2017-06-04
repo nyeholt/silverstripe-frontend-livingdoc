@@ -220,6 +220,7 @@
                 browserSpellcheck: true
             }
             ,
+            // really not sure if this matters here, but we'll run with it for now. 
             directives: {
                 dataobject: {
                     attr: 'doc-dataobject',
@@ -387,6 +388,10 @@
                 $('body').append(outer_el);
             };
 
+            livingdoc.interactiveView.page.editableController.editable.on('paste', function (elem, blocks, cursor) {
+                
+            });
+
             // text formatting options
             // @TODO - provide more in-paragraph options
             //  - sup/sub
@@ -456,6 +461,7 @@
                 }
             });
 
+            // HTML directive handling
             livingdoc.interactiveView.page.htmlElementClick.add(function (component, directiveName, event) {
                 
                 var isEditing = component.$html.attr('data-is-editing');

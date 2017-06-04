@@ -25,6 +25,23 @@ define full page structures in-place without needing convoluted CMS managed obje
 The module ships with the `LivingPage` page type that can be created in the CMS. After creation, click the 
 `Edit this page in-place` link to start modifying the page on the frontend of the site. 
 
+To enable global global shortcode configuration that can be added on all pages, add the following
+configuration (depending on whether you're using multisites or not)
+
+```
+---
+Name: livingpage_config
+---
+Site:
+  extensions:
+    - LivingPageSettingsExtension
+SiteConfig:
+  extensions:
+    - LivingPageSettingsExtension
+
+```
+
+
 ## Components
 
 The module comes with a base "design" which is a set of components defined in JavaScript 

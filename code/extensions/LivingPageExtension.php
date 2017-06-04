@@ -89,8 +89,28 @@ class LivingPageExtension extends DataExtension
     }
 
     public function shortcodeFor($label) {
-        $items = $this->owner->Shortcodes->getValues();
+        $items = $this->availableShortcodes();
         return isset($items[$label]) ? $items[$label] : null;
+    }
+
+    public function availableShortcodes() {
+        $configObject = class_exists('Site') ? \Multisites::inst()->getActiveSite() : \SiteConfig::current_site_config();
+
+        if ($configObject && $configObject->hasExtension('LivingPageSettingsExtension')) {
+            $configItems = $configObject->GlobalShortcodes->getValues();
+            if (!$configItems) {
+                $configItems = [];
+            }
+        }
+
+        $items = $this->owner->Shortcodes->getValues();
+        if (!$items) {
+            $items = [];
+        }
+        
+        $items = array_merge($configItems, $items);
+
+        return $items;
     }
 
     public static function embeditem_handler($arguments, $content = null, $parser = null) {

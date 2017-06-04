@@ -1,7 +1,7 @@
 <?php
 
 /**
- * 
+ * A controller for creating dialogs that get inserted into pages. 
  *
  * @author marcus
  */

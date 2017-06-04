@@ -163,7 +163,7 @@ class LivingPageControllerExtension extends Extension
             return $this->owner->httpError('403');
         }
         $item      = $this->owner->getRequest()->getVar('embed');
-        $available = $this->owner->data()->Shortcodes->getValues();
+        $available = $this->owner->data()->availableShortcodes();
 
         if (isset($available[$item])) {
             $shortcodeStr = $available[$item];
@@ -208,7 +208,7 @@ class LivingPageControllerExtension extends Extension
             return;
         }
 
-        $embeds = $this->owner->data()->Shortcodes->getValues();
+        $embeds = $this->owner->data()->availableShortcodes();
 
         $fields = FieldList::create([
                 HiddenField::create('PageStructure', "JSON structure"),
