@@ -96,9 +96,10 @@ class LivingPageExtension extends DataExtension
     public function availableShortcodes() {
         $configObject = class_exists('Site') ? \Multisites::inst()->getActiveSite() : \SiteConfig::current_site_config();
 
+         $configItems = [];
         if ($configObject && $configObject->hasExtension('LivingPageSettingsExtension')) {
             $configItems = $configObject->GlobalShortcodes->getValues();
-            if (!$configItems) {
+            if (!is_array($configItems)) {
                 $configItems = [];
             }
         }
