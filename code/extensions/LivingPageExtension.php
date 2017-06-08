@@ -93,10 +93,15 @@ class LivingPageExtension extends DataExtension
         return isset($items[$label]) ? $items[$label] : null;
     }
 
+    /**
+     * Gets all the shortcodes available for this page, inherited from its site
+     *
+     * @return array
+     */
     public function availableShortcodes() {
         $configObject = class_exists('Site') ? \Multisites::inst()->getActiveSite() : \SiteConfig::current_site_config();
 
-         $configItems = [];
+        $configItems = [];
         if ($configObject && $configObject->hasExtension('LivingPageSettingsExtension')) {
             $configItems = $configObject->GlobalShortcodes->getValues();
             if (!is_array($configItems)) {
@@ -112,6 +117,33 @@ class LivingPageExtension extends DataExtension
         $items = array_merge($configItems, $items);
 
         return $items;
+    }
+
+    /**
+     * Call this to update the design name used for the doc
+     *
+     * @param type $oldName
+     * @param type $newName
+     * @param type $components
+     */
+    public function updateDesignName($oldName, $newName, $components) {
+        $newComponents = [];
+        foreach ($components as $component) {
+            if (isset($component['identifier'])) {
+                $component['identifier'] = str_replace($oldName, $newName, $component['identifier']);
+            }
+            
+            if (isset($component['containers'])) {
+                foreach ($component['containers'] as $name => $items) {
+                    $newItems = [];
+                    $component['containers'][$name] = $this->updateDesignName($oldName, $newName, $component['containers'][$name]);
+                }
+            }
+
+            $newComponents[] = $component;
+        }
+
+        return $newComponents;
     }
 
     public static function embeditem_handler($arguments, $content = null, $parser = null) {

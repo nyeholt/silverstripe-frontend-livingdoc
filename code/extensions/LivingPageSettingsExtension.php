@@ -22,7 +22,7 @@ class LivingPageSettingsExtension extends DataExtension
     }
 
     public function updateLivingPageFields(\FieldList $fields) {
-        $opts = LivingPage::config()->living_designs;
+        $opts = LivingPageExtension::config()->living_designs;
         $opts = array_combine(array_keys($opts), array_keys($opts));
         
 
