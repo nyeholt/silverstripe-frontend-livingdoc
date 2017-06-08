@@ -210,7 +210,8 @@ body.doc-no-selection .livingdocs-toolbar iframe {
   margin-top: 16px;
   right: 10px;
 }
-.livingdocs-components ul li i:before, ul li i:after {
+.livingdocs-components ul li i:before, 
+.livingdocs-components ul li i:after {
   content: "";
   position: absolute;
   background-color: #ff6873;
