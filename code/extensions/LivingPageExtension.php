@@ -84,6 +84,10 @@ class LivingPageExtension extends DataExtension
             // back-convert link shortcodes
             $convertedHtml = preg_replace('/%5B(.+?)%5D/','[\\1]', $convertedHtml);
 
+            // replace empty <a> with <span>. Relies on correctly structure link tags
+            // so that there's no inner embedded <a>
+            $convertedHtml = preg_replace('/<a>(.+?)<\/a>/', '<span class="empty-href-span">\\1</span>', $convertedHtml);
+
             $this->owner->Content = $convertedHtml;
         }
     }
