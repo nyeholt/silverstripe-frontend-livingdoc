@@ -114,8 +114,11 @@ class LivingPageControllerExtension extends Extension
 
             Requirements::javascript(THIRDPARTY_DIR.'/jquery-form/jquery.form.js');
 
+            // our living docs integration files
             // will bind $ if not already bound, so that livingdocs doesn't die
+            Requirements::javascript('frontend-livingdoc/javascript/editor-content-bridge.js');
             Requirements::javascript('frontend-livingdoc/javascript/living-frontend.js');
+
 
             Requirements::javascript('frontend-livingdoc/javascript/livingdocs/editable.js');
             Requirements::javascript('frontend-livingdoc/javascript/livingdocs/livingdocs-engine.js');

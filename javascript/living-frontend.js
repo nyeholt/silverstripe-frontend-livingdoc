@@ -4,6 +4,8 @@
     if (!window.$) {
         window.$ = $;
     }
+    
+    var livingdoc;
 
     var DOC_HOLDER = '.livingdocs-editor';
     
@@ -11,112 +13,12 @@
     
     var PROPS_HOLDER = 'livingdocs_EditorField_Toolbar_options';
 
-    var mediaUrl = 'FrontendInsertDialog/MediaForm';
-    var imageUrl = 'FrontendInsertDialog/ImageForm';
-    var linkUrl = 'FrontendInsertDialog/LinkForm';
-
-    var windowPrefs = "height=600,width=750,menubar=no,location=no,resizable=no,scrollbars=yes,status=no,titlebar=no,toolbar=no";
-
+    
     var TABLE_ROW_COMPONENT = 'tablerow';
     var TABLE_CELL_COMPONENT = 'tablecell';
     var HEADER_CELL_COMPONENT = 'headercell';
 
-    window.ContentWrapper = {
-        callback: null,
-        currentLink: '',
-        currentContent: '',
-        dialogFrame: null,
-        closer: null,
-        linkDialogFrame: null,
-        mediaDialogFrame: null,
-
-        dialogDiv: null,
-
-        setCallback: function (callback) {
-            this.callback = callback;
-            this.currentLink = null;
-            this.currentContent = '';
-        },
-
-        setLinkObject: function (obj) {
-            this.currentLink = obj;
-            this.callback.call(this, obj);
-        },
-        setContent: function (content) {
-            this.callback(content);
-        },
-        init: function () {
-            this.linkDialogFrame = this.createFrame();
-            this.mediaDialogFrame = this.createFrame();
-            
-            this.closer = $('<a href="#" class="dialog-close">X</a>');
-            this.closer.click(function (e) {
-                e.preventDefault();
-                ContentWrapper.closeDialog();
-                return false;
-            });
-
-            $('body').append(this.closer);
-
-            this.linkDialogFrame.attr({'src': linkUrl});
-            this.mediaDialogFrame.attr({'src': mediaUrl});
-        },
-        createFrame: function () {
-            var frame = $('<iframe src="about:">');
-            frame.attr({
-                'class': "living-dialog"
-            });
-
-            $('body').append(frame);
-            return frame;
-        },
-        showDialog: function (type) {
-            // we may show a different dialog for images in future
-            switch (type) {
-                case 'media': {
-                    this.mediaDialogFrame.show();
-                    break;
-                }
-                case 'image': {
-                    this.mediaDialogFrame.show();
-                    break;
-                }
-                case 'link': {
-                    this.linkDialogFrame.show();
-                    break;
-                }
-            }
-            if (type == 'media') {
-                
-            } else {
-                
-            }
-            this.closer.show();
-        },
-        showTestDialog: function (link) {
-            var _this = this;
-            _this.dialogDiv.html('<input type="button" value="clickit" id="clicker" />');
-            _this.dialogDiv.show();
-            return;
-            $.get(link).done(function (html) {
-                _this.dialogDiv.html(html);
-                _this.dialogDiv.show();
-            });
-        },
-        closeDialog: function () {
-            this.mediaDialogFrame.hide();
-            this.linkDialogFrame.hide();
-            this.closer.hide();
-            
-            this.linkDialogFrame.attr({'src': 'about:'});
-            this.mediaDialogFrame.attr({'src': 'about:'});
-
-            this.linkDialogFrame.attr({'src': linkUrl});
-            this.mediaDialogFrame.attr({'src': mediaUrl});
-        }
-    };
-
-    ContentWrapper.init();
+    ContentBridge.init();
 
     $(document).on('click', function (e) {
         if ($(e.target).parents('.livingdocs-editor').length <= 0 &&
@@ -131,7 +33,7 @@
     })
 
     $(document).on('click', '#clicker', function () {
-        ContentWrapper.setLinkObject({
+        ContentBridge.setLinkObject({
             href: 'link/href', target: '', title: 'linktitle'
         });
     });
@@ -230,10 +132,8 @@
             }
         });
 
-        var livingdoc = doc.new(structure);
+        livingdoc = doc.new(structure);
         
-        // todo(Marcus) Remove this, it doesn't need to be global
-        window.livingdoc = livingdoc;
 
         updateDataFields();
 
@@ -884,12 +784,12 @@
         }
 
         function selectLink(callback) {
-            ContentWrapper.setCallback(callback);
-            ContentWrapper.showDialog('link');
+            ContentBridge.setCallback(callback);
+            ContentBridge.showDialog('link');
         }
 
         function selectImage(callback) {
-            ContentWrapper.setCallback(function (content) {
+            ContentBridge.setCallback(function (content) {
                 var attrs = {};
                 var node = $(content)[0];
                 if (!node) {
@@ -905,7 +805,7 @@
                 }
                 callback(attrs);
             });
-            ContentWrapper.showDialog('image');
+            ContentBridge.showDialog('image');
         }
 
 
