@@ -133,7 +133,9 @@
         });
 
         livingdoc = doc.new(structure);
-        
+
+        // bind it into the bridge
+        ContentBridge.setLivingDoc(livingdoc);
 
         updateDataFields();
 

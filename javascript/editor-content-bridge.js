@@ -13,6 +13,16 @@ window.ContentBridge = {
     mediaDialogFrame: null,
 
     dialogDiv: null,
+    
+    livingdoc: null,
+    
+    setLivingDoc: function (doc) {
+        this.livingdoc = doc;
+    },
+    
+    getLivingDoc: function () {
+        return this.livingdoc;
+    },
 
     setCallback: function (callback) {
         this.callback = callback;

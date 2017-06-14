@@ -22,7 +22,10 @@
             console.log("editorProxy.onopen");
         },
         getContent: function () {
-            console.log('editorProxy.getContent');
+            var doc = windowParent.ContentBridge.getLivingDoc();
+            if (doc) {
+                return doc.toHtml();
+            }
             return '';
         },
         getSelectedNode: function() {
