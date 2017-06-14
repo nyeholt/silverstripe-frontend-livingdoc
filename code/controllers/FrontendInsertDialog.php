@@ -92,7 +92,7 @@ class FrontendInsertDialog extends Controller
 
         $leftAndMainIncludes[] = FRAMEWORK_ADMIN_DIR.'/javascript/LeftAndMain.Ping.js';
 
-        Requirements::javascript('frontend-livingdoc/javascript/iframed-dialog.js');
+        Requirements::javascript('frontend-livingdoc/javascript/lf-iframed-dialog.js');
         
         Requirements::css(FRAMEWORK_ADMIN_DIR.'/thirdparty/chosen/chosen/chosen.css');
         Requirements::css(FRAMEWORK_DIR.'/thirdparty/jquery-ui-themes/smoothness/jquery-ui.css');
