@@ -455,16 +455,13 @@
                 var options = $("<div>").addClass(PROPS_HOLDER)
                 options.append("<h4>" + component.model.componentName + " properties</h4>");
                 
-                var closer = $('<a href="#">X</a>').appendTo(options);
-                closer.css({
-                    'padding-right': '20px',
-                    'float': 'right'
-                });
-                closer.click(function (e) {
-                    e.preventDefault();
-                    $("." + PROPS_HOLDER).remove();
-                    return false;
-                })
+                var closer = $('<button class="close properties-closer" title="Close properties"><span class="icon"></span>&times;</button>')
+                    .on('click', function(e){
+                        e.preventDefault();
+                        $("." + PROPS_HOLDER).remove();
+                        return false;
+                    })
+                    .appendTo(options);
                 
                 for (var s_id in component.model.template.styles) {
                     var curr_style = component.model.template.styles[s_id];

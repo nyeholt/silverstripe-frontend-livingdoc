@@ -228,15 +228,15 @@ class LivingPageControllerExtension extends Extension
         ]);
 
         $actions = FieldList::create([
-                FormAction::create('save', 'Save'),
+                FormAction::create('save', 'Save')->setUseButtonTag(true),
         ]);
 
         if ($this->owner->data()->canPublish()) {
-            $actions->push(FormAction::create('publish', 'Pub'));
+            $actions->push(FormAction::create('publish', 'Pub')->setUseButtonTag(true));
         }
 
-        $actions->push(FormAction::create('preview', 'View'));
-        $actions->push(FormAction::create('live', 'Done'));
+        $actions->push(FormAction::create('preview', 'View')->setUseButtonTag(true));
+        $actions->push(FormAction::create('live', 'Done')->setUseButtonTag(true));
 
         $form = Form::create($this->owner, 'LivingForm', $fields, $actions);
         $form->loadDataFrom($this->owner->data());
