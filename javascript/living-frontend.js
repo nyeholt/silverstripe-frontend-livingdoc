@@ -6,6 +6,10 @@
     }
     
     var livingdoc;
+    
+    window.LivingFrontendHelper = {
+        
+    };
 
     var DOC_HOLDER = '.livingdocs-editor';
     
@@ -271,6 +275,7 @@
              * @returns void
              */
             var showButtonBar = function (buttons, loc) {
+                
                 $(".livingdocs_EditorField_Toolbar_textopts").remove()
                 var outer_el = $("<div>").addClass("livingdocs_EditorField_Toolbar_textopts");
                 
@@ -286,9 +291,50 @@
                     outer_el.append(buttonEl);
                 }
 
+                var appendTo = $('body');
+                if (!loc.left) {
+                    // we have a node instead
+                    appendTo = $(loc).parent();
+                    
+                    var newloc = {
+                        top: loc.offsetTop + 20,
+                        left: loc.offsetLeft + 20
+                    };
+                    loc = newloc;
+                }
+                
                 outer_el.css({position: "absolute", left: loc.left, top: loc.top - 40, background: "transparent", "z-index": 1000});
-                $('body').append(outer_el);
+                appendTo.append(outer_el);
             };
+            
+            LivingFrontendHelper.showDialog = function () {
+                var popup;
+                var dialog = $('#lf-dialog');
+                if (!dialog.length) {
+                    dialog = $('<div class="lf-overlay" id="lf-dialog">');
+                    popup = $('<div class="lf-popup">').appendTo(dialog);
+                    popup.append('<a class="lf-dialog-close" href="#">&times;</a>');
+                    popup.append('<div class="lf-dialog-content">');
+                    $('body').append(dialog);
+                }
+
+                popup = dialog.find('.lf-popup');
+                $(dialog).addClass('active-dialog');
+                return popup;
+            }
+            
+            LivingFrontendHelper.closeDialog = function () {
+                var dialog = $('#lf-dialog');
+                if (dialog.length) {
+                    dialog.removeClass('active-dialog');
+                    dialog.find('lf-dialog-content').html('');
+                }
+            }
+            
+            $(document).on('click', 'a.lf-dialog-close', function (e) {
+                LivingFrontendHelper.closeDialog();
+                return false;
+            });
 
             livingdoc.interactiveView.page.editableController.editable.on('paste', function (elem, blocks, cursor) {
                 
@@ -538,35 +584,6 @@
                     }
                 }
 
-                var componentAttrs = component.model.getData('data_attributes');
-                if (componentAttrs) {
-                    options.append("<h4>Attributes</h4>");
-                    var changeAttribute = function (componentName, name) {
-                        return function () {
-                            componentAttrs[componentName][name] = $(this).val();
-                            if (component.model.componentTree) {
-                                component.model.componentTree.contentChanging(component.model, componentName);
-                            }
-                        }
-                    };
-                    
-                    for (var componentName in componentAttrs) {
-                        var itemAttrs = componentAttrs[componentName];
-                        if (!itemAttrs) {
-                            continue;
-                        }
-                        options.append('<h5>' + componentName + '</h5>');
-                        for (var key in itemAttrs) {
-                            var attrInput = null;
-                            var attrlbl = $('<label>').text(key);
-                            attrInput = $("<input>").attr({type: 'text'}).val(itemAttrs[key]);
-                            attrInput.on("change", changeAttribute(componentName, key));
-                            attrlbl.append(attrInput);
-                            options.append(attrlbl);
-                        }
-                    }
-                }
-                
                 if (component.model.directives.image && component.model.directives.image.length) {
                     for (var directive_id in component.model.directives.image) {
                         var curr_img = component.model.directives.image[directive_id];
@@ -651,10 +668,7 @@
 
                     var tableNode = component.$html[0];
                     if (tableNode) {
-                        var pos = {
-                            top: tableNode.offsetTop - 20,
-                            left: tableNode.offsetLeft + 20
-                        };
+                        
                         showButtonBar([
                             {
                                 label: 'Add row',
@@ -688,7 +702,7 @@
                                 }
                             }
                             
-                        ], pos);
+                        ], tableNode);
                         
                     }
                 }
@@ -703,6 +717,8 @@
                 $properties.html(options)
                 
             })
+
+            $(document).trigger('livingfrontend.updateLivingDoc', [livingdoc]);
         });
         
         /**
