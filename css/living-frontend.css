@@ -66,9 +66,6 @@ body {
 
 }
 
-.livingdocs-actions {
-}
-
 .livingdocs-components {
     height: 500px;
     overflow-y: auto;
@@ -77,6 +74,13 @@ body {
 
 .livingdocs-item-properties {
     margin-bottom: 10px;
+	position: relative;
+}
+
+.livingdocs-item-properties .properties-closer {
+	position: absolute;
+	top: 0;
+	right: 5px;
 }
 
 .structure-options {
