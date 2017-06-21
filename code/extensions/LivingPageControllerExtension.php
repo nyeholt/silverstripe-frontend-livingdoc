@@ -75,9 +75,16 @@ class LivingPageControllerExtension extends Extension
                 ];
             }
 
+            $designName    = $design['data']['design']['name'];
             // explicit binding because I'm too lazy right now to add yet another extension
             if (class_exists('Multisites') && Multisites::inst()->getCurrentSite()->LivingPageTheme) {
-                $design['data']['design']['name'] = Multisites::inst()->getCurrentSite()->LivingPageTheme;
+                $siteThemeName = Multisites::inst()->getCurrentSite()->LivingPageTheme;
+                if ($siteThemeName != $designName) {
+                    // go through _all_ components and update the design name
+                    $design['data']['content'] = $record->updateDesignName($designName, $siteThemeName, $design['data']['content']);
+                }
+                $designName = $siteThemeName;
+                $design['data']['design']['name'] = $siteThemeName;
             }
 
             // converts all nodes to current content state where necessary (in particular, embed items)
@@ -90,7 +97,6 @@ class LivingPageControllerExtension extends Extension
 
             $this->owner->data()->extend('updateLivingDesign', $design);
 
-            $designName    = $design['data']['design']['name'];
             $designOptions = LivingPageExtension::config()->living_designs;
 
             $designFile = $designOptions[$designName];
@@ -108,8 +114,12 @@ class LivingPageControllerExtension extends Extension
 
             Requirements::javascript(THIRDPARTY_DIR.'/jquery-form/jquery.form.js');
 
+            // our living docs integration files
             // will bind $ if not already bound, so that livingdocs doesn't die
+            Requirements::javascript('frontend-livingdoc/javascript/lf-editor-content-bridge.js');
+            Requirements::javascript('frontend-livingdoc/javascript/lf-links-buttons.js');
             Requirements::javascript('frontend-livingdoc/javascript/living-frontend.js');
+
 
             Requirements::javascript('frontend-livingdoc/javascript/livingdocs/editable.js');
             Requirements::javascript('frontend-livingdoc/javascript/livingdocs/livingdocs-engine.js');

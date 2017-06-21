@@ -84,6 +84,10 @@ class LivingPageExtension extends DataExtension
             // back-convert link shortcodes
             $convertedHtml = preg_replace('/%5B(.+?)%5D/','[\\1]', $convertedHtml);
 
+            // replace empty <a> with <span>. Relies on correctly structure link tags
+            // so that there's no inner embedded <a>
+            $convertedHtml = preg_replace('/<a>(.+?)<\/a>/', '<span class="empty-href-span">\\1</span>', $convertedHtml);
+
             $this->owner->Content = $convertedHtml;
         }
     }
@@ -93,6 +97,11 @@ class LivingPageExtension extends DataExtension
         return isset($items[$label]) ? $items[$label] : null;
     }
 
+    /**
+     * Gets all the shortcodes available for this page, inherited from its site
+     *
+     * @return array
+     */
     public function availableShortcodes() {
         $configObject = class_exists('Site') ? \Multisites::inst()->getActiveSite() : \SiteConfig::current_site_config();
 
@@ -112,6 +121,33 @@ class LivingPageExtension extends DataExtension
         $items = array_merge($configItems, $items);
 
         return $items;
+    }
+
+    /**
+     * Call this to update the design name used for the doc
+     *
+     * @param type $oldName
+     * @param type $newName
+     * @param type $components
+     */
+    public function updateDesignName($oldName, $newName, $components) {
+        $newComponents = [];
+        foreach ($components as $component) {
+            if (isset($component['identifier'])) {
+                $component['identifier'] = str_replace($oldName, $newName, $component['identifier']);
+            }
+            
+            if (isset($component['containers'])) {
+                foreach ($component['containers'] as $name => $items) {
+                    $newItems = [];
+                    $component['containers'][$name] = $this->updateDesignName($oldName, $newName, $component['containers'][$name]);
+                }
+            }
+
+            $newComponents[] = $component;
+        }
+
+        return $newComponents;
     }
 
     public static function embeditem_handler($arguments, $content = null, $parser = null) {

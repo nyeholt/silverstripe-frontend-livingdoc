@@ -22,6 +22,10 @@
             console.log("editorProxy.onopen");
         },
         getContent: function () {
+            var doc = windowParent.ContentBridge.getLivingDoc();
+            if (doc) {
+                return doc.toHtml();
+            }
             return '';
         },
         getSelectedNode: function() {
@@ -47,8 +51,8 @@
         },
         replaceContent: function(HTML) {
             console.log("editorProxy.replaceContent");
-            if (windowParent && windowParent.ContentWrapper) {
-                windowParent.ContentWrapper.setContent(HTML);
+            if (windowParent && windowParent.ContentBridge) {
+                windowParent.ContentBridge.setContent(HTML);
             }
             return false;
         },
@@ -56,8 +60,8 @@
             console.log("editorProxy.repaint");
         },
         insertContent: function(content) {
-            if (windowParent && windowParent.ContentWrapper) {
-                windowParent.ContentWrapper.setContent(content);
+            if (windowParent && windowParent.ContentBridge) {
+                windowParent.ContentBridge.setContent(content);
             }
             return false;
         },
@@ -65,8 +69,8 @@
             console.log("editorProxy.addUndo");
         },
         insertLink: function(link) {
-            if (windowParent && windowParent.ContentWrapper) {
-                windowParent.ContentWrapper.setLinkObject(link);
+            if (windowParent && windowParent.ContentBridge) {
+                windowParent.ContentBridge.setLinkObject(link);
             }
         }
     }
@@ -75,7 +79,7 @@
 
         $("form.htmleditorfield-form").entwine({
             close: function() {
-                windowParent.ContentWrapper.closeDialog();
+                windowParent.ContentBridge.closeDialog();
             },
             getEditor: function() {
                 console.log('form.htmleditorfield-form getEditor');
@@ -96,19 +100,17 @@
 
         $(".htmleditorfield-dialog").entwine({
             onadd: function() {
-                this.trigger("ssdialogopen");
                 this.getForm().setElement(element);
+                this.trigger("ssdialogopen");
                 this._super();
             },
             getEditor: function() {
                 return editorProxy;
             },
             close: function() {
-                windowParent.ContentWrapper.closeDialog();
+                windowParent.ContentBridge.closeDialog();
             }
         });
     });
-
-    
     
 })(jQuery);
