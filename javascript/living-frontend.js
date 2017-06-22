@@ -42,7 +42,7 @@
         });
     });
     
-    $(document).on('click', 'form' + TOOLBAR_FORM +' input.action', function (e) { 
+    $(document).on('click', 'form' + TOOLBAR_FORM +' > .Actions .action', function (e) { 
         // catuch the "live" click and redirect instead
         if ($(this).attr('name') == 'action_live') {
             e.preventDefault();
@@ -72,12 +72,12 @@
         _this.removeAttr('data-changed');
         
         $(this).ajaxSubmit(function (response) {
-            _this.find('input.action').each(function () {
+            _this.find('button.action').each(function () {
                 $(this).prop('disabled', false);
             });
         });
         
-        _this.find('input.action').each(function () {
+        _this.find('button.action').each(function () {
             $(this).prop('disabled', true);
         });
         
