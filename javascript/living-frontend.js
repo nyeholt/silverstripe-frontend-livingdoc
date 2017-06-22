@@ -319,6 +319,7 @@
                 }
 
                 popup = dialog.find('.lf-popup');
+                popup.empty();
                 $(dialog).addClass('active-dialog');
                 return popup;
             }

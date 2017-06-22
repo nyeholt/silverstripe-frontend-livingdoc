@@ -13,7 +13,7 @@
                     return function () {
                         componentAttrs[componentName][name] = $(this).val();
                         if (component.model.componentTree) {
-                            component.model.componentTree.contentChanging(component.model, componentName);
+                            component.model.componentTree.contentChanging(component.model);
                         }
                     }
                 };
@@ -75,17 +75,12 @@
                     if (todirective && todirective.length && attr && attr.length > 0) {
                         component.model.setDirectiveAttribute(todirective, attr, value);
                         if (component.model.componentTree) {
-                            component.model.componentTree.contentChanging(component.model, todirective);
+                            component.model.componentTree.contentChanging(component.model);
                         }
                     }
                     
                     LivingFrontendHelper.closeDialog();
                 });
-//                
-//                
-//                if (todirective && todirective.length && attr && attr.length > 0) {
-//                    component.model.setDirectiveAttribute(todirective, attr, 'no val');
-//                }
             })
         });
     });
