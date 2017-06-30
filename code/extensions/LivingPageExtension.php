@@ -203,7 +203,7 @@ class LivingPageExtension extends DataExtension
             $page = $controller instanceof ContentController ? $controller->data() : null;
         }
 
-        return $page->canView() ? $page : null;
+        return $page && $page->hasMethod('canView') ? ($page->canView() ? $page : null) : $page;
     }
 
     public static function config() {
