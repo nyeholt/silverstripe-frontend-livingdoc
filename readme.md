@@ -13,7 +13,7 @@ components can be defined with editable regions allowing content "directives" to
 * WYSIWYG html editing
 * Raw html editing
 * Image selection
-* Embedded items
+* Embedded items (using shortcodes)
 * Containers - lists of other components
  
 Components can be moved around the page and nested inside others, meaning content authors can 
@@ -124,6 +124,15 @@ $(document).on('updateLivingdocsDesign', function (e, design) { });
 
 The `design.components` collection can then be iterated to change the existing definitions, or 
 have new definitions pushed onto its list. 
+
+
+### New shortcodes for embedding content in pages
+
+* `livingpage_childlist` - displays the list of child items of a page (uses the 'current' page as the default) 
+* `livingpage_show_field` - shows the fields of an object (current page is the default). Supports resolution of 
+  subfields and parameters
+  * `[livingpage_show_field field="OriginalPublishDate.format" args="Y/m/d"]
+
 
 
 
