@@ -3864,7 +3864,7 @@ module.exports = ComponentTree = (function() {
     return words.readableJson(this.toJson());
   };
 
-  ComponentTree.prototype.serialize = function() {
+  ComponentTree.prototype.serialize = function(startComponent, excludeId) {
     var componentToData, data, walker;
     data = {};
     data['content'] = [];
@@ -3875,6 +3875,9 @@ module.exports = ComponentTree = (function() {
     componentToData = function(component, level, containerArray) {
       var componentData;
       componentData = component.toJson();
+      if (excludeId) {
+          delete componentData.id;
+      }
       containerArray.push(componentData);
       return componentData;
     };
@@ -3893,10 +3896,23 @@ module.exports = ComponentTree = (function() {
         return walker(component.next, level, dataObj);
       }
     };
-    if (this.root.first) {
-      walker(this.root.first, 0, data['content']);
+    if (!startComponent) {
+        startComponent = this.root.first;
+    }
+    if (startComponent) {
+      walker(startComponent, 0, data['content']);
     }
     return data;
+  };
+  
+  ComponentTree.prototype.componentsFromList = function (data, design) {
+      var created = [];
+      
+      for (var i = 0, c = data.length; i < c; i++) {
+        var componentData = data[i];
+        created.push(componentModelSerializer.fromJson(componentData, design));
+      }
+      return created;
   };
 
   ComponentTree.prototype.fromData = function(data, design, silent) {
