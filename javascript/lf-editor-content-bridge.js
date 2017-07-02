@@ -5,6 +5,7 @@
 
 window.ContentBridge = {
     callback: null,
+    focusedComponent: null,
     currentLink: '',
     currentContent: '',
     dialogFrame: null,

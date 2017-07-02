@@ -8,6 +8,14 @@
     var livingdoc;
     
     window.LivingFrontendHelper = {
+        activeComponent: null,
+        
+        focusOn: function (component) {
+            this.activeComponent = component;
+        },
+        blur: function () {
+            this.activeComponent = null;
+        }
         
     };
 
@@ -243,7 +251,11 @@
                     for (var i in selectedDesign.structures) {
                         var item = selectedDesign.structures[i];
                         if (item.label === selected) {
-                            createComponentList(item.components);
+                            var container = LivingFrontendHelper.activeComponent ? 
+                                    LivingFrontendHelper.activeComponent.model.parentContainer : 
+                                    livingdoc.componentTree.root;
+                            
+                            createComponentList(item.components, container);
                             break;
                         }
                     }
@@ -274,7 +286,7 @@
              * @param an object with a .left and .top  property that defines where to show the bar
              * @returns void
              */
-            var showButtonBar = function (buttons, loc) {
+            LivingFrontendHelper.showButtonBar = function (buttons, loc) {
                 
                 $(".livingdocs_EditorField_Toolbar_textopts").remove()
                 var outer_el = $("<div>").addClass("livingdocs_EditorField_Toolbar_textopts");
@@ -285,8 +297,7 @@
                     if (b.title) {
                         buttonEl.attr('title', b.title);
                     }
-                    buttonEl.on('mousedown', function (e) { e.preventDefault();})
-                    buttonEl.on('click', b.click);
+                    buttonEl.on('mousedown', function (e) { e.preventDefault(); b.click(); })
                     
                     outer_el.append(buttonEl);
                 }
@@ -303,7 +314,7 @@
                     loc = newloc;
                 }
                 
-                outer_el.css({position: "absolute", left: loc.left, top: loc.top - 40, background: "transparent", "z-index": 1000});
+                outer_el.css({position: "absolute", left: loc.left, top: loc.top - 40, background: "transparent", "z-index": 4000});
                 appendTo.append(outer_el);
             };
             
@@ -394,7 +405,7 @@
                     ];
 
                     $(document).trigger('livingfrontend.updateContentButtonBar', [barOptions, selection, ContentBridge]);
-                    showButtonBar(barOptions, rect);
+                    LivingFrontendHelper.showButtonBar(barOptions, rect);
                 }
             });
 
@@ -499,12 +510,16 @@
             livingdoc.interactiveView.page.focus.componentFocus.add(function (component) {
                 $("." + PROPS_HOLDER).remove();
                 $(".livingdocs_EditorField_Toolbar_textopts").remove();
-                var options = $("<div>").addClass(PROPS_HOLDER)
+                var options = $("<div>").addClass(PROPS_HOLDER);
+
+                LivingFrontendHelper.focusOn(component);
+
                 options.append("<h4>" + component.model.componentName + " properties</h4>");
                 
                 var closer = $('<button class="close properties-closer" title="Close properties"><span class="icon"></span>&times;</button>')
                     .on('click', function(e){
                         e.preventDefault();
+                        LivingFrontendHelper.blur();
                         $("." + PROPS_HOLDER).remove();
                         return false;
                     })
@@ -670,10 +685,11 @@
                     var tableNode = component.$html[0];
                     if (tableNode) {
                         
-                        showButtonBar([
+                        LivingFrontendHelper.showButtonBar([
                             {
                                 label: 'Add row',
                                 click: function () {
+                                    alert("NEW");
                                     var currentRow = component.$html.find('tr:first');
                                     var numCells = 0;
                                     if (currentRow.length) {
@@ -689,6 +705,9 @@
                                     for (var i = 0; i < numCells; i++) {
                                         var newCell = livingdoc.componentTree.getComponent(TABLE_CELL_COMPONENT);
                                         newComponent.append('rowcells', newCell);
+                                        
+                                        var newP = livingdoc.componentTree.getComponent("p");
+                                        newCell.append("cellitems", newP);
                                     }
                                 }
                             },
@@ -711,13 +730,27 @@
                 var $delete_button = $("<button class='alert alert-danger'>").text("Remove").on("click", function () {
                     component.model.remove();
                     $("." + PROPS_HOLDER).remove();
-                })
+                });
                 
-                $('<div class="Actions">').appendTo(options).append($delete_button);
+                var $dupe_button = $("<button class='alert alert-warning'>").text("Duplicate").on("click", function () {
+                    var tmpTree = new doc.ComponentTree({design: livingdoc.componentTree.design});
+                    
+                    // need to swap out 'next' for the moment otherwise the serialize walker
+                    // will do _all_ siblings. 
+                    var oldNext = component.model.next;
+                    component.model.next = null;
+                    var jsonRep = tmpTree.serialize(component.model, true);
+                    component.model.next = oldNext;
+                    
+                    createComponentList(jsonRep.content, component.model.parentContainer);
+                    
+                });
                 
+                $('<div class="Actions">').appendTo(options).append($delete_button).append($dupe_button);
+
                 $properties.html(options)
                 
-            })
+            });
 
             $(document).trigger('livingfrontend.updateLivingDoc', [livingdoc]);
         });
@@ -734,39 +767,23 @@
             if (!parent) {
                 parent = livingdoc.componentTree.root;
             }
-            for (var i in components) {
-                // create the new one and set relevant styles
-                var newComponent = livingdoc.componentTree.getComponent(components[i].type);
-
-                if (components[i].styles) {
-                    for (var j in components[i].styles) {
-                        newComponent.setStyle(j, components[i].styles[j]);
-                    }
-                }
-
-                if (components[i].data_attributes) {
-                    for (var directive in components[i].data_attributes) {
-                        for (var attrName in components[i].data_attributes[directive]) {
-                            newComponent.setDirectiveAttribute(directive, attrName, components[i].data_attributes[directive][attrName]);
-                        }
-                    }
-                }
-
-                // if we don't have a containerName, that means we are most likely adding
-                // to the root 
-                if (containerName) {
-                    parent.append(containerName, newComponent);
-                } else {
-                    parent.prepend(newComponent);
-                }
-
-
-                if (components[i].components) {
-                    for (var componentContainerName in components[i].components) {
-                        createComponentList(components[i].components[componentContainerName], newComponent, componentContainerName);
+            var newComponents = livingdoc.componentTree.componentsFromList(components, activeDesign);
+            
+            if (parent) {
+                for (var i in newComponents) {
+                    if (containerName) {
+                        parent.append(containerName, newComponents[i]);
+                    } else {
+                        parent.append(newComponents[i]);
                     }
                 }
             }
+
+//            for (var i in newComponents) {
+//                if (newComponents[i]) {
+//                    parent.append(newComponents[i]);
+//                }
+//            }
         };
 
         /**
@@ -782,6 +799,9 @@
                     var newCell = livingdoc.componentTree.getComponent(cellType);
                     firstRow.append('rowcells', newCell);
                     firstRow = firstRow.next;
+                    
+                    var newP = livingdoc.componentTree.getComponent("p");
+                    newCell.append("cellitems", newP);
                 }
             }
             return firstRow;

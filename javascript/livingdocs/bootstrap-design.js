@@ -546,14 +546,28 @@
                 "components": {
                     "tablehead": [
                         {
-                            "type": "tablerow",
-                            "components": {
+                            "identifier": "bootstrap3.tablerow",
+                            "containers": {
                                 "rowcells": [
                                     {
-                                        type: "headercell"
+                                        identifier: "bootstrap3.headercell",
+                                        "containers": {
+                                            "cellitems": [
+                                                {
+                                                    "identifier": "p"
+                                                }
+                                            ]
+                                        }
                                     },
                                     {
-                                        type: "headercell"
+                                        identifier: "bootstrap3.headercell",
+                                        "containers": {
+                                            "cellitems": [
+                                                {
+                                                    "identifier": "p"
+                                                }
+                                            ]
+                                        }
                                     }
                                 ]
                             }
@@ -561,60 +575,62 @@
                     ],
                     "tablebody": [
                         {
-                            "type": "tablerow",
-                            "components": {
+                            "identifier": "bootstrap3.tablerow",
+                            "containers": {
                                 "rowcells": [
                                     {
-                                        type: "tablecell"
+                                        identifier: "bootstrap3.tablecell",
+                                        "containers": {
+                                            "cellitems": [
+                                                {
+                                                    "identifier": "p"
+                                                }
+                                            ]
+                                        }
                                     },
                                     {
-                                        type: "tablecell"
+                                        identifier: "bootstrap3.tablecell",
+                                        "containers": {
+                                            "cellitems": [
+                                                {
+                                                    "identifier": "p"
+                                                }
+                                            ]
+                                        }
                                     }
                                 ]
                             }
                         }
                     ]
                 }
-            },
-            "tablecell": {
-                "components": {
-                    "cellitems": [
-                        {
-                            "type": "p"
-                        }
-                    ]
-                }
-            },
-            "headercell": {
-                "components": {
-                    "cellitems": [
-                        {
-                            "type": "p"
-                        }
-                    ]
-                }
-            },
+            }
         },
         "structures": [
             {
                 label: "Content section",
                 components: [
                     {
-                        "type": "section",
+                        "identifier": "bootstrap3.section",
                         "styles": {"section-class" : "container"},   /* key value listing */
-                        "data_attributes": {'section': { 'data-sample': 'just an example'}}, /* inner-directive => { }  */
-                        "components": {
+                        "data": {
+                            "data_attributes": {
+                                "section": {
+                                    "data-sample": "add your own attributes in this collection"
+                                }
+                            }, /* inner-directive => { }  */
+                        },
+                        "containers": {
                             "section": [        // the name of the container inside the component to add to
                                 {
-                                    "type": "row",
+                                    "identifier": "bootstrap3.row",
                                     "styles": {
                                         "text-styles": "text-center"
                                     },
-                                    "data_attributes": {},
-                                    "components": {
+                                    "data": {},
+                                    "containers": {
                                         "row": [
                                             {
-                                                "type": "column",
+                                                "identifier": "bootstrap3.column",
                                                 "data_attributes": {}
                                             }
                                         ]
