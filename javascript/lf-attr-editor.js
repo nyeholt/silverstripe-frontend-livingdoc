@@ -35,7 +35,7 @@
                 }
             }
             
-            var newAttr = $('<button class="alert">New Attr</button>').prependTo(options.find('.Actions'));
+            var newAttr = $('<button class="alert">New Attr</button>').prependTo(options.find('.component-actions'));
             newAttr.click(function (e) {
                 var names = [];
                 

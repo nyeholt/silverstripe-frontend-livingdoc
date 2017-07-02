@@ -38,6 +38,18 @@ body {
     margin: 0;
 }
 
+.livingdocs-toolbar .component-actions {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    background-color: #fefefe;
+    padding: 5px;
+}
+
+.livingdocs-toolbar .component-actions button {
+    margin: 1rem;
+}
+
 .livingdocs-toolbar a.btn, 
 .livingdocs-toolbar button, 
 .livingdocs-toolbar input[type="submit"], 

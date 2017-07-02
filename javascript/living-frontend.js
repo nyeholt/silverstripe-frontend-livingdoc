@@ -746,7 +746,7 @@
                     
                 });
                 
-                $('<div class="Actions">').appendTo(options).append($delete_button).append($dupe_button);
+                $('<div class="Actions component-actions">').appendTo(options).append($dupe_button).append($delete_button)
 
                 $properties.html(options)
                 
