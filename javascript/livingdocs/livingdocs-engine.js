@@ -3900,7 +3900,7 @@ module.exports = ComponentTree = (function() {
   };
 
   ComponentTree.prototype.fromData = function(data, design, silent) {
-    var component, componentData, _i, _len, _ref;
+    var component, componentData, _i, _len, _ref, created = [];
     if (silent == null) {
       silent = true;
     }
@@ -3918,6 +3918,7 @@ module.exports = ComponentTree = (function() {
         componentData = _ref[_i];
         component = componentModelSerializer.fromJson(componentData, design);
         this.root.append(component);
+        created.push(component);
       }
     }
     if (silent) {
@@ -3929,6 +3930,7 @@ module.exports = ComponentTree = (function() {
         };
       })(this));
     }
+    return created;
   };
 
   ComponentTree.prototype.addData = function(data, design) {
