@@ -12,6 +12,9 @@ body {
     background-color: #fff;
     padding: 5px;
     font-size: 14px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    height: 100%;
 }
 
 .livingdocs-toolbar form {
@@ -67,9 +70,7 @@ body {
 }
 
 .livingdocs-components {
-    height: 500px;
-    overflow-y: auto;
-    overflow-x: hidden;
+    /*height: 500px;*/
 }
 
 .livingdocs-item-properties {
