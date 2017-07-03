@@ -15,6 +15,10 @@ body {
     overflow-y: auto;
     overflow-x: hidden;
     height: 100%;
+    
+    box-shadow: 0 0 3px rgba(0,0,0,0.25);
+    padding: 0;
+    color: #000;
 }
 
 .livingdocs-toolbar form {
@@ -22,16 +26,22 @@ body {
     margin-bottom: 10px;
 }
 
-.livingdocs-toolbar form input.text, 
-.livingdocs-toolbar form textarea, 
-.livingdocs-toolbar form select {
+.livingdocs-toolbar label {
+    width: 100%;
+}
+
+.livingdocs-toolbar input.text, 
+.livingdocs-toolbar textarea, 
+.livingdocs-toolbar select {
 	width: 100%;
 	max-width: 400px;
 	padding: 6px 5px;
-	font-size: 15px;
+	font-size: 12px;
 	background-color: #fff;
 	border: 1px solid #dad9d9;
 	box-sizing: border-box;
+    height: auto;
+    color: #000;
 }
 
 .livingdocs-toolbar .Actions {
@@ -47,8 +57,20 @@ body {
 }
 
 .livingdocs-toolbar .component-actions button {
-    margin: 1rem;
+    margin: 0.5rem;
+    line-height: 1;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+    border-radius: 2px;
+
 }
+
+.livingdocs-toolbar .livingdocs-actions,
+.livingdocs-toolbar .livingdocs-item-properties > div {
+        padding: 10px;
+        position: relative;
+        margin: 0;
+    }
 
 .livingdocs-toolbar a.btn, 
 .livingdocs-toolbar button, 
@@ -59,6 +81,9 @@ body {
     border: 1px solid #333;
     border-radius: 3px;
     float: none;
+    font-size: 12px;
+    padding: 4px;
+    color: #000;
 }
 
 .livingdocs-toolbar a.btn:hover, 
@@ -78,7 +103,7 @@ body {
   border: 1px solid rgba(0, 0, 0, 0.5);
   margin: 5px;
   cursor: move;
-
+  font-size: 10px;
 }
 
 .livingdocs-components {
@@ -93,7 +118,7 @@ body {
 .livingdocs-item-properties .properties-closer {
 	position: absolute;
 	top: 0;
-	right: 5px;
+    right: 10px;
 }
 
 .structure-options {
@@ -140,15 +165,12 @@ body.doc-no-selection .livingdocs-toolbar iframe {
 	pointer-events: none;
 }
 
-
-[data-doc-container="row"], [data-doc-container="section"], [data-doc-container="column"] {
+[data-doc-container] {
     border: 4px dotted #ccc;
-    /*padding: 5px;*/
 }
 
-[data-doc-container="row"].doc-component-highlight, 
-[data-doc-container="section"].doc-component-highlight, 
-[data-doc-container="column"].doc-component-highlight {
+
+[data-doc-container].doc-component-highlight {
     border: 4px dotted #FA9E4E;
 /*    padding-top: 5px;
     padding-bottom: 5px;*/
@@ -168,14 +190,28 @@ body.doc-no-selection .livingdocs-toolbar iframe {
 }
 
 
+.livingdocs_EditorField_Toolbar_options > h4 {
+    font-size: 1rem;
+}
+
+.livingdocs_EditorField_Toolbar_options > h4:first-child {
+    margin-right: 2em;
+    font-weight: bold;
+}
+
+.livingdocs_EditorField_Toolbar_options > h5 {
+    font-size: 1rem;
+}
+
 .livingdocs-components h2 {
-  font-size: 18px;
+  font-size: 14px;
+  color: #000;
   line-height: 24px;
   font-weight: 300;
   letter-spacing: 1px;
   display: block;
   background-color: #fefffa;
-  margin: 0;
+  margin: 2px   ;
   cursor: pointer;
 }
 
