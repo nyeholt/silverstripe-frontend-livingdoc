@@ -62,7 +62,16 @@ body {
     padding: 0.25rem 0.5rem;
     font-size: 0.875rem;
     border-radius: 2px;
+}
 
+.livingdocs-toolbar .livingdocs-page-options {
+    padding: 3px;
+}
+
+.livingdocs-toolbar .livingdocs-history-list {
+    height: 200px;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .livingdocs-toolbar .livingdocs-actions,

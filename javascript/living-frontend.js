@@ -7,18 +7,7 @@
     
     var livingdoc;
     
-    window.LivingFrontendHelper = {
-        activeComponent: null,
-        
-        focusOn: function (component) {
-            this.activeComponent = component;
-        },
-        blur: function () {
-            this.activeComponent = null;
-        }
-        
-    };
-
+    
     var DOC_HOLDER = '.livingdocs-editor';
     
     var TOOLBAR_FORM = '#Form_LivingForm';
@@ -29,6 +18,72 @@
     var TABLE_ROW_COMPONENT = 'tablerow';
     var TABLE_CELL_COMPONENT = 'tablecell';
     var HEADER_CELL_COMPONENT = 'headercell';
+    
+    
+    window.LivingFrontendHelper = {
+        changeStack: [],
+        activeComponent: null,
+        trackChanges: true,
+        historyLength: 50,
+        
+        focusOn: function (component) {
+            this.activeComponent = component;
+        },
+        blur: function () {
+            this.activeComponent = null;
+        },
+        
+        saveState: function (currentState) {
+            if (this.trackChanges) {
+                var actionId = this.activeComponent ? this.activeComponent.model.id : null;
+                
+                // if the action happened to the currently active component, we remove any previous 
+                // actions to the same one
+                if (this.changeStack.length > 0 && 
+                        actionId && 
+                        this.changeStack[this.changeStack.length-1].cid === actionId) {
+                    this.changeStack.pop();
+                }
+                
+                this.changeStack.push({
+                    time: new Date(),
+                    cid: actionId,
+                    state: currentState
+                });
+                
+                if (this.changeStack.length > this.historyLength) {
+                    this.changeStack.shift();
+                }
+            }
+        },
+        
+        loadState: function (stateIndex) {
+            if (this.changeStack[stateIndex]) {
+                var dataSet = JSON.parse(this.changeStack[stateIndex].state);
+                
+                this.trackChanges = false;
+                while (livingdoc.componentTree.root.first) {
+                    livingdoc.componentTree.root.first.remove();
+                }
+                this.trackChanges = true;
+                livingdoc.componentTree.addDataWithAnimation(dataSet);
+            }
+        },
+
+        notifyDocUpdate: function (realchange) {
+            var docStructure = livingdoc.toJson();
+            $(TOOLBAR_FORM).find('[name=PageStructure]').val(docStructure);
+            $(TOOLBAR_FORM).find('[name=Content]').val(livingdoc.toHtml());
+            
+            this.saveState(docStructure);
+
+            if (realchange) {
+                $(TOOLBAR_FORM).attr('data-changed', 1);
+                $(TOOLBAR_FORM).find('[name=action_publish]').prop('disabled', true);
+            }
+        }
+    };
+
 
     ContentBridge.init();
 
@@ -50,6 +105,8 @@
         });
     });
     
+    // re-structures the form to ensure ajax submits pass through the 
+    // triggered action
     $(document).on('click', 'form' + TOOLBAR_FORM +' > .Actions .action', function (e) { 
         // catuch the "live" click and redirect instead
         if ($(this).attr('name') == 'action_live') {
@@ -106,7 +163,7 @@
 
         if (structure) {
         } else {
-            alert("No struct");
+            alert("No structure found");
         }
 
         if (!window.design) {
@@ -149,7 +206,7 @@
         // bind it into the bridge
         ContentBridge.setLivingDoc(livingdoc);
 
-        updateDataFields();
+        LivingFrontendHelper.notifyDocUpdate();
 
         var activeDesign = doc.design.designs[selectedDesignName];
 
@@ -161,19 +218,19 @@
         });
 
         ready.then(function () {
-            
             // captures model changes that need updating
             livingdoc.model.changed.add(function () {
-                updateDataFields(true);
+                LivingFrontendHelper.notifyDocUpdate(true);
             });
             
             
-            var toolbarHolder = $('.livingdocs-toolbar');
-
+            var $pageOptions = $('.livingdocs-page-options');
             var $components = $('.livingdocs-components');
             var $componentsList = $components.find('ul');
             var $properties = $('.livingdocs-item-properties');
             var componentGroupMap = {};
+            
+            
             
             var addGroup = function (label, num) {
                 var $group = $('<li>');
@@ -275,78 +332,7 @@
                     }
                 }
             });
-            
-            /**
-             * Show a list of buttons in a toolbar. The button list should be
-             * [
-             *     { label: 'Label', title: 'tooltop', click: function () {} }
-             * ]
-             * 
-             * @param an array of button objects
-             * @param an object with a .left and .top  property that defines where to show the bar
-             * @returns void
-             */
-            LivingFrontendHelper.showButtonBar = function (buttons, loc) {
-                
-                $(".livingdocs_EditorField_Toolbar_textopts").remove()
-                var outer_el = $("<div>").addClass("livingdocs_EditorField_Toolbar_textopts");
-                
-                for (var i = 0; i < buttons.length; i++) {
-                    var b = buttons[i];
-                    var buttonEl = $('<button>').html(b.label);
-                    if (b.title) {
-                        buttonEl.attr('title', b.title);
-                    }
-                    buttonEl.on('mousedown', function (e) { e.preventDefault(); b.click(); })
-                    
-                    outer_el.append(buttonEl);
-                }
 
-                var appendTo = $('body');
-                if (!loc.left) {
-                    // we have a node instead
-                    appendTo = $(loc).parent();
-                    
-                    var newloc = {
-                        top: loc.offsetTop + 20,
-                        left: loc.offsetLeft + 20
-                    };
-                    loc = newloc;
-                }
-                
-                outer_el.css({position: "absolute", left: loc.left, top: loc.top - 40, background: "transparent", "z-index": 4000});
-                appendTo.append(outer_el);
-            };
-            
-            LivingFrontendHelper.showDialog = function () {
-                var popup;
-                var dialog = $('#lf-dialog');
-                if (!dialog.length) {
-                    dialog = $('<div class="lf-overlay" id="lf-dialog">');
-                    popup = $('<div class="lf-popup">').appendTo(dialog);
-                    popup.append('<a class="lf-dialog-close" href="#">&times;</a>');
-                    popup.append('<div class="lf-dialog-content">');
-                    $('body').append(dialog);
-                }
-
-                popup = dialog.find('.lf-popup');
-                popup.empty();
-                $(dialog).addClass('active-dialog');
-                return popup;
-            }
-            
-            LivingFrontendHelper.closeDialog = function () {
-                var dialog = $('#lf-dialog');
-                if (dialog.length) {
-                    dialog.removeClass('active-dialog');
-                    dialog.find('lf-dialog-content').html('');
-                }
-            }
-            
-            $(document).on('click', 'a.lf-dialog-close', function (e) {
-                LivingFrontendHelper.closeDialog();
-                return false;
-            });
 
             livingdoc.interactiveView.page.editableController.editable.on('paste', function (elem, blocks, cursor) {
                 
@@ -755,6 +741,79 @@
             $(document).trigger('livingfrontend.updateLivingDoc', [livingdoc]);
         });
         
+
+
+        /**
+         * Show a list of buttons in a toolbar. The button list should be
+         * [
+         *     { label: 'Label', title: 'tooltop', click: function () {} }
+         * ]
+         * 
+         * @param an array of button objects
+         * @param an object with a .left and .top  property that defines where to show the bar
+         * @returns void
+         */
+        LivingFrontendHelper.showButtonBar = function (buttons, loc) {
+            $(".livingdocs_EditorField_Toolbar_textopts").remove()
+            var outer_el = $("<div>").addClass("livingdocs_EditorField_Toolbar_textopts");
+
+            for (var i = 0; i < buttons.length; i++) {
+                var b = buttons[i];
+                var buttonEl = $('<button>').html(b.label);
+                if (b.title) {
+                    buttonEl.attr('title', b.title);
+                }
+                buttonEl.on('mousedown', function (theButton) { return function (e) { e.preventDefault(); theButton.click(); } }(b) );
+                
+                outer_el.append(buttonEl);
+            }
+
+            var appendTo = $('body');
+            if (!loc.left) {
+                // we have a node instead
+                appendTo = $(loc).parent();
+
+                var newloc = {
+                    top: loc.offsetTop + 20,
+                    left: loc.offsetLeft + 20
+                };
+                loc = newloc;
+            }
+
+            outer_el.css({position: "absolute", left: loc.left, top: loc.top - 40, background: "transparent", "z-index": 4000});
+            appendTo.append(outer_el);
+        };
+
+        LivingFrontendHelper.showDialog = function () {
+            var popup;
+            var dialog = $('#lf-dialog');
+            if (!dialog.length) {
+                dialog = $('<div class="lf-overlay" id="lf-dialog">');
+                popup = $('<div class="lf-popup">').appendTo(dialog);
+                popup.append('<a class="lf-dialog-close" href="#">&times;</a>');
+                popup.append('<div class="lf-dialog-content">');
+                $('body').append(dialog);
+            }
+
+            popup = dialog.find('.lf-popup');
+            popup.empty();
+            $(dialog).addClass('active-dialog');
+            return popup;
+        }
+
+        LivingFrontendHelper.closeDialog = function () {
+            var dialog = $('#lf-dialog');
+            if (dialog.length) {
+                dialog.removeClass('active-dialog');
+                dialog.find('lf-dialog-content').html('');
+            }
+        }
+
+        $(document).on('click', 'a.lf-dialog-close', function (e) {
+            LivingFrontendHelper.closeDialog();
+            return false;
+        });
+        
         /**
          * creates components, inside a given parent.
          * 
@@ -831,18 +890,6 @@
             });
             ContentBridge.showDialog('image');
         }
-
-
-        // todo(Marcus) Clean this up in some way
-        function updateDataFields(realchange) {
-            $(TOOLBAR_FORM).find('[name=PageStructure]').val(livingdoc.toJson());
-            $(TOOLBAR_FORM).find('[name=Content]').val(livingdoc.toHtml());
-            if (realchange) {
-                $(TOOLBAR_FORM).attr('data-changed', 1);
-                $(TOOLBAR_FORM).find('[name=action_publish]').prop('disabled', true);
-            }
-        }
-
     });
 
 })(jQuery);
