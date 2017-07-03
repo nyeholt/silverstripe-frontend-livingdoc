@@ -120,6 +120,8 @@ class LivingPageControllerExtension extends Extension
             Requirements::javascript('frontend-livingdoc/javascript/lf-links-buttons.js');
             Requirements::javascript('frontend-livingdoc/javascript/lf-attr-editor.js');
             Requirements::javascript('frontend-livingdoc/javascript/lf-editing-history.js');
+            Requirements::javascript('frontend-livingdoc/javascript/lf-text-actions.js');
+            Requirements::javascript('frontend-livingdoc/javascript/lf-html-editing.js');
             
             Requirements::javascript('frontend-livingdoc/javascript/living-frontend.js');
 
