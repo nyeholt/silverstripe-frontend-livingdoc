@@ -5,7 +5,7 @@
  *
  * @author marcus
  */
-class FrontendInsertDialog extends Controller
+class FrontendInsertDialog extends LeftAndMain
 {
     private static $allowed_actions = array('MediaForm', 'LinkForm', 'EditorToolbar');
     public $fromType;
