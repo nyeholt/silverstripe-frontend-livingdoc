@@ -6,3 +6,4 @@ Director:
   rules:
     'FrontendInsertDialog': 'FrontendInsertDialog'
     'render-shortcode': 'ShortcodeRenderer'
+#    'lf-workflow': 'FwController'
