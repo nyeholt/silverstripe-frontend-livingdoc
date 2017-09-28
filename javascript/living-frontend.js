@@ -115,10 +115,9 @@
             return false;
         }
         
-        // catuch the "live" click and redirect instead
-        if ($(this).attr('name') == 'action_preview') {
+        if ($(this).hasClass('link-action')) {
             e.preventDefault();
-            location.href = location.href + '?preview=1&stage=Stage';
+            location.href = $(this).attr('data-link');
             return false;
         }
         

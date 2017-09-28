@@ -223,28 +223,46 @@ class LivingPageControllerExtension extends Extension
             return;
         }
 
-        $embeds = $this->owner->data()->availableShortcodes();
+        $record = $this->owner->data();
+        $embeds = $record->availableShortcodes();
 
         $fields = FieldList::create([
                 HiddenField::create('PageStructure', "JSON structure"),
                 HiddenField::create('Content', "HTML structure"),
                 HiddenField::create('Embeds', 'Content embeds', json_encode($embeds)),
-                HiddenField::create('EmbedLink', 'Embed link', $this->owner->data()->Link('renderembed'))
+                HiddenField::create('EmbedLink', 'Embed link', $record->Link('renderembed'))
         ]);
 
         $actions = FieldList::create([
                 FormAction::create('save', 'Save')->setUseButtonTag(true),
         ]);
 
-        if ($this->owner->data()->canPublish()) {
+        if ($record->canPublish()) {
             $actions->push(FormAction::create('publish', 'Pub')->setUseButtonTag(true));
         }
 
-        $actions->push(FormAction::create('preview', 'View')->setUseButtonTag(true));
+        if ($record->hasExtension('WorkflowApplicable')) {
+            $definitions = singleton('WorkflowService')->getDefinitionsFor($record);
+            if ($definitions && count($definitions)) {
+                $actions->push(
+                    FormAction::create('workflow', 'Workflow')
+                        ->setUseButtonTag(true)
+                        ->addExtraClass('link-action')
+                        ->setAttribute('data-link', $record->CMSEditLink())
+                );
+            }
+        }
+
+        $actions->push(
+            FormAction::create('preview', 'View')
+                ->setUseButtonTag(true)
+                ->addExtraClass('link-action')
+                ->setAttribute('data-link', $record->Link() . '?preview=1&stage=Stage')
+        );
         $actions->push(FormAction::create('live', 'Done')->setUseButtonTag(true));
 
         $form = Form::create($this->owner, 'LivingForm', $fields, $actions);
-        $form->loadDataFrom($this->owner->data());
+        $form->loadDataFrom($record);
         return $form;
     }
 
