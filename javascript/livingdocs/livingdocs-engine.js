@@ -3864,7 +3864,7 @@ module.exports = ComponentTree = (function() {
     return words.readableJson(this.toJson());
   };
 
-  ComponentTree.prototype.serialize = function() {
+  ComponentTree.prototype.serialize = function(startComponent, excludeId) {
     var componentToData, data, walker;
     data = {};
     data['content'] = [];
@@ -3875,6 +3875,9 @@ module.exports = ComponentTree = (function() {
     componentToData = function(component, level, containerArray) {
       var componentData;
       componentData = component.toJson();
+      if (excludeId) {
+          delete componentData.id;
+      }
       containerArray.push(componentData);
       return componentData;
     };
@@ -3893,14 +3896,27 @@ module.exports = ComponentTree = (function() {
         return walker(component.next, level, dataObj);
       }
     };
-    if (this.root.first) {
-      walker(this.root.first, 0, data['content']);
+    if (!startComponent) {
+        startComponent = this.root.first;
+    }
+    if (startComponent) {
+      walker(startComponent, 0, data['content']);
     }
     return data;
   };
+  
+  ComponentTree.prototype.componentsFromList = function (data, design) {
+      var created = [];
+      
+      for (var i = 0, c = data.length; i < c; i++) {
+        var componentData = data[i];
+        created.push(componentModelSerializer.fromJson(componentData, design));
+      }
+      return created;
+  };
 
   ComponentTree.prototype.fromData = function(data, design, silent) {
-    var component, componentData, _i, _len, _ref;
+    var component, componentData, _i, _len, _ref, created = [];
     if (silent == null) {
       silent = true;
     }
@@ -3918,6 +3934,7 @@ module.exports = ComponentTree = (function() {
         componentData = _ref[_i];
         component = componentModelSerializer.fromJson(componentData, design);
         this.root.append(component);
+        created.push(component);
       }
     }
     if (silent) {
@@ -3929,6 +3946,7 @@ module.exports = ComponentTree = (function() {
         };
       })(this));
     }
+    return created;
   };
 
   ComponentTree.prototype.addData = function(data, design) {

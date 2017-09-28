@@ -12,6 +12,13 @@ body {
     background-color: #fff;
     padding: 5px;
     font-size: 14px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    height: 100%;
+    
+    box-shadow: 0 0 3px rgba(0,0,0,0.25);
+    padding: 0;
+    color: #000;
 }
 
 .livingdocs-toolbar form {
@@ -19,21 +26,60 @@ body {
     margin-bottom: 10px;
 }
 
-.livingdocs-toolbar form input.text, 
-.livingdocs-toolbar form textarea, 
-.livingdocs-toolbar form select {
+.livingdocs-toolbar label {
+    width: 100%;
+}
+
+.livingdocs-toolbar input.text, 
+.livingdocs-toolbar textarea, 
+.livingdocs-toolbar select {
 	width: 100%;
 	max-width: 400px;
 	padding: 6px 5px;
-	font-size: 15px;
+	font-size: 12px;
 	background-color: #fff;
 	border: 1px solid #dad9d9;
 	box-sizing: border-box;
+    height: auto;
+    color: #000;
 }
 
 .livingdocs-toolbar .Actions {
     margin: 0;
 }
+
+.livingdocs-toolbar .component-actions {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    background-color: #fefefe;
+    padding: 5px;
+}
+
+.livingdocs-toolbar .component-actions button {
+    margin: 0.5rem;
+    line-height: 1;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+    border-radius: 2px;
+}
+
+.livingdocs-toolbar .livingdocs-page-options {
+    padding: 3px;
+}
+
+.livingdocs-toolbar .livingdocs-history-list {
+    height: 200px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.livingdocs-toolbar .livingdocs-actions,
+.livingdocs-toolbar .livingdocs-item-properties > div {
+        padding: 10px;
+        position: relative;
+        margin: 0;
+    }
 
 .livingdocs-toolbar a.btn, 
 .livingdocs-toolbar button, 
@@ -44,6 +90,9 @@ body {
     border: 1px solid #333;
     border-radius: 3px;
     float: none;
+    font-size: 12px;
+    padding: 4px;
+    color: #000;
 }
 
 .livingdocs-toolbar a.btn:hover, 
@@ -63,20 +112,22 @@ body {
   border: 1px solid rgba(0, 0, 0, 0.5);
   margin: 5px;
   cursor: move;
-
-}
-
-.livingdocs-actions {
+  font-size: 10px;
 }
 
 .livingdocs-components {
-    height: 500px;
-    overflow-y: auto;
-    overflow-x: hidden;
+    /*height: 500px;*/
 }
 
 .livingdocs-item-properties {
     margin-bottom: 10px;
+	position: relative;
+}
+
+.livingdocs-item-properties .properties-closer {
+	position: absolute;
+	top: 0;
+    right: 10px;
 }
 
 .structure-options {
@@ -123,15 +174,12 @@ body.doc-no-selection .livingdocs-toolbar iframe {
 	pointer-events: none;
 }
 
-
-[data-doc-container="row"], [data-doc-container="section"], [data-doc-container="column"] {
+[data-doc-container] {
     border: 4px dotted #ccc;
-    /*padding: 5px;*/
 }
 
-[data-doc-container="row"].doc-component-highlight, 
-[data-doc-container="section"].doc-component-highlight, 
-[data-doc-container="column"].doc-component-highlight {
+
+[data-doc-container].doc-component-highlight {
     border: 4px dotted #FA9E4E;
 /*    padding-top: 5px;
     padding-bottom: 5px;*/
@@ -151,14 +199,28 @@ body.doc-no-selection .livingdocs-toolbar iframe {
 }
 
 
+.livingdocs_EditorField_Toolbar_options > h4 {
+    font-size: 1rem;
+}
+
+.livingdocs_EditorField_Toolbar_options > h4:first-child {
+    margin-right: 2em;
+    font-weight: bold;
+}
+
+.livingdocs_EditorField_Toolbar_options > h5 {
+    font-size: 1rem;
+}
+
 .livingdocs-components h2 {
-  font-size: 18px;
+  font-size: 14px;
+  color: #000;
   line-height: 24px;
   font-weight: 300;
   letter-spacing: 1px;
   display: block;
   background-color: #fefffa;
-  margin: 0;
+  margin: 2px   ;
   cursor: pointer;
 }
 
@@ -210,7 +272,8 @@ body.doc-no-selection .livingdocs-toolbar iframe {
   margin-top: 16px;
   right: 10px;
 }
-.livingdocs-components ul li i:before, ul li i:after {
+.livingdocs-components ul li i:before, 
+.livingdocs-components ul li i:after {
   content: "";
   position: absolute;
   background-color: #ff6873;
@@ -331,4 +394,56 @@ table.doc-component thead:empty, table.doc-component tbody:empty {
 
 .js-editor-block button:hover {
     background-color: #dcdcdc;
+}
+
+.lf-overlay {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.7);
+  transition: opacity 500ms;
+  visibility: hidden;
+  opacity: 0;
+  z-index: 2001;
+}
+.lf-overlay.active-dialog {
+  visibility: visible;
+  opacity: 1;
+}
+
+.lf-popup {
+  margin: 70px auto;
+  padding: 20px;
+  background: #fff;
+  border-radius: 5px;
+  width: 30%;
+  position: relative;
+  transition: all 5s ease-in-out;
+}
+
+.lf-popup h2 {
+  margin-top: 0;
+  color: #333;
+}
+.lf-popup .lf-dialog-close {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  transition: all 200ms;
+  font-size: 30px;
+  font-weight: bold;
+  text-decoration: none;
+  color: #333;
+}
+.lf-popup .lf-dialog-close:hover {
+  color: #06D85F;
+}
+.lf-popup .lf-dialog-content {
+  max-height: 30%;
+  overflow: auto;
+}
+.lf-popup label {
+    display: block;
 }

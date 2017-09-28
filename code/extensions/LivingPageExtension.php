@@ -84,13 +84,70 @@ class LivingPageExtension extends DataExtension
             // back-convert link shortcodes
             $convertedHtml = preg_replace('/%5B(.+?)%5D/','[\\1]', $convertedHtml);
 
+            // replace empty <a> with <span>. Relies on correctly structure link tags
+            // so that there's no inner embedded <a>
+            $convertedHtml = preg_replace('/<a>(.+?)<\/a>/', '<span class="empty-href-span">\\1</span>', $convertedHtml);
+
             $this->owner->Content = $convertedHtml;
         }
     }
 
     public function shortcodeFor($label) {
-        $items = $this->owner->Shortcodes->getValues();
+        $items = $this->availableShortcodes();
         return isset($items[$label]) ? $items[$label] : null;
+    }
+
+    /**
+     * Gets all the shortcodes available for this page, inherited from its site
+     *
+     * @return array
+     */
+    public function availableShortcodes() {
+        $configObject = class_exists('Site') ? \Multisites::inst()->getActiveSite() : \SiteConfig::current_site_config();
+
+        $configItems = [];
+        if ($configObject && $configObject->hasExtension('LivingPageSettingsExtension')) {
+            $configItems = $configObject->GlobalShortcodes->getValues();
+            if (!is_array($configItems)) {
+                $configItems = [];
+            }
+        }
+
+        $items = $this->owner->Shortcodes->getValues();
+        if (!$items) {
+            $items = [];
+        }
+        
+        $items = array_merge($configItems, $items);
+
+        return $items;
+    }
+
+    /**
+     * Call this to update the design name used for the doc
+     *
+     * @param type $oldName
+     * @param type $newName
+     * @param type $components
+     */
+    public function updateDesignName($oldName, $newName, $components) {
+        $newComponents = [];
+        foreach ($components as $component) {
+            if (isset($component['identifier'])) {
+                $component['identifier'] = str_replace($oldName, $newName, $component['identifier']);
+            }
+            
+            if (isset($component['containers'])) {
+                foreach ($component['containers'] as $name => $items) {
+                    $newItems = [];
+                    $component['containers'][$name] = $this->updateDesignName($oldName, $newName, $component['containers'][$name]);
+                }
+            }
+
+            $newComponents[] = $component;
+        }
+
+        return $newComponents;
     }
 
     public static function embeditem_handler($arguments, $content = null, $parser = null) {
@@ -98,9 +155,47 @@ class LivingPageExtension extends DataExtension
     }
 
     public static function childlist_handler($arguments, $content = null, $parser = null) {
+        $page = self::shortcode_object($arguments);
+
+        if ($page) {
+            return $page->renderWith('ListingPage_ChildListing');
+        }
+    }
+
+    public static function show_field_shortcode($arguments, $content = null, $parser = null) {
+        $page = self::shortcode_object($arguments);
+        if (!$page) {
+            return '';
+        }
+        
+        $field = isset($arguments['field']) ? $arguments['field']: 'Title';
+        $extraArgs = isset($arguments['args']) ? explode(',', $arguments['args']) : [];
+        
+        return self::field_value($page, $field, $extraArgs);
+    }
+
+    private static function field_value($object, $field, $extraArgs) {
+        $bits = explode('.', $field);
+        $nextField = array_shift($bits);
+
+        if (count($bits) === 0) {
+            if (!($object instanceof DataObject) && method_exists($object, $nextField)) {
+                return call_user_func_array(array($object, $nextField), $extraArgs);
+            }
+            return $object->$nextField; //getField($nextField);;
+        }
+
+        $nextObject = $object->dbObject($nextField);
+        
+        return self::field_value($nextObject, implode('.', $bits), $extraArgs);
+    }
+
+    private static function shortcode_object($arguments) {
         $page = null;
+        $class = isset($arguments['class']) ? $arguments['class'] : 'Page';
+        
         if (isset($arguments['id'])) {
-            $page = Page::get()->byID($arguments['id']);
+            $page = $class::get()->byID($arguments['id']);
         }
 
         if (!$page) {
@@ -108,9 +203,7 @@ class LivingPageExtension extends DataExtension
             $page = $controller instanceof ContentController ? $controller->data() : null;
         }
 
-        if ($page) {
-            return $page->renderWith('ListingPage_ChildListing');
-        }
+        return $page && $page->hasMethod('canView') ? ($page->canView() ? $page : null) : $page;
     }
 
     public static function config() {

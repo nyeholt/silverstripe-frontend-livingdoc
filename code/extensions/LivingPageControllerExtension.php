@@ -75,9 +75,16 @@ class LivingPageControllerExtension extends Extension
                 ];
             }
 
+            $designName    = $design['data']['design']['name'];
             // explicit binding because I'm too lazy right now to add yet another extension
             if (class_exists('Multisites') && Multisites::inst()->getCurrentSite()->LivingPageTheme) {
-                $design['data']['design']['name'] = Multisites::inst()->getCurrentSite()->LivingPageTheme;
+                $siteThemeName = Multisites::inst()->getCurrentSite()->LivingPageTheme;
+                if ($siteThemeName != $designName) {
+                    // go through _all_ components and update the design name
+                    $design['data']['content'] = $record->updateDesignName($designName, $siteThemeName, $design['data']['content']);
+                }
+                $designName = $siteThemeName;
+                $design['data']['design']['name'] = $siteThemeName;
             }
 
             // converts all nodes to current content state where necessary (in particular, embed items)
@@ -90,7 +97,6 @@ class LivingPageControllerExtension extends Extension
 
             $this->owner->data()->extend('updateLivingDesign', $design);
 
-            $designName    = $design['data']['design']['name'];
             $designOptions = LivingPageExtension::config()->living_designs;
 
             $designFile = $designOptions[$designName];
@@ -108,8 +114,17 @@ class LivingPageControllerExtension extends Extension
 
             Requirements::javascript(THIRDPARTY_DIR.'/jquery-form/jquery.form.js');
 
+            // our living docs integration files
             // will bind $ if not already bound, so that livingdocs doesn't die
+            Requirements::javascript('frontend-livingdoc/javascript/lf-editor-content-bridge.js');
+            Requirements::javascript('frontend-livingdoc/javascript/lf-links-buttons.js');
+            Requirements::javascript('frontend-livingdoc/javascript/lf-attr-editor.js');
+            Requirements::javascript('frontend-livingdoc/javascript/lf-editing-history.js');
+            Requirements::javascript('frontend-livingdoc/javascript/lf-text-actions.js');
+            Requirements::javascript('frontend-livingdoc/javascript/lf-html-editing.js');
+            
             Requirements::javascript('frontend-livingdoc/javascript/living-frontend.js');
+
 
             Requirements::javascript('frontend-livingdoc/javascript/livingdocs/editable.js');
             Requirements::javascript('frontend-livingdoc/javascript/livingdocs/livingdocs-engine.js');
@@ -163,7 +178,7 @@ class LivingPageControllerExtension extends Extension
             return $this->owner->httpError('403');
         }
         $item      = $this->owner->getRequest()->getVar('embed');
-        $available = $this->owner->data()->Shortcodes->getValues();
+        $available = $this->owner->data()->availableShortcodes();
 
         if (isset($available[$item])) {
             $shortcodeStr = $available[$item];
@@ -208,28 +223,46 @@ class LivingPageControllerExtension extends Extension
             return;
         }
 
-        $embeds = $this->owner->data()->Shortcodes->getValues();
+        $record = $this->owner->data();
+        $embeds = $record->availableShortcodes();
 
         $fields = FieldList::create([
                 HiddenField::create('PageStructure', "JSON structure"),
                 HiddenField::create('Content', "HTML structure"),
                 HiddenField::create('Embeds', 'Content embeds', json_encode($embeds)),
-                HiddenField::create('EmbedLink', 'Embed link', $this->owner->data()->Link('renderembed'))
+                HiddenField::create('EmbedLink', 'Embed link', $record->Link('renderembed'))
         ]);
 
         $actions = FieldList::create([
-                FormAction::create('save', 'Save'),
+                FormAction::create('save', 'Save')->setUseButtonTag(true),
         ]);
 
-        if ($this->owner->data()->canPublish()) {
-            $actions->push(FormAction::create('publish', 'Pub'));
+        if ($record->canPublish()) {
+            $actions->push(FormAction::create('publish', 'Pub')->setUseButtonTag(true));
         }
 
-        $actions->push(FormAction::create('preview', 'View'));
-        $actions->push(FormAction::create('live', 'Done'));
+        if ($record->hasExtension('WorkflowApplicable')) {
+            $definitions = singleton('WorkflowService')->getDefinitionsFor($record);
+            if ($definitions && count($definitions)) {
+                $actions->push(
+                    FormAction::create('workflow', 'Workflow')
+                        ->setUseButtonTag(true)
+                        ->addExtraClass('link-action')
+                        ->setAttribute('data-link', $record->CMSEditLink())
+                );
+            }
+        }
+
+        $actions->push(
+            FormAction::create('preview', 'View')
+                ->setUseButtonTag(true)
+                ->addExtraClass('link-action')
+                ->setAttribute('data-link', $record->Link() . '?preview=1&stage=Stage')
+        );
+        $actions->push(FormAction::create('live', 'Done')->setUseButtonTag(true));
 
         $form = Form::create($this->owner, 'LivingForm', $fields, $actions);
-        $form->loadDataFrom($this->owner->data());
+        $form->loadDataFrom($record);
         return $form;
     }
 
