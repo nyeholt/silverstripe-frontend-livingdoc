@@ -8,6 +8,9 @@
 class FrontendInsertDialog extends LeftAndMain
 {
     private static $allowed_actions = array('MediaForm', 'LinkForm', 'EditorToolbar');
+
+    private static $url_base = '';
+    
     public $fromType;
 
     public function init()
@@ -18,6 +21,7 @@ class FrontendInsertDialog extends LeftAndMain
 
     /**
      * Load required CSS and Javascript
+     * 
      * @todo We probably go a bit overboard and include things we dont need here..... clean it up
      */
     protected function includes()
