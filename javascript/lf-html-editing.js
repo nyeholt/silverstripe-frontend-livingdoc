@@ -62,11 +62,16 @@
                     newContent = aceeditor.getValue();
                 }
 
+                // insert some markers for real &gt; and &lt;
+                newContent = newContent.replace(/&gt;/g, '__RAW_GT_TAG').replace(/&lt;/g, '__RAW_LT_TAG');
+
                 var catcher = $('<div>');
                 catcher.append(newContent); 
                 catcher.find('script').remove().find('textarea').remove();
 
                 var rawContent = catcher.html();
+                rawContent = rawContent.replace(/&gt;/g, '>').replace(/&lt;/g, '<').replace(/__RAW_GT_TAG/g, '&gt;').replace(/__RAW_LT_TAG/g, '&lt;');
+                
                 component.model.setData(directiveName + '-raw', rawContent);
 
                 if (component.$html.hasClass('js-living-markdown')) {
