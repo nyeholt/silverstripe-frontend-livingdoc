@@ -30,6 +30,7 @@
             this.activeComponent = component;
         },
         blur: function () {
+            // not a true blur, we don't trigger on all blur occasions otherwise we lose context
             this.activeComponent = null;
         },
         
@@ -333,9 +334,17 @@
             });
 
 
-            livingdoc.interactiveView.page.editableController.editable.on('paste', function (elem, blocks, cursor) {
-                
-            });
+            $(document).on('paste.editable', function (event) {
+                console.log("PASTEEE D");
+                if (event.clipboardData) {
+                    console.log("DIRECT");
+                }
+                if (event.originalEvent && event.originalEvent.clipboardData) {
+                    console.log("otieg");
+                    
+                    // https://codepen.io/netsi1964/pen/IoJbg
+                }
+            })
 
             
             livingdoc.interactiveView.page.embedItemClick.add(function (component, directiveName, event) {

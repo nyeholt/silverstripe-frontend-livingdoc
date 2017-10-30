@@ -127,6 +127,31 @@
                     }
                 ]
             },
+            "list-styles": {
+                "label": "List styles",
+                "type": "select",
+                "options": [
+                    {
+                        'caption': 'Multiple',
+                        'value': "yes"
+                    },
+                    {
+                        "caption": "None"
+                    },
+                    {
+                        'caption': 'List group',
+                        'value': "list-group"
+                    },
+                    {
+                        'caption': 'List group flush',
+                        'value': "list-group-flush"
+                    },
+                    {
+                        'caption': 'List group item',
+                        'value': "list-group-item"
+                    }
+                ]
+            },
             "text-styles": {
                 "label": "Text styles",
                 "type": "select",
@@ -501,6 +526,53 @@
                 </figcaption>\n</figure>",
                 "label": "Image"
             },
+            
+            {
+                "name": "unordered-list",
+                "html": "<ul doc-container=\"list\"></ul>",
+                "label": "Unordered List",
+                "properties": [
+                    "text-styles",
+                    "list-styles"
+                ],
+                "directives": {
+                    "list": {
+                        "allowedChildren": [
+                            "list-item"
+                        ]
+                    }
+                }
+            },
+            {
+                "name": "numbered-list",
+                "html": "<ol doc-container=\"list\"></ol>",
+                "label": "Numbered List",
+                "properties": [
+                    "text-styles",
+                    "list-styles"
+                ],
+                "directives": {
+                    "list": {
+                        "allowedChildren": [
+                            "list-item"
+                        ]
+                    }
+                }
+            },
+            {
+                "name": "list-item",
+                "html": "<li doc-editable=\"text\">List item</li>",
+                "label": "List item",
+                "properties": [
+                    "text-styles",
+                    "list-styles"
+                ],
+                "allowedParents": [
+                    "numbered-list",
+                    "unordered-list"
+                ]
+            },
+            
             {
                 "name": "list-group",
                 "html": "<ul class=\"list-group\" doc-container=\"list\"></ul>",
@@ -529,7 +601,7 @@
             {
                 "name": "list-group-item",
                 "html": "<li class=\"list-group-item\" doc-editable=\"text\">List item</li>",
-                "label": "List Item",
+                "label": "List group item",
                 "allowedParents": [
                     "list-group",
                     'numbered-list-group'
