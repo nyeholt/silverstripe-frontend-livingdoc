@@ -503,7 +503,17 @@
                         attrButton.on("click", function () {
                             var selected = attrInput.val();
                             if (selected) {
-                                $.get(EMBED_LINK, {embed: selected}).success(function (data) {
+                                
+                                var componentAttrs = component.model.getData('data_attributes');
+                                var attrStr = '';
+                                if (componentAttrs) {
+                                    componentAttrs = componentAttrs[_thisItem.name];
+                                    if (componentAttrs) {
+                                        attrStr = JSON.stringify(componentAttrs);
+                                    }
+                                }
+
+                                $.get(EMBED_LINK, {embed: selected, attrs: attrStr}).success(function (data) {
                                     component.model.setContent(_thisItem.name, {
                                         source: selected,
                                         content: data

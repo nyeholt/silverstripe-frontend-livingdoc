@@ -92,9 +92,33 @@ class LivingPageExtension extends DataExtension
         }
     }
 
-    public function shortcodeFor($label) {
+    public function shortcodeFor($label, $shortcodeParams = null) {
         $items = $this->availableShortcodes();
-        return isset($items[$label]) ? $items[$label] : null;
+        if (!isset($items[$label])) {
+            return null;
+        }
+
+        $paramStr = $this->attrListToAttrString($shortcodeParams);
+
+        return strlen($paramStr) ? str_replace(']', ' ' . $paramStr . ']', $items[$label]) : $items[$label];
+    }
+
+    /**
+     * Convert an array of key => values to shortcode parameters. 
+     *
+     * @param aray $shortcodeParams
+     * @return string
+     */
+    protected function attrListToAttrString($shortcodeParams) {
+        $paramStr = '';
+        if (is_array($shortcodeParams)) {
+            foreach ($shortcodeParams as $name => $values) {
+                if (strlen($values)) {
+                    $paramStr .= $name . '="' . $values .'" ';
+                }
+            }
+        }
+        return trim($paramStr);
     }
 
     /**

@@ -150,8 +150,10 @@ class LivingPageControllerExtension extends Extension
     protected function convertEmbedNodes(&$component)
     {
         if (isset($component['identifier']) && strpos($component['identifier'], 'embeddeditem') && isset($component['content'])) {
+            $dataAttrs = isset($component['data']['data_attributes']) ? $component['data']['data_attributes'] : [];
             foreach ($component['content'] as $name => $props) {
-                $shortCode = $this->owner->data()->shortcodeFor($props['source']);
+                $shortcodeParams = isset($dataAttrs[$name]) ? $dataAttrs[$name] : null;
+                $shortCode = $this->owner->data()->shortcodeFor($props['source'], $shortcodeParams);
                 if ($shortCode) {
                     $props['content'] = ShortcodeParser::get_active()->parse($shortCode);
                 }
@@ -181,7 +183,10 @@ class LivingPageControllerExtension extends Extension
         $available = $this->owner->data()->availableShortcodes();
 
         if (isset($available[$item])) {
-            $shortcodeStr = $available[$item];
+            $shortcodeParams = $this->owner->getRequest()->getVar('attrs') ? 
+                json_decode($this->owner->getRequest()->getVar('attrs'), true) : [];
+
+            $shortcodeStr = $this->owner->data()->shortcodeFor($item, $shortcodeParams);
             return ShortcodeParser::get_active()->parse($shortcodeStr);
         }
     }
