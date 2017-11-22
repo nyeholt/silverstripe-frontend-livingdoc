@@ -74,7 +74,12 @@ class LivingPageExtension extends DataExtension
             foreach ($toreplace as $replaceNode) {
                 $cnode = HtmlPageCrawler::create($replaceNode);
                 $replaceWith = $cnode->attr('data-embed-source-object');
-                $replaceWith = $this->shortcodeFor($replaceWith);
+                $embedAttrStr = $cnode->attr('data-embed-attrs-object');
+                $embedAttrs = null;
+                if ($embedAttrStr) {
+                    $embedAttrs = json_decode($embedAttrStr, true);
+                }
+                $replaceWith = $this->shortcodeFor($replaceWith, $embedAttrs);
                 $cnode->text("$replaceWith");
                 $text = $cnode->text();
             }

@@ -7894,13 +7894,14 @@ module.exports = ComponentView = (function() {
       var $elem;
       $elem = this.directives.$getElem(name);
       
-      value = value || {source: '', content: null};
+      value = value || {source: '', attrs: '', content: null};
       
       if (!value.content) {
           value.content = this.template.defaults[name];
       }
       
       $elem.attr('data-embed-source-' + name, value.source);
+      $elem.attr('data-embed-attrs-' + name, value.attrs);
       
       $elem.html(value.content);
       
@@ -7912,7 +7913,7 @@ module.exports = ComponentView = (function() {
   ComponentView.prototype.getEmbedItem = function (name) {
       var $elem;
       $elem = this.directives.$getElem(name);
-      return $elem.attr('data-embed-' + name);
+      return $elem.attr('data-embed-source-' + name);
   }
 
   ComponentView.prototype.setLink = function(name, value) {
