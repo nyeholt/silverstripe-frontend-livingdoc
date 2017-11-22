@@ -44,15 +44,16 @@ body {
     color: #000;
 }
 
+.livingdocs-toolbar select.with-button {
+    width: 70%;
+    margin-bottom: 0px;
+}
+
 .livingdocs-toolbar .Actions {
     margin: 0;
 }
 
 .livingdocs-toolbar .component-actions {
-    position: fixed;
-    bottom: 0;
-    right: 0;
-    background-color: #fefefe;
     padding: 5px;
 }
 
@@ -134,10 +135,6 @@ body {
     font-size: 12px;
 }
 
-.structure-options select {
-    width: 70%;
-}
-
 iframe.living-dialog {
     background-color: #fff;
     width: 50%;
@@ -198,6 +195,13 @@ body.doc-no-selection .livingdocs-toolbar iframe {
     background-color: #dcdcdc;
 }
 
+.livingdocs-item-properties {
+    position: fixed;
+    background-color: #fff;
+    top: 20px;
+    right: 0px;
+    border: 1px solid #666;
+}
 
 .livingdocs_EditorField_Toolbar_options > h4 {
     font-size: 1rem;
