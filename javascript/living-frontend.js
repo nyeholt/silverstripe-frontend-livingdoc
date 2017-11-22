@@ -158,9 +158,7 @@
     $(function () {
         var structure = $('#page-structure').length > 0 ? $('#page-structure').data('structure') : null;
         
-        var embeds = JSON.parse($('input[name=Embeds]').val());
-        var EMBED_LINK = $('input[name=EmbedLink]').val();
-
+        
         if (structure) {
         } else {
             alert("No structure found");
@@ -289,7 +287,7 @@
             
             // add in the structured components that can be chosen to have fully created
             if (selectedDesign.structures && selectedDesign.structures.length > 0) {
-                var optionList = $('<select>').attr('id', 'component-structures');
+                var optionList = $('<select class="with-button">').attr('id', 'component-structures');
                 optionList.append('<option>-- structures --</option>');
                 for (var i in selectedDesign.structures) {
                     var item = selectedDesign.structures[i];
@@ -474,65 +472,6 @@
                     }
                 }
                 
-                if (component.model.directives.embeditem && component.model.directives.embeditem.length) {
-                    for (var index in component.model.directives.embeditem) {
-                        var _thisItem  = component.model.directives.embeditem[index];
-                        
-                        var currentValue = component.model.get(_thisItem.name);
-                        currentValue = currentValue || {source: '', content: null};
-                        
-                        var attrInput = null;
-                        var attrlbl = $('<label>').text(_thisItem.name + ' source');
-                        
-                        if (embeds) {
-                            attrInput = $('<select>');
-                            attrInput.append('<option>-- select item --</option>');
-                            for (var label in embeds) {
-                                var opt = $('<option>').appendTo(attrInput);
-                                opt.attr('value', label).text(label);
-                            }
-                        } else {
-                            attrInput = $("<input>").attr({type: 'text', placeholder: 'Source string'});
-                        }
-                        
-                        if (attrInput) {
-                            attrInput.val(currentValue.source);
-                        }
-                        
-                        var attrButton = $('<button>✔</button>');
-                        attrButton.on("click", function () {
-                            var selected = attrInput.val();
-                            if (selected) {
-                                
-                                var componentAttrs = component.model.getData('data_attributes');
-                                var attrStr = '';
-                                if (componentAttrs) {
-                                    componentAttrs = componentAttrs[_thisItem.name];
-                                    if (componentAttrs) {
-                                        attrStr = JSON.stringify(componentAttrs);
-                                    }
-                                }
-
-                                $.get(EMBED_LINK, {embed: selected, attrs: attrStr}).success(function (data) {
-                                    component.model.setContent(_thisItem.name, {
-                                        source: selected,
-                                        content: data
-                                    });
-                                });
-                            } else {
-                                component.model.setContent(_thisItem.name, {
-                                    source: '',
-                                    content: ''
-                                });
-                            }
-                            
-                        });
-                        attrlbl.append(attrInput).append(attrButton);
-                        options.append(attrlbl);
-                    }
-                    
-                }
-                
                 if (component.model.componentName === 'table') {
                     // add row and add column
 
@@ -582,8 +521,10 @@
                 }
                 
                 var $delete_button = $("<button class='alert alert-danger'>").text("Remove").on("click", function () {
-                    component.model.remove();
-                    $("." + PROPS_HOLDER).remove();
+                    if (confirm("Remove this?")) {
+                        component.model.remove();
+                        $("." + PROPS_HOLDER).remove();
+                    }
                 });
                 
                 var $dupe_button = $("<button class='alert alert-warning'>").text("Duplicate").on("click", function () {
