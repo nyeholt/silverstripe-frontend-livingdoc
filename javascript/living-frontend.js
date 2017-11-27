@@ -543,8 +543,12 @@
                 
                 $('<div class="Actions component-actions">').appendTo(options).append($dupe_button).append($delete_button)
 
-                $properties.html(options)
-                
+                $properties.html(options);
+                if ($.fn.drags) {
+                    $('.livingdocs-item-properties').drags({
+                        handle: "h4"
+                    });
+                }
             });
 
             $(document).trigger('livingfrontend.updateLivingDoc', [livingdoc]);
@@ -700,5 +704,55 @@
             ContentBridge.showDialog('image');
         }
     });
+    
+    
+    (function($) {
+        $.fn.drags = function(opt) {
+
+            opt = $.extend({handle:"",cursor:"move"}, opt);
+            
+            var $el = this;
+            
+            if(opt.handle === "") {
+                var $handle = this;
+            } else {
+                var $handle = this.find(opt.handle);
+            }
+
+            return $handle.css('cursor', opt.cursor).on("mousedown", function(e) {
+                var $drag = $el.addClass('__draggable');
+                
+                if(opt.handle === "") {
+                    
+                } else {
+                    $handle.addClass('active-handle');
+                }
+                var z_idx = $drag.css('z-index'),
+                    drg_h = $drag.outerHeight(),
+                    drg_w = $drag.outerWidth(),
+                    pos_y = $drag.offset().top + drg_h - e.pageY,
+                    pos_x = $drag.offset().left + drg_w - e.pageX;
+                $drag.css({'z-index': '3000'}).parents().on("mousemove", function(e) {
+                    $('.__draggable').css('right', 'auto');
+                    $('.__draggable').offset({
+                        top:e.pageY + pos_y - drg_h,
+                        left:e.pageX + pos_x - drg_w
+                    }).on("mouseup", function() {
+                        $(this).css({'z-index': z_idx});
+                        $handle.removeClass('__draggable');
+                    });
+                });
+                e.preventDefault(); // disable selection
+            }).on("mouseup", function() {
+                $el.removeClass('__draggable');
+                if(opt.handle === "") {
+                    
+                } else {
+                    $handle.removeClass('active-handle');
+                }
+            });
+
+        }
+    })(jQuery);
 
 })(jQuery);

@@ -10,6 +10,7 @@ class LivingPageSettingsExtension extends DataExtension
     private static $db = array(
         'LivingPageTheme'       => 'Varchar(128)',
         'GlobalShortcodes'        => 'MultiValueField',
+        'DefaultStructure'  => 'Text',
     );
 
     public function updateCMSFields(\FieldList $fields)
@@ -31,6 +32,9 @@ class LivingPageSettingsExtension extends DataExtension
             DropdownField::create('LivingPageTheme', 'Theme for Living Pages', $opts)->setEmptyString('-- default --')
         ];
 
+        if ($this->owner instanceof Site) {
+            $pageOptions[] = TextareaField::create('DefaultStructure', 'Default page layout');
+        }
 
         $fields->addFieldsToTab(
             'Root.LivingPage',
