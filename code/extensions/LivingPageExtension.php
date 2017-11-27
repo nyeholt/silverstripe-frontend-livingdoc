@@ -60,7 +60,12 @@ class LivingPageExtension extends DataExtension
         parent::onBeforeWrite();
 
         if (!$this->owner->PageStructure) {
-            $this->owner->PageStructure = json_encode(self::config()->default_page);
+            $configObject = class_exists('Site') ? \Multisites::inst()->getActiveSite() : \SiteConfig::current_site_config();
+            if ($configObject && strlen($configObject->DefaultStructure)) {
+                $this->owner->PageStructure = json_encode(json_decode($configObject->DefaultStructure));
+            } else {
+                $this->owner->PageStructure = json_encode(self::config()->default_page);
+            }
         }
 
         // convert relevant bits of the content from the data-embed-source tag
