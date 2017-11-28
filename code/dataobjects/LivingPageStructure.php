@@ -44,12 +44,8 @@ class LivingPageStructure extends DataObject
                 continue;
             }
             if (is_array($val)) {
-                $newVal = [];
-                foreach ($val as $ckey => $child) {
-                    $newVal[$ckey] = is_array($child) ? $this->cleanupComponent($child) : $child;
-                }
-
-                $val = $newVal;
+                $val = $this->cleanupComponent($val);
+//                $val = $newVal;
             }
 
             $newComponent[$key] = $val;
