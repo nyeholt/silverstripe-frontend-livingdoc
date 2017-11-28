@@ -9,14 +9,17 @@ use \Wa72\HtmlPageDom\HtmlPageCrawler;
 class LivingPageExtension extends DataExtension
 {
     private static $db = [
-        'PageStructure' => 'Text',
+        'PageStructure'     => 'Text',
         'Shortcodes'        => 'MultiValueField',
+    ];
+
+    private static $has_one = [
+        'StructureTemplate' => 'LivingPageStructure',
     ];
 
     private static $living_designs = [
         'bootstrap3'        => 'frontend-livingdoc/javascript/livingdocs/bootstrap-design.js',
     ];
-
 
     private static $default_design_css = '';
 
@@ -37,6 +40,16 @@ class LivingPageExtension extends DataExtension
 
     public function updateCMSFields(\FieldList $fields)
     {
+        $structures = LivingPageStructure::get()->map();
+        if (!strlen($this->owner->PageStructure) && count($structures)) {
+            $fields->removeByName('Root');
+            $fields->push(new TabSet('Root'));
+            $fields->addFieldToTab('Root.Main', TextField::create('Title', 'Title'));
+            $fields->addFieldToTab('Root.Main', DropdownField::create('StructureTemplateID', 'Template', $structures)->setEmptyString('-- none --'));
+            
+            return $fields;
+        }
+
         $link = '<div class="field"><a href="' . $this->owner->Link() . '?edit=1" target="_blank">Edit this page in-place</a></div>';
         $literalContent = LiteralField::create('Content', $link);
         $fields->replaceField('Content', $literalContent);
@@ -60,12 +73,22 @@ class LivingPageExtension extends DataExtension
         parent::onBeforeWrite();
 
         if (!$this->owner->PageStructure) {
-            $configObject = class_exists('Site') ? \Multisites::inst()->getActiveSite() : \SiteConfig::current_site_config();
-            if ($configObject && strlen($configObject->DefaultStructure)) {
-                $this->owner->PageStructure = json_encode(json_decode($configObject->DefaultStructure));
+            $structures = LivingPageStructure::get()->toArray();
+            if (count($structures)) {
+                $structure = $this->owner->StructureTemplate();
+                if ($structure && $structure->ID) {
+                    $valid = json_encode(json_decode($structure->Structure, true), JSON_PRETTY_PRINT);
+                    $this->owner->PageStructure = $valid;
+                }
             } else {
-                $this->owner->PageStructure = json_encode(self::config()->default_page);
+                $configObject = class_exists('Site') ? \Multisites::inst()->getActiveSite() : \SiteConfig::current_site_config();
+                if ($configObject && strlen($configObject->DefaultStructure)) {
+                    $this->owner->PageStructure = json_encode(json_decode($configObject->DefaultStructure));
+                } else {
+                    $this->owner->PageStructure = json_encode(self::config()->default_page);
+                }
             }
+            
         }
 
         // convert relevant bits of the content from the data-embed-source tag
