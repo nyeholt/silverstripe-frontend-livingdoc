@@ -202,8 +202,15 @@ class LivingPageControllerExtension extends Extension
     public function getEditMode()
     {
         if (!$this->owner->data()->canEdit()) {
-            return $this->endEditing();
+            $this->endEditing();
+            return false;
         }
+
+        $stage = Versioned::current_stage();
+        if ($stage != 'Stage') {
+            return false;
+        }
+
         // one-off preview that does _not_ stop edit mode
         if ($this->owner->getRequest()->getVar('preview')) {
             return false;

@@ -1,4 +1,4 @@
-        <% if canEdit && $EditMode %>
+        <% if $EditMode %>
             <div class="livingdocs-toolbar">
     <!--            <iframe src="about:blank">
 
