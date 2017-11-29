@@ -332,19 +332,6 @@
             });
 
 
-            $(document).on('paste.editable', function (event) {
-                console.log("PASTEEE D");
-                if (event.clipboardData) {
-                    console.log("DIRECT");
-                }
-                if (event.originalEvent && event.originalEvent.clipboardData) {
-                    console.log("otieg");
-                    
-                    // https://codepen.io/netsi1964/pen/IoJbg
-                }
-            })
-
-            
             livingdoc.interactiveView.page.embedItemClick.add(function (component, directiveName, event) {
                 
             })

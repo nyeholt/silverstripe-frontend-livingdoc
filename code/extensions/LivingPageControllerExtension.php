@@ -4,6 +4,7 @@ class LivingPageControllerExtension extends Extension
 {
     private static $allowed_actions = array(
         'LivingForm',
+        'pastefile',
         'renderembed'
     );
 
@@ -119,6 +120,7 @@ class LivingPageControllerExtension extends Extension
             Requirements::javascript('frontend-livingdoc/javascript/lf-editor-content-bridge.js');
             Requirements::javascript('frontend-livingdoc/javascript/lf-links-buttons.js');
             Requirements::javascript('frontend-livingdoc/javascript/lf-attr-editor.js');
+            Requirements::javascript('frontend-livingdoc/javascript/lf-paste-image.js');
             Requirements::javascript('frontend-livingdoc/javascript/lf-embed-selection.js');
             Requirements::javascript('frontend-livingdoc/javascript/lf-editing-history.js');
             Requirements::javascript('frontend-livingdoc/javascript/lf-text-actions.js');
@@ -297,6 +299,47 @@ class LivingPageControllerExtension extends Extension
             return json_encode(['status' => 'success']);
         }
         return $this->owner->httpError(500);
+    }
+
+    public function pastefile(SS_HTTPRequest $request) {
+        if (!SecurityToken::inst()->checkRequest($request)) {
+            return $this->owner->httpError(403);
+        }
+
+        $raw = $request->postVar('rawData');
+
+        $filename = $request->postVar('filename') ? $request->postVar('filename') . '.png' : $this->owner->data()->Title . '-upload.png';
+
+        $response = ['success' => true];
+
+        if (substr($raw, 0, strlen('data:image/png;base64,')) === 'data:image/png;base64,') {
+            $base64 = substr($raw, strlen('data:image/png;base64,'));
+
+            $tempFilePath = tempnam(TEMP_FOLDER, 'png');
+            file_put_contents($tempFilePath, base64_decode($base64));
+
+            $tempFile = [
+                'size' => strlen($raw),
+                'name' => $filename,
+                'tmp_name' => $tempFilePath
+            ];
+
+            $upload = Upload::create();
+            $upload->setValidator(Injector::inst()->create('FakeUploadValidator'));
+
+            $upload->load($tempFile);
+            $file = $upload->getFile();
+            if ($file && $file->ID) {
+                $response['url'] = $file->getAbsoluteURL();
+                $response['name'] = $file->Title;
+            }
+            if (file_exists($tempFilePath)) {
+                @unlink($tempFile);
+            }
+        }
+
+        $this->owner->getResponse()->addHeader('Content-Type', 'application/json');
+        return json_encode($response, JSON_PRETTY_PRINT);
     }
 
     public function publish($data, Form $form, $request)
