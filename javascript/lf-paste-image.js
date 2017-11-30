@@ -42,27 +42,56 @@
 //                name: file.name
 //                            console.log(file);
                     if (evt.target.result && evt.target.result.length > 0 && evt.target.result.length < MAX_PASTE_SIZE) {
+                        
+                        // declared here, otherwise the paste action can change the focused element before the post responds
+                        var selectedComponent = LivingFrontendHelper.activeComponent;
 
                         var secId = $(TOOLBAR_FORM).find('[name=SecurityID]').val();
 
                         PASTING = true;
 
                         $.post(UPLOAD_ENDPOINT, {SecurityID: secId, rawData: evt.target.result}).then(function (res) {
+                            PASTING = false;
                             if (res && res.success) {
-                                var im = ContentBridge.livingdoc.design.defaultImage;
-                                var newComponent = im.createModel();
-
-                                if (!im.directives.image || im.directives.image.length === 0) {
-                                    // can't paste into an empty block!
-                                    console.log("No place to paste");
+                                var updateModel = null;
+                                var updateDirective = null;
+                                
+                                if (!selectedComponent) {
+                                    return;
                                 }
+                                // figure out the item we're updating; do we have a selected image, or are we creating
+                                // a new one?
+                                if (selectedComponent.model.directives.image && 
+                                    selectedComponent.model.directives.image.length > 0) {
+                                    updateModel = selectedComponent.model; //.directives.image[0];
+                                    
+                                } else {
+                                    // need to create a new one; this may be inside the container, _or_ as
+                                    // a sibling to the current item
+                                    var im = ContentBridge.livingdoc.design.defaultImage;
+                                    var newComponent = im.createModel();
 
-                                var updateDirective = im.directives.image[0].name;
+                                    if (!im.directives.image || im.directives.image.length === 0) {
+                                        // can't paste into an empty block!
+                                        console.log("No place to paste");
+                                    }
+                                    
+                                    var newView = selectedComponent;
+                                    if (selectedComponent.directives.container && selectedComponent.directives.container.length > 0) {
+                                        var containerName = selectedComponent.directives.container[0].name;
+                                        selectedComponent.model.containers[containerName].append(newComponent);
+                                    } else {
+                                        selectedComponent.model.after(newComponent);
+                                        newView = selectedComponent.next();
+                                    }
 
-                                var obj1 = LivingFrontendHelper.activeComponent.model.after(newComponent);
-                                var newView = LivingFrontendHelper.activeComponent.next();
-                                newView.focus();
-                                newView.model.setContent(updateDirective, {url: res.url});
+                                    newView.focus();
+                                    updateModel = newComponent;
+                                }
+                                
+                                updateDirective = updateModel.directives.image[0].name;
+                                updateModel.setContent(updateDirective, {url: res.url});
+                                
                             }
                         }).done(function (done) {
                             PASTING = false;
