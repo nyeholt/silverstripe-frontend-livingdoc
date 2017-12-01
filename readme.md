@@ -125,13 +125,38 @@ $(document).on('updateLivingdocsDesign', function (e, design) { });
 The `design.components` collection can then be iterated to change the existing definitions, or 
 have new definitions pushed onto its list. 
 
+## CMS capabilities
 
-### New shortcodes for embedding content in pages
+From the CMS you can define several things to help the page editing process
+
+### Shortcodes for embedding content in pages
+
+These can be configured on the SiteConfig, or Site object for Multisites users, which will cascade throughout that site. Additional shortcodes can be specified on a per-page basis; these will override any defined at a global level. Specify a key value pair, where the 'key' is the label shown to the user, and the value is the shortcode to output. Note that users may add attributes for the shortcode from the frontend of the site. 
 
 * `livingpage_childlist` - displays the list of child items of a page (uses the 'current' page as the default) 
 * `livingpage_show_field` - shows the fields of an object (current page is the default). Supports resolution of 
   subfields and parameters
   * `[livingpage_show_field field="OriginalPublishDate.format" args="Y/m/d"]
+
+Adding new shortcodes to a system is the normal SilverStripe method, eg
+
+`ShortcodeParser::get('default')->register('listing', array('PageShortcodes', 'listing_content'));`
+
+On the frontend of the site, shortcodes are added using the "Embed" component. 
+
+### LivingPageStructure
+
+To provide some structure to pages, you can define a "Living Page Structure" in the CMS at admin/livingpage. When creating this structure, you can choose an existing Living Page to extract the content structure from. 
+
+Then, when you create a Living Page object in the Site Tree, you can choose the template structure to provide the initial content. 
+
+### Paste
+
+You can paste clipboard images in a few different contexts;
+
+* When editing in a wysiwyg paragraph, a new image is inserted as a sibling component
+* When an existing image is selected, it will replace that image
+* When a container is selected, a new image is inserted at the end of that container
 
 
 
