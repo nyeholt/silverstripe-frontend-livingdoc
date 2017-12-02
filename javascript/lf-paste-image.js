@@ -34,6 +34,14 @@
         for (var i = 0; i < clipboardData.types.length; i++) {
             if (clipboardData.types[i].match(imageType) || clipboardData.items[i].type.match(imageType)) {
                 var file = clipboardData.items[i].getAsFile();
+                if (!file) {
+                    
+                    file = clipboardData.items[i].getAsString(function (s) {
+                        console.log(s);
+                    });
+                    alert("Could not convert clipboard data to file, please try a smaller image");
+                    continue;
+                }
                 var reader = new FileReader();
                 reader.onload = function (evt) {
                     if (evt.target.result && evt.target.result.length > 0 && evt.target.result.length < MAX_PASTE_SIZE) {
@@ -98,10 +106,5 @@
                 reader.readAsDataURL(file);
             }
         }
-
-//                
-//                var im = ContentBridge.livingdoc.design.defaultImage;
-//                var newComponent = im.createModel();
-//                LivingFrontendHelper.activeComponent.model.after(newComponent);
     })
 })(jQuery);
