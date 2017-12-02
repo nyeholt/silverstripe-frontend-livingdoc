@@ -386,7 +386,7 @@ table.doc-component thead:empty, table.doc-component tbody:empty {
 }
 
 .js-editor-block {
-  min-height: 200px;
+  min-height: 400px;
   position: relative;
 }
 
