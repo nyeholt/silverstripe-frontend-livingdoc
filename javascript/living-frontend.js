@@ -186,7 +186,8 @@
         doc.config({
             livingdocsCssFile: "frontend-livingdoc/javascript/livingdocs/css/livingdocs.css",
             editable: {
-                browserSpellcheck: true
+                browserSpellcheck: true,
+                changeDelay: 50
             }
             ,
             // really not sure if this matters here, but we'll run with it for now. 
