@@ -37,7 +37,7 @@
 
             var aceeditor = ace.edit($edBlock[0]);
             aceeditor.session.setMode('ace/mode/html');
-
+            
             if (component.$html.hasClass('js-living-markdown')) {
                 aceeditor.session.setMode('ace/mode/markdown');
             }
@@ -55,8 +55,8 @@
                 component.$html.html(component.model.get(directiveName));
                 cleanUp();
             });
-
-            $save.click(function () {
+            
+            var saveEditorBlock = function () {
                 var newContent = $edBlock.html();
                 if (aceeditor) {
                     newContent = aceeditor.getValue();
@@ -97,7 +97,11 @@
                 }
 
                 cleanUp();
-            })
+            }
+
+            aceeditor.on('blur', saveEditorBlock);
+            
+            $save.click(saveEditorBlock)
         });
 
     });
