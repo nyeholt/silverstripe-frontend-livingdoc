@@ -5,6 +5,34 @@
         window.$ = $;
     }
     
+    var PING_TIME = 300;
+    var MAX_TIME = 86400;
+    
+    var pingErrors = 0;
+    
+    var editingTime = 0;
+    
+    var pingterval = setInterval(function () {
+        
+        if (editingTime > MAX_TIME) {
+            clearInterval(pingterval);
+            return;
+        }
+        
+        $.get('Security/ping').success(function () {
+            pingErrors = 0;
+        }).error(function () {
+            pingErrors++;
+            if (pingErrors > 5) {
+                alert("Your session may have expired, please try logging in again in a separate tab");
+                clearInterval(pingterval);
+            }
+        });
+        
+        editingTime += PING_TIME;
+    }, PING_TIME*1000);
+    
+    
     var livingdoc;
     
     
