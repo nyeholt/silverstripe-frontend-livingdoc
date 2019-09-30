@@ -487,7 +487,7 @@ import FormContentSource from './lib/FormContentSource';
                 }
             });
 
-            $(document).trigger('livingfrontend.updateLivingDoc', [livingdoc]);
+            $(document).trigger('livingfrontend.updateLivingDoc', [LivingDocState.livingdoc]);
         });
         
 

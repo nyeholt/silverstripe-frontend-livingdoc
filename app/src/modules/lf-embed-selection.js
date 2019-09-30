@@ -45,7 +45,7 @@ $(document).on('livingfrontend.updateLivingDoc', function (e, livingdoc) {
                             }
                         }
 
-                        $.get(EMBED_LINK, { embed: selected, attrs: attrStr }).success(function (data) {
+                        $.get(EMBED_LINK, { embed: selected, attrs: attrStr }).then(function (data) {
                             component.model.setContent(_thisItem.name, {
                                 attrs: attrStr,
                                 source: selected,

@@ -1,6 +1,20 @@
 <?php
 namespace Symbiote\Frontend\LivingPage\Control;
 
+use Page;
+use SilverStripe\CMS\Controllers\ContentController;
+use SilverStripe\CMS\Controllers\ModelAsController;
+use SilverStripe\Control\Controller;
+use SilverStripe\Core\Convert;
+use SilverStripe\ORM\ArrayList;
+use SilverStripe\Security\Security;
+use SilverStripe\UserForms\Model\UserDefinedForm;
+use SilverStripe\View\ArrayData;
+use SilverStripe\View\SSViewer;
+use Symbiote\AdvancedWorkflow\DataObjects\WorkflowInstance;
+use Symbiote\ListingPage\ListingPage;
+use Symbiote\ListingPage\ListingTemplate;
+
 /**
  * 
  *
@@ -84,7 +98,7 @@ class LivingdocShortcodes
     }
 
     public static function workflow_tasks($arguments, $content = null, $parser = null) {
-        $currentUser = Member::currentUser();
+        $currentUser = Security::getCurrentUser();
         if (!$currentUser) {
             return '';
         }

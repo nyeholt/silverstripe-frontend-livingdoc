@@ -75,40 +75,40 @@ var editorProxy = {
     }
 }
 
-$.entwine("ss", function ($) {
+// $.entwine("ss", function ($) {
 
-    $("form.htmleditorfield-form").entwine({
-        close: function () {
-            windowParent.ContentBridge.closeDialog();
-        },
-        getEditor: function () {
-            console.log('form.htmleditorfield-form getEditor');
-            return editorProxy;
-        }
-    });
-    $("form.htmleditorfield-form button").entwine({
-        onadd: function () {
-            this.button().addClass("ss-ui-button");
-        }
-    });
-    $("form.htmleditorfield-linkform button[name=action_remove]").entwine({
-        onclick: function (e) {
-            e.preventDefault();
-            this.parents("form:first").removeLink();
-        }
-    });
+//     $("form.htmleditorfield-form").entwine({
+//         close: function () {
+//             windowParent.ContentBridge.closeDialog();
+//         },
+//         getEditor: function () {
+//             console.log('form.htmleditorfield-form getEditor');
+//             return editorProxy;
+//         }
+//     });
+//     $("form.htmleditorfield-form button").entwine({
+//         onadd: function () {
+//             this.button().addClass("ss-ui-button");
+//         }
+//     });
+//     $("form.htmleditorfield-linkform button[name=action_remove]").entwine({
+//         onclick: function (e) {
+//             e.preventDefault();
+//             this.parents("form:first").removeLink();
+//         }
+//     });
 
-    $(".htmleditorfield-dialog").entwine({
-        onadd: function () {
-            this.getForm().setElement(element);
-            this.trigger("ssdialogopen");
-            this._super();
-        },
-        getEditor: function () {
-            return editorProxy;
-        },
-        close: function () {
-            windowParent.ContentBridge.closeDialog();
-        }
-    });
-});
+//     $(".htmleditorfield-dialog").entwine({
+//         onadd: function () {
+//             this.getForm().setElement(element);
+//             this.trigger("ssdialogopen");
+//             this._super();
+//         },
+//         getEditor: function () {
+//             return editorProxy;
+//         },
+//         close: function () {
+//             windowParent.ContentBridge.closeDialog();
+//         }
+//     });
+// });
