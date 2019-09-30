@@ -521,7 +521,7 @@
                 "name": "image",
                 "html": "<figure>\n\
              <img doc-image=\"image\" class=\"img-responsive\">\n\
-                <figcaption doc-editable=\"caption\">\n\
+                <figcaption doc-html=\"caption\">\n\
                 Caption.\n\
                 </figcaption>\n</figure>",
                 "label": "Image"

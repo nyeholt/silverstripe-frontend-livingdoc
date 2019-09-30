@@ -49,12 +49,12 @@
 }
 
 [data-doc-container]:hover {
-  outline: 1px dashed rgba(0, 0, 0, 0.2);
+  outline: 2px dashed rgba(0, 0, 0, 0.2);
 }
 
 [data-doc-container]:empty {
   min-height: 100px;
-  outline: 1px dashed rgba(0, 0, 0, 0.2);
+  outline: 2px dashed rgba(0, 0, 0, 0.2);
   position: relative;
 }
 

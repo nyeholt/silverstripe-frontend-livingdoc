@@ -3,7 +3,7 @@
     $(document).on('livingfrontend.updateLivingDoc', function (e, livingdoc) {
         // HTML directive handling
         livingdoc.interactiveView.page.htmlElementClick.add(function (component, directiveName, event) {
-
+            
             var isEditing = component.$html.attr('data-is-editing');
             component.$html.addClass('js-editor-block');
             if (isEditing) {

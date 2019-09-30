@@ -5,5 +5,5 @@ After: 'framework/routes#coreroutes'
 Director:
   rules:
     'FrontendInsertDialog': 'FrontendInsertDialog'
-    'render-shortcode': 'ShortcodeRenderer'
+    'render-shortcode': ShortcodeRenderer
     'lf-workflow': 'FwController'

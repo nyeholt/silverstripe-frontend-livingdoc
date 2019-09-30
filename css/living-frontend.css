@@ -172,12 +172,12 @@ body.doc-no-selection .livingdocs-toolbar iframe {
 }
 
 [data-doc-container] {
-    border: 4px dotted #ccc;
+    border: 4px transparent;
 }
 
 
 [data-doc-container].doc-component-highlight {
-    border: 4px dotted #FA9E4E;
+    border: 1px dashed #FA9E4E;
 /*    padding-top: 5px;
     padding-bottom: 5px;*/
 }
