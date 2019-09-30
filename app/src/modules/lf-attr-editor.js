@@ -1,9 +1,10 @@
 import * as $ from 'jquery';
+import LivingDocState from '../lib/LivingDocState';
 
 var PROPS_HOLDER = 'livingdocs_EditorField_Toolbar_options';
 
 $(document).on('livingfrontend.updateLivingDoc', function (e, livingdoc) {
-    livingdoc.interactiveView.page.focus.componentFocus.add(function (component) {
+    LivingDocState.livingdoc.interactiveView.page.focus.componentFocus.add(function (component) {
         var componentAttrs = component.model.getData('data_attributes');
         var options = $('.' + PROPS_HOLDER);
 
@@ -50,7 +51,7 @@ $(document).on('livingfrontend.updateLivingDoc', function (e, livingdoc) {
                 return;
             }
 
-            var dialog = LivingFrontendHelper.showDialog();
+            var dialog = LivingDocState.showDialog();
 
             var directiveSelect = $('<select>');
             for (var i = 0; i < names.length; i++) {
@@ -79,7 +80,7 @@ $(document).on('livingfrontend.updateLivingDoc', function (e, livingdoc) {
                     }
                 }
 
-                LivingFrontendHelper.closeDialog();
+                LivingDocState.closeDialog();
             });
         })
     });

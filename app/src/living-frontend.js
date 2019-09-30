@@ -5,7 +5,7 @@ import './livingdocs/editable';
 import './livingdocs/livingdocs-engine';
 
 import ContentBridge from './modules/lf-editor-content-bridge';
-import LivingFrontendState from './lib/LivingFrontendState';
+import LivingDocState from './lib/LivingDocState';
 import FormContentSource from './lib/FormContentSource';
 
 (function ($) {
@@ -57,7 +57,7 @@ import FormContentSource from './lib/FormContentSource';
     var HEADER_CELL_COMPONENT = 'headercell';
     
 
-    ContentBridge.init();
+    // ContentBridge.init();
 
     $(document).on('click', function (e) {
         if ($(e.target).parents('.livingdocs-editor').length <= 0 &&
@@ -129,59 +129,56 @@ import FormContentSource from './lib/FormContentSource';
         $(document).trigger('updateLivingdocsDesign', selectedDesign);
 
         // hard coded against the design for now??
-        selectedDesign.assets.basePath = "frontend-livingdoc/javascript/livingdocs/";
+        // selectedDesign.assets.basePath = "frontend-livingdoc/javascript/livingdocs/";
 
-        doc.design.load(selectedDesign);
+        // doc.design.load(selectedDesign);
 
-        doc.config({
-            livingdocsCssFile: "frontend-livingdoc/javascript/livingdocs/css/livingdocs.css",
-            editable: {
-                browserSpellcheck: true,
-                changeDelay: 50
-            }
-            ,
-            // really not sure if this matters here, but we'll run with it for now. 
-            directives: {
-                dataobject: {
-                    attr: 'doc-dataobject',
-                    renderedAttr: 'calculated in augment_config',
-                    overwritesContent: true
-                }
-            }
-        });
+        // doc.config({
+        //     livingdocsCssFile: "frontend-livingdoc/javascript/livingdocs/css/livingdocs.css",
+        //     editable: {
+        //         browserSpellcheck: true,
+        //         changeDelay: 50
+        //     }
+        //     // ,
+        //     // // really not sure if this matters here, but we'll run with it for now. 
+        //     // directives: {
+        //     //     dataobject: {
+        //     //         attr: 'doc-dataobject',
+        //     //         renderedAttr: 'calculated in augment_config',
+        //     //         overwritesContent: true
+        //     //     }
+        //     // }
+        // });
 
-        livingdoc = doc.new(structure);
+        // livingdoc = doc.new(structure);
 
-        LivingFrontendState.setCurrentDoc(livingdoc, TOOLBAR_FORM);
+        LivingDocState.loadLivingdoc(doc, selectedDesign, structure, contentSource);
 
         // bind it into the bridge
-        ContentBridge.setLivingDoc(livingdoc);
+        // ContentBridge.setLivingDoc(livingdoc);
 
+        LivingDocState.notifyDocUpdate();
 
-        LivingFrontendHelper.notifyDocUpdate();
+        // var aLivingDocState.activeDesign = ;
 
-        var activeDesign = doc.design.designs[selectedDesignName];
-
-        var ready = livingdoc.createView({
+        var ready = LivingDocState.livingdoc.createView({
             interactive: true,
             iframe: false,
             host: DOC_HOLDER,
-            wrapper: activeDesign.wrapper
+            wrapper: LivingDocState.activeDesign.wrapper
         });
 
         ready.then(function () {
             // captures model changes that need updating
-            livingdoc.model.changed.add(function () {
-                LivingFrontendHelper.notifyDocUpdate(true);
+            LivingDocState.livingdoc.model.changed.add(function () {
+                LivingDocState.notifyDocUpdate(true);
             });
-            
             
             var $pageOptions = $('.livingdocs-page-options');
             var $components = $('.livingdocs-components');
             var $componentsList = $components.find('ul');
             var $properties = $('.livingdocs-item-properties');
             var componentGroupMap = {};
-            
             
             
             var addGroup = function (label, num) {
@@ -206,8 +203,8 @@ import FormContentSource from './lib/FormContentSource';
             addGroup('Misc', 'misc');
             
             // Adds in all the components in their appropriate grouping 
-            for (var i = 0; i < activeDesign.components.length; i++) {
-                var template = activeDesign.components[i];
+            for (var i = 0; i < LivingDocState.activeDesign.components.length; i++) {
+                var template = LivingDocState.activeDesign.components[i];
                 var $entry = $('<div class="toolbar-entry">');
                 $entry.html(template.label);
                 
@@ -225,7 +222,7 @@ import FormContentSource from './lib/FormContentSource';
             // Binds the drag behaviour when a menu item is dragged
             function draggableComponent(doc, name, $elem) {
                 $elem.on('mousedown', function (event) {
-                    var newComponent = livingdoc.createComponent(name);
+                    var newComponent = LivingDocState.livingdoc.createComponent(name);
                     doc.startDrag({
                         componentModel: newComponent,
                         event: event,
@@ -258,9 +255,9 @@ import FormContentSource from './lib/FormContentSource';
                     for (var i in selectedDesign.structures) {
                         var item = selectedDesign.structures[i];
                         if (item.label === selected) {
-                            var container = LivingFrontendHelper.activeComponent ? 
-                                    LivingFrontendHelper.activeComponent.model.parentContainer : 
-                                    livingdoc.componentTree.root;
+                            var container = LivingDocState.activeComponent ? 
+                                LivingDocState.activeComponent.model.parentContainer : 
+                                LivingDocState.livingdoc.componentTree.root;
                             
                             createComponentList(item.components, container);
                             break;
@@ -273,7 +270,7 @@ import FormContentSource from './lib/FormContentSource';
             // when adding a component, see if it has a set of components that should
             // be immediately created. Useful for something like a table cell that should always
             // have a paragraph in it when added
-            livingdoc.componentTree.componentAdded.add(function (newComponent) {
+            LivingDocState.livingdoc.componentTree.componentAdded.add(function (newComponent) {
                 var toCreate = selectedDesign.prefilledComponents[newComponent.componentName];
                 
                 if (toCreate && toCreate.components) {
@@ -284,23 +281,23 @@ import FormContentSource from './lib/FormContentSource';
             });
 
 
-            livingdoc.interactiveView.page.embedItemClick.add(function (component, directiveName, event) {
+            LivingDocState.livingdoc.interactiveView.page.embedItemClick.add(function (component, directiveName, event) {
                 
             })
 
-            livingdoc.interactiveView.page.focus.componentFocus.add(function (component) {
+            LivingDocState.livingdoc.interactiveView.page.focus.componentFocus.add(function (component) {
                 $("." + PROPS_HOLDER).remove();
                 $(".livingdocs_EditorField_Toolbar_textopts").remove();
                 var options = $("<div>").addClass(PROPS_HOLDER);
 
-                LivingFrontendHelper.focusOn(component);
+                LivingDocState.focusOn(component);
 
                 options.append("<h4>" + component.model.componentName + " properties</h4>");
                 
                 var closer = $('<button class="close properties-closer" title="Close properties"><span class="icon"></span>&times;</button>')
                     .on('click', function(e){
                         e.preventDefault();
-                        LivingFrontendHelper.blur();
+                        LivingDocState.blur();
                         $("." + PROPS_HOLDER).remove();
                         return false;
                     })
@@ -417,7 +414,7 @@ import FormContentSource from './lib/FormContentSource';
                     var tableNode = component.$html[0];
                     if (tableNode) {
                         
-                        LivingFrontendHelper.showButtonBar([
+                        LivingDocState.showButtonBar([
                             {
                                 label: 'Add row',
                                 click: function () {
@@ -430,15 +427,15 @@ import FormContentSource from './lib/FormContentSource';
                                                 currentRow.find('td').length;
                                     }
 
-                                    var newComponent = livingdoc.componentTree.getComponent(TABLE_ROW_COMPONENT);
+                                    var newComponent = LivingDocState.livingdoc.componentTree.getComponent(TABLE_ROW_COMPONENT);
                                     component.model.append('tablebody', newComponent);
 
                                     //create cells
                                     for (var i = 0; i < numCells; i++) {
-                                        var newCell = livingdoc.componentTree.getComponent(TABLE_CELL_COMPONENT);
+                                        var newCell = LivingDocState.livingdoc.componentTree.getComponent(TABLE_CELL_COMPONENT);
                                         newComponent.append('rowcells', newCell);
                                         
-                                        var newP = livingdoc.componentTree.getComponent("p");
+                                        var newP = LivingDocState.livingdoc.componentTree.getComponent("p");
                                         newCell.append("cellitems", newP);
                                     }
                                 }
@@ -467,7 +464,7 @@ import FormContentSource from './lib/FormContentSource';
                 });
                 
                 var $dupe_button = $("<button class='alert alert-warning'>").text("Duplicate").on("click", function () {
-                    var tmpTree = new doc.ComponentTree({design: livingdoc.componentTree.design});
+                    var tmpTree = new doc.ComponentTree({design: LivingDocState.livingdoc.componentTree.design});
                     
                     // need to swap out 'next' for the moment otherwise the serialize walker
                     // will do _all_ siblings. 
@@ -505,7 +502,7 @@ import FormContentSource from './lib/FormContentSource';
          * @param an object with a .left and .top  property that defines where to show the bar
          * @returns void
          */
-        LivingFrontendHelper.showButtonBar = function (buttons, loc) {
+        LivingDocState.showButtonBar = function (buttons, loc) {
             $(".livingdocs_EditorField_Toolbar_textopts").remove()
             var outer_el = $("<div>").addClass("livingdocs_EditorField_Toolbar_textopts");
 
@@ -536,7 +533,7 @@ import FormContentSource from './lib/FormContentSource';
             appendTo.append(outer_el);
         };
 
-        LivingFrontendHelper.showDialog = function () {
+        LivingDocState.showDialog = function () {
             var popup;
             var dialog = $('#lf-dialog');
             if (!dialog.length) {
@@ -553,7 +550,7 @@ import FormContentSource from './lib/FormContentSource';
             return popup;
         }
 
-        LivingFrontendHelper.closeDialog = function () {
+        LivingDocState.closeDialog = function () {
             var dialog = $('#lf-dialog');
             if (dialog.length) {
                 dialog.removeClass('active-dialog');
@@ -562,7 +559,7 @@ import FormContentSource from './lib/FormContentSource';
         }
 
         $(document).on('click', 'a.lf-dialog-close', function (e) {
-            LivingFrontendHelper.closeDialog();
+            LivingDocState.closeDialog();
             return false;
         });
         
@@ -576,9 +573,9 @@ import FormContentSource from './lib/FormContentSource';
          */
         function createComponentList (components, parent, containerName) {
             if (!parent) {
-                parent = livingdoc.componentTree.root;
+                parent = LivingDocState.livingdoc.componentTree.root;
             }
-            var newComponents = livingdoc.componentTree.componentsFromList(components, activeDesign);
+            var newComponents = LivingDocState.livingdoc.componentTree.componentsFromList(components, LivingDocState.activeDesign);
             
             if (parent) {
                 for (var i in newComponents) {
@@ -607,11 +604,11 @@ import FormContentSource from './lib/FormContentSource';
         function addCellToRows(firstRow, cellType) {
             if (firstRow) {
                 while (firstRow && firstRow.componentName == TABLE_ROW_COMPONENT) {
-                    var newCell = livingdoc.componentTree.getComponent(cellType);
+                    var newCell = LivingDocState.livingdoc.componentTree.getComponent(cellType);
                     firstRow.append('rowcells', newCell);
                     firstRow = firstRow.next;
                     
-                    var newP = livingdoc.componentTree.getComponent("p");
+                    var newP = LivingDocState.livingdoc.componentTree.getComponent("p");
                     newCell.append("cellitems", newP);
                 }
             }

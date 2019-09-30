@@ -1,18 +1,47 @@
 
-const LivingFrontendState = {
-    currentDoc: null,
+const LivingDocState = {
+    livingdoc: null,
     changeStack: [],
     activeComponent: null,
     trackChanges: true,
     historyLength: 20,
     formIdentifier: null,
+    selectedDesign: null,
+    activeDesign: null,
 
-    setCurrentDoc: function (livingdoc, identifer) {
-        this.currentDoc = livingdoc;
+    // 
+    contentSource: null,
+
+    // references the global 'doc' object that livingdocs exposes
+    docApi: null,
+
+    loadLivingdoc: function (docApi, selectedDesign, structure, contentSource) {
+        this.docApi = docApi;
+        this.contentSource = contentSource;
+        this.selectedDesign = selectedDesign;
+
+        this.docApi.design.load(this.selectedDesign);
+
+        // this is the active instance of the design being used. 
+        this.activeDesign = this.docApi.design.designs[this.selectedDesign.name];
+
+        this.docApi.config({
+            livingdocsCssFile: "frontend-livingdoc/javascript/livingdocs/css/livingdocs.css",
+            editable: {
+                browserSpellcheck: true,
+                changeDelay: 50
+            }
+        });
+
+        this.livingdoc = this.docApi.new(structure);
+
+        this.initialiseState();
+    },
+
+    initialiseState: function () {
         this.activeComponent = null;
         this.changeStack = [];
 
-        this.formIdentifier = identifer;
         this.notifyDocUpdate();
     },
 
@@ -53,26 +82,20 @@ const LivingFrontendState = {
             var dataSet = JSON.parse(this.changeStack[stateIndex].state);
 
             this.trackChanges = false;
-            while (this.currentDoc.componentTree.root.first) {
-                this.currentDoc.componentTree.root.first.remove();
+            while (this.livingdoc.componentTree.root.first) {
+                this.livingdoc.componentTree.root.first.remove();
             }
             this.trackChanges = true;
-            this.currentDoc.componentTree.addDataWithAnimation(dataSet);
+            this.livingdoc.componentTree.addDataWithAnimation(dataSet);
         }
     },
 
     notifyDocUpdate: function (realchange) {
-        var docStructure = this.currentDoc.toJson();
-        $(this.formIdentifier).find('[name=PageStructure]').val(docStructure);
-        $(this.formIdentifier).find('[name=Content]').val(this.currentDoc.toHtml());
-
+        var docStructure = this.livingdoc.toJson();
+        
+        this.contentSource.updatePageContent(docStructure, this.livingdoc.toHtml(), realchange);
         this.saveState(docStructure);
-
-        if (realchange) {
-            $(this.formIdentifier).attr('data-changed', 1);
-            $(this.formIdentifier).find('[name=action_publish]').prop('disabled', true);
-        }
     }
 };
 
-export default LivingFrontendState;
+export default LivingDocState;
