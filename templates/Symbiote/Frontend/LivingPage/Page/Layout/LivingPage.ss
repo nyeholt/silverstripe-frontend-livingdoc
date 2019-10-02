@@ -20,8 +20,7 @@
                 </div>
             </div>
 
-            <div class="livingdocs-editor"></div>
-            <input type="hidden" data-structure="$PageStructure.ATT" id="page-structure" />
+            <div id="livingdocs-editor" data-config="$LivingDocsConfig.JSON.ATT"></div>
         <% else %>
             $Content
         <% end_if %>

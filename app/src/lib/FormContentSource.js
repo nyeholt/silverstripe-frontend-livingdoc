@@ -5,13 +5,22 @@ import * as $ from 'jquery';
  * the provider of content. In future, this can be 
  * an API instead...
  */
-export default class FormContentSource {
+class FormContentSource {
     TOOLBAR_FORM = '#Form_LivingForm';
     PROPS_HOLDER = 'livingdocs_EditorField_Toolbar_options';
-    DOC_HOLDER = '.livingdocs-editor';
-    CONTENT_HOLDER = '#page-structure';
+    DOC_HOLDER = '#livingdocs-editor';
+
+    config = {};
 
     init() {
+
+        let config = $(this.DOC_HOLDER).data('config');
+        config.editorHost = this.DOC_HOLDER;
+
+        if (config.pageStructure) {
+            this.config = config;
+        }
+
         $(document).on('submit', this.TOOLBAR_FORM, function () {
             var _this = $(this);
 
@@ -35,19 +44,20 @@ export default class FormContentSource {
                 return "You may have unsaved changes, sure?";
             }
         });
+
+
+    }
+
+    getConfig() {
+        return this.config;
     }
 
     getPageStructure() {
-        let structure = $('#page-structure').length > 0 ? $('#page-structure').data('structure') : null;
-
-
-        if (structure) {
-        } else {
-            alert("No structure found");
-            structure = dummyStructure;
+        if (!this.config.pageStructure) {
+            this.config.pageStructure = dummyStructure;
         }
 
-        return structure;
+        return this.config.pageStructure;
     }
 
     updatePageContent(docStructure, docHtml, realchange) {
@@ -60,6 +70,11 @@ export default class FormContentSource {
         }
     }
 }
+
+const ContentSource = new FormContentSource;
+ContentSource.init();
+
+export default ContentSource;
 
 
 const dummyStructure = {

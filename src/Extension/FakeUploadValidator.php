@@ -23,7 +23,10 @@ class FakeUploadValidator extends Upload_Validator
 		}
 
 		$pathInfo = pathinfo($this->tmpFile['name']);
-		// filesize validation
+        // filesize validation
+        if (!isset($this->tmpFile['error'])) {
+            $this->tmpFile['error'] = '';
+        }
 		if(!$this->isValidSize()) {
 			$ext = (isset($pathInfo['extension'])) ? $pathInfo['extension'] : '';
 			$arg = File::format_size($this->getAllowedMaxFileSize($ext));

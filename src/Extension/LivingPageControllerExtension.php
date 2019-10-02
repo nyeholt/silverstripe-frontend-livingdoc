@@ -3,6 +3,7 @@ namespace Symbiote\Frontend\LivingPage\Extension;
 
 use Exception;
 use SilverStripe\Assets\Upload;
+use SilverStripe\Control\HTTPRequest;
 use SilverStripe\Core\Extension;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Forms\FieldList;
@@ -119,39 +120,13 @@ class LivingPageControllerExtension extends Extension
 
             $this->owner->data()->extend('updateLivingDesign', $design);
 
-            $designOptions = LivingPageExtension::config()->living_designs;
+            $config = $this->getLivingDocsConfig();
 
-            $designFile = $designOptions[$designName];
-            if (!$designFile) {
-                throw new Exception("Missing design for $designName");
-            }
-
-            $record->PageStructure = json_encode($design);
-
-//            $this->owner->setFailover($record);
-//            $this->owner->failover   = $record;
-//            $this->owner->dataRecord = $record;
 
             Requirements::block(THIRDPARTY_DIR.'/jquery/jquery.js');
 
             Requirements::javascript('silverstripe/admin: thirdparty/jquery-form/jquery.form.js');
 
-            // our living docs integration files
-            // will bind $ if not already bound, so that livingdocs doesn't die
-            // Requirements::javascript('frontend-livingdoc/javascript/lf-editor-content-bridge.js');
-            // Requirements::javascript('frontend-livingdoc/javascript/lf-links-buttons.js');
-            // Requirements::javascript('frontend-livingdoc/javascript/lf-attr-editor.js');
-            // Requirements::javascript('frontend-livingdoc/javascript/lf-paste-image.js');
-            // Requirements::javascript('frontend-livingdoc/javascript/lf-embed-selection.js');
-            // Requirements::javascript('frontend-livingdoc/javascript/lf-editing-history.js');
-            // Requirements::javascript('frontend-livingdoc/javascript/lf-text-actions.js');
-            // Requirements::javascript('frontend-livingdoc/javascript/lf-html-editing.js');
-            
-            // Requirements::javascript('frontend-livingdoc/javascript/living-frontend.js');
-
-
-            // Requirements::javascript('frontend-livingdoc/javascript/livingdocs/editable.js');
-            // Requirements::javascript('frontend-livingdoc/javascript/livingdocs/livingdocs-engine.js');
             Requirements::javascript('frontend-livingdoc/app/dist/main.js');
             Requirements::css('frontend-livingdoc/css/living-frontend.css');
             
@@ -162,10 +137,85 @@ class LivingPageControllerExtension extends Extension
             Requirements::javascript('frontend-livingdoc/javascript/ace/mode-html.js');
             Requirements::javascript('frontend-livingdoc/javascript/highlight/highlight.min.js');
 
-            Requirements::javascript($designFile);
+            Requirements::javascript($config['designFile']);
+    }
 
-            
-            
+    protected $livingConfig;
+
+    public function getLivingDocsConfig() {
+        if ($this->livingConfig) {
+            return $this->livingConfig;
+        }
+
+        $record = $this->owner->data();
+
+        $design = json_decode($record->PageStructure, true);
+
+        // check if we're incorrectly nested; supports legacy structures
+        if (!isset($design['data']) && isset($design['content'])) {
+            $design = ['data' => $design];
+        }
+
+        // create a default page data
+        if (!$design) {
+            $design = [
+                'data' => LivingPageExtension::config()->default_page
+            ];
+        }
+
+        // make sure there's a design version
+        if (!isset($design['data']['design']['version'])) {
+            $design['data']['design'] = [
+                'name' => 'bootstrap3',
+                "version" => "0.0.1",
+            ];
+        }
+
+        
+        // explicit binding because I'm too lazy right now to add yet another extension
+        // if (class_exists(Multisites::class) && Multisites::inst()->getCurrentSite()->LivingPageTheme) {
+        //     $siteThemeName = Multisites::inst()->getCurrentSite()->LivingPageTheme;
+        //     if ($siteThemeName != $designName) {
+        //         // go through _all_ components and update the design name
+        //         $design['data']['content'] = $record->updateDesignName($designName, $siteThemeName, $design['data']['content']);
+        //     }
+        //     $designName = $siteThemeName;
+        //     $design['data']['design']['name'] = $siteThemeName;
+        // }
+
+        // converts all nodes to current content state where necessary (in particular, embed items)
+        $newContent = [];
+        foreach ($design['data']['content'] as $component) {
+            $newContent[] = $this->convertEmbedNodes($component);
+        }
+
+        $design['data']['content'] = $newContent;
+
+        $this->owner->data()->extend('updateLivingDesign', $design);
+
+        $designOptions = LivingPageExtension::config()->living_designs;
+
+        $designName    = $design['data']['design']['name'];
+        $designFile = $designOptions[$designName];
+
+        if (!$designFile) {
+            throw new Exception("Missing design for $designName");
+        }
+
+        $this->livingConfig = [
+            'pageStructure' => $design,
+            'designFile' => $designFile,
+            'endpoints' => [
+                'paste' => $this->owner->Link('pastefile'),
+                'save' => '',
+                'publish' => '',
+                'workflow' => '',
+            ]
+        ];
+
+        $record->PageStructure = json_encode($design);
+
+        return $this->livingConfig;
     }
 
     /**
@@ -323,7 +373,7 @@ class LivingPageControllerExtension extends Extension
         return $this->owner->httpError(500);
     }
 
-    public function pastefile(SS_HTTPRequest $request) {
+    public function pastefile(HTTPRequest $request) {
         if (!SecurityToken::inst()->checkRequest($request)) {
             return $this->owner->httpError(403);
         }
@@ -348,12 +398,13 @@ class LivingPageControllerExtension extends Extension
 
             $upload = Upload::create();
             $upload->setValidator(Injector::inst()->create(FakeUploadValidator::class));
-
             $upload->load($tempFile);
             $file = $upload->getFile();
             if ($file && $file->ID) {
                 $response['url'] = $file->getAbsoluteURL();
                 $response['name'] = $file->Title;
+            } else {
+                error_log("Failed uploading pasted image: " . print_r($upload->getErrors(), true));
             }
             if (file_exists($tempFilePath)) {
                 @unlink($tempFile);

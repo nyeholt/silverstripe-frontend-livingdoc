@@ -6,7 +6,7 @@ import './livingdocs/livingdocs-engine';
 
 import ContentBridge from './modules/lf-editor-content-bridge';
 import LivingDocState from './lib/LivingDocState';
-import FormContentSource from './lib/FormContentSource';
+import ContentSource from './lib/FormContentSource';
 
 (function ($) {
     
@@ -42,16 +42,9 @@ import FormContentSource from './lib/FormContentSource';
     }, PING_TIME*1000);
     
     
-    var livingdoc;
-    
-    
-    var DOC_HOLDER = '.livingdocs-editor';
-    
     var TOOLBAR_FORM = '#Form_LivingForm';
-    
     var PROPS_HOLDER = 'livingdocs_EditorField_Toolbar_options';
 
-    
     var TABLE_ROW_COMPONENT = 'tablerow';
     var TABLE_CELL_COMPONENT = 'tablecell';
     var HEADER_CELL_COMPONENT = 'headercell';
@@ -60,7 +53,7 @@ import FormContentSource from './lib/FormContentSource';
     // ContentBridge.init();
 
     $(document).on('click', function (e) {
-        if ($(e.target).parents('.livingdocs-editor').length <= 0 &&
+        if ($(e.target).parents('#livingdocs-editor').length <= 0 &&
                 $(e.target).parents('.livingdocs-toolbar').length <= 0) {
             // remove the properties editing
             $('.'+PROPS_HOLDER).remove();
@@ -104,11 +97,8 @@ import FormContentSource from './lib/FormContentSource';
 
     $(function () {
 
-        var contentSource = new FormContentSource;
 
-        contentSource.init();
-
-        var structure = contentSource.getPageStructure();
+        var structure = ContentSource.getPageStructure();
 
         // relies on a design file having been loaded earlier
         // TODO - abstract this in _some_ manner. TBA
@@ -152,19 +142,17 @@ import FormContentSource from './lib/FormContentSource';
 
         // livingdoc = doc.new(structure);
 
-        LivingDocState.loadLivingdoc(doc, selectedDesign, structure, contentSource);
+        LivingDocState.loadLivingdoc(doc, selectedDesign, structure, ContentSource);
 
         // bind it into the bridge
         // ContentBridge.setLivingDoc(livingdoc);
 
         LivingDocState.notifyDocUpdate();
 
-        // var aLivingDocState.activeDesign = ;
-
         var ready = LivingDocState.livingdoc.createView({
             interactive: true,
             iframe: false,
-            host: DOC_HOLDER,
+            host: ContentSource.getConfig().editorHost,
             wrapper: LivingDocState.activeDesign.wrapper
         });
 
@@ -174,7 +162,6 @@ import FormContentSource from './lib/FormContentSource';
                 LivingDocState.notifyDocUpdate(true);
             });
             
-            var $pageOptions = $('.livingdocs-page-options');
             var $components = $('.livingdocs-components');
             var $componentsList = $components.find('ul');
             var $properties = $('.livingdocs-item-properties');

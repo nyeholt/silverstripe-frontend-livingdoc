@@ -1,16 +1,11 @@
 import * as $ from 'jquery';
+import LivingDocState from '../lib/LivingDocState';
+import ContentSource from '../lib/FormContentSource';
 
-var UPLOAD_ENDPOINT = '';
+var UPLOAD_ENDPOINT = ContentSource.getConfig().endpoints.paste;
 var MAX_PASTE_SIZE = 500000;
 var PASTING = false;
 var TOOLBAR_FORM = '#Form_LivingForm';
-
-$(function () {
-    var endpointUrl = $(TOOLBAR_FORM).attr('action');
-    if (endpointUrl.length > 0) {
-        UPLOAD_ENDPOINT = endpointUrl.substring(0, endpointUrl.lastIndexOf('/')) + '/pastefile';
-    }
-})
 
 $(document).on('paste.editable', function (event) {
     var imageType = /image.*/
@@ -46,7 +41,7 @@ $(document).on('paste.editable', function (event) {
                 if (evt.target.result && evt.target.result.length > 0 && evt.target.result.length < MAX_PASTE_SIZE) {
 
                     // declared here, otherwise the paste action can change the focused element before the post responds
-                    var selectedComponent = LivingFrontendHelper.activeComponent;
+                    var selectedComponent = LivingDocState.activeComponent;
 
                     var secId = $(TOOLBAR_FORM).find('[name=SecurityID]').val();
 
@@ -59,7 +54,7 @@ $(document).on('paste.editable', function (event) {
                         return;
                     }
 
-                    var srcTemplate = ContentBridge.livingdoc.design.defaultImage;
+                    var srcTemplate = LivingDocState.livingdoc.design.defaultImage;
 
                     // figure out the item we're updating; do we have a selected image, or are we creating
                     // a new one from the default template?
