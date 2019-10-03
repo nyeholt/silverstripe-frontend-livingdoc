@@ -637,7 +637,7 @@
                                         "containers": {
                                             "cellitems": [
                                                 {
-                                                    "identifier": "wysiwyg"
+                                                    "identifier": "p"
                                                 }
                                             ]
                                         }
@@ -647,7 +647,7 @@
                                         "containers": {
                                             "cellitems": [
                                                 {
-                                                    "identifier": "wysiwyg"
+                                                    "identifier": "p"
                                                 }
                                             ]
                                         }
@@ -666,7 +666,7 @@
                                         "containers": {
                                             "cellitems": [
                                                 {
-                                                    "identifier": "p"
+                                                    "identifier": "wysiwyg"
                                                 }
                                             ]
                                         }
@@ -676,7 +676,7 @@
                                         "containers": {
                                             "cellitems": [
                                                 {
-                                                    "identifier": "p"
+                                                    "identifier": "wysiwyg"
                                                 }
                                             ]
                                         }
