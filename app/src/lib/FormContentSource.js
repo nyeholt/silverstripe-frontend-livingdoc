@@ -158,6 +158,13 @@ const dummyStructure = {
                                                     "content": {
                                                         "text": "<a href=\"[file_link,id=90]\" title=\"Strategy Update March 2018\">Strategy Update&nbsp; - March 2018</a>"
                                                     }
+                                                },
+                                                {
+                                                    "id": "doc-1c8e7ea123",
+                                                    "identifier": "bootstrap3.wysiwyg",
+                                                    "content": {
+                                                        "content": "Wysiwyg content here nbsp;"
+                                                    }
                                                 }
                                             ]
                                         }

@@ -128,6 +128,7 @@ class LivingPageControllerExtension extends Extension
             Requirements::javascript('silverstripe/admin: thirdparty/jquery-form/jquery.form.js');
 
             Requirements::javascript('frontend-livingdoc/app/dist/main.js');
+            Requirements::css('frontend-livingdoc/app/dist/main.css');
             Requirements::css('frontend-livingdoc/css/living-frontend.css');
             
 

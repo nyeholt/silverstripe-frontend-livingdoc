@@ -245,7 +245,8 @@
                     "p",
                     "quote",
                     "markdown",
-                    "customhtml"
+                    "customhtml",
+                    "wysiwyg"
                 ]
             },
             {
@@ -292,7 +293,7 @@
             }
         ],
         "defaultComponents": {
-            "paragraph": "p",
+            "paragraph": null,
             "image": "image"
         },
         "defaultContent": [
@@ -300,7 +301,7 @@
                 "component": "header"
             },
             {
-                "component": "p"
+                "component": "wysiwyg"
             }
         ],
         "metadata": [
@@ -328,8 +329,16 @@
             },
             {
                 "name": "p",
-                "html": "<p doc-editable=\"text\">Paragraph content</p>",
-                "label": "WYSIWYG Paragraph",
+                "html": "<p doc-editable=\"text\">Paragraph</p>",
+                "label": "Paragraph",
+                "properties": [
+                    'text-styles'
+                ]
+            },
+            {
+                "name": "wysiwyg",
+                "html": "<div doc-wysiwyg=\"content\">Wyswiyg content</div>",
+                "label": "WYSIWYG",
                 "properties": [
                     'text-styles'
                 ]
@@ -628,7 +637,7 @@
                                         "containers": {
                                             "cellitems": [
                                                 {
-                                                    "identifier": "p"
+                                                    "identifier": "wysiwyg"
                                                 }
                                             ]
                                         }
@@ -638,7 +647,7 @@
                                         "containers": {
                                             "cellitems": [
                                                 {
-                                                    "identifier": "p"
+                                                    "identifier": "wysiwyg"
                                                 }
                                             ]
                                         }

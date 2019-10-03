@@ -2944,7 +2944,7 @@ module.exports = ComponentDirective = (function() {
 
 
 },{}],16:[function(require,module,exports){
-var ComponentDirective, EditableDirective, HtmlDirective, ImageDirective, LinkDirective, EmbedItemDirective, assert, imageService;
+var ComponentDirective, EditableDirective, HtmlDirective, ImageDirective, LinkDirective, EmbedItemDirective, WysiwygDirective, assert, imageService;
 
 assert = require('../modules/logging/assert');
 
@@ -2979,6 +2979,21 @@ EmbedItemDirective = (function(_super) {
 
 })(ComponentDirective);
 
+// todo(Marcus) need to re-compile from coffee script really...
+WysiwygDirective = (function(_super) {
+    __extends(WysiwygDirective, _super);
+  
+    function WysiwygDirective() {
+      return WysiwygDirective.__super__.constructor.apply(this, arguments);
+    }
+  
+    WysiwygDirective.prototype.isWysiwyg = true;
+  
+  
+    return WysiwygDirective;
+  
+  })(ComponentDirective);
+
 module.exports = {
   create: function(_arg) {
     var Directive, component, templateDirective;
@@ -3001,6 +3016,8 @@ module.exports = {
         return LinkDirective;
     case 'embeditem':
         return EmbedItemDirective;
+    case 'wysiwyg':
+                return WysiwygDirective;  
       default:
         return assert(false, "Unsupported component directive: " + directiveType);
     }
@@ -3064,6 +3081,7 @@ module.exports = ComponentModel = (function() {
         case 'html':
         case 'link':
         case 'embeditem':
+        case 'wysiwyg':
           this.createComponentDirective(directive);
           this.content || (this.content = {});
           _results.push(this.content[directive.name] = void 0);
@@ -4594,6 +4612,11 @@ module.exports = augmentConfig({
     },
     embeditem: {
         attr: 'doc-embeditem',
+        renderedAttr: 'calculated in augment_config',
+        overwritesContent: true
+    },
+    wysiwyg: {
+        attr: 'doc-wysiwyg',
         renderedAttr: 'calculated in augment_config',
         overwritesContent: true
     },
@@ -7777,7 +7800,17 @@ module.exports = ComponentView = (function() {
   ComponentView.prototype.focus = function(editableName) {
     var directive, _ref;
     directive = editableName ? this.directives.get(editableName) : (_ref = this.directives.editable) != null ? _ref[0] : void 0;
-    return $(directive != null ? directive.elem : void 0).focus();
+    if (directive) {
+        return $(directive != null ? directive.elem : void 0).focus();
+    }
+    
+    // note(Marcus) 2019-10-04
+    // check for wysiwyg and focus on that instead
+    _ref = this.directives.wysiwyg != null ? this.directives.wysiwyg[0] : void 0;
+    if (_ref) {
+        
+        $(_ref.elem).focus();
+    }
   };
 
   ComponentView.prototype.hasFocus = function() {
@@ -7818,6 +7851,8 @@ module.exports = ComponentView = (function() {
         break;
       case 'embeditem':
         return this.setEmbedItem(name, value);
+      case 'wysiwyg':
+        return this.setWysiwyg(name, value);
       case 'html':
         return this.setHtml(name, value);
       case 'link':
@@ -7892,7 +7927,25 @@ module.exports = ComponentView = (function() {
     this.directivesToReset || (this.directivesToReset = {});
     return this.directivesToReset[name] = name;
   };
-  
+
+  ComponentView.prototype.getWysiwyg = function(name) {
+    var $elem;
+    $elem = this.directives.$getElem(name);
+    return $elem.html();
+  };
+
+  ComponentView.prototype.setWysiwyg = function (name, value) {
+    var $elem;
+    $elem = this.directives.$getElem(name);
+    $elem.html(value || '');
+    if (!value) {
+      $elem.html(this.template.defaults[name]);
+    } else if (value && !this.isReadOnly) {
+      this.blockInteraction($elem);
+    }
+    this.directivesToReset || (this.directivesToReset = {});
+    return this.directivesToReset[name] = name;
+  };
   
   ComponentView.prototype.setEmbedItem = function (name, value) {
       var $elem;
@@ -7912,7 +7965,7 @@ module.exports = ComponentView = (function() {
       this.directivesToReset || (this.directivesToReset = {});
       return this.directivesToReset[name] = name;
   }
-  
+
   
   ComponentView.prototype.getEmbedItem = function (name) {
       var $elem;
@@ -9259,6 +9312,7 @@ module.exports = InteractivePage = (function(_super) {
     this.htmlElementClick = $.Callbacks();
     this.linkClick = $.Callbacks();
     this.embedItemClick = $.Callbacks();
+    this.wysiwygClick = $.Callbacks();
     this.componentWillBeDragged = $.Callbacks();
     this.componentWasDropped = $.Callbacks();
     this.dragBase = new DragBase(this);
@@ -9354,6 +9408,8 @@ module.exports = InteractivePage = (function(_super) {
           return this.htmlElementClick.fire(componentView, directives['html'].name, event);
         } else if (directives['embeditem']) {
             return this.embedItemClick.fire(componentView, directives['embeditem'].name, event);
+        } else if (directives['wysiwyg']) {
+            return this.wysiwygClick.fire(componentView, directives['wysiwyg'].name, event);
         }
       }
     } else {
@@ -10168,6 +10224,8 @@ module.exports = Template = (function() {
           case 'container':
             return _this.formatContainer(directive.name, directive.elem);
           case 'html':
+            return _this.formatHtml(directive.name, directive.elem);
+        case 'wysiwyg':
             return _this.formatHtml(directive.name, directive.elem);
           case 'embeditem': 
               // just doing the same for now

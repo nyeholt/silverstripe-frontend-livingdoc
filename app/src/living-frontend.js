@@ -268,10 +268,6 @@ import ContentSource from './lib/FormContentSource';
             });
 
 
-            LivingDocState.livingdoc.interactiveView.page.embedItemClick.add(function (component, directiveName, event) {
-                
-            })
-
             LivingDocState.livingdoc.interactiveView.page.focus.componentFocus.add(function (component) {
                 $("." + PROPS_HOLDER).remove();
                 $(".livingdocs_EditorField_Toolbar_textopts").remove();

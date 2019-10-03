@@ -9,5 +9,6 @@ import './modules/lf-iframed-dialog';
 import './modules/lf-links-buttons';
 import './modules/lf-paste-image';
 import './modules/lf-text-actions';
+import './modules/lf-wysiwyg-editing';
 
 const editors = [];
