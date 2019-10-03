@@ -204,6 +204,8 @@ class LivingPageControllerExtension extends Extension
         }
 
         $this->livingConfig = [
+            'pageId'  => $record->ID,
+            'pageLink' => $record->hasMethod('RelativeLink') ? $record->RelativeLink() : '',
             'pageStructure' => $design,
             'designFile' => $designFile,
             'endpoints' => [

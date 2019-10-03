@@ -7,6 +7,7 @@ use SilverStripe\CMS\Controllers\ModelAsController;
 use SilverStripe\Control\Controller;
 use SilverStripe\Core\Convert;
 use SilverStripe\ORM\ArrayList;
+use SilverStripe\ORM\DataObject;
 use SilverStripe\Security\Security;
 use SilverStripe\UserForms\Model\UserDefinedForm;
 use SilverStripe\View\ArrayData;
@@ -51,7 +52,7 @@ class LivingdocShortcodes
             if (!($object instanceof DataObject) && method_exists($object, $nextField)) {
                 return call_user_func_array(array($object, $nextField), $extraArgs);
             }
-            return $object->$nextField; //getField($nextField);;
+            return $object->hasField($nextField) ? $object->$nextField : null; //getField($nextField);;
         }
 
         $nextObject = $object->dbObject($nextField);

@@ -2,6 +2,7 @@ import * as $ from 'jquery';
 
 import { setupEditor } from "../../../../vendor/symbiote/silverstripe-prose-editor/editor/src/setup.js";
 import "../../../../vendor/symbiote/silverstripe-prose-editor/editor/dist/main.css" ;
+import ContentSource from '../lib/FormContentSource.js';
 
 $(document).on('livingfrontend.updateLivingDoc', function (e, livingdoc) {
 
@@ -17,9 +18,38 @@ $(document).on('livingfrontend.updateLivingDoc', function (e, livingdoc) {
 
         var currentContent = component.model.get(directiveName);
 
+        // var rawContent = component.model.getData(directiveName + '-raw');
+
+        let config = ContentSource.getConfig();
+
+        let proseNode = $('<div class="ProseWrapper">');
+        proseNode.attr('data-prose-url', '__prose');
+        proseNode.attr('data-context-id', config.pageId);
+        proseNode.attr('data-upload-path', config.pageLink);
+        proseNode.attr('data-prose-config', JSON.stringify({
+            "menu": {
+              "insertlink": true,
+              "insertimage": true,
+              "bulletlist": true,
+              "orderedlist": true,
+              "quote": true,
+              "paragraph": true,
+              "pre": true,
+              "hr": true,
+              "table": true,
+              "shortcode": true,
+              "viewsource": true
+            },
+            "linkSelector": {
+              "internal": true
+            }
+          }));
+
         var editorNode = $('<div class="ProseEditorFieldEditor" data-prose-config="">');
         var valueNode = $('<div class="ProseEditorFieldValue" style="display: none">');
         var storageNode = $('<input type="hidden" name="ThisProseEditor" class="ProseEditorFieldStorage" value="" />');
+
+        proseNode.append(editorNode).append(valueNode).append(storageNode);
         
         storageNode.val(currentContent);
         valueNode.html(currentContent);
@@ -31,8 +61,7 @@ $(document).on('livingfrontend.updateLivingDoc', function (e, livingdoc) {
         $actions.append($save).append($cancel);
 
         component.$html.empty();
-        component.$html.append(editorNode).append(valueNode).append(storageNode);
-        component.$html.append($actions);
+        component.$html.append(proseNode).append($actions);
 
         const thisEditor = setupEditor(editorNode[0], valueNode[0], storageNode[0]);
 
@@ -69,6 +98,12 @@ $(document).on('livingfrontend.updateLivingDoc', function (e, livingdoc) {
             });
 
             rawContent = catcher.html();
+
+            // component.model.setData(directiveName + '-raw', rawContent);
+
+            // let displayDom = editorNode.find('div.ProseMirror').first();
+            // displayDom.find('svg').remove
+            
 
             if (!component.model.setContent(directiveName, rawContent)) {
                 // we need to force this as the content set by rawContent may not
