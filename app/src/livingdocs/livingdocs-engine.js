@@ -4581,8 +4581,10 @@ module.exports = augmentConfig({
   css: {
     section: 'doc-section',
     component: 'doc-component',
+    htmlcontent: 'doc-htmlcontent',
     editable: 'doc-editable',
     noPlaceholder: 'doc-no-placeholder',
+    emptyContent: 'doc-content-empty',
     emptyImage: 'doc-image-empty',
     "interface": 'doc-ui',
     componentHighlight: 'doc-component-highlight',
@@ -7938,11 +7940,14 @@ module.exports = ComponentView = (function() {
     var $elem;
     $elem = this.directives.$getElem(name);
     $elem.html(value || '');
+    $elem.removeClass(css.emptyContent);
     if (!value) {
       $elem.html(this.template.defaults[name]);
+      $elem.addClass(css.emptyContent);
     } else if (value && !this.isReadOnly) {
       this.blockInteraction($elem);
     }
+
     this.directivesToReset || (this.directivesToReset = {});
     return this.directivesToReset[name] = name;
   };
@@ -10275,6 +10280,7 @@ module.exports = Template = (function() {
   Template.prototype.formatHtml = function(name, elem) {
     var defaultValue;
     defaultValue = words.trim(elem.innerHTML);
+    $(elem).addClass(config.css.htmlcontent);
     if (defaultValue) {
       this.defaults[name] = defaultValue;
     }

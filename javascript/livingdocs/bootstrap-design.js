@@ -5,7 +5,7 @@
         "version": "0.0.1",
         "author": "upfront.io",
         "assets": {
-            "basePath": 'frontend-livingdoc/javascript/livingdocs/',
+            "basePath": 'frontend-livingdoc/',
             "css": [
                 "./css/base.css"
             ]
