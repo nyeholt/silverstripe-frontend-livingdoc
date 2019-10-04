@@ -3,9 +3,45 @@ import * as $ from 'jquery';
 import { setupEditor } from "../../../../vendor/symbiote/silverstripe-prose-editor/editor/src/setup.js";
 import "../../../../vendor/symbiote/silverstripe-prose-editor/editor/dist/main.css" ;
 import ContentSource from '../lib/FormContentSource.js';
+import { renderProseShortcode } from '../../../../vendor/symbiote/silverstripe-prose-editor/editor/src/plugins/shortcodes.js';
+
+
+function replaceShortcodesIn(elem) {
+    $(elem).find('.prose-shortcode').each(function () {
+        let $shortcodeHolder = $(this);
+        if ($shortcodeHolder.attr('data-rendered-shortcode')) {
+            return;
+        }
+        $shortcodeHolder.attr('data-rendered-shortcode', 1);
+        let shortcodeData = JSON.parse($shortcodeHolder.attr('data-shortcode'));
+        if (shortcodeData && shortcodeData.type) {
+            let originalContent = $shortcodeHolder.html();
+            $shortcodeHolder.html("Loading data...");
+            renderProseShortcode(shortcodeData.type, shortcodeData.args).text(function (data) {
+                $shortcodeHolder.html(data);
+            }).catch(function (err) {
+                $shortcodeHolder.html(originalContent);
+            })
+        }
+    });
+}
 
 $(document).on('livingfrontend.updateLivingDoc', function (e, livingdoc) {
+    // initial render
+    setTimeout(function () {
+        replaceShortcodesIn($('#livingdocs-editor'));
+    }, 250);
 
+    // subsequent content changes    
+    livingdoc.model.changed.add(function () {
+        replaceShortcodesIn($('#livingdocs-editor'));
+    });
+
+    livingdoc.interactiveView.page.componentWasDropped.add(function (component) {
+        // clean up any things attached to the component
+        component.$html.removeAttr('data-is-editing');
+    });
+    
     livingdoc.interactiveView.page.wysiwygClick.add(function (component, directiveName, event) {
 
         var isEditing = component.$html.attr('data-is-editing');
@@ -55,7 +91,7 @@ $(document).on('livingfrontend.updateLivingDoc', function (e, livingdoc) {
         valueNode.html(currentContent);
 
         var $actions = $('<div>');
-        var $save = $('<button>OK</button>');
+        var $save = $('<button class="Button--Primary">OK</button>');
         var $cancel = $('<button>Cancel</button>');
         $save.css('display', 'inline'); $cancel.css('display', 'inline');
         $actions.append($save).append($cancel);
@@ -65,8 +101,6 @@ $(document).on('livingfrontend.updateLivingDoc', function (e, livingdoc) {
 
         const thisEditor = setupEditor(editorNode[0], valueNode[0], storageNode[0]);
 
-        // $edBlock.focus();
-
         var cleanUp = function () {
             thisEditor.destroy();
             component.$html.removeAttr('data-is-editing');
@@ -74,8 +108,11 @@ $(document).on('livingfrontend.updateLivingDoc', function (e, livingdoc) {
         }
 
         $cancel.click(function () {
-            component.$html.html(component.model.get(directiveName));
             cleanUp();
+            component.$html.empty();
+            proseNode.remove();
+            component.$html.html(component.model.get(directiveName));
+            replaceShortcodesIn(component.$html);
         });
 
         var saveEditorBlock = function () {
@@ -111,6 +148,8 @@ $(document).on('livingfrontend.updateLivingDoc', function (e, livingdoc) {
                 if (component.model.componentTree) {
                     component.model.componentTree.contentChanging(component.model, directiveName);
                 }
+
+                replaceShortcodesIn(component.$html);
             }
         }
 
@@ -119,5 +158,6 @@ $(document).on('livingfrontend.updateLivingDoc', function (e, livingdoc) {
             cleanUp();
         });
     });
+
 
 });

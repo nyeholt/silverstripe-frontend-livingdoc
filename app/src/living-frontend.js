@@ -28,9 +28,9 @@ import ContentSource from './lib/FormContentSource';
             return;
         }
         
-        $.get('Security/ping').success(function () {
+        $.get('Security/ping').then(function () {
             pingErrors = 0;
-        }).error(function () {
+        }).catch(function () {
             pingErrors++;
             if (pingErrors > 5) {
                 alert("Your session may have expired, please try logging in again in a separate tab");
@@ -65,9 +65,9 @@ import ContentSource from './lib/FormContentSource';
     })
 
     $(document).on('click', '#clicker', function () {
-        ContentBridge.setLinkObject({
-            href: 'link/href', target: '', title: 'linktitle'
-        });
+        // ContentBridge.setLinkObject({
+        //     href: 'link/href', target: '', title: 'linktitle'
+        // });
     });
     
     // re-structures the form to ensure ajax submits pass through the 
@@ -472,8 +472,6 @@ import ContentSource from './lib/FormContentSource';
 
             $(document).trigger('livingfrontend.updateLivingDoc', [LivingDocState.livingdoc]);
         });
-        
-
 
         /**
          * Show a list of buttons in a toolbar. The button list should be
@@ -599,28 +597,28 @@ import ContentSource from './lib/FormContentSource';
         }
 
         function selectLink(callback) {
-            ContentBridge.setCallback(callback);
-            ContentBridge.showDialog('link');
+            // ContentBridge.setCallback(callback);
+            // ContentBridge.showDialog('link');
         }
 
         function selectImage(callback) {
-            ContentBridge.setCallback(function (content) {
-                var attrs = {};
-                var node = $(content)[0];
-                if (!node) {
-                    return;
-                }
-                if (node.nodeName !== 'IMG') {
-                    alert("Image not selected");
-                    return;
-                }
-                var nodeAttrs = node.attributes;
-                for (var i = 0; i < nodeAttrs.length; i++ ) {
-                    attrs[nodeAttrs[i].name] = nodeAttrs[i].value;
-                }
-                callback(attrs);
-            });
-            ContentBridge.showDialog('image');
+            // ContentBridge.setCallback(function (content) {
+            //     var attrs = {};
+            //     var node = $(content)[0];
+            //     if (!node) {
+            //         return;
+            //     }
+            //     if (node.nodeName !== 'IMG') {
+            //         alert("Image not selected");
+            //         return;
+            //     }
+            //     var nodeAttrs = node.attributes;
+            //     for (var i = 0; i < nodeAttrs.length; i++ ) {
+            //         attrs[nodeAttrs[i].name] = nodeAttrs[i].value;
+            //     }
+            //     callback(attrs);
+            // });
+            // ContentBridge.showDialog('image');
         }
     });
     

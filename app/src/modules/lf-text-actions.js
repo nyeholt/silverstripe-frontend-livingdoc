@@ -1,4 +1,5 @@
 import * as $ from 'jquery';
+import LivingDocState from '../lib/LivingDocState';
 
 $(document).on('livingfrontend.updateLivingDoc', function (e, livingdoc) {
     // text formatting options
@@ -53,8 +54,8 @@ $(document).on('livingfrontend.updateLivingDoc', function (e, livingdoc) {
                 }
             ];
 
-            $(document).trigger('livingfrontend.updateContentButtonBar', [barOptions, selection, ContentBridge]);
-            LivingFrontendHelper.showButtonBar(barOptions, rect);
+            $(document).trigger('livingfrontend.updateContentButtonBar', [barOptions, selection]);
+            LivingDocState.showButtonBar(barOptions, rect);
         }
     });
 });

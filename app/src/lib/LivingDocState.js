@@ -26,7 +26,7 @@ const LivingDocState = {
         this.activeDesign = this.docApi.design.designs[this.selectedDesign.name];
 
         this.docApi.config({
-            livingdocsCssFile: "frontend-livingdoc/javascript/livingdocs/css/livingdocs.css",
+            livingdocsCssFile: "frontend-livingdoc/css/livingdocs.css",
             editable: {
                 browserSpellcheck: true,
                 changeDelay: 50
@@ -92,7 +92,6 @@ const LivingDocState = {
 
     notifyDocUpdate: function (realchange) {
         var docStructure = this.livingdoc.toJson();
-        
         this.contentSource.updatePageContent(docStructure, this.livingdoc.toHtml(), realchange);
         this.saveState(docStructure);
     }
