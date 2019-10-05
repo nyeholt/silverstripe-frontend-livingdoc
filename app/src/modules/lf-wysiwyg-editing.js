@@ -13,7 +13,11 @@ function replaceShortcodesIn(elem) {
             return;
         }
         $shortcodeHolder.attr('data-rendered-shortcode', 1);
-        let shortcodeData = JSON.parse($shortcodeHolder.attr('data-shortcode'));
+        let rawShortcode = $shortcodeHolder.attr('data-shortcode');
+        if(!rawShortcode) {
+            return;
+        }
+        let shortcodeData = JSON.parse(rawShortcode);
         if (shortcodeData && shortcodeData.type) {
             let originalContent = $shortcodeHolder.html();
             $shortcodeHolder.html("Loading data...");
@@ -30,7 +34,7 @@ $(document).on('livingfrontend.updateLivingDoc', function (e, livingdoc) {
     // initial render
     setTimeout(function () {
         replaceShortcodesIn($('#livingdocs-editor'));
-    }, 250);
+    }, 500);
 
     // subsequent content changes    
     livingdoc.model.changed.add(function () {
@@ -38,8 +42,11 @@ $(document).on('livingfrontend.updateLivingDoc', function (e, livingdoc) {
     });
 
     livingdoc.interactiveView.page.componentWasDropped.add(function (component) {
+        let componentView = livingdoc.componentTree.getMainComponentView(component.id);
         // clean up any things attached to the component
-        component.$html.removeAttr('data-is-editing');
+        if (componentView && componentView.$html) {
+            componentView.$html.removeAttr('data-is-editing');
+        }
     });
     
     livingdoc.interactiveView.page.wysiwygClick.add(function (component, directiveName, event) {

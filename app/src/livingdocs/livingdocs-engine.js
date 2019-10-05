@@ -3335,6 +3335,10 @@ module.exports = ComponentModel = (function() {
     return this.directives.count('html') > 0;
   };
 
+  ComponentModel.prototype.hasWysiwyg = function() {
+    return this.directives.count('wysiwyg') > 0;
+  };
+
   ComponentModel.prototype.hasImages = function() {
     return this.directives.count('image') > 0;
   };
