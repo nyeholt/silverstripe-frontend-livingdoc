@@ -3602,7 +3602,10 @@ module.exports = (function() {
       _ref2 = json.containers;
       for (containerName in _ref2) {
         componentArray = _ref2[containerName];
-        assert(model.containers.hasOwnProperty(containerName), "error while deserializing component: unknown container " + containerName);
+        if (!model.containers.hasOwnProperty(containerName)) {
+            console.warn("error while deserializing component: unknown container " + containerName);
+            componentArray = null;
+        }
         if (componentArray) {
           assert($.isArray(componentArray), "error while deserializing component: container is not array " + containerName);
           for (_i = 0, _len = componentArray.length; _i < _len; _i++) {
@@ -9317,6 +9320,7 @@ module.exports = InteractivePage = (function(_super) {
     InteractivePage.__super__.constructor.apply(this, arguments);
     this.focus = new Focus();
     this.editableController = new EditableController(this);
+    this.componentClick = $.Callbacks();
     this.imageClick = $.Callbacks();
     this.htmlElementClick = $.Callbacks();
     this.linkClick = $.Callbacks();
@@ -9408,6 +9412,7 @@ module.exports = InteractivePage = (function(_super) {
     if (componentView) {
       this.focus.componentFocused(componentView);
       directives = dom.getDirectiveContext(event.target);
+      this.componentClick.fire(componentView, this, directives, event);
       if (directives != null) {
         if (directives['image']) {
           return this.imageClick.fire(componentView, directives['image'].name, event);

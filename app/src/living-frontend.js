@@ -44,6 +44,7 @@ import ContentSource from './lib/FormContentSource';
     
     var TOOLBAR_FORM = '#Form_LivingForm';
     var PROPS_HOLDER = 'livingdocs_EditorField_Toolbar_options';
+    var BOTTOM_BAR = '.livingdocs-bottom-bar';
 
     var TABLE_ROW_COMPONENT = 'tablerow';
     var TABLE_CELL_COMPONENT = 'tablecell';
@@ -54,11 +55,20 @@ import ContentSource from './lib/FormContentSource';
 
     $(document).on('click', function (e) {
         if ($(e.target).parents('#livingdocs-editor').length <= 0 &&
-                $(e.target).parents('.livingdocs-toolbar').length <= 0) {
+                $(e.target).parents('.livingdocs-toolbar').length <= 0 &&
+                $(e.target).parents('.livingdocs-item-properties').length <= 0 &&
+                $(e.target).parents(BOTTOM_BAR).length <= 0) {
             // remove the properties editing
             $('.'+PROPS_HOLDER).remove();
         }
     })
+
+    let toolbarToggle = $('<button>').text("Show toolbar");
+    $(BOTTOM_BAR).find('.livingdocs-toolbar-controls').append(toolbarToggle);
+
+    toolbarToggle.click(function (e) {
+        $('body').toggleClass('show-livingdocs-toolbar');
+    });
 
     $(document).on('mousedown', '#clicker', function (e) {
         e.preventDefault();
@@ -267,6 +277,31 @@ import ContentSource from './lib/FormContentSource';
                 }
             });
 
+
+            // todo(Marcus)
+            // figure out how to allow selection of 'background' components
+            // let lastClickedComponent = "", lastClickedCount = 0;
+            
+            // LivingDocState.livingdoc.interactiveView.page.componentClick.add(function (componentView, page, directives, event) {
+            //     if (componentView.model.hasContainers()) {
+            //         if (lastClickedComponent === componentView.model.id) {
+            //             lastClickedCount++;
+            //             if (lastClickedCount == 2) {
+            //                 // get the parent and select it
+            //                 let parent = componentView.parent();
+            //                 page.handleClickedComponent(event, parent); 
+            //                 page.startDrag({
+            //                     componentView: parent,
+            //                     event: event
+            //                 });
+            //                 lastClickedCount = 0;
+            //             }
+            //         } else {
+            //             lastClickedCount = 0;
+            //         }
+            //         lastClickedComponent = componentView.model.id;
+            //     }
+            // });
 
             LivingDocState.livingdoc.interactiveView.page.focus.componentFocus.add(function (component) {
                 $("." + PROPS_HOLDER).remove();

@@ -1,9 +1,14 @@
 
 body {
+    padding-bottom: 80px;
+}
+
+body.show-livingdocs-toolbar {
     padding-left: 250px !important;
 }
 
 .livingdocs-toolbar {
+    display: none;
     z-index: 3000;
 	width: 250px;
 	position: fixed;
@@ -21,9 +26,42 @@ body {
     color: #000;
 }
 
-.livingdocs-toolbar form {
+body.show-livingdocs-toolbar .livingdocs-toolbar {
+    display: block;
+}
+
+.livingdocs-bottom-bar {
+    display: flex;
+    z-index: 3001;
+    height: 60px;
+    background: #fff;
+    padding: 10px;
+
+    width: 100%;
+
+    border-top: 1px solid #999;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+}
+
+.livingdocs-bottom-bar .livingdocs-toolbar-controls {
+    width: 50%;
+}
+
+
+.livingdocs-bottom-bar .livingdocs-actions {
+    width: 50%;
+    text-align: right;
+}
+
+.livingdocs-bottom-bar form {
     width: auto;
-    margin-bottom: 10px;
+}
+
+
+.livingdocs-bottom-bar .Actions {
+    margin: 0;
 }
 
 .livingdocs-toolbar label {
@@ -44,14 +82,12 @@ body {
     color: #000;
 }
 
+.livingdocs-bottom-bar select.with-button,
 .livingdocs-toolbar select.with-button {
     width: 70%;
     margin-bottom: 0px;
 }
 
-.livingdocs-toolbar .Actions {
-    margin: 0;
-}
 
 .livingdocs-toolbar .component-actions {
     padding: 5px;
@@ -75,13 +111,23 @@ body {
     overflow-x: hidden;
 }
 
-.livingdocs-toolbar .livingdocs-actions,
-.livingdocs-toolbar .livingdocs-item-properties > div {
+
+.livingdocs-item-properties > div {
         padding: 10px;
         position: relative;
         margin: 0;
     }
 
+.livingdocs-item-properties a.btn, 
+.livingdocs-item-properties button, 
+.livingdocs-item-properties input[type="submit"], 
+.livingdocs-item-properties input[type="reset"], 
+.livingdocs-item-properties .Actions .action,
+.livingdocs-bottom-bar a.btn, 
+.livingdocs-bottom-bar button, 
+.livingdocs-bottom-bar input[type="submit"], 
+.livingdocs-bottom-bar input[type="reset"], 
+.livingdocs-bottom-bar .Actions .action,
 .livingdocs-toolbar a.btn, 
 .livingdocs-toolbar button, 
 .livingdocs-toolbar input[type="submit"], 
@@ -196,11 +242,16 @@ body.doc-no-selection .livingdocs-toolbar iframe {
 }
 
 .livingdocs-item-properties {
+    z-index: 3002;
     position: fixed;
     background-color: #fff;
     top: 20px;
-    right: 0px;
+    right: 10px;
     border: 1px solid #666;
+    max-height: 400px;
+    width: 280px;
+    font-size: 12px;
+    overflow: auto;
 }
 
 .livingdocs_EditorField_Toolbar_options > h4 {

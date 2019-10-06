@@ -17,6 +17,16 @@
                 "type": "option",
                 "value": "well-lg"
             },
+            "position-relative": {
+                "label": "Does this contain absolutely positioned elements?",
+                "type": "option",
+                "value": "position-relative",
+            },
+            "position-absolute": {
+                "label": "Position this element using absolute units",
+                "type": "option",
+                "value": "position-absolute",
+            },
             "custom-class": {
                 "label": "Custom Styles",
                 "type": "text",
@@ -273,6 +283,7 @@
             {
                 "label": "Layout",
                 "components": [
+                    "block",
                     "section",
                     "pagecontainer",
                     "row",
@@ -390,7 +401,7 @@
             },
             {
                 "name": "row",
-                "html": "<div class=\"row\" doc-container=\"row\">\n</div>",
+                "html": "<div class=\"row\" doc-container=\"row\" doc-image=\"bgimage\">\n</div>",
                 "label": "Row",
                 "properties": [
                     "background-styles",
@@ -426,6 +437,23 @@
                 "label": "Panel",
                 "properties": [
                     "panel-styles"
+                ]
+            },
+            {
+                "name": "block",
+                "html": "<div class=\"\" doc-container=\"layout\">\n</div>",
+                "label": "Empty block",
+                // "allowedParents": [
+                    // "row"
+                // ],
+                "properties": [
+                    "position-relative",
+                    "position-absolute",
+                    "background-styles",
+                    "padded-styles",
+                    "text-styles",
+                    "column-width",
+                    'column-float'
                 ]
             },
             {
