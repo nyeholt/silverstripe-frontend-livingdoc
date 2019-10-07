@@ -268,5 +268,3 @@ $.fn.drags = function(opt) {
     });
 
 }
-
-console.log($.fn);
