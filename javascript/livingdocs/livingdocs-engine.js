@@ -7680,7 +7680,7 @@ module.exports = ComponentView = (function() {
   };
 
   ComponentView.prototype.updateContent = function(directiveName) {
-    var attributes, name, _ref, $elem;
+    var dataAttrs, name, _ref, $elem, elementStyles;
       
     if (directiveName) {
       this.set(directiveName, this.model.content[directiveName]);
@@ -7691,10 +7691,10 @@ module.exports = ComponentView = (function() {
       this.displayOptionals();
     }
     
-    attributes = this.model.getData('data_attributes');
+    
     _ref = this;
     
-    var updateElem = function (name) {
+    var updateElem = function (name, attributes) {
         if (attributes && attributes[name]) {
            $elem = _ref.directives.$getElem(name);
            for (var attr in attributes[name]) {
@@ -7702,12 +7702,28 @@ module.exports = ComponentView = (function() {
            }
        }
     }
-    
+
     if (directiveName) {
-        updateElem(directiveName);
+        dataAttrs = this.model.getData('data_attributes');
+        updateElem(directiveName, dataAttrs);
     } else {
         for (var i = 0; i < this.directives.length; i++) {
-            updateElem(this.directives[i].name);
+            updateElem(this.directives[i].name, dataAttrs);
+        }
+    }
+
+    elementStyles = this.model.getData('element_styles');
+    
+    if (elementStyles) {
+        console.log(elementStyles);
+        let styleString = '';
+        for (let name in elementStyles) {
+            styleString += name + ": " + elementStyles[name] + ";";
+        }
+        if (directiveName) {
+            updateElem(directiveName, {directiveName: {"style": styleString}});
+        } else {
+            console.log("AS");
         }
     }
     

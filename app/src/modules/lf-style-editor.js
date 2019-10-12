@@ -10,8 +10,26 @@ export function createStyleEditor(component) {
     if (!customStyles) {
         customStyles = {};
     }
+
+    console.log(component);
     
     let fields = {
+        "width": new TextField({
+            label: 'Width',
+            value: customStyles['width'] || '',
+        }),
+        "min-width": new TextField({
+            label: 'Minimum Width',
+            value: customStyles['min-width'] || '',
+        }),
+        "height": new TextField({
+            label: 'Height',
+            value: customStyles['height'] || '',
+        }),
+        "min-height": new TextField({
+            label: 'Minumum Height',
+            value: customStyles['min-height'] || '',
+        }),
         "padding": new TextField({
             label: 'Padding',
             value: customStyles['padding'] || '',
@@ -24,7 +42,27 @@ export function createStyleEditor(component) {
             label: 'Background',
             value: customStyles['background'] || '',
         }),
+        
     };
+
+    if (component.model.styles['position-absolute']) {
+        fields["top"] = new TextField({
+            label: 'Top',
+            value: customStyles['top'] || '',
+        });
+        fields["left"] = new TextField({
+            label: 'Left',
+            value: customStyles['left'] || '',
+        });
+        fields["bottom"] = new TextField({
+            label: 'Bottom',
+            value: customStyles['bottom'] || '',
+        });
+        fields["right"] = new TextField({
+            label: 'Right',
+            value: customStyles['right'] || '',
+        });
+    }
 
     let editContainer = $('.livingdocs-item-properties')[0];
     openPrompt({
