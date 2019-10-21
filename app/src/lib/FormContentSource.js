@@ -54,6 +54,7 @@ class FormContentSource {
 
     getPageStructure() {
         if (!this.config.pageStructure) {
+            throw "Page hasn't been properly initialised in the CMS";
             this.config.pageStructure = dummyStructure;
         }
 
@@ -82,7 +83,7 @@ const dummyStructure = {
         "content": [
             {
                 "id": "doc-1c8e6umt10",
-                "identifier": "bootstrap3.section",
+                "identifier": "bootstrap4.section",
                 "styles": {
                     "section-class": "first container"
                 },
@@ -90,20 +91,20 @@ const dummyStructure = {
                     "section": [
                         {
                             "id": "doc-1c8e6umt11",
-                            "identifier": "bootstrap3.row",
+                            "identifier": "bootstrap4.row",
                             "styles": {
-                                "text-styles": "text-center"
+                                "text-styles": ""
                             },
                             "containers": {
                                 "row": [
                                     {
                                         "id": "doc-1c8e6umt12",
-                                        "identifier": "bootstrap3.column",
+                                        "identifier": "bootstrap4.column",
                                         "containers": {
                                             "column": [
                                                 {
                                                     "id": "doc-1c8e6umt30",
-                                                    "identifier": "bootstrap3.h1",
+                                                    "identifier": "bootstrap4.h1",
                                                     "content": {
                                                         "title": "[livingpage_show_field field=Title]"
                                                     }

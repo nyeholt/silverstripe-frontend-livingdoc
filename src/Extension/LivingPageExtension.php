@@ -37,6 +37,7 @@ class LivingPageExtension extends DataExtension
 
     private static $living_designs = [
         'bootstrap3'        => 'frontend-livingdoc/javascript/livingdocs/bootstrap-design.js',
+        'bootstrap4'        => 'frontend-livingdoc/app/dist/designs/bootstrap4-design.js',
     ];
 
     private static $default_design_css = '';
@@ -44,14 +45,14 @@ class LivingPageExtension extends DataExtension
     private static $default_page = array(
         'content' => [
             [
-                'component' => 'p',
+                'component' => 'wysiwyg',
                 'content' => [
-                    'text' => "Edit away"
+                    'html' => "Edit away"
                 ]
             ],
         ],
         'design' => [
-            'name' => 'bootstrap3',
+            'name' => 'bootstrap4',
             "version" => "0.0.1",
         ]
     );
