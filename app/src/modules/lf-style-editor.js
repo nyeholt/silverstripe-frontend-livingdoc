@@ -92,9 +92,7 @@ export function createStyleEditor(component) {
 }
 
 function updateComponentStyles(component, styleset) {
-    let styleString = '';
     for (let name in styleset) {
-        styleString += name + ": " + styleset[name] + ";";
+        component.$html.css(name, styleset[name]);
     }
-    component.$html.attr('style', styleString);
 }

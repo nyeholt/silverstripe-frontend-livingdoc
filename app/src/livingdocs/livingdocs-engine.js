@@ -7751,19 +7751,12 @@ module.exports = ComponentView = (function() {
     elementStyles = this.model.getData('element_styles');
     
     if (elementStyles) {
-        let styleString = '';
-        for (let name in elementStyles) {
-            styleString += name + ": " + elementStyles[name] + ";";
-        }
-        console.log("Setting style ", styleString);
         if (directiveName) {
             // updateElem(directiveName, {[directiveName]: {"style": styleString}});
         } else {
-            this.$html.attr('style', styleString);
-            // updateElem(this.directives[0].name, {[this.directives[0].name]: {"style": styleString}});
-            // for (var i = 0; i < this.directives.length; i++) {
-            //     updateElem(this.directives[i].name, {[this.directives[i].name]: {"style": styleString}});
-            // }
+            for (let name in elementStyles) {
+                this.$html.css(name, elementStyles[name]);
+            }
         }
     }
     
@@ -8064,6 +8057,16 @@ module.exports = ComponentView = (function() {
     var imageService;
     $elem.addClass(config.css.emptyImage);
     imageService = this.model.directives.get(name).getImageService();
+    // if it's a background image, only set it if the elem doesn't have
+    // a background configured already
+    let currentStyles = $elem.attr('style');
+
+    // NOTE(Marcus) 2019-10-21 - only set a background if no other css is in there. 
+    if (currentStyles && imageService.isBackgroundImage($elem) && 
+        currentStyles.indexOf('background') >= 0 && 
+        currentStyles.indexOf('background: ;') < 0) {
+        return;
+    }
     return imageService.set($elem, config.imagePlaceholder);
   };
 
