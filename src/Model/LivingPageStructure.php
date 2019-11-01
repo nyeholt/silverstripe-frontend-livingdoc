@@ -13,6 +13,8 @@ use SilverStripe\ORM\DataObject;
  */
 class LivingPageStructure extends DataObject
 {
+    private static $table_name = 'LivingPageStructure';
+    
     private static $db = [
         'Title'     => 'Varchar',
         'Structure' => 'Text',
