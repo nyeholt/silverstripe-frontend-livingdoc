@@ -2982,16 +2982,16 @@ EmbedItemDirective = (function(_super) {
 // todo(Marcus) need to re-compile from coffee script really...
 WysiwygDirective = (function(_super) {
     __extends(WysiwygDirective, _super);
-  
+
     function WysiwygDirective() {
       return WysiwygDirective.__super__.constructor.apply(this, arguments);
     }
-  
+
     WysiwygDirective.prototype.isWysiwyg = true;
-  
-  
+
+
     return WysiwygDirective;
-  
+
   })(ComponentDirective);
 
 module.exports = {
@@ -3017,7 +3017,7 @@ module.exports = {
     case 'embeditem':
         return EmbedItemDirective;
     case 'wysiwyg':
-                return WysiwygDirective;  
+                return WysiwygDirective;
       default:
         return assert(false, "Unsupported component directive: " + directiveType);
     }
@@ -3419,21 +3419,21 @@ module.exports = ComponentModel = (function() {
       return this.dataValues;
     }
   };
-  
+
   ComponentModel.prototype.setDirectiveAttribute = function (name, attr, value) {
       var attributes, itemAttributes = {};
       attributes = this.getData('data_attributes');
       if (!attributes) {
           attributes = {};
       }
-      
+
       if (attributes[name]) {
           itemAttributes = attributes[name];
       }
-      
+
       itemAttributes[attr] = value;
       attributes[name] = itemAttributes;
-      
+
       this.setData('data_attributes', attributes);
   };
 
@@ -3933,10 +3933,10 @@ module.exports = ComponentTree = (function() {
     }
     return data;
   };
-  
+
   ComponentTree.prototype.componentsFromList = function (data, design) {
       var created = [];
-      
+
       for (var i = 0, c = data.length; i < c; i++) {
         var componentData = data[i];
         created.push(componentModelSerializer.fromJson(componentData, design));
@@ -4811,7 +4811,7 @@ module.exports = CssModificatorProperty = (function() {
           add: value
         };
       } else if (this.type === 'text') {
-          // todo(Marcus) 
+          // todo(Marcus)
           var current = currentClasses ? currentClasses.split(' ') : [];
           var remove = [];
           for (var i in current) {
@@ -6832,17 +6832,17 @@ module.exports = EditableController = (function() {
 
   EditableController.prototype.insert = function(view, editableName, direction, cursor) {
     var copy, defaultParagraph, newView;
-    
+
     var newModel = null;
     // todo(Marcus) - this needs to use this component type's "insertAfter" attribute
-    // handle LIs 
+    // handle LIs
     if (cursor.host && cursor.host.nodeName == 'LI') {
         // duplicate the current type
         newModel = dom.findComponentView(cursor.host);
     }
-    
+
     defaultParagraph = newModel ? newModel.template : this.page.design.defaultParagraph;
-    
+
     if (this.hasSingleEditable(view) && (defaultParagraph != null)) {
       copy = defaultParagraph.createModel();
       newView = direction === 'before' ? (view.model.before(copy), view.prev()) : (view.model.after(copy), view.next());
@@ -7717,7 +7717,7 @@ module.exports = ComponentView = (function() {
 
   ComponentView.prototype.updateContent = function(directiveName) {
     var dataAttrs, name, _ref, $elem, elementStyles;
-      
+
     if (directiveName) {
       this.set(directiveName, this.model.content[directiveName]);
     } else {
@@ -7726,10 +7726,10 @@ module.exports = ComponentView = (function() {
     if (!this.hasFocus()) {
       this.displayOptionals();
     }
-    
-    
+
+
     _ref = this;
-    
+
     var updateDirectiveElem = function (name, attributes) {
         if (attributes && attributes[name]) {
            $elem = _ref.directives.$getElem(name);
@@ -7749,7 +7749,7 @@ module.exports = ComponentView = (function() {
     }
 
     elementStyles = this.model.getData('element_styles');
-    
+
     if (elementStyles) {
         if (directiveName) {
             // updateElem(directiveName, {[directiveName]: {"style": styleString}});
@@ -7759,7 +7759,7 @@ module.exports = ComponentView = (function() {
             }
         }
     }
-    
+
     return this.stripHtmlIfReadOnly();
   };
 
@@ -7825,12 +7825,12 @@ module.exports = ComponentView = (function() {
     if (directive) {
         return $(directive != null ? directive.elem : void 0).focus();
     }
-    
+
     // note(Marcus) 2019-10-04
     // check for wysiwyg and focus on that instead
     _ref = this.directives.wysiwyg != null ? this.directives.wysiwyg[0] : void 0;
     if (_ref) {
-        
+
         $(_ref.elem).focus();
     }
   };
@@ -7860,7 +7860,7 @@ module.exports = ComponentView = (function() {
   ComponentView.prototype.set = function(name, value) {
     var directive, attributes, $elem, result;
     directive = this.model.directives.get(name);
-    
+
     switch (directive.type) {
       case 'editable':
         return this.setEditable(name, value);
@@ -7971,27 +7971,27 @@ module.exports = ComponentView = (function() {
     this.directivesToReset || (this.directivesToReset = {});
     return this.directivesToReset[name] = name;
   };
-  
+
   ComponentView.prototype.setEmbedItem = function (name, value) {
       var $elem;
       $elem = this.directives.$getElem(name);
-      
+
       value = value || {source: '', attrs: '', content: null};
-      
+
       if (!value.content) {
           value.content = this.template.defaults[name];
       }
-      
+
       $elem.attr('data-embed-source-' + name, value.source);
       $elem.attr('data-embed-attrs-' + name, value.attrs);
-      
+
       $elem.html(value.content);
-      
+
       this.directivesToReset || (this.directivesToReset = {});
       return this.directivesToReset[name] = name;
   }
 
-  
+
   ComponentView.prototype.getEmbedItem = function (name) {
       var $elem;
       $elem = this.directives.$getElem(name);
@@ -8061,9 +8061,9 @@ module.exports = ComponentView = (function() {
     // a background configured already
     let currentStyles = $elem.attr('style');
 
-    // NOTE(Marcus) 2019-10-21 - only set a background if no other css is in there. 
-    if (currentStyles && imageService.isBackgroundImage($elem) && 
-        currentStyles.indexOf('background') >= 0 && 
+    // NOTE(Marcus) 2019-10-21 - only set a background if no other css is in there.
+    if (currentStyles && imageService.isBackgroundImage($elem) &&
+        currentStyles.indexOf('background') >= 0 &&
         currentStyles.indexOf('background: ;') < 0) {
         return;
     }
@@ -9386,10 +9386,17 @@ module.exports = InteractivePage = (function(_super) {
     componentView = dom.findComponentView(event.target);
     this.handleClickedComponent(event, componentView);
     if (componentView) {
-      return this.startDrag({
-        componentView: componentView,
-        event: event
-      });
+        var opt = {
+            enable: true
+        };
+        this.componentWillBeDragged.fire(opt);
+
+        if (opt.enable) {
+            return this.startDrag({
+                componentView: componentView,
+                event: event
+            });
+        }
     }
   };
 
@@ -10264,9 +10271,9 @@ module.exports = Template = (function() {
             return _this.formatHtml(directive.name, directive.elem);
         case 'wysiwyg':
             return _this.formatHtml(directive.name, directive.elem);
-          case 'embeditem': 
+          case 'embeditem':
               // just doing the same for now
-            return _this.formatHtml(directive.name, directive.elem);  
+            return _this.formatHtml(directive.name, directive.elem);
         }
       };
     })(this));
