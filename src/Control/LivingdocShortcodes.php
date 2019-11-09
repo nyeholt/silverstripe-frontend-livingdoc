@@ -17,7 +17,7 @@ use Symbiote\ListingPage\ListingPage;
 use Symbiote\ListingPage\ListingTemplate;
 
 /**
- * 
+ *
  *
  * @author marcus
  */
@@ -75,7 +75,7 @@ class LivingdocShortcodes
 
         return $page && $page->hasMethod('canView') ? ($page->canView() ? $page : null) : $page;
     }
-    
+
     public static function listing_content($arguments, $content = null, $parser = null) {
         $pageId = isset($arguments['page_id']) ? $arguments['page_id'] : 0;
         $sourceId = isset($arguments['source_id']) ? $arguments['source_id'] : 0;

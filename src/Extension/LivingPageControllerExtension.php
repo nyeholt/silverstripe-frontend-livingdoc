@@ -29,7 +29,7 @@ class LivingPageControllerExtension extends Extension
     {
 
         // at the top so it can be overridden by user css
-        Requirements::css('frontend-livingdoc/javascript/livingdocs/css/base.css');
+        Requirements::css('frontend-livingdoc/css/base.css');
 
         // same with any highlight css needed
         Requirements::css('frontend-livingdoc/javascript/highlight/googlecode.css');
@@ -53,7 +53,7 @@ class LivingPageControllerExtension extends Extension
         if ($this->owner->getRequest()->getVar('edit') && $this->owner->data()->canEdit()) {
             // needs to be done this way to ensure Stage mode is set via the session
             // otherwise it'll default to live because we're on the frontend
-            
+
             Versioned::set_stage(Versioned::DRAFT);
 
             // trigger edit mode, so redirect works
@@ -125,12 +125,10 @@ class LivingPageControllerExtension extends Extension
 
             Requirements::block(THIRDPARTY_DIR.'/jquery/jquery.js');
 
-            Requirements::javascript('silverstripe/admin: thirdparty/jquery-form/jquery.form.js');
-
             Requirements::javascript('frontend-livingdoc/app/dist/main.js');
             Requirements::css('frontend-livingdoc/app/dist/main.css');
             Requirements::css('frontend-livingdoc/css/living-frontend.css');
-            
+
 
             Requirements::javascript('frontend-livingdoc/javascript/showdown/showdown.min.js');
             Requirements::javascript('frontend-livingdoc/javascript/ace/ace.min.js');
@@ -172,7 +170,7 @@ class LivingPageControllerExtension extends Extension
             ];
         }
 
-        
+
         // explicit binding because I'm too lazy right now to add yet another extension
         // if (class_exists(Multisites::class) && Multisites::inst()->getCurrentSite()->LivingPageTheme) {
         //     $siteThemeName = Multisites::inst()->getCurrentSite()->LivingPageTheme;
@@ -210,7 +208,7 @@ class LivingPageControllerExtension extends Extension
             'designFile' => $designFile,
             'endpoints' => [
                 'paste' => $this->owner->Link('pastefile'),
-                // the following aren't used at present, instead we're using a ContentSource that hooks back to the 
+                // the following aren't used at present, instead we're using a ContentSource that hooks back to the
                 // SilverStripe form
                 'save' => $this->owner->Link('save'),
                 'publish' => $this->owner->Link('publish'),
@@ -264,7 +262,7 @@ class LivingPageControllerExtension extends Extension
         $available = $this->owner->data()->availableShortcodes();
 
         if (isset($available[$item])) {
-            $shortcodeParams = $this->owner->getRequest()->getVar('attrs') ? 
+            $shortcodeParams = $this->owner->getRequest()->getVar('attrs') ?
                 json_decode($this->owner->getRequest()->getVar('attrs'), true) : [];
 
             $shortcodeStr = $this->owner->data()->shortcodeFor($item, $shortcodeParams);
@@ -319,6 +317,7 @@ class LivingPageControllerExtension extends Extension
         $embeds = $record->availableShortcodes();
 
         $fields = FieldList::create([
+                HiddenField::create('stage', "Stage", "Stage"),
                 HiddenField::create('PageStructure', "JSON structure"),
                 HiddenField::create('Content', "HTML structure"),
                 HiddenField::create('Embeds', 'Content embeds', json_encode($embeds)),
@@ -354,6 +353,7 @@ class LivingPageControllerExtension extends Extension
         $actions->push(FormAction::create('live', 'Done')->setUseButtonTag(true));
 
         $form = Form::create($this->owner, 'LivingForm', $fields, $actions);
+        // $form->setFormAction(substr($form->FormAction(), 0, strpos($form->FormAction(), "?")));
         $form->loadDataFrom($record);
         return $form;
     }

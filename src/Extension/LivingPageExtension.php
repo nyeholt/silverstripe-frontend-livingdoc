@@ -25,7 +25,7 @@ use \Wa72\HtmlPageDom\HtmlPageCrawler;
 class LivingPageExtension extends DataExtension
 {
     use Configurable;
-    
+
     private static $db = [
         'PageStructure'     => 'Text',
         'Shortcodes'        => 'MultiValueField',
@@ -65,7 +65,7 @@ class LivingPageExtension extends DataExtension
             $fields->push(new TabSet('Root'));
             $fields->addFieldToTab('Root.Main', TextField::create('Title', 'Title'));
             $fields->addFieldToTab('Root.Main', DropdownField::create('StructureTemplateID', 'Template', $structures)->setEmptyString('-- none --'));
-            
+
             return $fields;
         }
 
@@ -107,7 +107,7 @@ class LivingPageExtension extends DataExtension
                     $this->owner->PageStructure = json_encode(self::config()->default_page);
                 }
             }
-            
+
         }
 
         // convert relevant bits of the content from the data-embed-source tag
@@ -156,7 +156,7 @@ class LivingPageExtension extends DataExtension
     }
 
     /**
-     * Convert an array of key => values to shortcode parameters. 
+     * Convert an array of key => values to shortcode parameters.
      *
      * @param aray $shortcodeParams
      * @return string
@@ -193,7 +193,7 @@ class LivingPageExtension extends DataExtension
         if (!$items) {
             $items = [];
         }
-        
+
         $items = array_merge($configItems, $items);
 
         return $items;
@@ -212,7 +212,7 @@ class LivingPageExtension extends DataExtension
             if (isset($component['identifier'])) {
                 $component['identifier'] = str_replace($oldName, $newName, $component['identifier']);
             }
-            
+
             if (isset($component['containers'])) {
                 foreach ($component['containers'] as $name => $items) {
                     $newItems = [];

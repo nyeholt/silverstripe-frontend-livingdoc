@@ -20,7 +20,7 @@ body.show-livingdocs-toolbar {
     overflow-y: auto;
     overflow-x: hidden;
     height: 100%;
-    
+
     box-shadow: 0 0 3px rgba(0,0,0,0.25);
     padding: 0;
     color: #000;
@@ -68,8 +68,8 @@ body.show-livingdocs-toolbar .livingdocs-toolbar {
     width: 100%;
 }
 
-.livingdocs-toolbar input.text, 
-.livingdocs-toolbar textarea, 
+.livingdocs-toolbar input.text,
+.livingdocs-toolbar textarea,
 .livingdocs-toolbar select {
 	width: 100%;
 	max-width: 400px;
@@ -118,20 +118,20 @@ body.show-livingdocs-toolbar .livingdocs-toolbar {
         margin: 0;
     }
 
-.livingdocs-item-properties a.btn, 
-.livingdocs-item-properties button, 
-.livingdocs-item-properties input[type="submit"], 
-.livingdocs-item-properties input[type="reset"], 
+.livingdocs-item-properties a.btn,
+.livingdocs-item-properties button,
+.livingdocs-item-properties input[type="submit"],
+.livingdocs-item-properties input[type="reset"],
 .livingdocs-item-properties .Actions .action,
-.livingdocs-bottom-bar a.btn, 
-.livingdocs-bottom-bar button, 
-.livingdocs-bottom-bar input[type="submit"], 
-.livingdocs-bottom-bar input[type="reset"], 
+.livingdocs-bottom-bar a.btn,
+.livingdocs-bottom-bar button,
+.livingdocs-bottom-bar input[type="submit"],
+.livingdocs-bottom-bar input[type="reset"],
 .livingdocs-bottom-bar .Actions .action,
-.livingdocs-toolbar a.btn, 
-.livingdocs-toolbar button, 
-.livingdocs-toolbar input[type="submit"], 
-.livingdocs-toolbar input[type="reset"], 
+.livingdocs-toolbar a.btn,
+.livingdocs-toolbar button,
+.livingdocs-toolbar input[type="submit"],
+.livingdocs-toolbar input[type="reset"],
 .livingdocs-toolbar .Actions .action {
     background: #dad9d9;
     border: 1px solid #333;
@@ -142,14 +142,14 @@ body.show-livingdocs-toolbar .livingdocs-toolbar {
     color: #000;
 }
 
-.livingdocs-toolbar a.btn:hover, 
-.livingdocs-toolbar button:hover, 
-.livingdocs-toolbar input[type="submit"]:hover, 
+.livingdocs-toolbar a.btn:hover,
+.livingdocs-toolbar button:hover,
+.livingdocs-toolbar input[type="submit"]:hover,
 .livingdocs-toolbar .Actions .action:hover {
         background: #777;
         color: #fff;
     }
-    
+
     .livingdocs-toolbar input[type="submit"]:disabled {
         background: #666;
     }
@@ -190,7 +190,7 @@ iframe.living-dialog {
     top: 100px;
     left: 25%;
     display: none;
-    
+
     -webkit-box-shadow: 0px 0px 65px 4px rgba(68,68,102,1);
     -moz-box-shadow: 0px 0px 65px 4px rgba(68,68,102,1);
     box-shadow: 0px 0px 65px 4px rgba(68,68,102,1);
@@ -218,12 +218,16 @@ body.doc-no-selection .livingdocs-toolbar iframe {
 }
 
 [data-doc-container] {
-    border: 1px transparent;
+    border: 4px dotted #ccc;
+}
+
+[data-doc-container]:hover {
+    border: 4px dotted #99a;
 }
 
 
 [data-doc-container].doc-component-highlight {
-    border: 1px dashed #FA9E4E;
+    border: 4px dashed #FA9E4E;
 /*    padding-top: 5px;
     padding-bottom: 5px;*/
 }
@@ -327,7 +331,7 @@ body.doc-no-selection .livingdocs-toolbar iframe {
   margin-top: 16px;
   right: 10px;
 }
-.livingdocs-components ul li i:before, 
+.livingdocs-components ul li i:before,
 .livingdocs-components ul li i:after {
   content: "";
   position: absolute;
