@@ -10,25 +10,25 @@ import ContentSource from './lib/FormContentSource';
 import { initialise_property_editor } from './lib/ld-property-editor';
 
 (function ($) {
-    
+
     if (!window.$) {
         window.$ = $;
     }
-    
+
     var PING_TIME = 300;
     var MAX_TIME = 86400;
-    
+
     var pingErrors = 0;
-    
+
     var editingTime = 0;
-    
+
     var pingterval = setInterval(function () {
-        
+
         if (editingTime > MAX_TIME) {
             clearInterval(pingterval);
             return;
         }
-        
+
         $.get('Security/ping').then(function () {
             pingErrors = 0;
         }).catch(function () {
@@ -38,18 +38,18 @@ import { initialise_property_editor } from './lib/ld-property-editor';
                 clearInterval(pingterval);
             }
         });
-        
+
         editingTime += PING_TIME;
     }, PING_TIME*1000);
-    
-    
+
+
     var TOOLBAR_FORM = '#Form_LivingForm';
     var BOTTOM_BAR = '.livingdocs-bottom-bar';
 
     var TABLE_ROW_COMPONENT = 'tablerow';
     var TABLE_CELL_COMPONENT = 'tablecell';
     var HEADER_CELL_COMPONENT = 'headercell';
-    
+
 
     // ContentBridge.init();
 
@@ -69,23 +69,23 @@ import { initialise_property_editor } from './lib/ld-property-editor';
         //     href: 'link/href', target: '', title: 'linktitle'
         // });
     });
-    
-    // re-structures the form to ensure ajax submits pass through the 
+
+    // re-structures the form to ensure ajax submits pass through the
     // triggered action
-    $(document).on('click', 'form' + TOOLBAR_FORM +' > .Actions .action', function (e) { 
+    $(document).on('click', 'form' + TOOLBAR_FORM +' > .Actions .action', function (e) {
         // catuch the "live" click and redirect instead
         if ($(this).attr('name') == 'action_live') {
             e.preventDefault();
             location.href = location.href + '?edit=stop&stage=Live';
             return false;
         }
-        
+
         if ($(this).hasClass('link-action')) {
             e.preventDefault();
             location.href = $(this).attr('data-link');
             return false;
         }
-        
+
         var parentForm = $(this).parents('form');
         parentForm.find('input.hidden-action').remove();
         $('<input class="hidden-action">').attr({
@@ -96,8 +96,6 @@ import { initialise_property_editor } from './lib/ld-property-editor';
     })
 
     $(function () {
-
-
         var structure = ContentSource.getPageStructure();
 
         // relies on a design file having been loaded earlier
@@ -106,15 +104,15 @@ import { initialise_property_editor } from './lib/ld-property-editor';
             alert("No design loaded");
             return;
         }
-        
+
         var selectedDesignName = structure.data.design.name;
         var selectedDesign = design[selectedDesignName];
-        
+
         if (!selectedDesign) {
             alert("Selected design " + selectedDesignName + " couldn't be found");
             return;
         }
-        
+
         // provides 3rd party hooks
         $(document).trigger('updateLivingdocsDesign', selectedDesign);
 
@@ -130,7 +128,7 @@ import { initialise_property_editor } from './lib/ld-property-editor';
         //         changeDelay: 50
         //     }
         //     // ,
-        //     // // really not sure if this matters here, but we'll run with it for now. 
+        //     // // really not sure if this matters here, but we'll run with it for now.
         //     // directives: {
         //     //     dataobject: {
         //     //         attr: 'doc-dataobject',
@@ -161,24 +159,24 @@ import { initialise_property_editor } from './lib/ld-property-editor';
             LivingDocState.livingdoc.model.changed.add(function () {
                 LivingDocState.notifyDocUpdate(true);
             });
-            
+
             var $components = $('.livingdocs-components');
             var $componentsList = $components.find('ul');
-            
+
             var componentGroupMap = {};
-            
-            
+
+
             var addGroup = function (label, num) {
                 var $group = $('<li>');
                 $group.append('<input type="checkbox" checked>');
                 $group.append('<i>');
                 $group.append('<h2>' + label + '</h2>');
                 $group.append('<div class="group-component-holder" id="gch-'+num+'"></div>');
-                
+
                 $componentsList.append($group);
             }
-            
-            // use selectedDesign - the template, not active components at this point, as it is simpler to 
+
+            // use selectedDesign - the template, not active components at this point, as it is simpler to
             // iterate
             for (var i = 0; i < selectedDesign.groups.length; i++) {
                 addGroup(selectedDesign.groups[i].label, i);
@@ -188,24 +186,24 @@ import { initialise_property_editor } from './lib/ld-property-editor';
             }
 
             addGroup('Misc', 'misc');
-            
-            // Adds in all the components in their appropriate grouping 
+
+            // Adds in all the components in their appropriate grouping
             for (var i = 0; i < LivingDocState.activeDesign.components.length; i++) {
                 var template = LivingDocState.activeDesign.components[i];
                 var $entry = $('<div class="toolbar-entry">');
                 $entry.html(template.label);
-                
+
                 var groupId = componentGroupMap[template.name];
                 if (!groupId) {
                     groupId = 'gch-misc';
                 }
-                
+
                 var $holder = $('#' + groupId);
                 $holder.append($entry);
 
                 draggableComponent(doc, template.name, $entry);
             }
-            
+
             // Binds the drag behaviour when a menu item is dragged
             function draggableComponent(doc, name, $elem) {
                 $elem.on('mousedown', function (event) {
@@ -220,7 +218,7 @@ import { initialise_property_editor } from './lib/ld-property-editor';
                     });
                 });
             }
-            
+
             // add in the structured components that can be chosen to have fully created
             if (selectedDesign.structures && selectedDesign.structures.length > 0) {
                 var optionList = $('<select class="with-button">').attr('id', 'component-structures');
@@ -229,23 +227,23 @@ import { initialise_property_editor } from './lib/ld-property-editor';
                     var item = selectedDesign.structures[i];
                     optionList.append($('<option value="">').text(item.label).attr('value', item.label));
                 }
-                
+
                 var structureFields = $('<div class="structure-options">');
                 structureFields.append($('<label for="component-structures">Select a pre-defined set of components, or add individual components below</label>'));
                 structureFields.append(optionList);
                 var structureButton = $('<button>Add</button>');
                 structureFields.append(structureButton);
                 $components.prepend(structureFields);
-                
+
                 structureButton.click(function (e) {
                     var selected = optionList.val();
                     for (var i in selectedDesign.structures) {
                         var item = selectedDesign.structures[i];
                         if (item.label === selected) {
-                            var container = LivingDocState.activeComponent ? 
-                                LivingDocState.activeComponent.model.parentContainer : 
+                            var container = LivingDocState.activeComponent ?
+                                LivingDocState.activeComponent.model.parentContainer :
                                 LivingDocState.livingdoc.componentTree.root;
-                            
+
                             createComponentList(item.components, container);
                             break;
                         }
@@ -253,13 +251,13 @@ import { initialise_property_editor } from './lib/ld-property-editor';
                     optionList.val('');
                 });
             }
-            
+
             // when adding a component, see if it has a set of components that should
             // be immediately created. Useful for something like a table cell that should always
             // have a paragraph in it when added
             LivingDocState.livingdoc.componentTree.componentAdded.add(function (newComponent) {
                 var toCreate = selectedDesign.prefilledComponents[newComponent.componentName];
-                
+
                 if (toCreate && toCreate.components) {
                     for (var containerName in toCreate.components) {
                         createComponentList(toCreate.components[containerName], newComponent, containerName);
@@ -271,7 +269,7 @@ import { initialise_property_editor } from './lib/ld-property-editor';
             // todo(Marcus)
             // figure out how to allow selection of 'background' components
             // let lastClickedComponent = "", lastClickedCount = 0;
-            
+
             // LivingDocState.livingdoc.interactiveView.page.componentClick.add(function (componentView, page, directives, event) {
             //     if (componentView.model.hasContainers()) {
             //         if (lastClickedComponent === componentView.model.id) {
@@ -279,7 +277,7 @@ import { initialise_property_editor } from './lib/ld-property-editor';
             //             if (lastClickedCount == 2) {
             //                 // get the parent and select it
             //                 let parent = componentView.parent();
-            //                 page.handleClickedComponent(event, parent); 
+            //                 page.handleClickedComponent(event, parent);
             //                 page.startDrag({
             //                     componentView: parent,
             //                     event: event
@@ -303,7 +301,7 @@ import { initialise_property_editor } from './lib/ld-property-editor';
          * [
          *     { label: 'Label', title: 'tooltop', click: function () {} }
          * ]
-         * 
+         *
          * @param an array of button objects
          * @param an object with a .left and .top  property that defines where to show the bar
          * @returns void
@@ -319,7 +317,7 @@ import { initialise_property_editor } from './lib/ld-property-editor';
                     buttonEl.attr('title', b.title);
                 }
                 buttonEl.on('mousedown', function (theButton) { return function (e) { e.preventDefault(); theButton.click(); } }(b) );
-                
+
                 outer_el.append(buttonEl);
             }
 
@@ -368,10 +366,10 @@ import { initialise_property_editor } from './lib/ld-property-editor';
             LivingDocState.closeDialog();
             return false;
         });
-        
+
         /**
          * creates components, inside a given parent.
-         * 
+         *
          * @param array components
          * @param ComponentModel parent
          * @param string containerName
@@ -382,7 +380,7 @@ import { initialise_property_editor } from './lib/ld-property-editor';
                 parent = LivingDocState.livingdoc.componentTree.root;
             }
             var newComponents = LivingDocState.livingdoc.componentTree.componentsFromList(components, LivingDocState.activeDesign);
-            
+
             if (parent) {
                 for (var i in newComponents) {
                     if (containerName) {
@@ -402,7 +400,7 @@ import { initialise_property_editor } from './lib/ld-property-editor';
 
         /**
          * Iteratively add cells to all the rows in a given table container
-         * 
+         *
          * @param {type} firstRow
          * @param {type} cellType
          * @returns {.firstRow.next.next}
@@ -413,7 +411,7 @@ import { initialise_property_editor } from './lib/ld-property-editor';
                     var newCell = LivingDocState.livingdoc.componentTree.getComponent(cellType);
                     firstRow.append('rowcells', newCell);
                     firstRow = firstRow.next;
-                    
+
                     var newP = LivingDocState.livingdoc.componentTree.getComponent("p");
                     newCell.append("cellitems", newP);
                 }
@@ -446,5 +444,5 @@ import { initialise_property_editor } from './lib/ld-property-editor';
             // ContentBridge.showDialog('image');
         }
     });
-    
+
 })(jQuery);

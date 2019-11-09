@@ -1,8 +1,9 @@
 import * as $ from 'jquery';
+import 'jquery-form';
 
 /**
  * Represents a SilverStripe based form as being
- * the provider of content. In future, this can be 
+ * the provider of content. In future, this can be
  * an API instead...
  */
 class FormContentSource {
@@ -26,10 +27,17 @@ class FormContentSource {
 
             _this.removeAttr('data-changed');
 
-            $(this).ajaxSubmit(function (response) {
-                _this.find('button.action').each(function () {
-                    $(this).prop('disabled', false);
-                });
+            $(this).ajaxSubmit({
+                error: function () {
+                    alert("An error was encountered");
+                    console.log(arguments);
+                },
+                complete: function (response) {
+                    _this.find('button.action').each(function () {
+                        $(this).prop('disabled', false);
+                        $(this).attr("data-clicked", "0");
+                    });
+                }
             });
 
             _this.find('button.action').each(function () {
@@ -39,13 +47,34 @@ class FormContentSource {
             return false;
         });
 
+        $(document).on('mousedown', this.TOOLBAR_FORM + ' button.action', function (e) {
+            // catuch the "live" click and redirect instead
+            if ($(this).attr('name') == 'action_live') {
+                e.preventDefault();
+                location.href = location.href + '?edit=stop&stage=Live';
+                return false;
+            }
+
+            if ($(this).hasClass('link-action')) {
+                e.preventDefault();
+                location.href = $(this).attr('data-link');
+                return false;
+            }
+
+            var parentForm = $(this).parents('form');
+            parentForm.find('input.hidden-action').remove();
+            $('<input class="hidden-action">').attr({
+                'type': 'hidden',
+                'name': $(this).attr('name'),
+                'value': '1'
+            }).appendTo(parentForm);
+        })
+
         $(window).bind('beforeunload', function () {
             if ($(this.TOOLBAR_FORM).attr('data-changed')) {
                 return "You may have unsaved changes, sure?";
             }
         });
-
-
     }
 
     getConfig() {
@@ -72,6 +101,7 @@ class FormContentSource {
     }
 }
 
+
 const ContentSource = new FormContentSource;
 ContentSource.init();
 
@@ -81,101 +111,7 @@ export default ContentSource;
 const dummyStructure = {
     "data": {
         "content": [
-            {
-                "id": "doc-1c8e6umt10",
-                "identifier": "bootstrap4.section",
-                "styles": {
-                    "section-class": "first container"
-                },
-                "containers": {
-                    "section": [
-                        {
-                            "id": "doc-1c8e6umt11",
-                            "identifier": "bootstrap4.row",
-                            "styles": {
-                                "text-styles": ""
-                            },
-                            "containers": {
-                                "row": [
-                                    {
-                                        "id": "doc-1c8e6umt12",
-                                        "identifier": "bootstrap4.column",
-                                        "containers": {
-                                            "column": [
-                                                {
-                                                    "id": "doc-1c8e6umt30",
-                                                    "identifier": "bootstrap4.h1",
-                                                    "content": {
-                                                        "title": "[livingpage_show_field field=Title]"
-                                                    }
-                                                }
-                                            ]
-                                        }
-                                    }
-                                ]
-                            }
-                        }
-                    ]
-                }
-            },
-            {
-                "id": "doc-1c8e6umt31",
-                "identifier": "bootstrap3.section",
-                "styles": {
-                    "section-class": "container"
-                },
-                "containers": {
-                    "section": [
-                        {
-                            "id": "doc-1c8e6umt32",
-                            "identifier": "bootstrap3.row",
-                            "styles": {
-                                "text-styles": ""
-                            },
-                            "containers": {
-                                "row": [
-                                    {
-                                        "id": "doc-1c8e6umt33",
-                                        "identifier": "bootstrap3.column",
-                                        "containers": {
-                                            "column": [
-                                                {
-                                                    "id": "doc-1c8e6umt34",
-                                                    "identifier": "bootstrap3.p",
-                                                    "content": {
-                                                        "text": "<a href=\"[file_link,id=124]\" title=\"Strategy Update August 2018\">Current version (to December 2018) is available via PDF</a>.&nbsp;"
-                                                    }
-                                                },
-                                                {
-                                                    "id": "doc-1c8e7eaol0",
-                                                    "identifier": "bootstrap3.p",
-                                                    "content": {
-                                                        "text": "Previous versions will appear below.&nbsp;"
-                                                    }
-                                                },
-                                                {
-                                                    "id": "doc-1ckc2s4t40",
-                                                    "identifier": "bootstrap3.p",
-                                                    "content": {
-                                                        "text": "<a href=\"[file_link,id=90]\" title=\"Strategy Update March 2018\">Strategy Update&nbsp; - March 2018</a>"
-                                                    }
-                                                },
-                                                {
-                                                    "id": "doc-1c8e7ea123",
-                                                    "identifier": "bootstrap3.wysiwyg",
-                                                    "content": {
-                                                        "content": "Wysiwyg content here nbsp;"
-                                                    }
-                                                }
-                                            ]
-                                        }
-                                    }
-                                ]
-                            }
-                        }
-                    ]
-                }
-            }
+
         ],
         "design": {
             "name": "bootstrap3",
