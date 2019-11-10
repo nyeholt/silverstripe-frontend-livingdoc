@@ -16,6 +16,7 @@ use SilverStripe\Security\SecurityToken;
 use SilverStripe\Versioned\Versioned;
 use SilverStripe\View\Parsers\ShortcodeParser;
 use SilverStripe\View\Requirements;
+use Symbiote\Prose\ProseController;
 
 class LivingPageControllerExtension extends Extension
 {
@@ -379,6 +380,11 @@ class LivingPageControllerExtension extends Extension
     }
 
     public function pastefile(HTTPRequest $request) {
+        if (class_exists(ProseController::class)) {
+            $alt = ProseController::create();
+            $this->owner->getResponse()->addHeader('Content-Type', 'application/json');
+            return $alt->pastefile($request);
+        }
         if (!SecurityToken::inst()->checkRequest($request)) {
             return $this->owner->httpError(403);
         }
@@ -387,7 +393,7 @@ class LivingPageControllerExtension extends Extension
 
         $filename = $request->postVar('filename') ? $request->postVar('filename') . '.png' : $this->owner->data()->Title . '-upload.png';
 
-        $response = ['success' => true];
+        $response = ['success' => false];
 
         if (substr($raw, 0, strlen('data:image/png;base64,')) === 'data:image/png;base64,') {
             $base64 = substr($raw, strlen('data:image/png;base64,'));
@@ -396,6 +402,7 @@ class LivingPageControllerExtension extends Extension
             file_put_contents($tempFilePath, base64_decode($base64));
 
             $tempFile = [
+                'error' => '',
                 'size' => strlen($raw),
                 'name' => $filename,
                 'tmp_name' => $tempFilePath
@@ -408,6 +415,7 @@ class LivingPageControllerExtension extends Extension
             if ($file && $file->ID) {
                 $response['url'] = $file->getAbsoluteURL();
                 $response['name'] = $file->Title;
+                $response['success'] = true;
             } else {
                 error_log("Failed uploading pasted image: " . print_r($upload->getErrors(), true));
             }

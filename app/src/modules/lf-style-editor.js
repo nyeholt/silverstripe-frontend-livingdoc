@@ -38,9 +38,9 @@ export function createStyleEditor(component) {
             label: 'Margin',
             value: customStyles['margin'] || '',
         }),
-        "background": new TextField({
-            label: 'Background',
-            value: customStyles['background'] || '',
+        "background-color": new TextField({
+            label: 'Background Colour',
+            value: customStyles['background-color'] || '',
         }),
         "color": new TextField({
             label: "Text colour",
@@ -48,6 +48,7 @@ export function createStyleEditor(component) {
         }),
     };
 
+    fields['background-color'].textType = 'color';
     fields.color.textType = 'color';
 
     if (component.model.styles['position-absolute']) {
