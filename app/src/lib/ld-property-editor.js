@@ -1,5 +1,7 @@
 import LivingDocState from "./LivingDocState";
 import * as $ from 'jquery';
+import { createStyleEditor } from "../modules/lf-style-editor";
+import { componentExport } from "../modules/lf-component-export";
 
 var PROPS_HOLDER = 'livingdocs_EditorField_Toolbar_options';
 var BOTTOM_BAR = '.livingdocs-bottom-bar';
@@ -202,7 +204,7 @@ export function initialise_property_editor() {
             var tmpTree = new doc.ComponentTree({ design: LivingDocState.livingdoc.componentTree.design });
 
             // need to swap out 'next' for the moment otherwise the serialize walker
-            // will do _all_ siblings. 
+            // will do _all_ siblings.
             var oldNext = component.model.next;
             component.model.next = null;
             var jsonRep = tmpTree.serialize(component.model, true);
@@ -212,7 +214,20 @@ export function initialise_property_editor() {
 
         });
 
-        $('<div class="Actions component-actions">').appendTo(options).append($dupe_button).append($delete_button)
+        var editStyles = $('<button class="alert">Styles</button>'); // .prependTo(options.find('.component-actions'));
+
+        editStyles.click(function (e) {
+            createStyleEditor(component);
+        });
+
+
+        var exportButton = $('<button>Export</button>');
+
+        exportButton.click(function (e) {
+            componentExport(component);
+        })
+
+        $('<div class="Actions component-actions">').appendTo(options).append(editStyles).append($dupe_button).append($delete_button).append(exportButton);
 
         $properties.html(options);
         if ($.fn.drags) {
@@ -225,9 +240,9 @@ export function initialise_property_editor() {
 
 $.fn.drags = function(opt) {
     opt = $.extend({handle:"",cursor:"move"}, opt);
-    
+
     var $el = this;
-    
+
     if(opt.handle === "") {
         var $handle = this;
     } else {
@@ -236,9 +251,9 @@ $.fn.drags = function(opt) {
 
     return $handle.css('cursor', opt.cursor).on("mousedown", function(e) {
         var $drag = $el.addClass('__draggable');
-        
+
         if(opt.handle === "") {
-            
+
         } else {
             $handle.addClass('active-handle');
         }
@@ -261,7 +276,7 @@ $.fn.drags = function(opt) {
     }).on("mouseup", function() {
         $el.removeClass('__draggable');
         if(opt.handle === "") {
-            
+
         } else {
             $handle.removeClass('active-handle');
         }

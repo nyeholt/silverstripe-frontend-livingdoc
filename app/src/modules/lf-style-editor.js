@@ -5,14 +5,14 @@ import { openPrompt } from '../../../../vendor/symbiote/silverstripe-prose-edito
 
 var PROPS_HOLDER = 'livingdocs_EditorField_Toolbar_options';
 
+var STYLES_PROP = 'element_styles';
+
 export function createStyleEditor(component) {
-    let customStyles = component.model.getData('element_styles');
+    let customStyles = component.model.getData(STYLES_PROP);
     if (!customStyles) {
         customStyles = {};
     }
 
-    console.log(component);
-    
     let fields = {
         "width": new TextField({
             label: 'Width',
@@ -42,8 +42,13 @@ export function createStyleEditor(component) {
             label: 'Background',
             value: customStyles['background'] || '',
         }),
-        
+        "color": new TextField({
+            label: "Text colour",
+            value: customStyles['color'] || '',
+        }),
     };
+
+    fields.color.textType = 'color';
 
     if (component.model.styles['position-absolute']) {
         fields["top"] = new TextField({
@@ -69,7 +74,7 @@ export function createStyleEditor(component) {
         title: "Component Styles",
         fields: fields,
         update: function (name, value) {
-            let currentStyles = component.model.getData('element_styles');
+            let currentStyles = component.model.getData(STYLES_PROP);
             if (!currentStyles) {
                 currentStyles = {};
             }
@@ -78,14 +83,14 @@ export function createStyleEditor(component) {
                 ...currentStyles,
             }
             newStyles[name] = value;
-            component.model.setData('element_styles', newStyles);
+            component.model.setData(STYLES_PROP, newStyles);
             updateComponentStyles(component, newStyles);
         },
         callback: function callback(attrs) {
-            
+
         },
         cancel: function () {
-            component.model.setData('element_styles', customStyles);
+            component.model.setData(STYLES_PROP, customStyles);
             updateComponentStyles(component, customStyles);
         }
     }, editContainer);

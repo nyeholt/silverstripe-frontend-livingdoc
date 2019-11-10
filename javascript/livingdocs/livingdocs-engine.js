@@ -3393,21 +3393,21 @@ module.exports = ComponentModel = (function() {
       return this.dataValues;
     }
   };
-  
+
   ComponentModel.prototype.setDirectiveAttribute = function (name, attr, value) {
       var attributes, itemAttributes = {};
       attributes = this.getData('data_attributes');
       if (!attributes) {
           attributes = {};
       }
-      
+
       if (attributes[name]) {
           itemAttributes = attributes[name];
       }
-      
+
       itemAttributes[attr] = value;
       attributes[name] = itemAttributes;
-      
+
       this.setData('data_attributes', attributes);
   };
 
@@ -3904,10 +3904,10 @@ module.exports = ComponentTree = (function() {
     }
     return data;
   };
-  
+
   ComponentTree.prototype.componentsFromList = function (data, design) {
       var created = [];
-      
+
       for (var i = 0, c = data.length; i < c; i++) {
         var componentData = data[i];
         created.push(componentModelSerializer.fromJson(componentData, design));
@@ -4775,7 +4775,7 @@ module.exports = CssModificatorProperty = (function() {
           add: value
         };
       } else if (this.type === 'text') {
-          // todo(Marcus) 
+          // todo(Marcus)
           var current = currentClasses ? currentClasses.split(' ') : [];
           var remove = [];
           for (var i in current) {
@@ -6796,17 +6796,17 @@ module.exports = EditableController = (function() {
 
   EditableController.prototype.insert = function(view, editableName, direction, cursor) {
     var copy, defaultParagraph, newView;
-    
+
     var newModel = null;
     // todo(Marcus) - this needs to use this component type's "insertAfter" attribute
-    // handle LIs 
+    // handle LIs
     if (cursor.host && cursor.host.nodeName == 'LI') {
         // duplicate the current type
         newModel = dom.findComponentView(cursor.host);
     }
-    
+
     defaultParagraph = newModel ? newModel.template : this.page.design.defaultParagraph;
-    
+
     if (this.hasSingleEditable(view) && (defaultParagraph != null)) {
       copy = defaultParagraph.createModel();
       newView = direction === 'before' ? (view.model.before(copy), view.prev()) : (view.model.after(copy), view.next());
@@ -7681,7 +7681,7 @@ module.exports = ComponentView = (function() {
 
   ComponentView.prototype.updateContent = function(directiveName) {
     var dataAttrs, name, _ref, $elem, elementStyles;
-      
+
     if (directiveName) {
       this.set(directiveName, this.model.content[directiveName]);
     } else {
@@ -7690,10 +7690,10 @@ module.exports = ComponentView = (function() {
     if (!this.hasFocus()) {
       this.displayOptionals();
     }
-    
-    
+
+
     _ref = this;
-    
+
     var updateElem = function (name, attributes) {
         if (attributes && attributes[name]) {
            $elem = _ref.directives.$getElem(name);
@@ -7713,20 +7713,20 @@ module.exports = ComponentView = (function() {
     }
 
     elementStyles = this.model.getData('element_styles');
-    
+
     if (elementStyles) {
-        console.log(elementStyles);
         let styleString = '';
         for (let name in elementStyles) {
             styleString += name + ": " + elementStyles[name] + ";";
         }
+        console.log("Styles to set: " + elementStyles);
         if (directiveName) {
+            console.log("Setting styles on " + directiveName);
             updateElem(directiveName, {directiveName: {"style": styleString}});
         } else {
-            console.log("AS");
         }
     }
-    
+
     return this.stripHtmlIfReadOnly();
   };
 
@@ -7817,7 +7817,7 @@ module.exports = ComponentView = (function() {
   ComponentView.prototype.set = function(name, value) {
     var directive, attributes, $elem, result;
     directive = this.model.directives.get(name);
-    
+
     switch (directive.type) {
       case 'editable':
         return this.setEditable(name, value);
@@ -7904,28 +7904,28 @@ module.exports = ComponentView = (function() {
     this.directivesToReset || (this.directivesToReset = {});
     return this.directivesToReset[name] = name;
   };
-  
-  
+
+
   ComponentView.prototype.setEmbedItem = function (name, value) {
       var $elem;
       $elem = this.directives.$getElem(name);
-      
+
       value = value || {source: '', attrs: '', content: null};
-      
+
       if (!value.content) {
           value.content = this.template.defaults[name];
       }
-      
+
       $elem.attr('data-embed-source-' + name, value.source);
       $elem.attr('data-embed-attrs-' + name, value.attrs);
-      
+
       $elem.html(value.content);
-      
+
       this.directivesToReset || (this.directivesToReset = {});
       return this.directivesToReset[name] = name;
   }
-  
-  
+
+
   ComponentView.prototype.getEmbedItem = function (name) {
       var $elem;
       $elem = this.directives.$getElem(name);
@@ -10181,9 +10181,9 @@ module.exports = Template = (function() {
             return _this.formatContainer(directive.name, directive.elem);
           case 'html':
             return _this.formatHtml(directive.name, directive.elem);
-          case 'embeditem': 
+          case 'embeditem':
               // just doing the same for now
-            return _this.formatHtml(directive.name, directive.elem);  
+            return _this.formatHtml(directive.name, directive.elem);
         }
       };
     })(this));

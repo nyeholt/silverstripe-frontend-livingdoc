@@ -1,6 +1,5 @@
 import * as $ from 'jquery';
 import LivingDocState from '../lib/LivingDocState';
-import { createStyleEditor } from './lf-style-editor';
 
 var PROPS_HOLDER = 'livingdocs_EditorField_Toolbar_options';
 
@@ -37,11 +36,6 @@ $(document).on('livingfrontend.updateLivingDoc', function (e, livingdoc) {
             }
         }
 
-        var editStyles = $('<button class="alert">Styles</button>').prependTo(options.find('.component-actions'));
-
-        editStyles.click(function (e) {
-            createStyleEditor(component);
-        })
 
         var newAttr = $('<button class="alert">New Attr</button>').prependTo(options.find('.component-actions'));
         newAttr.click(function (e) {

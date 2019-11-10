@@ -222,7 +222,7 @@ import { initialise_property_editor } from './lib/ld-property-editor';
             // add in the structured components that can be chosen to have fully created
             if (selectedDesign.structures && selectedDesign.structures.length > 0) {
                 var optionList = $('<select class="with-button">').attr('id', 'component-structures');
-                optionList.append('<option>-- structures --</option>');
+                optionList.append('<option>-- Components --</option>');
                 for (var i in selectedDesign.structures) {
                     var item = selectedDesign.structures[i];
                     optionList.append($('<option value="">').text(item.label).attr('value', item.label));

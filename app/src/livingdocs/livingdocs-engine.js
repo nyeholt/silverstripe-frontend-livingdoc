@@ -7743,9 +7743,9 @@ module.exports = ComponentView = (function() {
     if (directiveName) {
         updateDirectiveElem(directiveName, dataAttrs);
     } else {
-        for (var i = 0; i < this.directives.length; i++) {
-            updateDirectiveElem(this.directives[i].name, dataAttrs);
-        }
+        // for (var i = 0; i < this.directives.length; i++) {
+        //     updateDirectiveElem(this.directives[i].name, dataAttrs);
+        // }
     }
 
     elementStyles = this.model.getData('element_styles');
