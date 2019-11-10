@@ -2,6 +2,7 @@ import LivingDocState from "./LivingDocState";
 import * as $ from 'jquery';
 import { createStyleEditor } from "../modules/lf-style-editor";
 import { componentExport } from "../modules/lf-component-export";
+import { selectImage } from "../modules/lf-image-selector";
 
 var PROPS_HOLDER = 'livingdocs_EditorField_Toolbar_options';
 var BOTTOM_BAR = '.livingdocs-bottom-bar';
@@ -119,14 +120,7 @@ export function initialise_property_editor() {
             for (var directive_id in component.model.directives.image) {
                 var curr_img = component.model.directives.image[directive_id];
                 var $image_button = $("<button>").text("Select \"" + curr_img.name + '"').on("click", function () {
-                    selectImage(function (attrs) {
-                        // ComponentView.prototype.set
-
-                        component.model.setDirectiveAttribute(curr_img.name, 'width', attrs.width);
-                        component.model.setDirectiveAttribute(curr_img.name, 'height', attrs.height);
-
-                        component.model.setContent(curr_img.name, { url: attrs.src });
-                    })
+                    selectImage(component, curr_img, directive_id);
                 })
                 options.append($image_button)
             }

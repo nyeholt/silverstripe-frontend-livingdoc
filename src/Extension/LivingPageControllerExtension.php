@@ -29,7 +29,7 @@ class LivingPageControllerExtension extends Extension
     {
 
         // at the top so it can be overridden by user css
-        Requirements::css('frontend-livingdoc/css/base.css');
+        Requirements::css('frontend-livingdoc/app/dist/css/base.css');
 
         // same with any highlight css needed
         Requirements::css('frontend-livingdoc/javascript/highlight/googlecode.css');

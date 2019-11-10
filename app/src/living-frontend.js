@@ -424,7 +424,7 @@ import { initialise_property_editor } from './lib/ld-property-editor';
             // ContentBridge.showDialog('link');
         }
 
-        function selectImage(callback) {
+        // function selectImage(callback) {
             // ContentBridge.setCallback(function (content) {
             //     var attrs = {};
             //     var node = $(content)[0];
@@ -442,7 +442,7 @@ import { initialise_property_editor } from './lib/ld-property-editor';
             //     callback(attrs);
             // });
             // ContentBridge.showDialog('image');
-        }
+        // }
     });
 
 })(jQuery);

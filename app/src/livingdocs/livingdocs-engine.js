@@ -3437,6 +3437,20 @@ module.exports = ComponentModel = (function() {
       this.setData('data_attributes', attributes);
   };
 
+  ComponentModel.prototype.getDirectiveAttribute = function (name, attr, value) {
+    var attributes, itemAttributes = {};
+    attributes = this.getData('data_attributes');
+    if (!attributes) {
+        attributes = {};
+    }
+
+    if (attributes[name]) {
+        itemAttributes = attributes[name];
+    }
+
+    return itemAttributes[attr] ? itemAttributes[attr] : value;
+};
+
   ComponentModel.prototype.setData = function(key, value) {
     var _ref;
     if (key && this.changeData(key, value)) {
