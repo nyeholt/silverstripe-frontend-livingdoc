@@ -42,13 +42,29 @@ export function createStyleEditor(component) {
             label: 'Background Colour',
             value: customStyles['background-color'] || '',
         }),
+        'background-size': new TextField({
+            label: 'Background Size',
+            value: customStyles['background-size'] || '',
+        }),
+        'background-position': new TextField({
+            label: 'Background Position',
+            value: customStyles['background-position'] || '',
+        }),
+        'background-attachment': new TextField({
+            label: 'Background Attachment',
+            value: customStyles['background-attachment'] || '',
+        }),
+        "background-repeat": new TextField({
+            label: 'Background Repeat',
+            value: customStyles['background-repeat'] || '',
+        }),
         "color": new TextField({
             label: "Text colour",
             value: customStyles['color'] || '',
         }),
     };
 
-    fields['background-color'].textType = 'color';
+    // fields['background-color'].textType = 'color';
     fields.color.textType = 'color';
 
     if (component.model.styles['position-absolute']) {
