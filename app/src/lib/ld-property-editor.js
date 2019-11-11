@@ -3,6 +3,7 @@ import * as $ from 'jquery';
 import { createStyleEditor } from "../modules/lf-style-editor";
 import { componentExport } from "../modules/lf-component-export";
 import { selectImage } from "../modules/lf-image-selector";
+import { linkSelectorDialog } from "../../../../vendor/symbiote/silverstripe-prose-editor/editor/src/plugins/ss-link-selector";
 
 var PROPS_HOLDER = 'livingdocs_EditorField_Toolbar_options';
 var BOTTOM_BAR = '.livingdocs-bottom-bar';
@@ -130,10 +131,21 @@ export function initialise_property_editor() {
             for (var linkIndex in component.model.directives.link) {
                 var _thisLink = component.model.directives.link[linkIndex];
                 var $link_button = $("<button>").text('Select "' + _thisLink.name + '"').on("click", function () {
-                    selectLink(function (attrs) {
+                    const linkAttrs = {
+                        href: component.get(_thisLink.name),
+                        title: '',
+                        target: '',
+                        text: component.get(_thisLink.name),
+                    };
+
+                    console.log(linkAttrs);
+                    console.log(component.model);
+
+                    linkSelectorDialog(linkAttrs, {internal: true}, function (attrs) {
                         // ComponentView.prototype.set
+                        console.log(attrs);
                         component.model.setContent(_thisLink.name, attrs.href);
-                    })
+                    }, ['pageLink', 'externalLink'])
                 })
                 options.append($link_button)
             }

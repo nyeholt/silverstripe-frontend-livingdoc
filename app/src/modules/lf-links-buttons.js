@@ -1,12 +1,12 @@
 
 import * as $ from 'jquery';
 
-$(document).on('livingfrontend.updateContentButtonBar', function (e, bar, selection, ContentBridge) {
+export function selectLink(attrs, callback) {
 
-    var selectLink = function (callback) {
-        ContentBridge.setCallback(callback);
-        ContentBridge.showDialog('link');
-    };
+
+}
+
+$(document).on('livingfrontend.updateContentButtonBar', function (e, bar, selection, ContentBridge) {
 
     var addLink = {
         label: 'Link',

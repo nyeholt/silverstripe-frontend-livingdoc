@@ -349,7 +349,7 @@ class LivingPageControllerExtension extends Extension
             FormAction::create('preview', 'View')
                 ->setUseButtonTag(true)
                 ->addExtraClass('link-action')
-                ->setAttribute('data-link', $record->Link() . '?preview=1&stage=Stage')
+                ->setAttribute('data-link', $record->Link() . '&preview=1')
         );
         $actions->push(FormAction::create('live', 'Done')->setUseButtonTag(true));
 

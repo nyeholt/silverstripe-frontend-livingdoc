@@ -8071,14 +8071,10 @@ module.exports = ComponentView = (function() {
     var imageService;
     $elem.addClass(config.css.emptyImage);
     imageService = this.model.directives.get(name).getImageService();
-    // if it's a background image, only set it if the elem doesn't have
-    // a background configured already
-    let currentStyles = $elem.attr('style');
 
-    // NOTE(Marcus) 2019-10-21 - only set a background if no other css is in there.
-    if (currentStyles && imageService.isBackgroundImage($elem) &&
-        currentStyles.indexOf('background') >= 0 &&
-        currentStyles.indexOf('background: ;') < 0) {
+    // NOTE(Marcus) 2019-10-21 - only set placeholders for image components
+    // _not_ backgrounds.
+    if (imageService.isBackgroundImage($elem)) {
         return;
     }
     return imageService.set($elem, config.imagePlaceholder);

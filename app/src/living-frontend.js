@@ -418,31 +418,6 @@ import { initialise_property_editor } from './lib/ld-property-editor';
             }
             return firstRow;
         }
-
-        function selectLink(callback) {
-            // ContentBridge.setCallback(callback);
-            // ContentBridge.showDialog('link');
-        }
-
-        // function selectImage(callback) {
-            // ContentBridge.setCallback(function (content) {
-            //     var attrs = {};
-            //     var node = $(content)[0];
-            //     if (!node) {
-            //         return;
-            //     }
-            //     if (node.nodeName !== 'IMG') {
-            //         alert("Image not selected");
-            //         return;
-            //     }
-            //     var nodeAttrs = node.attributes;
-            //     for (var i = 0; i < nodeAttrs.length; i++ ) {
-            //         attrs[nodeAttrs[i].name] = nodeAttrs[i].value;
-            //     }
-            //     callback(attrs);
-            // });
-            // ContentBridge.showDialog('image');
-        // }
     });
 
 })(jQuery);
