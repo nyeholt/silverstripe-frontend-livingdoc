@@ -146,13 +146,16 @@ class LivingPageExtension extends DataExtension
 
     public function shortcodeFor($label, $shortcodeParams = null) {
         $items = $this->availableShortcodes();
-        if (!isset($items[$label])) {
+        if (!isset($items[$label]) && $label != 'embed') {
             return null;
         }
 
+        // a defined shortcode
+        $shortcode = strpos($items[$label], "[") ? $items[$label] : '[' . $label . ']';
+
         $paramStr = $this->attrListToAttrString($shortcodeParams);
 
-        return strlen($paramStr) ? str_replace(']', ' ' . $paramStr . ']', $items[$label]) : $items[$label];
+        return strlen($paramStr) ? str_replace(']', ' ' . $paramStr . ']', $shortcode) : $items[$label];
     }
 
     /**
@@ -182,7 +185,7 @@ class LivingPageExtension extends DataExtension
         $configObject = SiteConfig::current_site_config();
 
         $configItems = [];
-        if ($configObject && $configObject->hasExtension(LivingPageSettingsExtension::class)) {
+        if ($configObject && $configObject->GlobalShortcodes) {
             $configItems = $configObject->GlobalShortcodes->getValues();
             if (!is_array($configItems)) {
                 $configItems = [];

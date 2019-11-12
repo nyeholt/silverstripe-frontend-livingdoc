@@ -203,7 +203,6 @@ import { initialise_property_editor } from './lib/ld-property-editor';
                 var $holder = $('#' + groupId);
                 $holder.append($entryWrap);
 
-                console.log("Adding " + name + " item to " + groupId);
                 draggableComponent(doc, name, $entry);
             }
 

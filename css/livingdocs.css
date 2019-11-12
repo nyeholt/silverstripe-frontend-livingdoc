@@ -73,6 +73,14 @@
   background: rgba(0, 0, 0, 0.2);
 }
 
+[data-doc-embeditem] {
+    padding-bottom: 10px;
+}
+
+[data-doc-embeditem]:hover {
+    box-shadow: 0 0 1px 2px rgba(123, 215, 253, 0.5);
+}
+
 
 
 /**

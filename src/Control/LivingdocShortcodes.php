@@ -32,47 +32,49 @@ class LivingdocShortcodes
         }
     }
 
-    public static function show_field_shortcode($arguments, $content = null, $parser = null) {
+    public static function show_field_shortcode($arguments, $content = null, $parser = null)
+    {
         $page = self::shortcode_object($arguments);
         if (!$page) {
             return '';
         }
-
-        $field = isset($arguments['field']) ? $arguments['field']: 'Title';
+        $field = isset($arguments['field']) ? $arguments['field'] : 'Title';
         $extraArgs = isset($arguments['args']) ? explode(',', $arguments['args']) : [];
-
         return self::field_value($page, $field, $extraArgs);
     }
 
-    private static function field_value($object, $field, $extraArgs) {
+    private static function field_value($object, $field, $extraArgs)
+    {
         $bits = explode('.', $field);
         $nextField = array_shift($bits);
-
         if (count($bits) === 0) {
             if (!($object instanceof DataObject) && method_exists($object, $nextField)) {
                 return call_user_func_array(array($object, $nextField), $extraArgs);
             }
-            return $object->hasField($nextField) ? $object->$nextField : null; //getField($nextField);;
+            return $object->$nextField; //getField($nextField);;
         }
-
         $nextObject = $object->dbObject($nextField);
-
         return self::field_value($nextObject, implode('.', $bits), $extraArgs);
     }
 
-    private static function shortcode_object($arguments) {
+    private static function shortcode_object($arguments)
+    {
         $page = null;
         $class = isset($arguments['class']) ? $arguments['class'] : 'Page';
-
         if (isset($arguments['id'])) {
             $page = $class::get()->byID($arguments['id']);
         }
-
         if (!$page) {
             $controller = Controller::has_curr() ? Controller::curr() : null;
             $page = $controller instanceof ContentController ? $controller->data() : null;
         }
 
+        if (!$page) {
+            // check whether there's a context id
+            if (isset($arguments['context_id'])) {
+                $page = $class::get()->byID($arguments['context_id']);
+            }
+        }
         return $page && $page->hasMethod('canView') ? ($page->canView() ? $page : null) : $page;
     }
 

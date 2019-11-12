@@ -233,6 +233,9 @@ class LivingPageControllerExtension extends Extension
             $dataAttrs = isset($component['data']['data_attributes']) ? $component['data']['data_attributes'] : [];
             foreach ($component['content'] as $name => $props) {
                 $shortcodeParams = isset($dataAttrs[$name]) ? $dataAttrs[$name] : null;
+                if (isset($props['attrs'])) {
+                    $shortcodeParams = json_decode($props['attrs'], true);
+                }
                 $shortCode = $this->owner->data()->shortcodeFor($props['source'], $shortcodeParams);
                 if ($shortCode) {
                     $props['content'] = ShortcodeParser::get_active()->parse($shortCode);
@@ -322,7 +325,7 @@ class LivingPageControllerExtension extends Extension
                 HiddenField::create('PageStructure', "JSON structure"),
                 HiddenField::create('Content', "HTML structure"),
                 HiddenField::create('Embeds', 'Content embeds', json_encode($embeds)),
-                HiddenField::create('EmbedLink', 'Embed link', $record->Link('renderembed'))
+                HiddenField::create('EmbedLink', 'Embed link', '/__prose/rendershortcode')
         ]);
 
         $actions = FieldList::create([
