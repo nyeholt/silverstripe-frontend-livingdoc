@@ -14,7 +14,6 @@ class FormContentSource {
     config = {};
 
     init() {
-
         let config = $(this.DOC_HOLDER).data('config');
         config.editorHost = this.DOC_HOLDER;
 

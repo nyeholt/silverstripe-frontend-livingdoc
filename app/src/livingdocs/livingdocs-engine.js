@@ -5188,6 +5188,8 @@ validator.add('design', {
 
 validator.add('component', {
   name: 'string',
+  // NOTE: Marcus(2019-11-20) Allow icons for UI purposes
+  icon: 'string, optional',
   label: 'string, optional',
   html: 'string',
   directives: 'object, optional',

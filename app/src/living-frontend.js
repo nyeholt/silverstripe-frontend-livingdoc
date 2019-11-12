@@ -155,21 +155,19 @@ import { initialise_property_editor } from './lib/ld-property-editor';
         });
 
         ready.then(function () {
+            const defaultIcon = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M16.21 4.16l4 4v-4zm4 12l-4 4h4zm-12 4l-4-4v4zm-4-12l4-4h-4zm12.95-.95c-2.73-2.73-7.17-2.73-9.9 0s-2.73 7.17 0 9.9 7.17 2.73 9.9 0 2.73-7.16 0-9.9zm-1.1 8.8c-2.13 2.13-5.57 2.13-7.7 0s-2.13-5.57 0-7.7 5.57-2.13 7.7 0 2.13 5.57 0 7.7z" fill="#010101"/><path fill="none" d="M.21.16h24v24h-24z"/></svg>';
             // captures model changes that need updating
             LivingDocState.livingdoc.model.changed.add(function () {
                 LivingDocState.notifyDocUpdate(true);
             });
 
             var $components = $('.livingdocs-components');
-            var $componentsList = $components.find('ul');
+            var $componentsList = $components.find('div.component-list');
 
             var componentGroupMap = {};
 
-
             var addGroup = function (label, num) {
-                var $group = $('<li>');
-                $group.append('<input type="checkbox" checked>');
-                $group.append('<i>');
+                var $group = $('<div>');
                 $group.append('<h2>' + label + '</h2>');
                 $group.append('<div class="group-component-holder" id="gch-'+num+'"></div>');
 
@@ -187,27 +185,48 @@ import { initialise_property_editor } from './lib/ld-property-editor';
 
             addGroup('Misc', 'misc');
 
-            // Adds in all the components in their appropriate grouping
-            for (var i = 0; i < LivingDocState.activeDesign.components.length; i++) {
-                var template = LivingDocState.activeDesign.components[i];
+            let addMenuComponent = function (icon, label, name) {
+                var $entryWrap = $('<div class="toolbar-entry-wrapper">');
                 var $entry = $('<div class="toolbar-entry">');
-                $entry.html(template.label);
+                var $entryLabel = $('<div class="toolbar-entry-title">');
 
-                var groupId = componentGroupMap[template.name];
+                $entry.html(icon ? icon : defaultIcon);
+                $entryLabel.html(label);
+
+                $entryWrap.append($entry).append($entryLabel);
+
+                var groupId = componentGroupMap[name];
                 if (!groupId) {
                     groupId = 'gch-misc';
                 }
 
                 var $holder = $('#' + groupId);
-                $holder.append($entry);
+                $holder.append($entryWrap);
 
-                draggableComponent(doc, template.name, $entry);
+                console.log("Adding " + name + " item to " + groupId);
+                draggableComponent(doc, name, $entry);
+            }
+
+            // Adds in all the components in their appropriate grouping
+            for (var i = 0; i < LivingDocState.activeDesign.components.length; i++) {
+                var template = LivingDocState.activeDesign.components[i];
+                addMenuComponent(template.icon, template.label, template.name);
+            }
+
+            for (var compoundName in selectedDesign.compounds) {
+                addMenuComponent(null, selectedDesign.compounds[compoundName].label, compoundName);
             }
 
             // Binds the drag behaviour when a menu item is dragged
             function draggableComponent(doc, name, $elem) {
                 $elem.on('mousedown', function (event) {
-                    var newComponent = LivingDocState.livingdoc.createComponent(name);
+                    let newComponent;
+                    if (selectedDesign.compounds[name]) {
+                        newComponent = createComponentList(selectedDesign.compounds[name].components);
+                    } else {
+                        newComponent = LivingDocState.livingdoc.createComponent(name);
+                    }
+
                     doc.startDrag({
                         componentModel: newComponent,
                         event: event,
@@ -221,35 +240,35 @@ import { initialise_property_editor } from './lib/ld-property-editor';
 
             // add in the structured components that can be chosen to have fully created
             if (selectedDesign.structures && selectedDesign.structures.length > 0) {
-                var optionList = $('<select class="with-button">').attr('id', 'component-structures');
-                optionList.append('<option>-- Components --</option>');
-                for (var i in selectedDesign.structures) {
-                    var item = selectedDesign.structures[i];
-                    optionList.append($('<option value="">').text(item.label).attr('value', item.label));
-                }
+                // var optionList = $('<select class="with-button">').attr('id', 'component-structures');
+                // optionList.append('<option>-- Components --</option>');
+                // for (var i in selectedDesign.structures) {
+                //     var item = selectedDesign.structures[i];
+                //     optionList.append($('<option value="">').text(item.label).attr('value', item.label));
+                // }
 
-                var structureFields = $('<div class="structure-options">');
-                structureFields.append($('<label for="component-structures">Select a pre-defined set of components, or add individual components below</label>'));
-                structureFields.append(optionList);
-                var structureButton = $('<button>Add</button>');
-                structureFields.append(structureButton);
-                $components.prepend(structureFields);
+                // var structureFields = $('<div class="structure-options">');
+                // structureFields.append($('<label for="component-structures">Select a pre-defined set of components, or add individual components below</label>'));
+                // structureFields.append(optionList);
+                // var structureButton = $('<button>Add</button>');
+                // structureFields.append(structureButton);
+                // $components.prepend(structureFields);
 
-                structureButton.click(function (e) {
-                    var selected = optionList.val();
-                    for (var i in selectedDesign.structures) {
-                        var item = selectedDesign.structures[i];
-                        if (item.label === selected) {
-                            var container = LivingDocState.activeComponent ?
-                                LivingDocState.activeComponent.model.parentContainer :
-                                LivingDocState.livingdoc.componentTree.root;
+                // structureButton.click(function (e) {
+                //     var selected = optionList.val();
+                //     for (var i in selectedDesign.structures) {
+                //         var item = selectedDesign.structures[i];
+                //         if (item.label === selected) {
+                //             var container = LivingDocState.activeComponent ?
+                //                 LivingDocState.activeComponent.model.parentContainer :
+                //                 LivingDocState.livingdoc.componentTree.root;
 
-                            createComponentList(item.components, container);
-                            break;
-                        }
-                    }
-                    optionList.val('');
-                });
+                //             createComponentList(item.components, container);
+                //             break;
+                //         }
+                //     }
+                //     optionList.val('');
+                // });
             }
 
             // when adding a component, see if it has a set of components that should
@@ -382,6 +401,9 @@ import { initialise_property_editor } from './lib/ld-property-editor';
             var newComponents = LivingDocState.livingdoc.componentTree.componentsFromList(components, LivingDocState.activeDesign);
 
             if (parent) {
+                if (!containerName && newComponents.length == 1) {
+                    return newComponents[0];
+                }
                 for (var i in newComponents) {
                     if (containerName) {
                         parent.append(containerName, newComponents[i]);
