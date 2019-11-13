@@ -13,19 +13,19 @@ $(document).on('livingfrontend.updateLivingDoc', function (e, livingdoc) {
                 var currentValue = component.model.get(_thisItem.name);
                 currentValue = currentValue || { source: '', attrs: '', content: null, url: '' };
 
-                var attrInput = null;
+                var attrInput = attrInput = $("<input>").attr({ type: 'text', placeholder: 'Source url' });;
                 var attrlbl = $('<label>').text('Source URL');
 
-                if (embeds) {
-                    attrInput = $('<select class="with-button">');
-                    attrInput.append('<option>-- select item --</option>');
-                    for (var label in embeds) {
-                        var opt = $('<option>').appendTo(attrInput);
-                        opt.attr('value', label).text(label);
-                    }
-                } else {
-                    attrInput = $("<input>").attr({ type: 'text', placeholder: 'Source url' });
-                }
+                // if (embeds) {
+                //     attrInput = $('<select class="with-button">');
+                //     attrInput.append('<option>-- select item --</option>');
+                //     for (var label in embeds) {
+                //         var opt = $('<option>').appendTo(attrInput);
+                //         opt.attr('value', label).text(label);
+                //     }
+                // } else {
+
+                // }
 
                 if (attrInput && currentValue.url) {
                     // let storedAttrs = JSON.parse(currentValue.attrs);
@@ -38,22 +38,38 @@ $(document).on('livingfrontend.updateLivingDoc', function (e, livingdoc) {
                     if (selected) {
                         var componentAttrs = component.model.getData('data_attributes');
                         componentAttrs = componentAttrs || {};
-                        componentAttrs[_thisItem.name] = componentAttrs[_thisItem.name] || {};
-                        componentAttrs[_thisItem.name].url = selected;
 
                         var attrStr = '';
 
                         if (componentAttrs) {
                             componentAttrs = componentAttrs[_thisItem.name];
                             if (componentAttrs) {
+                                componentAttrs.url = selected;
                                 attrStr = JSON.stringify(componentAttrs);
                             }
                         }
 
-                        $.get(EMBED_LINK, { shortcode: 'embed', attrs: attrStr }).then(function (data) {
+                        let source = 'embed';
+
+                        // do we have an actual URL to be embedded, or a shortcode style URL?
+                        let shortcodeData = /\[(\w+)(.*?)\]/.exec(selected);
+                        if (shortcodeData) {
+                            source = shortcodeData[1];
+                            attrStr = '';
+                            if (shortcodeData[2] && shortcodeData[2].length > 0) {
+                                var scAttrs = {};
+
+                                for (let match of shortcodeData[2].matchAll(/(\w+)=['"]{1}(.*?)['"]{1}/g)) {
+                                    scAttrs[match[1]] = match[2];
+                                }
+                                attrStr = JSON.stringify(scAttrs);
+                            }
+                        }
+
+                        $.get(EMBED_LINK, { shortcode: source, attrs: attrStr }).then(function (data) {
                             const toSave = {
                                 attrs: attrStr,
-                                source: 'embed',
+                                source: source,
                                 content: data,
                                 url: selected
                             };
