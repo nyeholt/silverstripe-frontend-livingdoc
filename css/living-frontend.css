@@ -239,26 +239,6 @@ body.doc-no-selection .livingdocs-toolbar iframe {
     pointer-events: none;
 }
 
-[data-doc-container] {
-    border: 4px dotted #ccc;
-}
-
-[data-doc-container]:hover {
-    border: 4px dotted #99a;
-}
-
-
-[data-doc-container].doc-component-highlight {
-    border: 4px dashed #FA9E4E;
-    /*    padding-top: 5px;
-    padding-bottom: 5px;*/
-}
-
-
-[data-doc-container="row"] {
-    overflow: auto;
-}
-
 .livingdocs_EditorField_Toolbar_textopts button {
     border: 1px outset #efefef;
 }

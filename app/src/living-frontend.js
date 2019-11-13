@@ -40,7 +40,7 @@ import { initialise_property_editor } from './lib/ld-property-editor';
         });
 
         editingTime += PING_TIME;
-    }, PING_TIME*1000);
+    }, PING_TIME * 1000);
 
 
     var TOOLBAR_FORM = '#Form_LivingForm';
@@ -55,10 +55,16 @@ import { initialise_property_editor } from './lib/ld-property-editor';
 
     let toolbarToggle = $('<button>').text("Show toolbar");
     $(BOTTOM_BAR).find('.livingdocs-toolbar-controls').append(toolbarToggle);
-
     toolbarToggle.click(function (e) {
         $('body').toggleClass('show-livingdocs-toolbar');
     });
+
+    const gridToggle = $('<button>Toggle Grid</button>');
+    $(BOTTOM_BAR).find('.livingdocs-toolbar-controls').append(gridToggle);
+    gridToggle.click(function (e) {
+        $('body').toggleClass('no-grid-display');
+    });
+
 
     $(document).on('mousedown', '#clicker', function (e) {
         e.preventDefault();
@@ -72,7 +78,7 @@ import { initialise_property_editor } from './lib/ld-property-editor';
 
     // re-structures the form to ensure ajax submits pass through the
     // triggered action
-    $(document).on('click', 'form' + TOOLBAR_FORM +' > .Actions .action', function (e) {
+    $(document).on('click', 'form' + TOOLBAR_FORM + ' > .Actions .action', function (e) {
         // catuch the "live" click and redirect instead
         if ($(this).attr('name') == 'action_live') {
             e.preventDefault();
@@ -155,6 +161,24 @@ import { initialise_property_editor } from './lib/ld-property-editor';
         });
 
         ready.then(function () {
+
+            const layoutToggle = $('<button>Toggle Layout editing</button>');
+            $(BOTTOM_BAR).find('.livingdocs-toolbar-controls').append(layoutToggle);
+            layoutToggle.click(function (e) {
+                var state = $(this).attr('data-layout-editing');
+                if (state) {
+                    $(this).attr('data-layout-editing', 0);
+                } else {
+                    $(this).attr('data-layout-editing', 1);
+                }
+            });
+
+            LivingDocState.livingdoc.interactiveView.page.componentWillBeDragged.add(function (option) {
+                if (layoutToggle.attr('data-layout-editing')) {
+                    option.enable = false;
+                }
+            })
+
             const defaultIcon = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M16.21 4.16l4 4v-4zm4 12l-4 4h4zm-12 4l-4-4v4zm-4-12l4-4h-4zm12.95-.95c-2.73-2.73-7.17-2.73-9.9 0s-2.73 7.17 0 9.9 7.17 2.73 9.9 0 2.73-7.16 0-9.9zm-1.1 8.8c-2.13 2.13-5.57 2.13-7.7 0s-2.13-5.57 0-7.7 5.57-2.13 7.7 0 2.13 5.57 0 7.7z" fill="#010101"/><path fill="none" d="M.21.16h24v24h-24z"/></svg>';
             // captures model changes that need updating
             LivingDocState.livingdoc.model.changed.add(function () {
@@ -169,7 +193,7 @@ import { initialise_property_editor } from './lib/ld-property-editor';
             var addGroup = function (label, num) {
                 var $group = $('<div>');
                 $group.append('<h2>' + label + '</h2>');
-                $group.append('<div class="group-component-holder" id="gch-'+num+'"></div>');
+                $group.append('<div class="group-component-holder" id="gch-' + num + '"></div>');
 
                 $componentsList.append($group);
             }
@@ -334,7 +358,7 @@ import { initialise_property_editor } from './lib/ld-property-editor';
                 if (b.title) {
                     buttonEl.attr('title', b.title);
                 }
-                buttonEl.on('mousedown', function (theButton) { return function (e) { e.preventDefault(); theButton.click(); } }(b) );
+                buttonEl.on('mousedown', function (theButton) { return function (e) { e.preventDefault(); theButton.click(); } }(b));
 
                 outer_el.append(buttonEl);
             }
@@ -351,7 +375,7 @@ import { initialise_property_editor } from './lib/ld-property-editor';
                 loc = newloc;
             }
 
-            outer_el.css({position: "absolute", left: loc.left, top: loc.top - 40, background: "transparent", "z-index": 4000});
+            outer_el.css({ position: "absolute", left: loc.left, top: loc.top - 40, background: "transparent", "z-index": 4000 });
             appendTo.append(outer_el);
         };
 
@@ -393,7 +417,7 @@ import { initialise_property_editor } from './lib/ld-property-editor';
          * @param string containerName
          * @returns void
          */
-        function createComponentList (components, parent, containerName) {
+        function createComponentList(components, parent, containerName) {
             if (!parent) {
                 parent = LivingDocState.livingdoc.componentTree.root;
             }
@@ -412,11 +436,11 @@ import { initialise_property_editor } from './lib/ld-property-editor';
                 }
             }
 
-//            for (var i in newComponents) {
-//                if (newComponents[i]) {
-//                    parent.append(newComponents[i]);
-//                }
-//            }
+            //            for (var i in newComponents) {
+            //                if (newComponents[i]) {
+            //                    parent.append(newComponents[i]);
+            //                }
+            //            }
         };
 
         /**
