@@ -4,6 +4,7 @@ import { createStyleEditor } from "../modules/lf-style-editor";
 import { componentExport } from "../modules/lf-component-export";
 import { selectImage } from "../modules/lf-image-selector";
 import { linkSelectorDialog } from "../../../../vendor/symbiote/silverstripe-prose-editor/editor/src/plugins/ss-link-selector";
+import createComponentList from "./createComponentList";
 
 var PROPS_HOLDER = 'livingdocs_EditorField_Toolbar_options';
 var BOTTOM_BAR = '.livingdocs-bottom-bar';
@@ -216,7 +217,7 @@ export function initialise_property_editor() {
             var jsonRep = tmpTree.serialize(component.model, true);
             component.model.next = oldNext;
 
-            createComponentList(jsonRep.content, component.model.parentContainer);
+            createComponentList(jsonRep.content, component.model.parentContainer, null, true);
 
         });
 

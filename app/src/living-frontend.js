@@ -8,6 +8,7 @@ import ContentBridge from './modules/lf-editor-content-bridge';
 import LivingDocState from './lib/LivingDocState';
 import ContentSource from './lib/FormContentSource';
 import { initialise_property_editor } from './lib/ld-property-editor';
+import createComponentList from './lib/createComponentList';
 
 (function ($) {
 
@@ -231,8 +232,9 @@ import { initialise_property_editor } from './lib/ld-property-editor';
             }
 
             // Adds in all the components in their appropriate grouping
-            for (var i = 0; i < LivingDocState.activeDesign.components.length; i++) {
-                var template = LivingDocState.activeDesign.components[i];
+            // this used to use LivingDoc.activeDesign, but that misses the icons
+            for (var i = 0; i < selectedDesign.components.length; i++) {
+                var template = selectedDesign.components[i];
                 addMenuComponent(template.icon, template.label, template.name);
             }
 
@@ -409,39 +411,7 @@ import { initialise_property_editor } from './lib/ld-property-editor';
             return false;
         });
 
-        /**
-         * creates components, inside a given parent.
-         *
-         * @param array components
-         * @param ComponentModel parent
-         * @param string containerName
-         * @returns void
-         */
-        function createComponentList(components, parent, containerName) {
-            if (!parent) {
-                parent = LivingDocState.livingdoc.componentTree.root;
-            }
-            var newComponents = LivingDocState.livingdoc.componentTree.componentsFromList(components, LivingDocState.activeDesign);
 
-            if (parent) {
-                if (!containerName && newComponents.length == 1) {
-                    return newComponents[0];
-                }
-                for (var i in newComponents) {
-                    if (containerName) {
-                        parent.append(containerName, newComponents[i]);
-                    } else {
-                        parent.append(newComponents[i]);
-                    }
-                }
-            }
-
-            //            for (var i in newComponents) {
-            //                if (newComponents[i]) {
-            //                    parent.append(newComponents[i]);
-            //                }
-            //            }
-        };
 
         /**
          * Iteratively add cells to all the rows in a given table container

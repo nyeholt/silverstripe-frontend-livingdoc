@@ -3,10 +3,19 @@ import { openPrompt } from "../../../../vendor/symbiote/silverstripe-prose-edito
 
 
 export function componentExport(component) {
-
-console.log(component);
+    // // store the 'next' pointer; the serializer
+    // // walks all siblings
+    // var oldNext = component.model.next;
+    //         component.model.next = null;
+    //         var jsonRep = tmpTree.serialize(component.model, true);
+    //         component.model.next = oldNext;
 
     let output = component.model.componentTree.serialize(component.model);
+
+    // our component is in content.[0]
+    if (output.content && output.content.length >= 1) {
+        output = output.content[0];
+    }
 
     let fields = {
         "exportdata": new TextareaField({
