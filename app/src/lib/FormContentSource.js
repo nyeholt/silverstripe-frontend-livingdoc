@@ -74,6 +74,42 @@ class FormContentSource {
                 return "You may have unsaved changes, sure?";
             }
         });
+
+        $(document).on('updateLivingdocsDesign', function (e, selectedDesign) {
+            if (config.extraComponents) {
+                for (let i in config.extraComponents) {
+                    let newComponent = config.extraComponents[i];
+                    let group = newComponent.group;
+                    delete newComponent.group;
+                    if (group && selectedDesign.groups) {
+                        let existingIndex = selectedDesign.groups.findIndex(function (item) {
+                            return item.label == group;
+                        });
+                        if (existingIndex >= 0) {
+                            selectedDesign.groups[existingIndex].components.push(newComponent.name);
+                        }
+                    }
+                    selectedDesign.components.push(newComponent);
+                }
+            }
+            if (config.compounds) {
+                for (let i in config.compounds) {
+                    let newComponent = config.compounds[i];
+                    let group = newComponent.group;
+                    delete newComponent.group;
+                    if (group && selectedDesign.groups) {
+                        let existingIndex = selectedDesign.groups.findIndex(function (item) {
+                            return item.label == group;
+                        });
+                        if (existingIndex >= 0) {
+                            selectedDesign.groups[existingIndex].components.push(newComponent.name);
+                        }
+                    }
+
+                    selectedDesign.compounds[newComponent.name] = newComponent;
+                }
+            }
+        })
     }
 
     getConfig() {

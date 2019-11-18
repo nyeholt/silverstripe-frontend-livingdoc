@@ -184,6 +184,11 @@ body.show-livingdocs-toolbar .livingdocs-toolbar {
     font-size: 10px;
 }
 
+.livingdocs-toolbar .toolbar-entry svg {
+    width: 100%;
+    height: 100%;
+}
+
 .livingdocs-components {
     /*height: 500px;*/
 }

@@ -150,6 +150,10 @@ To provide some structure to pages, you can define a "Living Page Structure" in 
 
 Then, when you create a Living Page object in the Site Tree, you can choose the template structure to provide the initial content. 
 
+### Compound Component
+
+
+
 ### Paste
 
 You can paste clipboard images in a few different contexts;

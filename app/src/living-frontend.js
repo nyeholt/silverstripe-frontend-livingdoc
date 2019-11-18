@@ -4,7 +4,6 @@ import * as jQuery from 'jquery';
 import './livingdocs/editable';
 import './livingdocs/livingdocs-engine';
 
-import ContentBridge from './modules/lf-editor-content-bridge';
 import LivingDocState from './lib/LivingDocState';
 import ContentSource from './lib/FormContentSource';
 import { initialise_property_editor } from './lib/ld-property-editor';
@@ -48,11 +47,6 @@ import createComponentList from './lib/createComponentList';
     var BOTTOM_BAR = '.livingdocs-bottom-bar';
 
     var TABLE_ROW_COMPONENT = 'tablerow';
-    var TABLE_CELL_COMPONENT = 'tablecell';
-    var HEADER_CELL_COMPONENT = 'headercell';
-
-
-    // ContentBridge.init();
 
     let toolbarToggle = $('<button>').text("Show toolbar");
     $(BOTTOM_BAR).find('.livingdocs-toolbar-controls').append(toolbarToggle);
@@ -213,7 +207,7 @@ import createComponentList from './lib/createComponentList';
             let addMenuComponent = function (icon, label, name) {
                 var $entryWrap = $('<div class="toolbar-entry-wrapper">');
                 var $entry = $('<div class="toolbar-entry">');
-                var $entryLabel = $('<div class="toolbar-entry-title">');
+                var $entryLabel = $('<div class="toolbar-entry-title" data-name="'+name+'">');
 
                 $entry.html(icon ? icon : defaultIcon);
                 $entryLabel.html(label);
@@ -239,7 +233,7 @@ import createComponentList from './lib/createComponentList';
             }
 
             for (var compoundName in selectedDesign.compounds) {
-                addMenuComponent(null, selectedDesign.compounds[compoundName].label, compoundName);
+                addMenuComponent(selectedDesign.compounds[compoundName].icon, selectedDesign.compounds[compoundName].label, compoundName);
             }
 
             // Binds the drag behaviour when a menu item is dragged

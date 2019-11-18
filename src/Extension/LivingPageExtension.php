@@ -1,8 +1,6 @@
 <?php
 namespace Symbiote\Frontend\LivingPage\Extension;
 
-use LivingPageSettingsExtension;
-use SilverStripe\Core\Config\Config;
 use SilverStripe\Core\Config\Configurable;
 use SilverStripe\Forms\DropdownField;
 use SilverStripe\Forms\FieldList;

@@ -16,6 +16,8 @@ use SilverStripe\Security\SecurityToken;
 use SilverStripe\Versioned\Versioned;
 use SilverStripe\View\Parsers\ShortcodeParser;
 use SilverStripe\View\Requirements;
+use Symbiote\Frontend\LivingPage\Model\CompoundComponent;
+use Symbiote\Frontend\LivingPage\Model\PageComponent;
 use Symbiote\Prose\ProseController;
 
 class LivingPageControllerExtension extends Extension
@@ -202,10 +204,44 @@ class LivingPageControllerExtension extends Extension
             throw new Exception("Missing design for $designName");
         }
 
+        $components = Versioned::get_by_stage(PageComponent::class, Versioned::LIVE)->filter([
+            'IsActive' => 1,
+            'ClassName' => PageComponent::class,
+        ])->toArray();
+
+        $components = array_filter($components, function ($item) use ($designName) {
+            $themes = $item->Themes->getValues();
+            if ($themes && count($themes)) {
+                $has = array_search($designName, $themes);
+                return $has;
+            }
+        });
+
+        $components = array_map(function ($item) use ($designName) {
+            return $item->asComponent($designName);
+        }, $components);
+
+
+        $compounds = Versioned::get_by_stage(CompoundComponent::class, Versioned::LIVE)->filter([
+            'IsActive' => 1,
+        ])->toArray();
+        $compounds = array_filter($compounds, function ($item) use ($designName) {
+            $themes = $item->Themes->getValues();
+            if ($themes && count($themes)) {
+                $has = array_search($designName, $themes);
+                return $has;
+            }
+        });
+        $compounds = array_map(function ($item) use ($designName) {
+            return $item->asComponent($designName);
+        }, $compounds);
+
         $this->livingConfig = [
             'pageId'  => $record->ID,
             'pageLink' => $record->hasMethod('RelativeLink') ? $record->RelativeLink() : '',
             'pageStructure' => $design,
+            'extraComponents' => $components,
+            'compounds' => $compounds,
             'designFile' => $designFile,
             'endpoints' => [
                 'paste' => $this->owner->Link('pastefile'),
