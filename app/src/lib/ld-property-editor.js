@@ -133,24 +133,24 @@ export function initialise_property_editor() {
 
         if (component.model.directives.link && component.model.directives.link.length) {
             for (var linkIndex in component.model.directives.link) {
-                var _thisLink = component.model.directives.link[linkIndex];
-                var $link_button = $("<button>").text('Select "' + _thisLink.name + '"').on("click", function () {
-                    const linkAttrs = {
-                        href: component.get(_thisLink.name),
-                        title: '',
-                        target: '',
-                        text: component.get(_thisLink.name),
-                    };
+                var updateLink = component.model.directives.link[linkIndex];
 
-                    console.log(linkAttrs);
-                    console.log(component.model);
+                var $link_button = $("<button>").text('Select "' + updateLink.name + '"').on("click", function (comp, link) {
+                    return function () {
+                        const linkAttrs = {
+                            href: comp.get(link.name),
+                            title: '',
+                            target: '',
+                            text: comp.get(link.name),
+                        };
 
-                    linkSelectorDialog(linkAttrs, {internal: true}, function (attrs) {
-                        // ComponentView.prototype.set
-                        console.log(attrs);
-                        component.model.setContent(_thisLink.name, attrs.href);
-                    }, ['pageLink', 'externalLink'])
-                })
+                        linkSelectorDialog(linkAttrs, {internal: true}, function (attrs) {
+                            // ComponentView.prototype.set
+                            comp.model.setContent(link.name, attrs.href);
+                        }, ['pageLink', 'externalLink'])
+                    }
+
+                }(component, updateLink))
                 options.append($link_button)
             }
         }
