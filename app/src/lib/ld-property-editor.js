@@ -121,9 +121,12 @@ export function initialise_property_editor() {
         if (component.model.directives.image && component.model.directives.image.length) {
             for (var directive_id in component.model.directives.image) {
                 var curr_img = component.model.directives.image[directive_id];
-                var $image_button = $("<button>").text("Select \"" + curr_img.name + '"').on("click", function () {
-                    selectImage(component, curr_img, directive_id);
-                })
+                var $image_button = $("<button>").text("Select \"" + curr_img.name + '"');
+                $image_button.on("click", function (comp, img, did) {
+                    return function () {
+                        selectImage(comp, img, did);
+                    }
+                }(component, curr_img, directive_id));
                 options.append($image_button)
             }
         }
