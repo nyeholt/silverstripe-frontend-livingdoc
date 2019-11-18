@@ -36,7 +36,7 @@ $(document).on('livingfrontend.updateLivingDoc', function (e, livingdoc) {
         replaceShortcodesIn($('#livingdocs-editor'));
     }, 500);
 
-    // subsequent content changes    
+    // subsequent content changes
     livingdoc.model.changed.add(function () {
         replaceShortcodesIn($('#livingdocs-editor'));
     });
@@ -45,19 +45,24 @@ $(document).on('livingfrontend.updateLivingDoc', function (e, livingdoc) {
         let componentView = livingdoc.componentTree.getMainComponentView(component.id);
         // clean up any things attached to the component
         if (componentView && componentView.$html) {
-            componentView.$html.removeAttr('data-is-editing');
+            componentView.$html.find('[data-is-editing]').removeAttr('data-is-editing');
         }
     });
-    
-    livingdoc.interactiveView.page.wysiwygClick.add(function (component, directiveName, event) {
 
-        var isEditing = component.$html.attr('data-is-editing');
-        component.$html.addClass('js-wysiwyg-editor-block');
+    livingdoc.interactiveView.page.wysiwygClick.add(function (component, directiveName, event) {
+        let $elem = component.directives.$getElem(directiveName);
+
+        if (!$elem) {
+            return;
+        }
+
+        var isEditing = $elem.attr('data-is-editing');
+        $elem.addClass('js-wysiwyg-editor-block');
         if (isEditing) {
             return;
         }
 
-        component.$html.attr('data-is-editing', 1);
+        $elem.attr('data-is-editing', 1);
 
         var currentContent = component.model.get(directiveName);
 
@@ -93,7 +98,7 @@ $(document).on('livingfrontend.updateLivingDoc', function (e, livingdoc) {
         var storageNode = $('<input type="hidden" name="ThisProseEditor" class="ProseEditorFieldStorage" value="" />');
 
         proseNode.append(editorNode).append(valueNode).append(storageNode);
-        
+
         storageNode.val(currentContent);
         valueNode.html(currentContent);
 
@@ -103,23 +108,23 @@ $(document).on('livingfrontend.updateLivingDoc', function (e, livingdoc) {
         $save.css('display', 'inline'); $cancel.css('display', 'inline');
         $actions.append($save).append($cancel);
 
-        component.$html.empty();
-        component.$html.append(proseNode).append($actions);
+        $elem.empty();
+        $elem.append(proseNode).append($actions);
 
         const thisEditor = setupEditor(editorNode[0], valueNode[0], storageNode[0]);
 
         var cleanUp = function () {
             thisEditor.destroy();
-            component.$html.removeAttr('data-is-editing');
-            component.$html.removeClass('js-wysiwyg-editor-block');
+            $elem.removeAttr('data-is-editing');
+            $elem.removeClass('js-wysiwyg-editor-block');
         }
 
         $cancel.click(function () {
             cleanUp();
-            component.$html.empty();
+            $elem.empty();
             proseNode.remove();
-            component.$html.html(component.model.get(directiveName));
-            replaceShortcodesIn(component.$html);
+            $elem.html(component.model.get(directiveName));
+            replaceShortcodesIn($elem);
         });
 
         var saveEditorBlock = function () {
@@ -147,7 +152,7 @@ $(document).on('livingfrontend.updateLivingDoc', function (e, livingdoc) {
 
             // let displayDom = editorNode.find('div.ProseMirror').first();
             // displayDom.find('svg').remove
-            
+
 
             if (!component.model.setContent(directiveName, rawContent)) {
                 // we need to force this as the content set by rawContent may not
@@ -156,7 +161,7 @@ $(document).on('livingfrontend.updateLivingDoc', function (e, livingdoc) {
                     component.model.componentTree.contentChanging(component.model, directiveName);
                 }
 
-                replaceShortcodesIn(component.$html);
+                replaceShortcodesIn($elem);
             }
         }
 
