@@ -58,6 +58,10 @@ export function createStyleEditor(component) {
             label: 'Background Repeat',
             value: customStyles['background-repeat'] || '',
         }),
+        "object-fit": new TextField({
+            label: 'Object fit',
+            value: customStyles['object-fit'] || '',
+        }),
         "color": new TextField({
             label: "Text colour",
             value: customStyles['color'] || '',

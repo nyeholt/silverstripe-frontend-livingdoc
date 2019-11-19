@@ -41,14 +41,6 @@ $(document).on('livingfrontend.updateLivingDoc', function (e, livingdoc) {
 
                         var attrStr = '';
 
-                        if (componentAttrs) {
-                            componentAttrs = componentAttrs[_thisItem.name];
-                            if (componentAttrs) {
-                                componentAttrs.url = selected;
-                                attrStr = JSON.stringify(componentAttrs);
-                            }
-                        }
-
                         let source = 'embed';
 
                         // do we have an actual URL to be embedded, or a shortcode style URL?
@@ -64,6 +56,10 @@ $(document).on('livingfrontend.updateLivingDoc', function (e, livingdoc) {
                                 }
                                 attrStr = JSON.stringify(scAttrs);
                             }
+                        } else {
+                            attrStr = JSON.stringify({
+                                url: selected
+                            });
                         }
 
                         $.get(EMBED_LINK, { shortcode: source, attrs: attrStr }).then(function (data) {

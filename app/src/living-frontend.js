@@ -8,6 +8,7 @@ import LivingDocState from './lib/LivingDocState';
 import ContentSource from './lib/FormContentSource';
 import { initialise_property_editor } from './lib/ld-property-editor';
 import createComponentList from './lib/createComponentList';
+import { initialise_keyboard } from './modules/lf-keyboard-handler';
 
 (function ($) {
 
@@ -161,7 +162,7 @@ import createComponentList from './lib/createComponentList';
             $(BOTTOM_BAR).find('.livingdocs-toolbar-controls').append(layoutToggle);
             layoutToggle.click(function (e) {
                 var state = $(this).attr('data-layout-editing');
-                if (state) {
+                if (state == 1) {
                     $(this).attr('data-layout-editing', 0);
                 } else {
                     $(this).attr('data-layout-editing', 1);
@@ -169,8 +170,10 @@ import createComponentList from './lib/createComponentList';
             });
 
             LivingDocState.livingdoc.interactiveView.page.componentWillBeDragged.add(function (option) {
-                if (layoutToggle.attr('data-layout-editing')) {
+                if (layoutToggle.attr('data-layout-editing') == 1) {
                     option.enable = false;
+                } else {
+                    option.enable = true;
                 }
             })
 
@@ -257,38 +260,6 @@ import createComponentList from './lib/createComponentList';
                 });
             }
 
-            // add in the structured components that can be chosen to have fully created
-            if (selectedDesign.structures && selectedDesign.structures.length > 0) {
-                // var optionList = $('<select class="with-button">').attr('id', 'component-structures');
-                // optionList.append('<option>-- Components --</option>');
-                // for (var i in selectedDesign.structures) {
-                //     var item = selectedDesign.structures[i];
-                //     optionList.append($('<option value="">').text(item.label).attr('value', item.label));
-                // }
-
-                // var structureFields = $('<div class="structure-options">');
-                // structureFields.append($('<label for="component-structures">Select a pre-defined set of components, or add individual components below</label>'));
-                // structureFields.append(optionList);
-                // var structureButton = $('<button>Add</button>');
-                // structureFields.append(structureButton);
-                // $components.prepend(structureFields);
-
-                // structureButton.click(function (e) {
-                //     var selected = optionList.val();
-                //     for (var i in selectedDesign.structures) {
-                //         var item = selectedDesign.structures[i];
-                //         if (item.label === selected) {
-                //             var container = LivingDocState.activeComponent ?
-                //                 LivingDocState.activeComponent.model.parentContainer :
-                //                 LivingDocState.livingdoc.componentTree.root;
-
-                //             createComponentList(item.components, container);
-                //             break;
-                //         }
-                //     }
-                //     optionList.val('');
-                // });
-            }
 
             // when adding a component, see if it has a set of components that should
             // be immediately created. Useful for something like a table cell that should always
@@ -330,6 +301,7 @@ import createComponentList from './lib/createComponentList';
             // });
 
             initialise_property_editor();
+            initialise_keyboard(LivingDocState);
 
             $(document).trigger('livingfrontend.updateLivingDoc', [LivingDocState.livingdoc]);
         });

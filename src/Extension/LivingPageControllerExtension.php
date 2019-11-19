@@ -3,6 +3,7 @@ namespace Symbiote\Frontend\LivingPage\Extension;
 
 use Exception;
 use SilverStripe\Assets\Upload;
+use SilverStripe\Control\Director;
 use SilverStripe\Control\HTTPRequest;
 use SilverStripe\Core\Extension;
 use SilverStripe\Core\Injector\Injector;
@@ -274,7 +275,12 @@ class LivingPageControllerExtension extends Extension
                 }
                 $shortCode = $this->owner->data()->shortcodeFor($props['source'], $shortcodeParams);
                 if ($shortCode) {
-                    $props['content'] = ShortcodeParser::get_active()->parse($shortCode);
+                    try {
+                        $props['content'] = ShortcodeParser::get_active()->parse($shortCode);
+                    } catch(Exception $e) {
+                        $props['content'] = Director::isDev() ? "Failed parsing shortcode" : "";
+                    }
+
                 }
                 $component['content'][$name] = $props;
             }

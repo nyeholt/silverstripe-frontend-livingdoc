@@ -1,7 +1,7 @@
 import LivingDocState from "./LivingDocState";
 import * as $ from 'jquery';
 import { createStyleEditor } from "../modules/lf-style-editor";
-import { componentExport } from "../modules/lf-component-export";
+import { componentExportForm } from "../modules/lf-component-export";
 import { selectImage } from "../modules/lf-image-selector";
 import { linkSelectorDialog } from "../../../../vendor/symbiote/silverstripe-prose-editor/editor/src/plugins/ss-link-selector";
 import createComponentList from "./createComponentList";
@@ -234,7 +234,7 @@ export function initialise_property_editor() {
         var exportButton = $('<button>Export</button>');
 
         exportButton.click(function (e) {
-            componentExport(component);
+            componentExportForm(component);
         })
 
         $('<div class="Actions component-actions">').appendTo(options).append(editStyles).append($dupe_button).append($delete_button).append(exportButton);

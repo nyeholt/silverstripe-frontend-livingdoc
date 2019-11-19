@@ -10,6 +10,7 @@ export function selectImage(component, img, directiveId) {
 
 
     imageSelectorDialog(params, function (newAttrs) {
+        console.log(newAttrs);
         component.model.setDirectiveAttribute(img.name, 'alt', newAttrs.alt);
         component.model.setDirectiveAttribute(img.name, 'title', newAttrs.title);
         component.model.setDirectiveAttribute(img.name, 'width', newAttrs.width);
