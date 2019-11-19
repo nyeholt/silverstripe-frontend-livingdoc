@@ -25,6 +25,12 @@ export function initialise_keyboard(state) {
         }
 
         if (e.keyCode == 67) {
+            // check that what we have selected is copyable
+            const selectedNode = document.getSelection().anchorNode;
+            if (selectedNode.nodeType === 3) {
+                return;
+            }
+
             const content = exportComponent(state.activeComponent);
             copyTextToClipboard(JSON.stringify(content).replace(/"id":"doc-(.*?)",/g, ""));
         }
@@ -35,33 +41,30 @@ export function initialise_keyboard(state) {
         let clipboardData = e.clipboardData || window.clipboardData;
         let content = clipboardData.getData('Text');
 
-        if (content && content.length > 0) {
+        if (content && content.length > 0 && content.indexOf('identifier') > 0) {
             try {
                 const newComponent = JSON.parse(content);
                 if (newComponent && newComponent.identifier) {
-                    console.log("Creating component", newComponent, state.activeComponent);
                     // we use the first available container on the target component
-                    let targetContainer = null;
-
-                    if (state.activeComponent.directives.container && state.activeComponent.directives.container.length > 0) {
+                    if (state.activeComponent && state.activeComponent.directives.container && state.activeComponent.directives.container.length > 0) {
                         const targetContainerName = state.activeComponent.directives.container[0].name;
                         const targetContainer = state.activeComponent.model.containers[targetContainerName];
                         createComponentList([newComponent], targetContainer, null, true);
                     } else {
-                        alert("Can't paste components here, choose a container first");
+                        if (state.activeComponent) {
+                            alert("Cannot paste into this component");
+                            e.preventDefault();
+                        } else {
+                            createComponentList([newComponent], null, null, true);
+                        }
                     }
                 }
             } catch (err) {
-                console.log(err);
+                console.log("Paste of non-component text detected - ", err);
             }
         }
     })
-
 }
-
-
-
-
 
 export function copyTextToClipboard(text) {
     const textArea = getTempField();
@@ -72,9 +75,8 @@ export function copyTextToClipboard(text) {
     try {
         var successful = document.execCommand('copy');
         var msg = successful ? 'successful' : 'unsuccessful';
-        console.log('Copying text command was ' + msg);
     } catch (err) {
-        console.log('Oops, unable to copy');
+        console.log('Unable to copy');
     }
     document.body.removeChild(textArea);
 }
