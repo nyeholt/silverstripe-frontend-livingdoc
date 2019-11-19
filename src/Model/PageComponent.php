@@ -98,7 +98,7 @@ class PageComponent extends DataObject
         ];
 
         if ($this->IconID) {
-            $component['icon'] = $this->Icon()->ScaleWidth(48)->forTemplate();
+            $component['icon'] = $this->Icon()->ScaleWidth(78)->forTemplate();
         }
 
         return $component;

@@ -168,8 +168,8 @@ body.show-livingdocs-toolbar .livingdocs-toolbar {
 }
 
 .livingdocs-toolbar .toolbar-entry-wrapper {
-    width: 78px;
-    height: 110px;
+    width: 110px;
+    height: 140px;
     text-align: center;
 }
 
@@ -177,8 +177,8 @@ body.show-livingdocs-toolbar .livingdocs-toolbar {
     padding: 5px;
     border: 1px solid #ccc;
     border-radius: 3px;
-    width: 60px;
-    height: 60px;
+    width: 90px;
+    height: 90px;
     margin: 0px auto;
     cursor: move;
     font-size: 10px;

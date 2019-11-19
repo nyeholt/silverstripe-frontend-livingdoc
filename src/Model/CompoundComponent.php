@@ -42,7 +42,7 @@ class CompoundComponent extends PageComponent
             ]
         ];
         if ($this->IconID) {
-            $compound['icon'] = $this->Icon()->ScaleWidth(48)->forTemplate();
+            $compound['icon'] = $this->Icon()->ScaleWidth(78)->forTemplate();
         }
 
 
