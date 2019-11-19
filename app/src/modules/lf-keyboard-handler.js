@@ -1,6 +1,6 @@
 import { exportComponent } from "./lf-component-export";
 import createComponentList from "../lib/createComponentList";
-
+import { showMessage } from "./lf-messages";
 
 const PROPS_HOLDER = 'livingdocs_EditorField_Toolbar_options';
 
@@ -26,13 +26,15 @@ export function initialise_keyboard(state) {
 
         if (e.keyCode == 67) {
             // check that what we have selected is copyable
-            const selectedNode = document.getSelection().anchorNode;
-            if (selectedNode.nodeType === 3) {
+            const selection = document.getSelection();
+            if (selection.anchorNode.nodeType === 3 && selection.type.toLowerCase() == 'range') {
+                console.log("Not copying text node ", selection.anchorNode);
                 return;
             }
 
             const content = exportComponent(state.activeComponent);
             copyTextToClipboard(JSON.stringify(content).replace(/"id":"doc-(.*?)",/g, ""));
+            showMessage("Copied " + state.activeComponent.model.componentName);
         }
     });
 

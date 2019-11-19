@@ -9,6 +9,7 @@ import ContentSource from './lib/FormContentSource';
 import { initialise_property_editor } from './lib/ld-property-editor';
 import createComponentList from './lib/createComponentList';
 import { initialise_keyboard } from './modules/lf-keyboard-handler';
+import { initialise_messages } from './modules/lf-messages';
 
 (function ($) {
 
@@ -61,6 +62,7 @@ import { initialise_keyboard } from './modules/lf-keyboard-handler';
         $('body').toggleClass('no-grid-display');
     });
 
+    initialise_messages();
 
     $(document).on('mousedown', '#clicker', function (e) {
         e.preventDefault();

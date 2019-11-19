@@ -3584,6 +3584,10 @@ module.exports = (function() {
     fromJson: function(json, design) {
       var child, componentArray, containerName, model, name, styleName, template, value, _i, _len, _ref, _ref1, _ref2;
       template = design.get(json.component || json.identifier);
+      if (!template) {
+          console.error("Uknown template identifier: " + json.identifier);
+          return;
+      }
       assert(template, "error while deserializing component: unknown template identifier '" + json.identifier + "'");
       model = new ComponentModel({
         template: template,

@@ -7,6 +7,8 @@
                 <div class="livingdocs-actions">
                     $LivingForm
                 </div>
+                <div class="livingdocs-toolbar-messages">
+                </div>
             </div>
 
             <div class="livingdocs-item-properties"></div>
