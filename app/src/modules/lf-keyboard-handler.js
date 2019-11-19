@@ -1,4 +1,5 @@
 import { exportComponent } from "./lf-component-export";
+import createComponentList from "../lib/createComponentList";
 
 
 const PROPS_HOLDER = 'livingdocs_EditorField_Toolbar_options';
@@ -9,8 +10,7 @@ const PROPS_HOLDER = 'livingdocs_EditorField_Toolbar_options';
  */
 export function initialise_keyboard(state) {
     document.addEventListener("keydown", function (e) {
-        console.log(e.keyCode, e.ctrlKey);
-        // we need ctrl even for delete
+        // we need ctrl for delete too
         if (!e.ctrlKey) {
             return;
         }
@@ -29,10 +29,59 @@ export function initialise_keyboard(state) {
             copyTextToClipboard(JSON.stringify(content).replace(/"id":"doc-(.*?)",/g, ""));
         }
     });
+
+
+    document.addEventListener('paste', function (e) {
+        let clipboardData = e.clipboardData || window.clipboardData;
+        let content = clipboardData.getData('Text');
+
+        if (content && content.length > 0) {
+            try {
+                const newComponent = JSON.parse(content);
+                if (newComponent && newComponent.identifier) {
+                    console.log("Creating component", newComponent, state.activeComponent);
+                    // we use the first available container on the target component
+                    let targetContainer = null;
+
+                    if (state.activeComponent.directives.container && state.activeComponent.directives.container.length > 0) {
+                        const targetContainerName = state.activeComponent.directives.container[0].name;
+                        const targetContainer = state.activeComponent.model.containers[targetContainerName];
+                        createComponentList([newComponent], targetContainer, null, true);
+                    } else {
+                        alert("Can't paste components here, choose a container first");
+                    }
+                }
+            } catch (err) {
+                console.log(err);
+            }
+        }
+    })
+
 }
 
 
+
+
+
 export function copyTextToClipboard(text) {
+    const textArea = getTempField();
+    textArea.value = text;
+    textArea.focus();
+    textArea.select();
+
+    try {
+        var successful = document.execCommand('copy');
+        var msg = successful ? 'successful' : 'unsuccessful';
+        console.log('Copying text command was ' + msg);
+    } catch (err) {
+        console.log('Oops, unable to copy');
+    }
+    document.body.removeChild(textArea);
+}
+
+
+
+function getTempField() {
     var textArea = document.createElement("textarea");
 
     //
@@ -73,20 +122,7 @@ export function copyTextToClipboard(text) {
     textArea.style.background = 'transparent';
 
 
-    textArea.value = text;
-
     document.body.appendChild(textArea);
-    textArea.focus();
-    textArea.select();
 
-    try {
-        var successful = document.execCommand('copy');
-        var msg = successful ? 'successful' : 'unsuccessful';
-        console.log('Copying text command was ' + msg);
-    } catch (err) {
-        console.log('Oops, unable to copy');
-    }
-
-    document.body.removeChild(textArea);
+    return textArea;
 }
-

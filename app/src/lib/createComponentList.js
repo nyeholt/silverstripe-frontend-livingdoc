@@ -9,6 +9,7 @@ import LivingDocState from "./LivingDocState";
  * @returns void
  */
 export default function createComponentList(components, parent, containerName, forceAdd = false) {
+    console.log(arguments);
     if (!parent) {
         parent = LivingDocState.livingdoc.componentTree.root;
     }
