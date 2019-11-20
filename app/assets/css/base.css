@@ -1,7 +1,4 @@
 
-img {
-    max-width: 100%;
-}
 
 .position-relative {
     position: relative;
@@ -11,34 +8,6 @@ img {
     position: absolute;
 }
 
-.padded-top {
-    padding-top: 2rem;
+.img-responsive {
+    max-width: 100%;
 }
-
-.padded-bottom {
-    padding-bottom: 2rem;
-}
-
-.padded-left {
-    padding-left: 2rem;
-}
-.padded-right {
-    padding-right: 2rem;
-}
-
-.right-margin {
-    margin-right: 2rem;
-}
-
-.left-margin {
-    margin-left: 2rem;
-}
-
-.top-margin {
-    margin-top: 2rem;
-}
-
-.bottom-margin {
-    margin-bottom: 2rem;
-}
-
