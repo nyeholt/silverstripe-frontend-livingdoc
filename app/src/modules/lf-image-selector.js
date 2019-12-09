@@ -14,7 +14,7 @@ export function selectImage(component, img, directiveId) {
         component.model.setDirectiveAttribute(img.name, 'title', newAttrs.title);
         component.model.setDirectiveAttribute(img.name, 'width', newAttrs.width);
         component.model.setDirectiveAttribute(img.name, 'height', newAttrs.height);
-        component.model.setDirectiveAttribute(img.name, 'data-id', newAttrs.imageId.id);
+        component.model.setDirectiveAttribute(img.name, 'data-id', newAttrs.imageSel.id);
         component.model.setContent(img.name, { url: newAttrs.src });
-    }, ['imageId', 'src', 'title', 'alt', 'width', 'height']);
+    });
 }
