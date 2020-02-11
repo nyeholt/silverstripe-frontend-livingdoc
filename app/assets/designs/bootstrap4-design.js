@@ -1,22 +1,17 @@
 (function () {
     var designJSON = {
-        "name": "bootstrap3",
-        "label": "Bootstrap 3",
+        "name": "bootstrap4",
+        "label": "Bootstrap 4",
         "version": "0.0.1",
-        "author": "upfront.io",
+        "author": "symbiote.com.au",
         "assets": {
-            "basePath": 'frontend-livingdoc/',
+            "basePath": 'frontend-livingdoc/app/dist',
             "css": [
                 "./css/base.css"
             ]
         },
         "wrapper": "<div class='doc-section'></div>",
         "componentProperties": {
-            "well-large": {
-                "label": "Large",
-                "type": "option",
-                "value": "well-lg"
-            },
             "position-relative": {
                 "label": "Does this contain absolutely positioned elements?",
                 "type": "option",
@@ -26,11 +21,6 @@
                 "label": "Position this element using absolute units",
                 "type": "option",
                 "value": "position-absolute",
-            },
-            "custom-class": {
-                "label": "Custom Styles",
-                "type": "text",
-                "value": "fillitin"
             },
             "section-class": {
                 "label": "Section style",
@@ -57,54 +47,8 @@
                     }
                 ]
             },
-            "padded-styles": {
-                "label": "Padding",
-                "type": "select",
-                "options": [
-                    {
-                        'caption': 'Multiple',
-                        'value': "yes"
-                    },
-                    {
-                        "caption": "None"
-                    },
-                    {
-                        "caption": "Padded Top",
-                        'value': "padded-top"
-                    },
-                    {
-                        "caption": "Padded Right",
-                        'value': "padded-right"
-                    },
-                    {
-                        "caption": "Padded Bottom",
-                        'value': "padded-bottom"
-                    },
-                    {
-                        "caption": "Padded Left",
-                        'value': "padded-left"
-                    },
-                    {
-                        "caption": "Margin Top",
-                        'value': "top-margin"
-                    },
-                    {
-                        "caption": "Margin Right",
-                        'value': "right-margin"
-                    },
-                    {
-                        "caption": "Margin Bottom",
-                        'value': "bottom-margin"
-                    },
-                    {
-                        "caption": "Padded Left",
-                        'value': "left-margin"
-                    }
-                    
-                ]
-            },
             "column-width": {
-                "label": "Width",
+                "label": "Column width",
                 "type": "select",
                 "options": [
                     {
@@ -113,11 +57,15 @@
                     },
                     {
                         "caption": "None"
+                    },
+                    {
+                        "caption": "Auto",
+                        "value": "col"
                     }
                 ]
             },
-            "column-float": {
-                "label": "Float",
+            "column-margin": {
+                "label": "Column margin",
                 "type": "select",
                 "options": [
                     {
@@ -135,6 +83,35 @@
                 'options': [
                     {
                         "caption": "None"
+                    }
+                ]
+            },
+            "div-styles": {
+                "label": "Block styles",
+                "type": "select",
+                "options": [
+                    {
+                        'caption': 'Multiple',
+                        'value': "yes"
+                    },
+                    {
+                        "caption": "None"
+                    },
+                    {
+                        'caption': 'Container',
+                        'value': "container"
+                    },
+                    {
+                        'caption': 'Fluid width container',
+                        'value': "container-fluid"
+                    },
+                    {
+                        'caption': 'Row',
+                        'value': "row"
+                    },
+                    {
+                        'caption': 'Column',
+                        'value': "col"
                     }
                 ]
             },
@@ -208,35 +185,6 @@
                     }
                 ]
             },
-            "panel-styles": {
-                "label": "Panel Styles",
-                "type": "select",
-                "options": [
-                    {
-                        "caption": "Default"
-                    },
-                    {
-                        "caption": "Primary",
-                        "value": "panel-primary"
-                    },
-                    {
-                        "caption": "Success",
-                        "value": "panel-success"
-                    },
-                    {
-                        "caption": "Info",
-                        "value": "panel-info"
-                    },
-                    {
-                        "caption": "Warning",
-                        "value": "panel-warning"
-                    },
-                    {
-                        "caption": "Danger",
-                        "value": "panel-danger"
-                    }
-                ]
-            }
         },
         "groups": [
             {
@@ -348,7 +296,7 @@
             },
             {
                 "name": "wysiwyg",
-                "html": "<div doc-wysiwyg=\"content\">Wyswiyg content</div>",
+                "html": "<div doc-wysiwyg=\"html\">Wyswiyg content</div>",
                 "label": "WYSIWYG",
                 "properties": [
                     'text-styles'
@@ -370,21 +318,12 @@
                 "label": "Markdown"
             },
             {
-                "name": "well",
-                "html": "<div class=\"well\" doc-container=\"well\">\n</div>",
-                "label": "Well",
-                "properties": [
-                    "well-large"
-                ]
-            },
-            {
                 "name": "section",
                 "html": "<section class=\"page-section container\" doc-container=\"section\">\n</section>",
                 "label": "Section",
                 "properties": [
                     "section-class",
                     "background-styles",
-                    "padded-styles",
                     "text-styles"
                 ]
             },
@@ -395,7 +334,6 @@
                 "properties": [
                     "section-class",
                     "background-styles",
-                    "padded-styles",
                     "text-styles"
                 ]
             },
@@ -405,7 +343,6 @@
                 "label": "Row",
                 "properties": [
                     "background-styles",
-                    "padded-styles",
                     "text-styles"
                 ],
                 "directives": {
@@ -425,18 +362,9 @@
                 ],
                 "properties": [
                     "background-styles",
-                    "padded-styles",
                     "text-styles",
                     "column-width",
-                    'column-float'
-                ]
-            },
-            {
-                "name": "panel",
-                "html": "<div class=\"panel panel-default\">\n  <div class=\"panel-heading\">\n    <h3 class=\"panel-title\" doc-editable=\"title\">Panel Title</h3>\n  </div>\n  <div class=\"panel-body\" doc-editable=\"body\">\n    Panel content\n  </div>\n</div>",
-                "label": "Panel",
-                "properties": [
-                    "panel-styles"
+                    'column-margin'
                 ]
             },
             {
@@ -444,16 +372,16 @@
                 "html": "<div class=\"\" doc-container=\"layout\">\n</div>",
                 "label": "Empty block",
                 // "allowedParents": [
-                    // "row"
+                // "row"
                 // ],
                 "properties": [
                     "position-relative",
                     "position-absolute",
                     "background-styles",
-                    "padded-styles",
                     "text-styles",
+                    "div-styles",
                     "column-width",
-                    'column-float'
+                    'column-margin'
                 ]
             },
             {
@@ -462,7 +390,6 @@
                 "label": "Table",
                 "properties": [
                     "background-styles",
-                    "padded-styles",
                     "text-styles"
                 ],
                 "directives": {
@@ -484,7 +411,6 @@
                 "label": "Table Row",
                 "properties": [
                     "background-styles",
-                    "padded-styles",
                     "text-styles"
                 ],
                 "allowedParents": [
@@ -505,7 +431,6 @@
                 "label": "Table Cell",
                 "properties": [
                     "background-styles",
-                    "padded-styles",
                     "text-styles"
                 ],
                 "allowedParents": [
@@ -518,7 +443,6 @@
                 "label": "Table Header Cell",
                 "properties": [
                     "background-styles",
-                    "padded-styles",
                     "text-styles"
                 ],
                 "allowedParents": [
@@ -564,7 +488,7 @@
                 </figcaption>\n</figure>",
                 "label": "Image"
             },
-            
+
             {
                 "name": "unordered-list",
                 "html": "<ul doc-container=\"list\"></ul>",
@@ -610,7 +534,7 @@
                     "unordered-list"
                 ]
             },
-            
+
             {
                 "name": "list-group",
                 "html": "<ul class=\"list-group\" doc-container=\"list\"></ul>",
@@ -650,18 +574,18 @@
                 "html": "<div class=\"thumbnail\">\n  <a doc-link=\"link\" href=\"#\">\n    <img doc-image=\"image\">\n    <div class=\"caption\">\n      <h3 doc-editable=\"label\">Label</h3>\n      <p doc-editable=\"description\">Description</p></div>\n</a>\n</div>",
                 "label": "Teaser"
             }
-            
+
         ],
         "prefilledComponents": {
             "table": {
                 "components": {
                     "tablehead": [
                         {
-                            "identifier": "bootstrap3.tablerow",
+                            "identifier": "bootstrap4.tablerow",
                             "containers": {
                                 "rowcells": [
                                     {
-                                        identifier: "bootstrap3.headercell",
+                                        identifier: "bootstrap4.headercell",
                                         "containers": {
                                             "cellitems": [
                                                 {
@@ -671,7 +595,7 @@
                                         }
                                     },
                                     {
-                                        identifier: "bootstrap3.headercell",
+                                        identifier: "bootstrap4.headercell",
                                         "containers": {
                                             "cellitems": [
                                                 {
@@ -686,11 +610,11 @@
                     ],
                     "tablebody": [
                         {
-                            "identifier": "bootstrap3.tablerow",
+                            "identifier": "bootstrap4.tablerow",
                             "containers": {
                                 "rowcells": [
                                     {
-                                        identifier: "bootstrap3.tablecell",
+                                        identifier: "bootstrap4.tablecell",
                                         "containers": {
                                             "cellitems": [
                                                 {
@@ -700,7 +624,7 @@
                                         }
                                     },
                                     {
-                                        identifier: "bootstrap3.tablecell",
+                                        identifier: "bootstrap4.tablecell",
                                         "containers": {
                                             "cellitems": [
                                                 {
@@ -721,8 +645,8 @@
                 label: "Content section",
                 components: [
                     {
-                        "identifier": "bootstrap3.section",
-                        "styles": {"section-class" : "container"},   /* key value listing */
+                        "identifier": "bootstrap4.section",
+                        "styles": { "section-class": "container" },   /* key value listing */
                         "data": {
                             "data_attributes": {
                                 "section": {
@@ -733,7 +657,7 @@
                         "containers": {
                             "section": [        // the name of the container inside the component to add to
                                 {
-                                    "identifier": "bootstrap3.row",
+                                    "identifier": "bootstrap4.row",
                                     "styles": {
                                         "text-styles": "text-center"
                                     },
@@ -741,7 +665,7 @@
                                     "containers": {
                                         "row": [
                                             {
-                                                "identifier": "bootstrap3.column",
+                                                "identifier": "bootstrap4.column",
                                                 "data_attributes": {}
                                             }
                                         ]
@@ -758,37 +682,40 @@
         return module.exports = designJSON;
     } else {
         this.design = this.design || {};
-        this.design.bootstrap3 = designJSON;
+        this.design.bootstrap4 = designJSON;
     }
-    
+
     // now update the design style options programmatically
     var sizeLabels = {
         'sm': 'Small',
-        'md': 'Medium', 
+        'md': 'Medium',
         'lg': 'Large'
     };
-    
+
     for (var screen in sizeLabels) {
+        var opt = {
+            'caption': sizeLabels[screen] + ' and up',
+            'value': 'col-' + screen
+        }
+        designJSON.componentProperties['column-width'].options.push(opt);
+
         for (var i = 1; i < 13; i++) {
             var opt = {
-                'caption' : sizeLabels[screen] + ' ' + i + ' wide',
-                'value' : 'col-' + screen + '-' + i
+                'caption': sizeLabels[screen] + ' ' + i + ' wide',
+                'value': 'col-' + screen + '-' + i
             }
             designJSON.componentProperties['column-width'].options.push(opt);
-            
-            var pushOpt = {
-                'caption': sizeLabels[screen] + ' push ' + i,
-                'value': 'col-' + screen + '-push-' + i
-            };
-            var pullOpt = {
-                'caption': sizeLabels[screen] + ' pull ' + i,
-                'value': 'col-' + screen + '-pull-' + i
-            };
-            
-            designJSON.componentProperties['column-float'].options.push(pushOpt);
-            designJSON.componentProperties['column-float'].options.push(pullOpt);
         }
+
+        designJSON.componentProperties['column-margin'].options.push({
+            'caption': sizeLabels[screen] + ' auto left margin',
+            'value': 'ml-' + screen + '-auto'
+        });
+        designJSON.componentProperties['column-margin'].options.push({
+            'caption': sizeLabels[screen] + ' auto right margin',
+            'value': 'mr-' + screen + '-auto'
+        });
     }
 
-    
+
 }).call(this);
