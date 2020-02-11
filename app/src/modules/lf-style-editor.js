@@ -1,7 +1,7 @@
 import * as $ from 'jquery';
 import LivingDocState from '../lib/LivingDocState';
-import { TextField } from '../../../../vendor/symbiote/silverstripe-prose-editor/editor/src/fields/TextField';
-import { openPrompt } from '../../../../vendor/symbiote/silverstripe-prose-editor/editor/src/proseutil/prose-prompt';
+import { TextField } from '../../../../../symbiote/silverstripe-prose-editor/editor/src/fields/TextField';
+import { openPrompt } from '../../../../../symbiote/silverstripe-prose-editor/editor/src/proseutil/prose-prompt';
 
 var PROPS_HOLDER = 'livingdocs_EditorField_Toolbar_options';
 

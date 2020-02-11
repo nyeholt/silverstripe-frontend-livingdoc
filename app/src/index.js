@@ -11,4 +11,9 @@ import './modules/lf-paste-image';
 import './modules/lf-text-actions';
 import './modules/lf-wysiwyg-editing';
 
+import './style/livingdocs.css';
+import './style/living-frontend.css';
+
+
+
 const editors = [];

@@ -92,6 +92,7 @@ class FormContentSource {
                     selectedDesign.components.push(newComponent);
                 }
             }
+            
             if (config.compounds) {
                 for (let i in config.compounds) {
                     let newComponent = config.compounds[i];
@@ -108,6 +109,8 @@ class FormContentSource {
 
                     selectedDesign.compounds[newComponent.name] = newComponent;
                 }
+            } else {
+                selectedDesign.compounds = {};
             }
         })
     }

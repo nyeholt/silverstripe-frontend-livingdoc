@@ -1,9 +1,9 @@
 import * as $ from 'jquery';
 
-import { setupEditor } from "../../../../vendor/symbiote/silverstripe-prose-editor/editor/src/setup.js";
-import "../../../../vendor/symbiote/silverstripe-prose-editor/editor/dist/main.css" ;
+import { setupEditor } from "../../../../../symbiote/silverstripe-prose-editor/editor/src/setup.js";
+import "../../../../../symbiote/silverstripe-prose-editor/editor/dist/main.css" ;
 import ContentSource from '../lib/FormContentSource.js';
-import { renderProseShortcode } from '../../../../vendor/symbiote/silverstripe-prose-editor/editor/src/plugins/shortcodes.js';
+import { renderProseShortcode } from '../../../../../symbiote/silverstripe-prose-editor/editor/src/plugins/shortcodes.js';
 
 
 function replaceShortcodesIn(elem) {

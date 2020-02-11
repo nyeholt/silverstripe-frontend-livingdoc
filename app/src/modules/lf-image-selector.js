@@ -1,4 +1,4 @@
-import { imageSelectorDialog } from "../../../../vendor/symbiote/silverstripe-prose-editor/editor/src/plugins/ss-image-selector";
+import { imageSelectorDialog } from "../../../../../symbiote/silverstripe-prose-editor/editor/src/plugins/ss-image-selector";
 
 export function selectImage(component, img, directiveId) {
     let params = {};

@@ -34,8 +34,7 @@ class LivingPageExtension extends DataExtension
     ];
 
     private static $living_designs = [
-        'bootstrap3'        => 'frontend-livingdoc/javascript/livingdocs/bootstrap-design.js',
-        'bootstrap4'        => 'frontend-livingdoc/app/dist/designs/bootstrap4-design.js',
+        'bootstrap4'        => 'resources/nyeholt/silverstripe-frontend-livingdoc/app/dist/designs/bootstrap4-design.js',
     ];
 
     private static $default_design_css = '';

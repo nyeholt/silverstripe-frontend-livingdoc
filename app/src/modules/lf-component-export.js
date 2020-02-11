@@ -1,5 +1,5 @@
-import { TextareaField } from "../../../../vendor/symbiote/silverstripe-prose-editor/editor/src/fields/TextareaField";
-import { openPrompt } from "../../../../vendor/symbiote/silverstripe-prose-editor/editor/src/proseutil/prose-prompt";
+import { TextareaField } from "../../../../../symbiote/silverstripe-prose-editor/editor/src/fields/TextareaField";
+import { openPrompt } from "../../../../../symbiote/silverstripe-prose-editor/editor/src/proseutil/prose-prompt";
 
 
 export function exportComponent(component) {

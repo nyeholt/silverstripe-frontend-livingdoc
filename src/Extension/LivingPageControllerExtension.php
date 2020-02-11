@@ -33,10 +33,10 @@ class LivingPageControllerExtension extends Extension
     {
 
         // at the top so it can be overridden by user css
-        Requirements::css('frontend-livingdoc/app/dist/css/base.css');
+        Requirements::css('nyeholt/silverstripe-frontend-livingdoc: app/dist/css/base.css');
 
         // same with any highlight css needed
-        Requirements::css('frontend-livingdoc/javascript/highlight/googlecode.css');
+        Requirements::css('nyeholt/silverstripe-frontend-livingdoc: javascript/highlight/googlecode.css');
 
         if ($this->owner->getRequest()->getVar('edit') && !$this->owner->data()->canEdit()) {
             // redirect to login
@@ -126,19 +126,10 @@ class LivingPageControllerExtension extends Extension
 
             $config = $this->getLivingDocsConfig();
 
-
             Requirements::block(THIRDPARTY_DIR.'/jquery/jquery.js');
 
-            Requirements::javascript('frontend-livingdoc/app/dist/main.js');
-            Requirements::css('frontend-livingdoc/app/dist/main.css');
-            Requirements::css('frontend-livingdoc/css/living-frontend.css');
-
-
-            Requirements::javascript('frontend-livingdoc/javascript/showdown/showdown.min.js');
-            Requirements::javascript('frontend-livingdoc/javascript/ace/ace.min.js');
-            Requirements::javascript('frontend-livingdoc/javascript/ace/mode-markdown.js');
-            Requirements::javascript('frontend-livingdoc/javascript/ace/mode-html.js');
-            Requirements::javascript('frontend-livingdoc/javascript/highlight/highlight.min.js');
+            Requirements::javascript('nyeholt/silverstripe-frontend-livingdoc: app/dist/main.js');
+            Requirements::css('nyeholt/silverstripe-frontend-livingdoc: app/dist/main.css');
 
             Requirements::javascript($config['designFile']);
     }

@@ -212,7 +212,7 @@ import { initialise_messages } from './modules/lf-messages';
             let addMenuComponent = function (icon, label, name) {
                 var $entryWrap = $('<div class="toolbar-entry-wrapper">');
                 var $entry = $('<div class="toolbar-entry">');
-                var $entryLabel = $('<div class="toolbar-entry-title" data-name="'+name+'">');
+                var $entryLabel = $('<div class="toolbar-entry-title" data-name="' + name + '">');
 
                 $entry.html(icon ? icon : defaultIcon);
                 $entryLabel.html(label);
@@ -237,15 +237,18 @@ import { initialise_messages } from './modules/lf-messages';
                 addMenuComponent(template.icon, template.label, template.name);
             }
 
-            for (var compoundName in selectedDesign.compounds) {
-                addMenuComponent(selectedDesign.compounds[compoundName].icon, selectedDesign.compounds[compoundName].label, compoundName);
+            if (selectedDesign.compounds) {
+                for (var compoundName in selectedDesign.compounds) {
+                    addMenuComponent(selectedDesign.compounds[compoundName].icon, selectedDesign.compounds[compoundName].label, compoundName);
+                }
             }
+
 
             // Binds the drag behaviour when a menu item is dragged
             function draggableComponent(doc, name, $elem) {
                 $elem.on('mousedown', function (event) {
                     let newComponent;
-                    if (selectedDesign.compounds[name]) {
+                    if (selectedDesign.compounds && selectedDesign.compounds[name]) {
                         newComponent = createComponentList(selectedDesign.compounds[name].components);
                     } else {
                         newComponent = LivingDocState.livingdoc.createComponent(name);

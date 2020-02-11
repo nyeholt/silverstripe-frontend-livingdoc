@@ -26,7 +26,7 @@ const LivingDocState = {
         this.activeDesign = this.docApi.design.designs[this.selectedDesign.name];
 
         this.docApi.config({
-            livingdocsCssFile: "frontend-livingdoc/css/livingdocs.css",
+            livingdocsCssFile: false,
             editable: {
                 browserSpellcheck: true,
                 changeDelay: 50

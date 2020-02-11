@@ -3,7 +3,7 @@ import * as $ from 'jquery';
 import { createStyleEditor } from "../modules/lf-style-editor";
 import { componentExportForm } from "../modules/lf-component-export";
 import { selectImage } from "../modules/lf-image-selector";
-import { linkSelectorDialog } from "../../../../vendor/symbiote/silverstripe-prose-editor/editor/src/plugins/ss-link-selector";
+import { linkSelectorDialog } from "../../../../../symbiote/silverstripe-prose-editor/editor/src/plugins/ss-link-selector";
 import createComponentList from "./createComponentList";
 
 var PROPS_HOLDER = 'livingdocs_EditorField_Toolbar_options';

@@ -5,7 +5,7 @@
         "version": "0.0.1",
         "author": "symbiote.com.au",
         "assets": {
-            "basePath": 'frontend-livingdoc/app/dist',
+            "basePath": '/resources/nyeholt/silverstripe-frontend-livingdoc/app/dist',
             "css": [
                 "./css/base.css"
             ]
