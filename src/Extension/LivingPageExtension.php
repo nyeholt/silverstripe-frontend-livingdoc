@@ -151,6 +151,15 @@ class LivingPageExtension extends DataExtension
         // a defined shortcode
         $shortcode = strpos($items[$label], "[") ? $items[$label] : '[' . $label . ']';
 
+        if ($label == 'embed') {
+            if (!isset($shortcodeParams['width'])) {
+                $shortcodeParams['width'] = '100%';
+            }
+            if (!isset($shortcodeParams['height'])) {
+                $shortcodeParams['height'] = '100%';
+            }
+        }
+
         $paramStr = $this->attrListToAttrString($shortcodeParams);
 
         return strlen($paramStr) ? str_replace(']', ' ' . $paramStr . ']', $shortcode) : $items[$label];

@@ -246,6 +246,7 @@ class LivingPageControllerExtension extends Extension
             'designFile' => $designFile,
             'endpoints' => [
                 'paste' => $this->owner->Link('pastefile'),
+                'upload' => $this->owner->Link('uploadfile'),
                 // the following aren't used at present, instead we're using a ContentSource that hooks back to the
                 // SilverStripe form
                 'save' => $this->owner->Link('save'),
