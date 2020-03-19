@@ -163,6 +163,12 @@ You can paste clipboard images in a few different contexts;
 * When a container is selected, a new image is inserted at the end of that container
 
 
+## Building new bundles
+
+* cd vendor/nyeholt/silverstripe-frontend-livingdoc/app
+* yarn install
+* yarn watch
+
 
 
 ## Limitations

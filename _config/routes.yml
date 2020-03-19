@@ -4,4 +4,5 @@ After: 'framework/routes#coreroutes'
 ---
 Director:
   rules:
+    'page-editor': Symbiote\Frontend\LivingPage\Control\LivingPageEditController
     'render-shortcode': ShortcodeRenderer
