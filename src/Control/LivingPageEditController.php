@@ -4,6 +4,7 @@ namespace Symbiote\Frontend\LivingPage\Control;
 
 use Exception;
 use SilverStripe\Assets\Upload;
+use SilverStripe\CMS\Controllers\ModelAsController;
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Control\Controller;
 use SilverStripe\Control\Director;
@@ -19,6 +20,7 @@ use SilverStripe\Security\PermissionProvider;
 use SilverStripe\Security\Security;
 use SilverStripe\Security\SecurityToken;
 use SilverStripe\Versioned\Versioned;
+use SilverStripe\View\ArrayData;
 use SilverStripe\View\Parsers\ShortcodeParser;
 use SilverStripe\View\Requirements;
 use Symbiote\Frontend\LivingPage\Extension\FakeUploadValidator;
@@ -49,6 +51,10 @@ class LivingPageEditController extends Controller implements PermissionProvider
         }
         $pageId = $this->getRequest()->param('ID');
 
+        if (!$pageId) {
+            $pageId = $this->getRequest()->postVar('ID');
+        }
+
         if ($pageId) {
             $this->page = SiteTree::get()->byID($pageId);
 
@@ -58,6 +64,8 @@ class LivingPageEditController extends Controller implements PermissionProvider
                 }
             }
         }
+
+        return $this->page;
     }
 
     public function Link($action = '')
@@ -68,26 +76,7 @@ class LivingPageEditController extends Controller implements PermissionProvider
     public function onBeforeInit()
     {
 
-        // at the top so it can be overridden by user css
-        Requirements::css('nyeholt/silverstripe-frontend-livingdoc: app/dist/css/base.css');
 
-        // same with any highlight css needed
-        Requirements::css('nyeholt/silverstripe-frontend-livingdoc: javascript/highlight/googlecode.css');
-
-        $page = $this->getPage();
-
-        if ($this->getRequest()->getVar('edit') === 'stop') {
-            $this->endEditing();
-            return $this->redirect($page->Link());
-        }
-
-        if (!strlen($page->PageStructure)) {
-            $page->PageStructure = json_encode([
-                'data' => LivingPageExtension::config()->default_page
-            ]);
-        }
-
-        Versioned::set_stage(Versioned::DRAFT);
 
         // if ($this->getRequest()->getVar('edit') && $page->canEdit()) {
         //     // needs to be done this way to ensure Stage mode is set via the session
@@ -106,7 +95,36 @@ class LivingPageEditController extends Controller implements PermissionProvider
     {
         $page = $this->getPage();
 
+        // at the top so it can be overridden by user css
+        Requirements::css('nyeholt/silverstripe-frontend-livingdoc: app/dist/css/base.css');
+
+        // same with any highlight css needed
+        Requirements::css('nyeholt/silverstripe-frontend-livingdoc: javascript/highlight/googlecode.css');
+
+        if ($this->getRequest()->getVar('edit') === 'stop') {
+            $this->endEditing();
+            return $this->redirect($page->Link());
+        }
+
+        if (!strlen($page->PageStructure)) {
+            $page->PageStructure = json_encode([
+                'data' => LivingPageExtension::config()->default_page
+            ]);
+        }
+
+        Versioned::set_stage(Versioned::DRAFT);
+
         $this->includeEditingRequirements();
+
+        $ctrl = ModelAsController::controller_for($page);
+
+        $content = $ctrl->render([
+            'EditMode' => $this->getEditMode(),
+            'LivingDocsConfig' => json_encode($this->getLivingDocsConfig()),
+            'LivingForm' => $this->LivingForm()
+        ]);
+
+        return $content;
     }
 
     public function includeEditingRequirements()
@@ -365,12 +383,7 @@ class LivingPageEditController extends Controller implements PermissionProvider
             return false;
         }
 
-        if ($this->getRequest()->getVar('edit')) {
-            $this->getRequest()->getSession()->set('EditMode', 1);
-        }
-
-        $edit = ((int) $this->getRequest()->getSession()->get('EditMode')) > 0;
-        return $edit;
+        return true;
     }
 
     public function endEditing()
@@ -393,6 +406,7 @@ class LivingPageEditController extends Controller implements PermissionProvider
             HiddenField::create('PageStructure', "JSON structure"),
             HiddenField::create('Content', "HTML structure"),
             HiddenField::create('Embeds', 'Content embeds', json_encode($embeds)),
+            HiddenField::create('ID', 'ID', $record->ID),
             HiddenField::create('EmbedLink', 'Embed link', '/__prose/rendershortcode')
         ]);
 

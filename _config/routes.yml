@@ -2,7 +2,6 @@
 Name: frontendlivingdocroutes
 After: 'framework/routes#coreroutes'
 ---
-Director:
+SilverStripe\Control\Director:
   rules:
-    'page-editor': Symbiote\Frontend\LivingPage\Control\LivingPageEditController
-    'render-shortcode': ShortcodeRenderer
+    'page-editor': 'Symbiote\Frontend\LivingPage\Control\LivingPageEditController'
