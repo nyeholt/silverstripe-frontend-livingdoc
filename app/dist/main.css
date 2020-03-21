@@ -2525,7 +2525,7 @@ body.show-livingdocs-toolbar .livingdocs-toolbar {
   font-size: 0.875rem;
   border-radius: 2px; }
 
-.livingdocs-toolbar .livingdocs-page-options {
+.livingdocs-toolbar #livingdocs-page-options {
   padding: 3px; }
 
 .livingdocs-toolbar .livingdocs-history-list {
@@ -2574,7 +2574,7 @@ body.show-livingdocs-toolbar .livingdocs-toolbar {
 .livingdocs-toolbar .component-list {
   padding-bottom: 100px; }
 
-.livingdocs-components div.group-component-holder {
+#livingdocs-components div.group-component-holder {
   font-size: 14px;
   line-height: 22px;
   letter-spacing: 1px;
@@ -2680,7 +2680,7 @@ body.doc-no-selection .livingdocs-toolbar iframe {
 .livingdocs_EditorField_Toolbar_options > h5 {
   font-size: 1rem; }
 
-.livingdocs-components h2 {
+#livingdocs-components h2 {
   font-size: 14px;
   color: #000;
   line-height: 24px;
