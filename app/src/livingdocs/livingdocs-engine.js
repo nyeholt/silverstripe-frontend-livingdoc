@@ -2630,6 +2630,9 @@ module.exports = ComponentContainer = (function() {
   };
 
   ComponentContainer.prototype.isAllowedAsChild = function(component) {
+      if (!component) {
+          return false;
+      }
     return !!(this.canBeNested(component.id) && this.isChildAllowed(component.template) && this.isAllowedAsParent(component.template));
   };
 

@@ -19,6 +19,7 @@ use SilverStripe\Security\PermissionFailureException;
 use SilverStripe\Security\PermissionProvider;
 use SilverStripe\Security\Security;
 use SilverStripe\Security\SecurityToken;
+use SilverStripe\SiteConfig\SiteConfig;
 use SilverStripe\Versioned\Versioned;
 use SilverStripe\View\ArrayData;
 use SilverStripe\View\Parsers\ShortcodeParser;
@@ -217,17 +218,18 @@ class LivingPageEditController extends Controller implements PermissionProvider
             ];
         }
 
+        $designName = isset($design['data']['design']['name']) ? $design['data']['design']['name'] : '';
 
         // explicit binding because I'm too lazy right now to add yet another extension
-        // if (class_exists(Multisites::class) && Multisites::inst()->getCurrentSite()->LivingPageTheme) {
-        //     $siteThemeName = Multisites::inst()->getCurrentSite()->LivingPageTheme;
-        //     if ($siteThemeName != $designName) {
-        //         // go through _all_ components and update the design name
-        //         $design['data']['content'] = $record->updateDesignName($designName, $siteThemeName, $design['data']['content']);
-        //     }
-        //     $designName = $siteThemeName;
-        //     $design['data']['design']['name'] = $siteThemeName;
-        // }
+        if (SiteConfig::current_site_config()->LivingPageTheme) {
+            $siteThemeName = SiteConfig::current_site_config()->LivingPageTheme;
+            if ($siteThemeName != $designName) {
+                // go through _all_ components and update the design name
+                $design['data']['content'] = $record->updateDesignName($designName, $siteThemeName, $design['data']['content']);
+            }
+            $designName = $siteThemeName;
+            $design['data']['design']['name'] = $siteThemeName;
+        }
 
         // converts all nodes to current content state where necessary (in particular, embed items)
         $newContent = [];
@@ -241,7 +243,7 @@ class LivingPageEditController extends Controller implements PermissionProvider
 
         $designOptions = LivingPageExtension::config()->living_designs;
 
-        $designName    = $design['data']['design']['name'];
+
         $designFile = $designOptions[$designName];
 
         if (!$designFile) {

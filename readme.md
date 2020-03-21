@@ -32,12 +32,9 @@ configuration (depending on whether you're using multisites or not)
 ---
 Name: livingpage_config
 ---
-Site:
-  extensions:
-    - LivingPageSettingsExtension
 SiteConfig:
   extensions:
-    - LivingPageSettingsExtension
+    - Symbiote\Frontend\LivingPage\Extension\LivingPageSettingsExtension
 
 ```
 
