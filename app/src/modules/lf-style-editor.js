@@ -66,6 +66,10 @@ export function createStyleEditor(component) {
             label: "Text colour",
             value: customStyles['color'] || '',
         }),
+        "text-align": new TextField({
+            label: "Text alignment",
+            value: customStyles['text-align'] || '',
+        }),
     };
 
     // fields['background-color'].textType = 'color';

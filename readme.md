@@ -32,12 +32,9 @@ configuration (depending on whether you're using multisites or not)
 ---
 Name: livingpage_config
 ---
-Site:
-  extensions:
-    - LivingPageSettingsExtension
 SiteConfig:
   extensions:
-    - LivingPageSettingsExtension
+    - Symbiote\Frontend\LivingPage\Extension\LivingPageSettingsExtension
 
 ```
 
@@ -162,6 +159,12 @@ You can paste clipboard images in a few different contexts;
 * When an existing image is selected, it will replace that image
 * When a container is selected, a new image is inserted at the end of that container
 
+
+## Building new bundles
+
+* cd vendor/nyeholt/silverstripe-frontend-livingdoc/app
+* yarn install
+* yarn watch
 
 
 

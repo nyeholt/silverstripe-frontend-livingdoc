@@ -5,6 +5,7 @@ use SilverStripe\Forms\DropdownField;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\TextareaField;
 use SilverStripe\ORM\DataExtension;
+use Symbiote\Multisites\Model\Site;
 use Symbiote\MultiValueField\Fields\KeyValueField;
 
 /**
@@ -32,7 +33,7 @@ class LivingPageSettingsExtension extends DataExtension
     public function updateLivingPageFields(FieldList $fields) {
         $opts = LivingPageExtension::config()->living_designs;
         $opts = array_combine(array_keys($opts), array_keys($opts));
-        
+
 
         $pageOptions = [
             KeyValueField::create('GlobalShortcodes', 'Livingpage shorcodes'),

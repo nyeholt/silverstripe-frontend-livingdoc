@@ -1,36 +1,100 @@
 <?php
-namespace Symbiote\Frontend\LivingPage\Extension;
+
+namespace Symbiote\Frontend\LivingPage\Control;
 
 use Exception;
 use SilverStripe\Assets\Upload;
+use SilverStripe\CMS\Controllers\ModelAsController;
+use SilverStripe\CMS\Model\SiteTree;
+use SilverStripe\Control\Controller;
 use SilverStripe\Control\Director;
 use SilverStripe\Control\HTTPRequest;
-use SilverStripe\Core\Extension;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\Form;
 use SilverStripe\Forms\FormAction;
 use SilverStripe\Forms\HiddenField;
 use SilverStripe\Forms\HTMLEditor\HTMLEditorField;
+use SilverStripe\Security\PermissionFailureException;
+use SilverStripe\Security\PermissionProvider;
 use SilverStripe\Security\Security;
 use SilverStripe\Security\SecurityToken;
+use SilverStripe\SiteConfig\SiteConfig;
 use SilverStripe\Versioned\Versioned;
+use SilverStripe\View\ArrayData;
 use SilverStripe\View\Parsers\ShortcodeParser;
 use SilverStripe\View\Requirements;
+use Symbiote\Frontend\LivingPage\Extension\FakeUploadValidator;
+use Symbiote\Frontend\LivingPage\Extension\LivingPageExtension;
 use Symbiote\Frontend\LivingPage\Model\CompoundComponent;
 use Symbiote\Frontend\LivingPage\Model\PageComponent;
 use Symbiote\Prose\ProseController;
 
-class LivingPageControllerExtension extends Extension
+class LivingPageEditController extends Controller implements PermissionProvider
 {
-    private static $allowed_actions = array(
-        'LivingForm',
-        'pastefile',
-        'renderembed'
-    );
+    const EDIT_PAGES = 'EDIT_LIVING_PAGES';
+
+    private static $allowed_actions = [
+        'edit' => self::EDIT_PAGES,
+        'LivingForm' => self::EDIT_PAGES,
+        'pastefile' => self::EDIT_PAGES,
+        'renderembed' => self::EDIT_PAGES,
+    ];
+
+    protected $page = null;
+
+    protected function getPage()
+    {
+        Versioned::set_stage(Versioned::DRAFT);
+
+        if ($this->page) {
+            return $this->page;
+        }
+        $pageId = $this->getRequest()->param('ID');
+
+        if (!$pageId) {
+            $pageId = $this->getRequest()->postVar('ID');
+        }
+
+        if ($pageId) {
+            $this->page = SiteTree::get()->byID($pageId);
+
+            if ($this->page) {
+                if (!$this->page->canEdit()) {
+                    throw new PermissionFailureException("Cannot edit this page");
+                }
+            }
+        }
+
+        return $this->page;
+    }
+
+    public function Link($action = '')
+    {
+        return Controller::join_links('page-editor', $action);
+    }
 
     public function onBeforeInit()
     {
+
+
+
+        // if ($this->getRequest()->getVar('edit') && $page->canEdit()) {
+        //     // needs to be done this way to ensure Stage mode is set via the session
+        //     // otherwise it'll default to live because we're on the frontend
+
+        //     Versioned::set_stage(Versioned::DRAFT);
+
+        //     // trigger edit mode, so redirect works
+        //     if ($this->getEditMode()) {
+        //         return $this->redirect($page->Link());
+        //     }
+        // }
+    }
+
+    public function edit()
+    {
+        $page = $this->getPage();
 
         // at the top so it can be overridden by user css
         Requirements::css('nyeholt/silverstripe-frontend-livingdoc: app/dist/css/base.css');
@@ -38,110 +102,35 @@ class LivingPageControllerExtension extends Extension
         // same with any highlight css needed
         Requirements::css('nyeholt/silverstripe-frontend-livingdoc: javascript/highlight/googlecode.css');
 
-        if ($this->owner->getRequest()->getVar('edit') && !$this->owner->data()->canEdit()) {
-            // redirect to login
-            return Security::permissionFailure($this->owner);
-        }
-
-        if ($this->owner->getRequest()->getVar('edit') === 'stop') {
+        if ($this->getRequest()->getVar('edit') === 'stop') {
             $this->endEditing();
-            return $this->owner->redirect($this->owner->data()->Link());
+            return $this->redirect($page->Link());
         }
 
-        if (!strlen($this->owner->data()->PageStructure)) {
-            $this->owner->data()->PageStructure = json_encode([
+        if (!strlen($page->PageStructure)) {
+            $page->PageStructure = json_encode([
                 'data' => LivingPageExtension::config()->default_page
             ]);
         }
 
-        if ($this->owner->getRequest()->getVar('edit') && $this->owner->data()->canEdit()) {
-            // needs to be done this way to ensure Stage mode is set via the session
-            // otherwise it'll default to live because we're on the frontend
+        Versioned::set_stage(Versioned::DRAFT);
 
-            Versioned::set_stage(Versioned::DRAFT);
+        $this->includeEditingRequirements();
 
-            // trigger edit mode, so redirect works
-            if ($this->getEditMode()) {
-                return $this->owner->redirect($this->owner->data()->Link());
-            }
-        }
+        $ctrl = ModelAsController::controller_for($page);
+
+        $content = $ctrl->render([
+            'EditMode' => $this->getEditMode(),
+            'LivingDocsConfig' => json_encode($this->getLivingDocsConfig()),
+            'LivingForm' => $this->LivingForm()
+        ]);
+
+        return $content;
     }
 
-    public function onAfterInit()
+    public function includeEditingRequirements()
     {
-        if (!$this->owner->getRequest()->getVar('edit') && $this->owner->data()->canEdit() && $this->getEditMode()) {
-            $this->includeEditingRequirements();
-        }
-    }
-
-    public function includeEditingRequirements() {
-        // $record = $this->editingRecord();
-            // needed to swap back to this; there's potential stage vs non-stage init issues here, but the
-            // failover record setting later fails due to an SS bug
-            $record = $this->owner->data();
-
-            $design = json_decode($record->PageStructure, true);
-
-            // check if we're incorrectly nested; supports legacy structures
-            if (!isset($design['data']) && isset($design['content'])) {
-                $design = ['data' => $design];
-            }
-
-            // create a default page data
-            if (!$design) {
-                $design = [
-                    'data' => LivingPageExtension::config()->default_page
-                ];
-            }
-
-            // make sure there's a design version
-            if (!isset($design['data']['design']['version'])) {
-                $design['data']['design'] = [
-                    'name' => 'bootstrap3',
-                    "version" => "0.0.1",
-                ];
-            }
-
-            $designName    = $design['data']['design']['name'];
-            // explicit binding because I'm too lazy right now to add yet another extension
-            // if (class_exists(Multisites::class) && Multisites::inst()->getCurrentSite()->LivingPageTheme) {
-            //     $siteThemeName = Multisites::inst()->getCurrentSite()->LivingPageTheme;
-            //     if ($siteThemeName != $designName) {
-            //         // go through _all_ components and update the design name
-            //         $design['data']['content'] = $record->updateDesignName($designName, $siteThemeName, $design['data']['content']);
-            //     }
-            //     $designName = $siteThemeName;
-            //     $design['data']['design']['name'] = $siteThemeName;
-            // }
-
-            // converts all nodes to current content state where necessary (in particular, embed items)
-            $newContent = [];
-            foreach ($design['data']['content'] as $component) {
-                $newContent[] = $this->convertEmbedNodes($component);
-            }
-
-            $design['data']['content'] = $newContent;
-
-            $this->owner->data()->extend('updateLivingDesign', $design);
-
-            $config = $this->getLivingDocsConfig();
-
-            Requirements::block(THIRDPARTY_DIR.'/jquery/jquery.js');
-
-            Requirements::javascript('nyeholt/silverstripe-frontend-livingdoc: app/dist/main.js');
-            Requirements::css('nyeholt/silverstripe-frontend-livingdoc: app/dist/main.css');
-
-            Requirements::javascript($config['designFile']);
-    }
-
-    protected $livingConfig;
-
-    public function getLivingDocsConfig() {
-        if ($this->livingConfig) {
-            return $this->livingConfig;
-        }
-
-        $record = $this->owner->data();
+        $record = $this->getPage();
 
         $design = json_decode($record->PageStructure, true);
 
@@ -165,7 +154,7 @@ class LivingPageControllerExtension extends Extension
             ];
         }
 
-
+        $designName    = $design['data']['design']['name'];
         // explicit binding because I'm too lazy right now to add yet another extension
         // if (class_exists(Multisites::class) && Multisites::inst()->getCurrentSite()->LivingPageTheme) {
         //     $siteThemeName = Multisites::inst()->getCurrentSite()->LivingPageTheme;
@@ -185,11 +174,76 @@ class LivingPageControllerExtension extends Extension
 
         $design['data']['content'] = $newContent;
 
-        $this->owner->data()->extend('updateLivingDesign', $design);
+        $record->extend('updateLivingDesign', $design);
+
+        $config = $this->getLivingDocsConfig();
+
+        Requirements::block(THIRDPARTY_DIR . '/jquery/jquery.js');
+
+        Requirements::javascript('nyeholt/silverstripe-frontend-livingdoc: app/dist/main.js');
+        Requirements::css('nyeholt/silverstripe-frontend-livingdoc: app/dist/main.css');
+
+        Requirements::javascript($config['designFile']);
+    }
+
+    protected $livingConfig;
+
+    public function getLivingDocsConfig()
+    {
+        if ($this->livingConfig) {
+            return $this->livingConfig;
+        }
+
+        $record = $this->getPage();
+
+        $design = json_decode($record->PageStructure, true);
+
+        // check if we're incorrectly nested; supports legacy structures
+        if (!isset($design['data']) && isset($design['content'])) {
+            $design = ['data' => $design];
+        }
+
+        // create a default page data
+        if (!$design) {
+            $design = [
+                'data' => LivingPageExtension::config()->default_page
+            ];
+        }
+
+        // make sure there's a design version
+        if (!isset($design['data']['design']['version'])) {
+            $design['data']['design'] = [
+                'name' => 'bootstrap3',
+                "version" => "0.0.1",
+            ];
+        }
+
+        $designName = isset($design['data']['design']['name']) ? $design['data']['design']['name'] : '';
+
+        // explicit binding because I'm too lazy right now to add yet another extension
+        if (SiteConfig::current_site_config()->LivingPageTheme) {
+            $siteThemeName = SiteConfig::current_site_config()->LivingPageTheme;
+            if ($siteThemeName != $designName) {
+                // go through _all_ components and update the design name
+                $design['data']['content'] = $record->updateDesignName($designName, $siteThemeName, $design['data']['content']);
+            }
+            $designName = $siteThemeName;
+            $design['data']['design']['name'] = $siteThemeName;
+        }
+
+        // converts all nodes to current content state where necessary (in particular, embed items)
+        $newContent = [];
+        foreach ($design['data']['content'] as $component) {
+            $newContent[] = $this->convertEmbedNodes($component);
+        }
+
+        $design['data']['content'] = $newContent;
+
+        $record->extend('updateLivingDesign', $design);
 
         $designOptions = LivingPageExtension::config()->living_designs;
 
-        $designName    = $design['data']['design']['name'];
+
         $designFile = $designOptions[$designName];
 
         if (!$designFile) {
@@ -236,12 +290,12 @@ class LivingPageControllerExtension extends Extension
             'compounds' => $compounds,
             'designFile' => $designFile,
             'endpoints' => [
-                'paste' => $this->owner->Link('pastefile'),
-                'upload' => $this->owner->Link('uploadfile'),
+                'paste' => $this->Link('pastefile'),
+                'upload' => $this->Link('uploadfile'),
                 // the following aren't used at present, instead we're using a ContentSource that hooks back to the
                 // SilverStripe form
-                'save' => $this->owner->Link('save'),
-                'publish' => $this->owner->Link('publish'),
+                'save' => $this->Link('save'),
+                'publish' => $this->Link('publish'),
                 'workflow' => '',
             ]
         ];
@@ -258,6 +312,8 @@ class LivingPageControllerExtension extends Extension
      */
     protected function convertEmbedNodes(&$component)
     {
+        $page = $this->getPage();
+
         if (isset($component['identifier']) && strpos($component['identifier'], 'embeddeditem') && isset($component['content'])) {
             $dataAttrs = isset($component['data']['data_attributes']) ? $component['data']['data_attributes'] : [];
             foreach ($component['content'] as $name => $props) {
@@ -265,14 +321,13 @@ class LivingPageControllerExtension extends Extension
                 if (isset($props['attrs'])) {
                     $shortcodeParams = json_decode($props['attrs'], true);
                 }
-                $shortCode = $this->owner->data()->shortcodeFor($props['source'], $shortcodeParams);
+                $shortCode = $page->shortcodeFor($props['source'], $shortcodeParams);
                 if ($shortCode) {
                     try {
                         $props['content'] = ShortcodeParser::get_active()->parse($shortCode);
-                    } catch(Exception $e) {
+                    } catch (Exception $e) {
                         $props['content'] = Director::isDev() ? "Failed parsing shortcode" : "";
                     }
-
                 }
                 $component['content'][$name] = $props;
             }
@@ -292,32 +347,30 @@ class LivingPageControllerExtension extends Extension
 
     public function renderembed()
     {
-        $editing = $this->editingRecord();
+        $editing = $this->getPage();
         if (!$editing || !$editing->canEdit()) {
-            return $this->owner->httpError('403');
+            return $this->httpError('403');
         }
-        $item      = $this->owner->getRequest()->getVar('embed');
-        $available = $this->owner->data()->availableShortcodes();
+        $item      = $this->getRequest()->getVar('embed');
+        $available = $editing->availableShortcodes();
 
         if (isset($available[$item])) {
-            $shortcodeParams = $this->owner->getRequest()->getVar('attrs') ?
-                json_decode($this->owner->getRequest()->getVar('attrs'), true) : [];
+            $shortcodeParams = $this->getRequest()->getVar('attrs') ?
+                json_decode($this->getRequest()->getVar('attrs'), true) : [];
 
-            $shortcodeStr = $this->owner->data()->shortcodeFor($item, $shortcodeParams);
+            $shortcodeStr = $editing->shortcodeFor($item, $shortcodeParams);
             return ShortcodeParser::get_active()->parse($shortcodeStr);
         }
     }
 
-    protected function editingRecord()
-    {
-        Versioned::set_stage(Versioned::DRAFT);
-        $recordClass = $this->owner->data()->ClassName;
-        return $recordClass::get()->byID($this->owner->data()->ID);
-    }
-
+    /**
+     * Are we in edit mode?
+     */
     public function getEditMode()
     {
-        if (!$this->owner->data()->canEdit()) {
+        $page = $this->getPage();
+
+        if (!$page->canEdit()) {
             $this->endEditing();
             return false;
         }
@@ -328,20 +381,16 @@ class LivingPageControllerExtension extends Extension
         }
 
         // one-off preview that does _not_ stop edit mode
-        if ($this->owner->getRequest()->getVar('preview')) {
+        if ($this->getRequest()->getVar('preview')) {
             return false;
         }
-        if ($this->owner->getRequest()->getVar('edit')) {
-            $this->owner->getRequest()->getSession()->set('EditMode', 1);
-        }
 
-        $edit = ((int) $this->owner->getRequest()->getSession()->get('EditMode')) > 0;
-        return $edit;
+        return true;
     }
 
     public function endEditing()
     {
-        $this->owner->getRequest()->getSession()->clear('EditMode');
+        $this->getRequest()->getSession()->clear('EditMode');
         Versioned::set_stage(Versioned::LIVE);
     }
 
@@ -351,19 +400,20 @@ class LivingPageControllerExtension extends Extension
             return;
         }
 
-        $record = $this->owner->data();
+        $record = $this->getPage();
         $embeds = $record->availableShortcodes();
 
         $fields = FieldList::create([
-                HiddenField::create('stage', "Stage", "Stage"),
-                HiddenField::create('PageStructure', "JSON structure"),
-                HiddenField::create('Content', "HTML structure"),
-                HiddenField::create('Embeds', 'Content embeds', json_encode($embeds)),
-                HiddenField::create('EmbedLink', 'Embed link', '/__prose/rendershortcode')
+            HiddenField::create('stage', "Stage", "Stage"),
+            HiddenField::create('PageStructure', "JSON structure"),
+            HiddenField::create('Content', "HTML structure"),
+            HiddenField::create('Embeds', 'Content embeds', json_encode($embeds)),
+            HiddenField::create('ID', 'ID', $record->ID),
+            HiddenField::create('EmbedLink', 'Embed link', '/__prose/rendershortcode')
         ]);
 
         $actions = FieldList::create([
-                FormAction::create('save', 'Save')->setUseButtonTag(true),
+            FormAction::create('save', 'Save')->setUseButtonTag(true),
         ]);
 
         if ($record->canPublish()) {
@@ -398,37 +448,36 @@ class LivingPageControllerExtension extends Extension
 
     public function save($data, Form $form, $request)
     {
-        if (!$this->owner->data()->canEdit()) {
-            return $this->owner->httpError(403);
-        }
-
-        $record = $this->editingRecord();
+        $record = $this->getPage();
 
         $dummyHtmlField = HTMLEditorField::create('Content', 'Content', isset($data['Content']) ? $data['Content'] : '');
         $form->Fields()->replaceField('Content', $dummyHtmlField);
         $form->saveInto($record);
 
-        $this->owner->getResponse()->addHeader('Content-type', 'application/json');
+        $this->getResponse()->addHeader('Content-type', 'application/json');
         if ($record->write()) {
-            $this->owner->getResponse()->addHeader('Content-type', 'application/json');
+            $this->getResponse()->addHeader('Content-type', 'application/json');
             return json_encode(['status' => 'success']);
         }
-        return $this->owner->httpError(500);
+        return $this->httpError(500);
     }
 
-    public function pastefile(HTTPRequest $request) {
+    public function pastefile(HTTPRequest $request)
+    {
+        $page = $this->getPage();
+
         if (class_exists(ProseController::class)) {
             $alt = ProseController::create();
-            $this->owner->getResponse()->addHeader('Content-Type', 'application/json');
+            $this->getResponse()->addHeader('Content-Type', 'application/json');
             return $alt->pastefile($request);
         }
         if (!SecurityToken::inst()->checkRequest($request)) {
-            return $this->owner->httpError(403);
+            return $this->httpError(403);
         }
 
         $raw = $request->postVar('rawData');
 
-        $filename = $request->postVar('filename') ? $request->postVar('filename') . '.png' : $this->owner->data()->Title . '-upload.png';
+        $filename = $request->postVar('filename') ? $request->postVar('filename') . '.png' : $page->Title . '-upload.png';
 
         $response = ['success' => false];
 
@@ -461,20 +510,33 @@ class LivingPageControllerExtension extends Extension
             }
         }
 
-        $this->owner->getResponse()->addHeader('Content-Type', 'application/json');
+        $this->getResponse()->addHeader('Content-Type', 'application/json');
         return json_encode($response, JSON_PRETTY_PRINT);
     }
 
     public function publish($data, Form $form, $request)
     {
-        $record = $this->editingRecord();
+        $record = $this->getPage();
 
         if (!$record->canPublish()) {
-            return $this->owner->httpError(403);
+            return $this->httpError(403);
         }
 
         $success = $record->doPublish();
-        $this->owner->getResponse()->addHeader('Content-type', 'application/json');
+        $this->getResponse()->addHeader('Content-type', 'application/json');
         return json_encode(['status' => $success ? 'success' : 'fail']);
+    }
+
+
+    public function providePermissions()
+    {
+        return [
+            self::EDIT_PAGES => [
+                'name' => 'Edit Living pages',
+                'category' => 'Content permissions',
+                'sort' => 2,
+                'help' => 'Allows users to edit pages on the frontend'
+            ]
+        ];
     }
 }
