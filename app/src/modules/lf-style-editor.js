@@ -3,11 +3,9 @@ import LivingDocState from '../lib/LivingDocState';
 import { TextField } from '../../../../../symbiote/silverstripe-prose-editor/editor/src/fields/TextField';
 import { openPrompt } from '../../../../../symbiote/silverstripe-prose-editor/editor/src/proseutil/prose-prompt';
 
-var PROPS_HOLDER = 'livingdocs_EditorField_Toolbar_options';
-
 var STYLES_PROP = 'element_styles';
 
-export function createStyleEditor(component) {
+export function createStyleEditor(component, editContainer) {
     let customStyles = component.model.getData(STYLES_PROP);
     if (!customStyles) {
         customStyles = {};
@@ -94,10 +92,15 @@ export function createStyleEditor(component) {
         });
     }
 
-    let editContainer = $('.livingdocs-item-properties')[0];
+    if (!editContainer) {
+        editContainer = $('.livingdocs-item-properties')[0];
+    }
+
     openPrompt({
         title: "Component Styles",
         fields: fields,
+        forceRemainOpen: true,
+        hideButtons: true,
         update: function (name, value) {
             let currentStyles = component.model.getData(STYLES_PROP);
             if (!currentStyles) {

@@ -5,12 +5,13 @@ import { componentExportForm } from "../modules/lf-component-export";
 import { selectImage } from "../modules/lf-image-selector";
 import { linkSelectorDialog } from "../../../../../symbiote/silverstripe-prose-editor/editor/src/plugins/ss-link-selector";
 import createComponentList from "./createComponentList";
+import { select_tab } from "../editor-interface";
+import { initialise_attribute_editor } from "../modules/lf-attr-editor";
 
 var PROPS_HOLDER = 'livingdocs_EditorField_Toolbar_options';
 var BOTTOM_BAR = '.livingdocs-bottom-bar';
 
 var ITEM_PROPERTIES_HOLDER = '.livingdocs-item-properties';
-
 
 $(document).on('click', function (e) {
     if ($(e.target).parents('#livingdocs-editor').length <= 0 &&
@@ -18,6 +19,7 @@ $(document).on('click', function (e) {
         $(e.target).parents(ITEM_PROPERTIES_HOLDER).length <= 0 &&
         $(e.target).parents(BOTTOM_BAR).length <= 0) {
         // remove the properties editing
+        select_tab('default');
         $('.' + PROPS_HOLDER).remove();
     }
 })
@@ -33,15 +35,6 @@ export function initialise_property_editor() {
         LivingDocState.focusOn(component);
 
         options.append("<h4>" + component.model.componentName + " properties</h4>");
-
-        var closer = $('<button class="close properties-closer" title="Close properties"><span class="icon"></span>&times;</button>')
-            .on('click', function (e) {
-                e.preventDefault();
-                LivingDocState.blur();
-                $("." + PROPS_HOLDER).remove();
-                return false;
-            })
-            .appendTo(options);
 
         for (var s_id in component.model.template.styles) {
             var curr_style = component.model.template.styles[s_id];
@@ -224,72 +217,24 @@ export function initialise_property_editor() {
 
         });
 
-        var editStyles = $('<button class="alert">Styles</button>'); // .prependTo(options.find('.component-actions'));
-
-        editStyles.click(function (e) {
-            createStyleEditor(component);
-        });
-
-
         var exportButton = $('<button>Export</button>');
 
         exportButton.click(function (e) {
             componentExportForm(component);
         })
 
-        $('<div class="Actions component-actions">').appendTo(options).append(editStyles).append($dupe_button).append($delete_button).append(exportButton);
+        $('<div class="Actions component-actions">').appendTo(options).append($dupe_button).append($delete_button).append(exportButton);
+
+        // TODO Re-evaluate whether we need access to the raw attribute values
+        // initialise_attribute_editor(options, component);
+
+        let styleDiv = $('<div>').appendTo(options);
 
         $properties.html(options);
-        if ($.fn.drags) {
-            $(ITEM_PROPERTIES_HOLDER).drags({
-                handle: "h4"
-            });
-        }
+
+        createStyleEditor(component, styleDiv[0]);
+
+        select_tab('livingdocs-property-tab');
     });
 }
 
-$.fn.drags = function(opt) {
-    opt = $.extend({handle:"",cursor:"move"}, opt);
-
-    var $el = this;
-
-    if(opt.handle === "") {
-        var $handle = this;
-    } else {
-        var $handle = this.find(opt.handle);
-    }
-
-    return $handle.css('cursor', opt.cursor).on("mousedown", function(e) {
-        var $drag = $el.addClass('__draggable');
-
-        if(opt.handle === "") {
-
-        } else {
-            $handle.addClass('active-handle');
-        }
-        var z_idx = $drag.css('z-index'),
-            drg_h = $drag.outerHeight(),
-            drg_w = $drag.outerWidth(),
-            pos_y = $drag.offset().top + drg_h - e.pageY,
-            pos_x = $drag.offset().left + drg_w - e.pageX;
-        $drag.css({'z-index': '3000'}).parents().on("mousemove", function(e) {
-            $('.__draggable').css('right', 'auto');
-            $('.__draggable').offset({
-                top:e.pageY + pos_y - drg_h,
-                left:e.pageX + pos_x - drg_w
-            }).on("mouseup", function() {
-                $(this).css({'z-index': z_idx});
-                $handle.removeClass('__draggable');
-            });
-        });
-        e.preventDefault(); // disable selection
-    }).on("mouseup", function() {
-        $el.removeClass('__draggable');
-        if(opt.handle === "") {
-
-        } else {
-            $handle.removeClass('active-handle');
-        }
-    });
-
-}

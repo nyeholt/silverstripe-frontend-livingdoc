@@ -1,3 +1,5 @@
+import { select_tab } from "../app/src/editor-interface";
+
 ;
 (function ($) {
 
@@ -120,7 +122,7 @@
         if ($(e.target).parents('.livingdocs-editor').length <= 0 &&
                 $(e.target).parents('.livingdocs-toolbar').length <= 0) {
             // remove the properties editing
-            $('.'+PROPS_HOLDER).remove();
+            select_tab('default');
         }
     })
 

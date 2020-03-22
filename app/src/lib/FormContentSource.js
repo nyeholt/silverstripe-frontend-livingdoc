@@ -8,7 +8,6 @@ import 'jquery-form';
  */
 class FormContentSource {
     TOOLBAR_FORM = '#Form_LivingForm';
-    PROPS_HOLDER = 'livingdocs_EditorField_Toolbar_options';
     DOC_HOLDER = '#livingdocs-editor';
 
     config = {};
@@ -92,7 +91,7 @@ class FormContentSource {
                     selectedDesign.components.push(newComponent);
                 }
             }
-            
+
             if (config.compounds) {
                 for (let i in config.compounds) {
                     let newComponent = config.compounds[i];

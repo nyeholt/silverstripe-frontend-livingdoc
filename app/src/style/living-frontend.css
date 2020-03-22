@@ -3,13 +3,13 @@ body {
 }
 
 body.show-livingdocs-toolbar {
-    padding-left: 250px !important;
+    padding-left: 280px !important;
 }
 
 .livingdocs-toolbar {
     display: none;
     z-index: 3000;
-    width: 250px;
+    width: 280px;
     position: fixed;
     left: 0px;
     top: 0px;
@@ -18,7 +18,8 @@ body.show-livingdocs-toolbar {
     font-size: 14px;
     overflow-y: auto;
     overflow-x: hidden;
-    height: 100%;
+
+    height: calc(100% - 60px);
 
     box-shadow: 0 0 3px rgba(0, 0, 0, 0.25);
     padding: 0;
@@ -210,12 +211,6 @@ body.show-livingdocs-toolbar .livingdocs-toolbar {
     position: relative;
 }
 
-.livingdocs-item-properties .properties-closer {
-    position: absolute;
-    top: 0;
-    right: 10px;
-}
-
 .structure-options {
     font-size: 12px;
 }
@@ -265,16 +260,10 @@ body.doc-no-selection .livingdocs-toolbar iframe {
 }
 
 .livingdocs-item-properties {
-    z-index: 3002;
-    position: fixed;
-    background-color: #fff;
-    top: 20px;
-    right: 10px;
-    border: 1px solid #666;
-    max-height: 400px;
-    width: 280px;
-    font-size: 12px;
-    overflow: auto;
+    /* z-index: 3002;
+    position: fixed; */
+    /* top: 20px;
+    right: 10px; */
 }
 
 .livingdocs_EditorField_Toolbar_options>h4 {
