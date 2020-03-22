@@ -344,8 +344,8 @@
                     "position-absolute",
                     "text-styles",
                     "div-styles",
-                    "column-width",
-                    'column-margin'
+                    // "column-width",
+                    // 'column-margin'
                 ]
             },
             {
@@ -387,8 +387,8 @@
                 "properties": [
                     "display",
                     "text-styles",
-                    "column-width",
-                    'column-margin'
+                    "column-width"
+                    // 'column-margin'
                 ]
             },
 
