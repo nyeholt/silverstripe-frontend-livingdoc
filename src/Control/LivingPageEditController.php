@@ -76,9 +76,6 @@ class LivingPageEditController extends Controller implements PermissionProvider
 
     public function onBeforeInit()
     {
-
-
-
         // if ($this->getRequest()->getVar('edit') && $page->canEdit()) {
         //     // needs to be done this way to ensure Stage mode is set via the session
         //     // otherwise it'll default to live because we're on the frontend

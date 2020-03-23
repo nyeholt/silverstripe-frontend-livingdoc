@@ -36,6 +36,8 @@ export function initialise_property_editor() {
 
         options.append("<h4>" + component.model.componentName + " properties</h4>");
 
+        // handles all the 'styles' ie css classes that this
+        // component can have
         for (var s_id in component.model.template.styles) {
             var curr_style = component.model.template.styles[s_id];
 
@@ -114,7 +116,7 @@ export function initialise_property_editor() {
         if (component.model.directives.image && component.model.directives.image.length) {
             for (var directive_id in component.model.directives.image) {
                 var curr_img = component.model.directives.image[directive_id];
-                var $image_button = $("<button>").text("Select \"" + curr_img.name + '"');
+                var $image_button = $("<button class='ld-item-selector'>").text("Select \"" + curr_img.name + '"');
                 $image_button.on("click", function (comp, img, did) {
                     return function () {
                         selectImage(comp, img, did);
@@ -128,7 +130,7 @@ export function initialise_property_editor() {
             for (var linkIndex in component.model.directives.link) {
                 var updateLink = component.model.directives.link[linkIndex];
 
-                var $link_button = $("<button>").text('Select "' + updateLink.name + '"').on("click", function (comp, link) {
+                var $link_button = $("<button class='ld-item-selector'>").text('Select "' + updateLink.name + '"').on("click", function (comp, link) {
                     return function () {
                         const linkAttrs = {
                             href: comp.get(link.name),

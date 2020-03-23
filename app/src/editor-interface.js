@@ -3,7 +3,7 @@ import createComponentList from './lib/createComponentList';
 
 const TOOLBAR_FORM = '#Form_LivingForm';
 const BOTTOM_BAR = '.livingdocs-bottom-bar';
-
+const PAGE_OPTIONS = '#livingdocs-page-options';
 
 
 export const init_interface = function (doc, selectedDesign) {
@@ -33,6 +33,7 @@ function init_toolbar_tabs() {
     $(document).on('click', '.ld-tab', function (e) {
         e.preventDefault();
         select_tab($(this).attr('href'));
+        return false;
     })
 }
 
@@ -121,20 +122,24 @@ function init_component_list(doc, selectedDesign) {
 }
 
 function init_toolbar_toggles() {
-    let toolbarToggle = $('<button>').text("Show toolbar");
+
+    let toolbarToggle = $('<button>').text("Toggle toolbar");
     $(BOTTOM_BAR).find('.livingdocs-toolbar-controls').append(toolbarToggle);
     toolbarToggle.click(function (e) {
         $('body').toggleClass('show-livingdocs-toolbar');
     });
 
-    const gridToggle = $('<button>Toggle Grid</button>');
-    $(BOTTOM_BAR).find('.livingdocs-toolbar-controls').append(gridToggle);
+    const gridToggle = $('<input type="checkbox" checked>');
+    const enableGrid = $('<label class="ld-toggle">').append(gridToggle).append('Enable grid');
+
+    $(PAGE_OPTIONS).append(enableGrid);
     gridToggle.click(function (e) {
         $('body').toggleClass('no-grid-display');
     });
 
-    const layoutToggle = $('<button>Toggle Layout editing</button>');
-    $(BOTTOM_BAR).find('.livingdocs-toolbar-controls').append(layoutToggle);
+    const layoutToggle = $('<input type="checkbox" checked>');
+    const enableLayout = $('<label class="ld-toggle">').append(layoutToggle).append('Enable layout editing');
+    $(PAGE_OPTIONS).append(enableLayout);
     layoutToggle.click(function (e) {
         var state = $(this).attr('data-layout-editing');
         if (state == 1) {
@@ -143,6 +148,9 @@ function init_toolbar_toggles() {
             $(this).attr('data-layout-editing', 1);
         }
     });
+
+    // and start with the toolbar shown
+    toolbarToggle.click();
 
     LivingDocState.livingdoc.interactiveView.page.componentWillBeDragged.add(function (option) {
         if (layoutToggle.attr('data-layout-editing') == 1) {
@@ -191,5 +199,9 @@ export function select_tab(name) {
     }
 
     $('.ld-tab-panel').hide();
+    $('.ld-tab').removeClass('ld-tab--active');
+
+    $('.ld-tab[href="' + name +'"]').addClass('ld-tab--active');
+
     $(name).show();
 }

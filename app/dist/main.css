@@ -2458,6 +2458,20 @@ body.show-livingdocs-toolbar {
   box-shadow: 0 0 3px rgba(0, 0, 0, 0.25);
   padding: 0;
   color: #000; }
+  .livingdocs-toolbar .ld-tab {
+    display: inline-block;
+    cursor: pointer;
+    padding: 2px; }
+    .livingdocs-toolbar .ld-tab--active {
+      background-color: #efefff; }
+  .livingdocs-toolbar .ld-toggle {
+    display: block; }
+    .livingdocs-toolbar .ld-toggle input {
+      margin-right: 5px; }
+  .livingdocs-toolbar .ld-item-selector {
+    width: 90%;
+    display: block;
+    margin: 0px auto; }
 
 body.show-livingdocs-toolbar .livingdocs-toolbar {
   display: block; }
@@ -2554,22 +2568,46 @@ body.show-livingdocs-toolbar .livingdocs-toolbar {
 .livingdocs-toolbar input[type="reset"],
 .livingdocs-toolbar .Actions .action {
   background: #dad9d9;
-  border: 1px solid #333;
+  border: 1px solid #dad9d9;
   border-radius: 3px;
   float: none;
   font-size: 12px;
   padding: 4px;
-  color: #000; }
-
-.livingdocs-toolbar a.btn:hover,
-.livingdocs-toolbar button:hover,
-.livingdocs-toolbar input[type="submit"]:hover,
-.livingdocs-toolbar .Actions .action:hover {
-  background: #777;
-  color: #fff; }
-
-.livingdocs-toolbar input[type="submit"]:disabled {
-  background: #666; }
+  color: #000;
+  display: inline-block;
+  margin: 2px; }
+  .livingdocs-item-properties a.btn:hover,
+  .livingdocs-item-properties button:hover,
+  .livingdocs-item-properties input[type="submit"]:hover,
+  .livingdocs-item-properties input[type="reset"]:hover,
+  .livingdocs-item-properties .Actions .action:hover,
+  .livingdocs-bottom-bar a.btn:hover,
+  .livingdocs-bottom-bar button:hover,
+  .livingdocs-bottom-bar input[type="submit"]:hover,
+  .livingdocs-bottom-bar input[type="reset"]:hover,
+  .livingdocs-bottom-bar .Actions .action:hover,
+  .livingdocs-toolbar a.btn:hover,
+  .livingdocs-toolbar button:hover,
+  .livingdocs-toolbar input[type="submit"]:hover,
+  .livingdocs-toolbar input[type="reset"]:hover,
+  .livingdocs-toolbar .Actions .action:hover {
+    border: 1px solid #777; }
+  .livingdocs-item-properties a.btn:disabled,
+  .livingdocs-item-properties button:disabled,
+  .livingdocs-item-properties input[type="submit"]:disabled,
+  .livingdocs-item-properties input[type="reset"]:disabled,
+  .livingdocs-item-properties .Actions .action:disabled,
+  .livingdocs-bottom-bar a.btn:disabled,
+  .livingdocs-bottom-bar button:disabled,
+  .livingdocs-bottom-bar input[type="submit"]:disabled,
+  .livingdocs-bottom-bar input[type="reset"]:disabled,
+  .livingdocs-bottom-bar .Actions .action:disabled,
+  .livingdocs-toolbar a.btn:disabled,
+  .livingdocs-toolbar button:disabled,
+  .livingdocs-toolbar input[type="submit"]:disabled,
+  .livingdocs-toolbar input[type="reset"]:disabled,
+  .livingdocs-toolbar .Actions .action:disabled {
+    color: #fff; }
 
 .livingdocs-toolbar .component-list {
   padding-bottom: 100px; }
@@ -2653,12 +2691,15 @@ body.doc-no-selection .livingdocs-toolbar iframe {
 .livingdocs_EditorField_Toolbar_textopts button:hover {
   background-color: #dcdcdc; }
 
+<<<<<<< HEAD
 .livingdocs-item-properties {
   /* z-index: 3002;
     position: fixed; */
   /* top: 20px;
     right: 10px; */ }
 
+=======
+>>>>>>> 0141ea4... refactor(toolbar) Refactoring of toolbar
 .livingdocs_EditorField_Toolbar_options > h4 {
   font-size: 1rem; }
 

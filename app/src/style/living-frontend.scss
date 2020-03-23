@@ -24,6 +24,32 @@ body.show-livingdocs-toolbar {
     box-shadow: 0 0 3px rgba(0, 0, 0, 0.25);
     padding: 0;
     color: #000;
+
+
+    .ld-tab {
+        display: inline-block;
+        cursor: pointer;
+
+        padding: 2px;
+
+        &--active {
+            background-color: #efefff;
+        }
+    }
+
+    .ld-toggle {
+        display: block;
+
+        input {
+            margin-right: 5px;
+        }
+    }
+
+    .ld-item-selector {
+        width: 90%;
+        display: block;
+        margin: 0px auto;
+    }
 }
 
 body.show-livingdocs-toolbar .livingdocs-toolbar {
@@ -142,24 +168,23 @@ body.show-livingdocs-toolbar .livingdocs-toolbar {
 .livingdocs-toolbar input[type="reset"],
 .livingdocs-toolbar .Actions .action {
     background: #dad9d9;
-    border: 1px solid #333;
+    border: 1px solid #dad9d9;
     border-radius: 3px;
     float: none;
     font-size: 12px;
     padding: 4px;
     color: #000;
-}
 
-.livingdocs-toolbar a.btn:hover,
-.livingdocs-toolbar button:hover,
-.livingdocs-toolbar input[type="submit"]:hover,
-.livingdocs-toolbar .Actions .action:hover {
-    background: #777;
-    color: #fff;
-}
+    display: inline-block;
+    margin: 2px;
 
-.livingdocs-toolbar input[type="submit"]:disabled {
-    background: #666;
+    &:hover {
+        border: 1px solid #777;
+    }
+
+    &:disabled {
+        color: #fff;
+    }
 }
 
 
@@ -257,13 +282,6 @@ body.doc-no-selection .livingdocs-toolbar iframe {
 
 .livingdocs_EditorField_Toolbar_textopts button:hover {
     background-color: #dcdcdc;
-}
-
-.livingdocs-item-properties {
-    /* z-index: 3002;
-    position: fixed; */
-    /* top: 20px;
-    right: 10px; */
 }
 
 .livingdocs_EditorField_Toolbar_options>h4 {
