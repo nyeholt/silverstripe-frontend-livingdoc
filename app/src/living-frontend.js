@@ -57,6 +57,14 @@ import { init_interface } from './editor-interface';
     });
 
     $(function () {
+        $('#livingdocs-frame').on('load', function () {
+            initialise_editor($(this));
+        });
+
+
+    });
+
+    function initialise_editor(holderFrame) {
         // let tools = $('#livingdocs-editor-holder').html();
         // $('#livingdocs-editor-holder').remove();
 
@@ -68,6 +76,7 @@ import { init_interface } from './editor-interface';
 
         // holderFrame.contents().find('body').html(pageContent);
         // holderFrame.contents().find('head').html(headContent);
+
 
         initialise_messages();
 
@@ -267,6 +276,6 @@ import { init_interface } from './editor-interface';
             }
             return firstRow;
         }
-    });
+    };
 
 })(jQuery);

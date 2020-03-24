@@ -48,7 +48,7 @@
             </div>
         </div>
     </div>
-    <iframe src="$PageLink" class="livingdocs-frame"></iframe>
+    <iframe src="$PageLink" id="livingdocs-frame"></iframe>
     <div id="livingdocs-editor" data-config="$LivingDocsConfig.ATT"></div>
 </body>
 
