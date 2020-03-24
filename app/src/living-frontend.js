@@ -44,10 +44,7 @@ import { init_interface } from './editor-interface';
         editingTime += PING_TIME;
     }, PING_TIME * 1000);
 
-
     var TABLE_ROW_COMPONENT = 'tablerow';
-
-    initialise_messages();
 
     $(document).on('mousedown', '#clicker', function (e) {
         e.preventDefault();
@@ -60,6 +57,20 @@ import { init_interface } from './editor-interface';
     });
 
     $(function () {
+        // let tools = $('#livingdocs-editor-holder').html();
+        // $('#livingdocs-editor-holder').remove();
+
+        // let holderFrame = $('<iframe src="about:config" style="height: 100%;">');
+        // let headContent = $('head').html();
+        // let pageContent = $('body').html();
+
+        // $('body').html(tools).append(holderFrame);
+
+        // holderFrame.contents().find('body').html(pageContent);
+        // holderFrame.contents().find('head').html(headContent);
+
+        initialise_messages();
+
         var structure = ContentSource.getPageStructure();
 
         // relies on a design file having been loaded earlier
@@ -114,7 +125,7 @@ import { init_interface } from './editor-interface';
         var ready = LivingDocState.livingdoc.createView({
             interactive: true,
             iframe: false,
-            host: ContentSource.getConfig().editorHost,
+            host: holderFrame.contents().find(ContentSource.getConfig().editorHost),
             wrapper: LivingDocState.activeDesign.wrapper
         });
 

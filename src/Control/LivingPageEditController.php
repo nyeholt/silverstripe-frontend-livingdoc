@@ -119,6 +119,11 @@ class LivingPageEditController extends Controller implements PermissionProvider
 
         $this->includeEditingRequirements();
 
+        return $this->customise([
+            'LivingDocsConfig' => json_encode($this->getLivingDocsConfig()),
+            'PageLink' => $page->Link(),
+        ])->renderWith('LivingPage_editor');
+
         $ctrl = ModelAsController::controller_for($page);
 
         $content = $ctrl->render([

@@ -14,7 +14,7 @@ var BOTTOM_BAR = '.livingdocs-bottom-bar';
 var ITEM_PROPERTIES_HOLDER = '.livingdocs-item-properties';
 
 $(document).on('click', function (e) {
-    if ($(e.target).parents('#livingdocs-editor').length <= 0 &&
+    if ($(e.target).parents('#livingdocs-container').length <= 0 &&
         $(e.target).parents('.livingdocs-toolbar').length <= 0 &&
         $(e.target).parents(ITEM_PROPERTIES_HOLDER).length <= 0 &&
         $(e.target).parents(BOTTOM_BAR).length <= 0) {

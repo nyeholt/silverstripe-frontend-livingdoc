@@ -33,12 +33,14 @@ function replaceShortcodesIn(elem) {
 $(document).on('livingfrontend.updateLivingDoc', function (e, livingdoc) {
     // initial render
     setTimeout(function () {
-        replaceShortcodesIn($('#livingdocs-editor'));
+        // TODO
+        replaceShortcodesIn($('#livingdocs-container'));
     }, 500);
 
     // subsequent content changes
     livingdoc.model.changed.add(function () {
-        replaceShortcodesIn($('#livingdocs-editor'));
+        // TODO
+        replaceShortcodesIn($('#livingdocs-container'));
     });
 
     livingdoc.interactiveView.page.componentWasDropped.add(function (component) {

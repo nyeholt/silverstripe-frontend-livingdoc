@@ -8,12 +8,13 @@ import 'jquery-form';
  */
 class FormContentSource {
     TOOLBAR_FORM = '#Form_LivingForm';
-    DOC_HOLDER = '#livingdocs-editor';
+    CONFIG_HOLDER = '#livingdocs-editor';
+    DOC_HOLDER = '#livingdocs-container';
 
     config = {};
 
     init() {
-        let config = $(this.DOC_HOLDER).data('config');
+        let config = $(this.CONFIG_HOLDER).data('config');
         config.editorHost = this.DOC_HOLDER;
 
         if (config.pageStructure) {
