@@ -1690,8 +1690,9 @@ div.resize-cursor {
       border-color: #6666ff; }
 
 body {
-  margin: 0px;
-  padding: 0px; }
+  height: auto !important;
+  padding: 0px;
+  margin: 0px; }
 
 body.show-livingdocs-toolbar {
   padding-left: 280px !important; }
@@ -1745,7 +1746,7 @@ body.show-livingdocs-toolbar .livingdocs-toolbar {
 .livingdocs-bottom-bar {
   display: flex;
   z-index: 3001;
-  height: 60px;
+  height: 40px;
   background: #fff;
   padding: 10px;
   width: 100%;

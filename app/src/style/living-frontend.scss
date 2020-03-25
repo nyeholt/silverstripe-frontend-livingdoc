@@ -4,7 +4,8 @@
 
 body {
     height: auto !important;
-    padding-bottom: 60px;
+    padding: 0px;
+    margin: 0px;
 }
 
 body.show-livingdocs-toolbar {
@@ -82,7 +83,7 @@ body.show-livingdocs-toolbar .livingdocs-toolbar {
 .livingdocs-bottom-bar {
     display: flex;
     z-index: 3001;
-    height: 60px;
+    height: 40px;
     background: #fff;
     padding: 10px;
 
