@@ -94,10 +94,10 @@ class LivingPageEditController extends Controller implements PermissionProvider
         $page = $this->getPage();
 
         // at the top so it can be overridden by user css
-        Requirements::css('nyeholt/silverstripe-frontend-livingdoc: app/dist/css/base.css');
+        // Requirements::css('nyeholt/silverstripe-frontend-livingdoc: app/dist/css/base.css');
 
-        // same with any highlight css needed
-        Requirements::css('nyeholt/silverstripe-frontend-livingdoc: javascript/highlight/googlecode.css');
+        // // same with any highlight css needed
+        // Requirements::css('nyeholt/silverstripe-frontend-livingdoc: javascript/highlight/googlecode.css');
 
         if ($this->getRequest()->getVar('edit') === 'stop') {
             $this->endEditing();

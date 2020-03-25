@@ -2437,7 +2437,8 @@ div.resize-cursor {
   user-select: none; }
 
 body {
-  padding-bottom: 80px; }
+  height: auto !important;
+  padding-bottom: 60px; }
 
 body.show-livingdocs-toolbar {
   padding-left: 280px !important; }
@@ -2691,15 +2692,6 @@ body.doc-no-selection .livingdocs-toolbar iframe {
 .livingdocs_EditorField_Toolbar_textopts button:hover {
   background-color: #dcdcdc; }
 
-<<<<<<< HEAD
-.livingdocs-item-properties {
-  /* z-index: 3002;
-    position: fixed; */
-  /* top: 20px;
-    right: 10px; */ }
-
-=======
->>>>>>> 0141ea4... refactor(toolbar) Refactoring of toolbar
 .livingdocs_EditorField_Toolbar_options > h4 {
   font-size: 1rem; }
 

@@ -1,5 +1,12 @@
 import * as $ from 'jquery';
 
+import * as ace from 'ace-builds';
+
+import 'ace-builds/src-noconflict/mode-markdown';
+import 'ace-builds/src-noconflict/mode-html';
+
+import * as showdown from 'showdown';
+
 $(document).on('livingfrontend.updateLivingDoc', function (e, livingdoc) {
     // HTML directive handling
     livingdoc.interactiveView.page.htmlElementClick.add(function (component, directiveName, event) {
@@ -35,7 +42,9 @@ $(document).on('livingfrontend.updateLivingDoc', function (e, livingdoc) {
 
         $edBlock.focus();
 
+
         var aceeditor = ace.edit($edBlock[0]);
+
         aceeditor.session.setMode('ace/mode/html');
 
         if (component.$html.hasClass('js-living-markdown')) {
