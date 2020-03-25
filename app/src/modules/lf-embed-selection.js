@@ -5,84 +5,100 @@ var embeds = null; // moving away from this now... JSON.parse($('input[name=Embe
 var EMBED_LINK = $('input[name=EmbedLink]').val();
 
 $(document).on('livingfrontend.updateLivingDoc', function (e, livingdoc) {
-    livingdoc.interactiveView.page.focus.componentFocus.add(function (component) {
-        if (component.model.directives.embeditem && component.model.directives.embeditem.length) {
-            for (var index in component.model.directives.embeditem) {
-                var _thisItem = component.model.directives.embeditem[index];
+    livingdoc.interactiveView.page.embedItemClick.add(function (component, directiveName, event) {
+        var currentValue = component.model.get(directiveName);
+        currentValue = currentValue || { source: '', attrs: '', content: null, url: '' };
 
-                var currentValue = component.model.get(_thisItem.name);
-                currentValue = currentValue || { source: '', attrs: '', content: null, url: '' };
+        var isEditing = component.$html.attr('data-is-editing');
+        if (isEditing) {
+            return;
+        }
 
-                var attrInput = attrInput = $("<input>").attr({ type: 'text', placeholder: 'Source url' });;
-                var attrlbl = $('<label>').text('Source URL');
+        component.$html.attr('data-is-editing', 1);
 
-                // if (embeds) {
-                //     attrInput = $('<select class="with-button">');
-                //     attrInput.append('<option>-- select item --</option>');
-                //     for (var label in embeds) {
-                //         var opt = $('<option>').appendTo(attrInput);
-                //         opt.attr('value', label).text(label);
-                //     }
-                // } else {
+        var attrInput = attrInput = $("<input>").attr({ type: 'text', placeholder: 'Source url' });
+        var attrlbl = $('<label>').text('Source URL');
 
-                // }
+        // if (embeds) {
+        //     attrInput = $('<select class="with-button">');
+        //     attrInput.append('<option>-- select item --</option>');
+        //     for (var label in embeds) {
+        //         var opt = $('<option>').appendTo(attrInput);
+        //         opt.attr('value', label).text(label);
+        //     }
+        // } else {
 
-                if (attrInput && currentValue.url) {
-                    // let storedAttrs = JSON.parse(currentValue.attrs);
-                    attrInput.val(currentValue.url);
+        // }
+
+        if (attrInput && currentValue.url) {
+            // let storedAttrs = JSON.parse(currentValue.attrs);
+            attrInput.val(currentValue.url);
+        }
+
+        const cleanUp = function () {
+            component.$html.removeAttr('data-is-editing');
+        }
+
+        var attrButton = $('<button>✔</button>');
+        var cancelButton = $('<button>X</button>');
+        attrButton.on("click", function () {
+            var selected = attrInput.val();
+            attrButton.text("...");
+            if (selected) {
+                var componentAttrs = component.model.getData('data_attributes');
+                componentAttrs = componentAttrs || {};
+
+                var attrStr = '';
+
+                let source = 'embed';
+
+                // do we have an actual URL to be embedded, or a shortcode style URL?
+                let shortcodeData = /\[(\w+)(.*?)\]/.exec(selected);
+                if (shortcodeData) {
+                    source = shortcodeData[1];
+                    attrStr = '';
+                    if (shortcodeData[2] && shortcodeData[2].length > 0) {
+                        var scAttrs = {};
+
+                        for (let match of shortcodeData[2].matchAll(/(\w+)=['"]{1}(.*?)['"]{1}/g)) {
+                            scAttrs[match[1]] = match[2];
+                        }
+                        attrStr = JSON.stringify(scAttrs);
+                    }
+                } else {
+                    attrStr = JSON.stringify({
+                        url: selected
+                    });
                 }
 
-                var attrButton = $('<button>✔</button>');
-                attrButton.on("click", function () {
-                    var selected = attrInput.val();
-                    if (selected) {
-                        var componentAttrs = component.model.getData('data_attributes');
-                        componentAttrs = componentAttrs || {};
-
-                        var attrStr = '';
-
-                        let source = 'embed';
-
-                        // do we have an actual URL to be embedded, or a shortcode style URL?
-                        let shortcodeData = /\[(\w+)(.*?)\]/.exec(selected);
-                        if (shortcodeData) {
-                            source = shortcodeData[1];
-                            attrStr = '';
-                            if (shortcodeData[2] && shortcodeData[2].length > 0) {
-                                var scAttrs = {};
-
-                                for (let match of shortcodeData[2].matchAll(/(\w+)=['"]{1}(.*?)['"]{1}/g)) {
-                                    scAttrs[match[1]] = match[2];
-                                }
-                                attrStr = JSON.stringify(scAttrs);
-                            }
-                        } else {
-                            attrStr = JSON.stringify({
-                                url: selected
-                            });
-                        }
-
-                        $.get(EMBED_LINK, { shortcode: source, attrs: attrStr }).then(function (data) {
-                            const toSave = {
-                                attrs: attrStr,
-                                source: source,
-                                content: data,
-                                url: selected
-                            };
-                            component.model.setContent(_thisItem.name, toSave);
-                        });
-                    } else {
-                        component.model.setContent(_thisItem.name, {
-                            source: '',
-                            attrs: '',
-                            content: ''
-                        });
-                    }
-
+                $.get(EMBED_LINK, { shortcode: source, attrs: attrStr }).then(function (data) {
+                    const toSave = {
+                        attrs: attrStr,
+                        source: source,
+                        content: data,
+                        url: selected
+                    };
+                    component.model.setContent(directiveName, toSave);
                 });
-                attrlbl.append(attrInput).append(attrButton);
-                $('.' + PROPS_HOLDER).append(attrlbl);
+            } else {
+                component.model.setContent(directiveName, {
+                    source: '',
+                    attrs: '',
+                    content: ''
+                });
             }
-        }
+            cleanUp();
+        });
+
+        cancelButton.on('click', function () {
+            // component.model.setContent(directiveName, currentValue);
+            component.$html.html(currentValue.content);
+            cleanUp();
+        })
+
+        attrlbl.append(attrInput).append(attrButton).append(cancelButton);
+
+        component.$html.empty();
+        component.$html.append(attrlbl);
     })
 });
