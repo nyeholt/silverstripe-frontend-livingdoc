@@ -129,11 +129,9 @@ body.show-livingdocs-toolbar .livingdocs-toolbar {
 }
 
 .livingdocs-toolbar .component-actions button {
-    margin: 0.5rem;
-    line-height: 1;
-    padding: 0.25rem 0.5rem;
-    font-size: 0.875rem;
-    border-radius: 2px;
+    width: 90%;
+        display: block;
+        margin: 0px auto;
 }
 
 .livingdocs-toolbar #livingdocs-page-options {
