@@ -12,7 +12,7 @@ export function initialise_attribute_editor(holder, component) {
             return function () {
                 componentAttrs[componentName][name] = $(this).val();
                 if (component.model.componentTree) {
-                    component.model.componentTree.contentChanging(component.model);
+                    component.model.componentTree.contentChanging(component.model, componentName);
                 }
             }
         };
@@ -35,7 +35,7 @@ export function initialise_attribute_editor(holder, component) {
     }
 
 
-    var newAttr = $('<button class="alert">New Attr</button>').prependTo(holder.find('.component-actions'));
+    var newAttr = $('<button class="alert">New Attribute</button>').prependTo(holder.find('.component-actions'));
     newAttr.click(function (e) {
         var names = [];
 

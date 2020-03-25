@@ -228,7 +228,7 @@ export function initialise_property_editor() {
         $('<div class="Actions component-actions">').appendTo(options).append($dupe_button).append($delete_button).append(exportButton);
 
         // TODO Re-evaluate whether we need access to the raw attribute values
-        // initialise_attribute_editor(options, component);
+        initialise_attribute_editor(options, component);
 
         let styleDiv = $('<div>').appendTo(options);
 
