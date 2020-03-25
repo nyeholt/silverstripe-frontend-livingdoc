@@ -36,6 +36,7 @@ $(document).on('livingfrontend.updateLivingDoc', function (e, livingdoc) {
         }
 
         const cleanUp = function () {
+            attrlbl.remove();
             component.$html.removeAttr('data-is-editing');
         }
 
@@ -43,7 +44,7 @@ $(document).on('livingfrontend.updateLivingDoc', function (e, livingdoc) {
         var cancelButton = $('<button>X</button>');
         attrButton.on("click", function () {
             var selected = attrInput.val();
-            attrButton.text("...");
+            attrButton.text("⏳").prop('disabled');
             if (selected) {
                 var componentAttrs = component.model.getData('data_attributes');
                 componentAttrs = componentAttrs || {};
@@ -72,6 +73,8 @@ $(document).on('livingfrontend.updateLivingDoc', function (e, livingdoc) {
                 }
 
                 $.get(EMBED_LINK, { shortcode: source, attrs: attrStr }).then(function (data) {
+                    cleanUp();
+
                     const toSave = {
                         attrs: attrStr,
                         source: source,
@@ -81,19 +84,19 @@ $(document).on('livingfrontend.updateLivingDoc', function (e, livingdoc) {
                     component.model.setContent(directiveName, toSave);
                 });
             } else {
+                cleanUp();
                 component.model.setContent(directiveName, {
                     source: '',
                     attrs: '',
                     content: ''
                 });
             }
-            cleanUp();
         });
 
         cancelButton.on('click', function () {
             // component.model.setContent(directiveName, currentValue);
-            component.$html.html(currentValue.content);
             cleanUp();
+            component.$html.html(currentValue.content);
         })
 
         attrlbl.append(attrInput).append(attrButton).append(cancelButton);
