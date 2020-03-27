@@ -179,7 +179,11 @@ import { init_interface } from './editor-interface';
                 if (b.title) {
                     buttonEl.attr('title', b.title);
                 }
-                buttonEl.on('mousedown', function (theButton) { return function (e) { e.preventDefault(); theButton.click(); } }(b));
+                buttonEl.on('mousedown', function (theButton) {
+                    return function (e) {
+                        e.preventDefault(); theButton.click();
+                    }
+                }(b));
 
                 outer_el.append(buttonEl);
             }
