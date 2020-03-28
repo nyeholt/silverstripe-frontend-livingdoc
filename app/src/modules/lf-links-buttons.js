@@ -18,12 +18,9 @@ export function selectLink(selection, callback) {
         linkAttrs.text = $sc.text();
     }
 
-
     linkSelectorDialog(linkAttrs, {internal: true}, function (attrs) {
-        // ComponentView.prototype.set
-        console.log(attrs);
         callback(attrs);
-    }, ['pageLink', 'externalLink'])
+    })
 
 }
 

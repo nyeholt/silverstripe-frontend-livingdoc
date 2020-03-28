@@ -1,0 +1,62 @@
+@import './common.scss';
+
+
+@mixin form-field() {
+    width: 100%;
+    max-width: 400px;
+    padding: 10px 5px;
+    font-size: 14px;
+    background-color: #fff;
+    border: 1px solid #dad9d9;
+    box-sizing: border-box;
+    height: auto;
+    color: #000;
+
+    &:focus {
+        border-color: #6666ff;
+    }
+}
+
+
+.livingdocs-toolbar label {
+    width: 100%;
+}
+
+.livingdocs-toolbar {
+
+    input.text,
+    input[type="text"],
+    textarea,
+    select {
+        @include form-field();
+    }
+
+    select.with-button {
+        width: 70%;
+        margin-bottom: 0px;
+    }
+}
+
+
+.livingdocs-bottom-bar select.with-button {
+    width: 70%;
+    margin-bottom: 0px;
+}
+
+
+.livingdocs-bottom-bar form {
+    width: auto;
+}
+
+.ProseMirror-prompt {
+    background-color: $toolbar-background !important;
+
+    input[type="text"],
+    textarea,
+    select {
+        @include form-field();
+        max-width: none;
+        width: 90%;
+        display: block;
+    }
+}

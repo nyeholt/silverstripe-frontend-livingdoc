@@ -2,25 +2,25 @@ import * as $ from 'jquery';
 import LivingDocState from '../lib/LivingDocState';
 
 $(document).on('livingfrontend.updateLivingDoc', function (e, livingdoc) {
-    var $pageOptions = $('.livingdocs-page-options');
+    var $pageOptions = $('#livingdocs-page-options');
 
     var $history = $('<div class="livingdocs-page-history">');
 
-    var $toggle = $('<a href="#">History</a>');
+    var $toggle = $('<h3>History</h3>');
 
     $history.append($toggle);
 
-    var $historyList = $('<div class="livingdocs-history-list" style="display: none">');
+    var $historyList = $('<div class="livingdocs-history-list" >');
 
     $history.append($historyList);
 
     $pageOptions.append($history);
 
-    $history.click(function (e) {
-        e.preventDefault();
-        $historyList.toggle();
-        return false;
-    });
+    // $history.click(function (e) {
+    //     e.preventDefault();
+    //     $historyList.toggle();
+    //     return false;
+    // });
 
     var drawHistory = function () {
         $historyList.empty();

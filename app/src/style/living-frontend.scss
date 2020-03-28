@@ -1,3 +1,7 @@
+@import './common.scss';
+@import './toolbar-form';
+
+
 body {
     height: auto !important;
     padding-bottom: 60px;
@@ -14,9 +18,9 @@ body.show-livingdocs-toolbar {
     position: fixed;
     left: 0px;
     top: 0px;
-    background-color: #fff;
+    background-color: $toolbar-background;
     padding: 5px;
-    font-size: 14px;
+    font-size: 16px;
     overflow-y: auto;
     overflow-x: hidden;
 
@@ -76,7 +80,6 @@ body.show-livingdocs-toolbar .livingdocs-toolbar {
     width: 30%;
 }
 
-
 .livingdocs-bottom-bar .livingdocs-actions {
     width: 40%;
     text-align: right;
@@ -90,39 +93,9 @@ body.show-livingdocs-toolbar .livingdocs-toolbar {
     padding-right: 10px;
 }
 
-.livingdocs-bottom-bar form {
-    width: auto;
-}
-
-
 .livingdocs-bottom-bar .Actions {
     margin: 0;
 }
-
-.livingdocs-toolbar label {
-    width: 100%;
-}
-
-.livingdocs-toolbar input.text,
-.livingdocs-toolbar textarea,
-.livingdocs-toolbar select {
-    width: 100%;
-    max-width: 400px;
-    padding: 6px 5px;
-    font-size: 12px;
-    background-color: #fff;
-    border: 1px solid #dad9d9;
-    box-sizing: border-box;
-    height: auto;
-    color: #000;
-}
-
-.livingdocs-bottom-bar select.with-button,
-.livingdocs-toolbar select.with-button {
-    width: 70%;
-    margin-bottom: 0px;
-}
-
 
 .livingdocs-toolbar .component-actions {
     padding: 5px;
@@ -130,8 +103,8 @@ body.show-livingdocs-toolbar .livingdocs-toolbar {
 
 .livingdocs-toolbar .component-actions button {
     width: 90%;
-        display: block;
-        margin: 0px auto;
+    display: block;
+    margin: 0px auto;
 }
 
 .livingdocs-toolbar #livingdocs-page-options {
@@ -240,7 +213,7 @@ body.show-livingdocs-toolbar .livingdocs-toolbar {
 }
 
 iframe.living-dialog {
-    background-color: #fff;
+    background-color: $toolbar-background;
     width: 50%;
     height: 80%;
     position: fixed;
@@ -260,7 +233,7 @@ a.dialog-close {
     z-index: 20002;
     top: 80px;
     right: 24%;
-    background-color: #fff;
+    background-color: $toolbar-background;
     font-size: 20px;
     font-weight: bold;
     color: #222;
@@ -303,7 +276,6 @@ body.doc-no-selection .livingdocs-toolbar iframe {
     font-weight: bold;
     letter-spacing: 1px;
     display: block;
-    background-color: #fefffa;
     margin: 2px;
 }
 
