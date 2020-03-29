@@ -30,6 +30,16 @@ body.show-livingdocs-toolbar {
     padding: 0;
     color: #000;
 
+    .toolbar-tabs {
+        position: fixed;
+        background-color: $toolbar-background;
+        z-index: 3;
+    }
+
+    .toolbar-items {
+        padding-top: 30px;
+    }
+
 
     .ld-tab {
         display: inline-block;

@@ -11,7 +11,8 @@
   display: block;
   margin: 10px; }
   .ItemFilterField__Item__Image {
-    width: 100%; }
+    max-width: 100%;
+    display: block; }
     .ItemFilterField__Item__Image--Selected {
       outline: 2px solid #008; }
   .ItemFilterField__Item__Caption {
@@ -24,17 +25,6 @@
   text-align: center;
   height: 20%;
   width: 50%; }
-
-.field-imageInfo {
-  display: inline-block;
-  width: 45%;
-  vertical-align: top; }
-
-.field-imageProps {
-  display: inline-block;
-  width: 45%;
-  margin: 0px auto;
-  vertical-align: top; }
 
 /*!
  * FilePond 4.8.0
@@ -2534,6 +2524,12 @@ body.show-livingdocs-toolbar {
   box-shadow: 0 0 3px rgba(0, 0, 0, 0.25);
   padding: 0;
   color: #000; }
+  .livingdocs-toolbar .toolbar-tabs {
+    position: fixed;
+    background-color: #FAFAFA;
+    z-index: 3; }
+  .livingdocs-toolbar .toolbar-items {
+    padding-top: 30px; }
   .livingdocs-toolbar .ld-tab {
     display: inline-block;
     cursor: pointer;

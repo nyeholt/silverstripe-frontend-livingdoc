@@ -1,6 +1,7 @@
 import LivingDocState from "./lib/LivingDocState";
 import createComponentList from './lib/createComponentList';
 
+const TOOLBAR = '.livingdocs-toolbar';
 const TOOLBAR_FORM = '#Form_LivingForm';
 const BOTTOM_BAR = '.livingdocs-bottom-bar';
 const PAGE_OPTIONS = '#livingdocs-page-options';
@@ -202,6 +203,8 @@ export function select_tab(name) {
     $('.ld-tab').removeClass('ld-tab--active');
 
     $('.ld-tab[href="' + name +'"]').addClass('ld-tab--active');
+    
+    $(TOOLBAR).scrollTop(0, 0);
 
     $(name).show();
 }
