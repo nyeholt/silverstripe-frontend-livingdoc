@@ -17,8 +17,6 @@ use Symbiote\ListingPage\ListingPage;
 use Symbiote\ListingPage\ListingTemplate;
 
 /**
- *
- *
  * @author marcus
  */
 class LivingdocShortcodes
