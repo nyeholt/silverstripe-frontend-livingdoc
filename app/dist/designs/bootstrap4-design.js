@@ -385,6 +385,7 @@
                 "label": "Modules",
                 "components": [
                     "content_section",
+                    "hero_banner"
                 ]
             },
             {
@@ -446,7 +447,8 @@
                     "h2",
                     "h3",
                     "h4",
-                    "h5"
+                    "h5",
+                    "h6"
                 ]
             },
             {
@@ -801,7 +803,87 @@
                 "properties": [
                     "card-images"
                 ]
-            }
+            },
+            {
+                "name": "unordered-list",
+                "html": "<ul doc-container=\"list\"></ul>",
+                "label": "Unordered List",
+                "properties": [
+                    "text-styles",
+                    "list-styles"
+                ],
+                "directives": {
+                    "list": {
+                        "allowedChildren": [
+                            "list-item"
+                        ]
+                    }
+                }
+            },
+            {
+                "name": "numbered-list",
+                "html": "<ol doc-container=\"list\"></ol>",
+                "label": "Numbered List",
+                "properties": [
+                    "text-styles",
+                    "list-styles"
+                ],
+                "directives": {
+                    "list": {
+                        "allowedChildren": [
+                            "list-item"
+                        ]
+                    }
+                }
+            },
+            {
+                "name": "list-item",
+                "html": "<li doc-editable=\"text\">List item</li>",
+                "label": "List item",
+                "properties": [
+                    "text-styles",
+                    "list-styles"
+                ],
+                "allowedParents": [
+                    "numbered-list",
+                    "unordered-list"
+                ]
+            },
+            
+            {
+                "name": "list-group",
+                "html": "<ul class=\"list-group\" doc-container=\"list\"></ul>",
+                "label": "List",
+                "directives": {
+                    "list": {
+                        "allowedChildren": [
+                            "list-group-item",
+                            "list-group-box-item"
+                        ]
+                    }
+                }
+            },
+            {
+                "name": "numbered-list-group",
+                "html": "<ol class=\"list-group\" doc-container=\"list\"></ol>",
+                "label": "Ordered List",
+                "directives": {
+                    "list": {
+                        "allowedChildren": [
+                            "list-group-item"
+                        ]
+                    }
+                }
+            },
+            {
+                "name": "list-group-item",
+                "html": "<li class=\"list-group-item\" doc-editable=\"text\">List item</li>",
+                "label": "List group item",
+                "allowedParents": [
+                    "list-group",
+                    'numbered-list-group'
+                ]
+            },
         ],
         "prefilledComponents": {
             "table": {

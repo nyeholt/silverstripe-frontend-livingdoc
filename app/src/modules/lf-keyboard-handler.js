@@ -31,11 +31,18 @@ export function initialise_keyboard(state) {
             // we used to check for classes,
             // but this ignores having selected a text-based component, ie 'p' 
             // .classList && selection.anchorNode.classList.contains('doc-component')) {
-            if (selection.anchorNode && selection.type.toLowerCase() === 'caret') { 
-                const content = exportComponent(state.activeComponent);
-                copyTextToClipboard(JSON.stringify(content).replace(/"id":"doc-(.*?)",/g, ""));
-                showMessage("Copied " + state.activeComponent.model.componentName);
-                
+            if (selection.anchorNode && selection.type.toLowerCase() === 'caret') {
+                // if it's an input type, ignore
+
+                const nodeType = selection.anchorNode.nodeName.toLowerCase();
+
+                if (nodeType == 'input' || nodeType == 'textarea' || nodeType == 'select') {
+                    console.log("Form input")
+                } else {
+                    const content = exportComponent(state.activeComponent);
+                    copyTextToClipboard(JSON.stringify(content).replace(/"id":"doc-(.*?)",/g, ""));
+                    showMessage("Copied " + state.activeComponent.model.componentName);
+                }
             } else {
                 console.log("Not copying text node");
             }
