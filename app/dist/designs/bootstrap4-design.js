@@ -410,7 +410,8 @@
             {
                 "label": "Embeds",
                 "components": [
-                    "embeddeditem"
+                    "embeddeditem",
+                    "shortcodeitem"
                 ]
             },
             {
@@ -502,7 +503,12 @@
             {
                 "name": "embeddeditem",
                 "html": "<div doc-embeditem=\"object\">Select an item...\n</div>",
-                "label": "Embed object"
+                "label": "Embed URL"
+            },
+            {
+                "name": "shortcodeitem",
+                "html": "<div doc-embeditem=\"object\" data-use-sc='1'>Select component\n</div>",
+                "label": "Global component"
             },
             {
                 "name": "p",

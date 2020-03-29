@@ -1,7 +1,7 @@
 import * as $ from 'jquery';
 
 import { setupEditor } from "../../../../../symbiote/silverstripe-prose-editor/editor/src/setup.js";
-import "../../../../../symbiote/silverstripe-prose-editor/editor/dist/main.css" ;
+import "../../../../../symbiote/silverstripe-prose-editor/editor/style/index.scss" ;
 import ContentSource from '../lib/FormContentSource.js';
 import { renderProseShortcode } from '../../../../../symbiote/silverstripe-prose-editor/editor/src/plugins/shortcodes.js';
 

@@ -414,7 +414,7 @@ class LivingPageEditController extends Controller implements PermissionProvider
         ]);
 
         if ($record->canPublish()) {
-            $actions->push(FormAction::create('publish', 'Pub')->setUseButtonTag(true));
+            $actions->push(FormAction::create('publish', 'Publist')->setUseButtonTag(true));
         }
 
         if ($record->hasExtension('WorkflowApplicable')) {

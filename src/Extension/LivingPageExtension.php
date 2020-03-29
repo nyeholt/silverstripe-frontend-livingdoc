@@ -66,7 +66,7 @@ class LivingPageExtension extends DataExtension
             return $fields;
         }
 
-        $link = '<div class="field"><a href="' . $this->owner->Link() . '?edit=1" target="_blank">Edit this page in-place</a></div>';
+        $link = '<div class="field"><a href="page-editor/edit/' . $this->owner->ID . '?stage=Stage" target="_blank">Edit this page in-place</a></div>';
         $literalContent = LiteralField::create('Content', $link);
         $fields->replaceField('Content', $literalContent);
 
