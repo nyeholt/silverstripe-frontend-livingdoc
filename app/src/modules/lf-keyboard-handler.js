@@ -27,17 +27,20 @@ export function initialise_keyboard(state) {
         if (e.keyCode == 67) {
             // check that what we have selected is copyable
             const selection = document.getSelection();
-            if (selection.anchorNode.nodeType === 3 && selection.type.toLowerCase() == 'range') {
-                console.log("Not copying text node ", selection.anchorNode);
-                return;
-            }
 
-            const content = exportComponent(state.activeComponent);
-            copyTextToClipboard(JSON.stringify(content).replace(/"id":"doc-(.*?)",/g, ""));
-            showMessage("Copied " + state.activeComponent.model.componentName);
+            // we used to check for classes,
+            // but this ignores having selected a text-based component, ie 'p' 
+            // .classList && selection.anchorNode.classList.contains('doc-component')) {
+            if (selection.anchorNode && selection.type.toLowerCase() === 'caret') { 
+                const content = exportComponent(state.activeComponent);
+                copyTextToClipboard(JSON.stringify(content).replace(/"id":"doc-(.*?)",/g, ""));
+                showMessage("Copied " + state.activeComponent.model.componentName);
+                
+            } else {
+                console.log("Not copying text node");
+            }
         }
     });
-
 
     document.addEventListener('paste', function (e) {
         let clipboardData = e.clipboardData || window.clipboardData;
