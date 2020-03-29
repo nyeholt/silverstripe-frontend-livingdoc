@@ -41,6 +41,14 @@
                         "caption": "Mobile",
                         "value": "d-block d-md-none"
                     },
+                    {
+                        "caption": "Screen reader only",
+                        "value": ".sr-only"
+                    },
+                    {
+                        "caption": "Screen reader focused",
+                        "value": ".sr-only-focusable"
+                    }
                 ]
             },
             "section-class": {
@@ -127,6 +135,76 @@
                     }
                 ]
             },
+            "header-styles": {
+                "label": "Header styles",
+                "type": "select",
+                "options": [
+                    {
+                        'caption': 'Multiple',
+                        'value': "yes"
+                    },
+                    {
+                        "caption": "None"
+                    },
+                    {
+                        'caption': 'Title',
+                        'value': "title"
+                    },
+                    {
+                        'caption': 'Card title',
+                        'value': "card-title"
+                    },
+                    {
+                        'caption': 'Card subtitle',
+                        'value': "card-subtitle"
+                    },
+                    {
+                        'caption': 'As h1',
+                        'value': "h1"
+                    },
+                    {
+                        'caption': 'As h2',
+                        'value': "h2"
+                    },
+                    {
+                        'caption': 'As h3',
+                        'value': "h3"
+                    },
+                    {
+                        'caption': 'As h4',
+                        'value': "h4"
+                    },
+                    {
+                        'caption': 'As h5',
+                        'value': "h5"
+                    },
+                    {
+                        'caption': 'As h6',
+                        'value': "h6"
+                    },
+                ]
+            },
+            "card-layout": {
+                "label": "Card layout",
+                "type": "select",
+                "options": [
+                    {
+                        "caption": "None"
+                    },
+                    {
+                        'caption': 'Deck',
+                        'value': "card-deck"
+                    },
+                    {
+                        'caption': 'Joined Group',
+                        'value': "card-group"
+                    },
+                    {
+                        'caption': 'Masonry',
+                        'value': "card-columns"
+                    },
+                ]
+            },
             "list-styles": {
                 "label": "List styles",
                 "type": "select",
@@ -152,6 +230,98 @@
                     }
                 ]
             },
+            "button-styles": {
+                "label": "Button styles",
+                "type": "select",
+                "options": [
+                    {
+                        'caption': 'Multiple',
+                        'value': "yes"
+                    },
+                    {
+                        "caption": "None"
+                    },
+                    {
+                        'caption': 'Large',
+                        'value': "btn-lg"
+                    },
+                    {
+                        'caption': 'Small',
+                        'value': "btn-sm"
+                    },
+                    {
+                        'caption': 'Primary',
+                        'value': "btn-primary"
+                    },
+                    {
+                        'caption': 'Secondary',
+                        'value': "btn-secondary"
+                    },
+                    {
+                        'caption': 'Success',
+                        'value': "btn-success"
+                    },
+                    {
+                        'caption': 'Danger',
+                        'value': "btn-danger"
+                    },
+                    {
+                        'caption': 'Warning',
+                        'value': "btn-warning"
+                    },
+                    {
+                        'caption': 'Info',
+                        'value': "btn-info"
+                    },
+                    {
+                        'caption': 'Light',
+                        'value': "btn-light"
+                    },
+                    {
+                        'caption': 'Dark',
+                        'value': "btn-dark"
+                    },
+                    {
+                        'caption': 'Plain link',
+                        'value': "btn-link"
+                    },
+                    
+                ]
+            },
+            "card-bodies": {
+                "label": "Card body types",
+                "type": "select",
+                "options": [
+                    {
+                        "caption": "None"
+                    },
+                    {
+                        'caption': 'Card body',
+                        'value': "card-body"
+                    },
+                    {
+                        'caption': 'Card image overlay',
+                        'value': "card-img-overlay"
+                    }
+                ]
+            },
+            "card-images": {
+                "label": "Card image types",
+                "type": "select",
+                "options": [
+                    {
+                        "caption": "None"
+                    },
+                    {
+                        'caption': 'Card top',
+                        'value': "card-img-top"
+                    },
+                    {
+                        'caption': 'Card image',
+                        'value': "card-img"
+                    }
+                ]
+            },
             "text-styles": {
                 "label": "Text styles",
                 "type": "select",
@@ -162,6 +332,14 @@
                     },
                     {
                         "caption": "None"
+                    },
+                    {
+                        'caption': 'Muted',
+                        'value': "text-muted"
+                    },
+                    {
+                        'caption': 'Centered',
+                        'value': "text-center"
                     },
                     {
                         'caption': 'Centered',
@@ -194,37 +372,33 @@
                     {
                         'caption': 'Capitalize',
                         'value': "text-capitalize"
-                    }
+                    },
+                    {
+                        'caption': 'Stretched Link',
+                        'value': "stretched-link"
+                    },
                 ]
             },
         },
         "groups": [
-            {
-                "label": "Headers",
-                "components": [
-                    "h1",
-                    "h2",
-                    "h3",
-                    "h4",
-                    "h5"
-                ]
-            },
-            {
-                "label": "Text",
-                "components": [
-                    "p",
-                    "quote",
-                    "markdown",
-                    "customhtml",
-                    "wysiwyg"
-                ]
-            },
             {
                 "label": "Modules",
                 "components": [
                     "content_section",
                 ]
             },
+            {
+                "label": "Text",
+                "components": [
+                    "p",
+                    "buttonlink",
+                    "quote",
+                    "markdown",
+                    "customhtml",
+                    "wysiwyg"
+                ]
+            },
+
             {
                 "label": "Images",
                 "components": [
@@ -239,11 +413,18 @@
                 ]
             },
             {
-                "label": "Lists",
+                "label": "Cards",
                 "components": [
-                    "list-group",
-                    'numbered-list-group',
-                    "list-group-item"
+                    "card",
+                    "cardbody",
+                    "cardtext",
+                    "cardlink",
+                    // "cardimagetop",
+                    "cardimage",
+                    // "cardimgoverlay",
+                    "cardheader",
+                    "cardfooter",
+                    "cardlayout" // "carddeck", cardgroup, cardcolumns as classes
                 ]
             },
             {
@@ -256,6 +437,24 @@
                     "panel",
                     "main-and-sidebar",
                     "well"
+                ]
+            },
+            {
+                "label": "Headers",
+                "components": [
+                    "h1",
+                    "h2",
+                    "h3",
+                    "h4",
+                    "h5"
+                ]
+            },
+            {
+                "label": "Lists",
+                "components": [
+                    "list-group",
+                    'numbered-list-group',
+                    "list-group-item"
                 ]
             },
             {
@@ -309,6 +508,14 @@
                 "label": "Paragraph",
                 "properties": [
                     'text-styles'
+                ]
+            },
+            {
+                "name": "buttonlink",
+                "html": "<a doc-link=\"Link\" class=\"btn\">Link</a>",
+                "label": "Button",
+                "properties": [
+                    'button-styles'
                 ]
             },
             {
@@ -455,27 +662,63 @@
             },
             {
                 "name": "h1",
-                "html": "<h1 class=\"title\" doc-editable=\"title\">\n  Title\n</h1>",
+                "html": "<h1 class=\"\" doc-editable=\"title\">\n  Title\n</h1>",
                 "icon": '<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M5 4v3h5.5v12h3V7H19V4z"/><path fill="none" d="M0 0h24v24H0V0z"/></svg>',
-                "label": "Title H1"
+                "label": "Heading H1",
+                "properties": [
+                    "header-styles",
+                    "text-styles"
+                ]
             },
             {
                 "name": "h2",
-                "html": "<h2 class=\"title\" doc-editable=\"title\">\n  Title\n</h2>",
+                "html": "<h2 class=\"\" doc-editable=\"title\">\n  Title\n</h2>",
                 "icon": '<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M5 4v3h5.5v12h3V7H19V4z"/><path fill="none" d="M0 0h24v24H0V0z"/></svg>',
-                "label": "Title H2"
+                "label": "Heading H2",
+                "properties": [
+                    "header-styles",
+                    "text-styles"
+                ]
             },
             {
                 "name": "h3",
-                "html": "<h3 class=\"title\" doc-editable=\"title\">\n  Title\n</h3>",
+                "html": "<h3 class=\"\" doc-editable=\"title\">\n  Title\n</h3>",
                 "icon": '<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M5 4v3h5.5v12h3V7H19V4z"/><path fill="none" d="M0 0h24v24H0V0z"/></svg>',
-                "label": "Title H3"
+                "label": "Heading H3",
+                "properties": [
+                    "header-styles",
+                    "text-styles"
+                ]
             },
             {
                 "name": "h4",
-                "html": "<h4 class=\"title\" doc-editable=\"title\">\n  Title\n</h4>",
+                "html": "<h4 class=\"\" doc-editable=\"title\">\n  Title\n</h4>",
                 "icon": '<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M5 4v3h5.5v12h3V7H19V4z"/><path fill="none" d="M0 0h24v24H0V0z"/></svg>',
-                "label": "Title H4"
+                "label": "Heading H4",
+                "properties": [
+                    "header-styles",
+                    "text-styles"
+                ]
+            },
+            {
+                "name": "h5",
+                "html": "<h5 class=\"\" doc-editable=\"title\">\n  Title\n</h4>",
+                "icon": '<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M5 4v3h5.5v12h3V7H19V4z"/><path fill="none" d="M0 0h24v24H0V0z"/></svg>',
+                "label": "Header H5",
+                "properties": [
+                    "header-styles",
+                    "text-styles"
+                ]
+            },
+            {
+                "name": "h6",
+                "html": "<h6 class=\"\" doc-editable=\"title\">\n  Title\n</h4>",
+                "icon": '<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M5 4v3h5.5v12h3V7H19V4z"/><path fill="none" d="M0 0h24v24H0V0z"/></svg>',
+                "label": "Header H6",
+                "properties": [
+                    "header-styles",
+                    "text-styles"
+                ]
             },
             {
                 "name": "image",
@@ -492,6 +735,72 @@
                 Caption.\n\
                 </figcaption>\n</figure>",
                 "label": "Image with Caption"
+            },
+            {
+                "name": "cardlayout",
+                "html": "<div class=\"card-layout\" doc-container=\"cards\">\n</div>",
+                "label": "Card layout",
+                "properties": [
+                    "display",
+                    "card-layout"
+                ]
+            },
+            {
+                "name": "card",
+                "html": "<div class=\"card\" doc-container=\"carditems\">\n</div>",
+                "label": "Card",
+                "properties": [
+                    "display",
+                    "text-styles"
+                ]
+            },
+            {
+                "name": "cardbody",
+                "html": "<div class=\"\" doc-container=\"bodyitems\">\n</div>",
+                "label": "Card body",
+                "allowedParents": [
+                    "card"
+                ],
+                "properties": [
+                    "card-bodies",
+                    "display",
+                    "text-styles"
+                ]
+            },
+            {
+                "name": "cardtext",
+                "html": "<p class=\"card-text\" doc-editable=\"cardtext\">\nCard text</p>",
+                "label": "Card text",
+                "allowedParents": [
+                    "cardbody"
+                ],
+                "properties": [
+                    "display",
+                    "text-styles"
+                ]
+            },
+            {
+                "name": "cardlink",
+                "html": "<a doc-link=\"Link\" class=\"card-link\" href=\"#\">\nLink</a>",
+                "label": "Card link",
+                "allowedParents": [
+                    "cardbody"
+                ],
+                "properties": [
+                    "display",
+                    "text-styles"
+                ]
+            },
+            {
+                "name": "cardimage",
+                "html": "<img doc-image=\"Image\" class=\"\" />",
+                "label": "Card image",
+                "allowedParents": [
+                    "card"
+                ],
+                "properties": [
+                    "card-images"
+                ]
             }
         ],
         "prefilledComponents": {
