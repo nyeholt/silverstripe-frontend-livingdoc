@@ -1,4 +1,5 @@
 <?php
+
 namespace Symbiote\Frontend\LivingPage\Control;
 
 use Page;
@@ -21,8 +22,14 @@ use Symbiote\ListingPage\ListingTemplate;
  */
 class LivingdocShortcodes
 {
+    public static function menu($arguments, $content = null, $parser = null)
+    {
+        $ctrl = Controller::has_curr() ? Controller::curr() : null;
+        return $ctrl->renderWith('ShortcodeMenu');
+    }
 
-    public static function childlist_handler($arguments, $content = null, $parser = null) {
+    public static function childlist_handler($arguments, $content = null, $parser = null)
+    {
         $page = self::shortcode_object($arguments);
 
         if ($page) {
@@ -76,7 +83,8 @@ class LivingdocShortcodes
         return $page && $page->hasMethod('canView') ? ($page->canView() ? $page : null) : $page;
     }
 
-    public static function listing_content($arguments, $content = null, $parser = null) {
+    public static function listing_content($arguments, $content = null, $parser = null)
+    {
         $pageId = isset($arguments['page_id']) ? $arguments['page_id'] : 0;
         $sourceId = isset($arguments['source_id']) ? $arguments['source_id'] : 0;
         if (!$pageId) {
@@ -98,7 +106,8 @@ class LivingdocShortcodes
         }
     }
 
-    public static function workflow_tasks($arguments, $content = null, $parser = null) {
+    public static function workflow_tasks($arguments, $content = null, $parser = null)
+    {
         $currentUser = Security::getCurrentUser();
         if (!$currentUser) {
             return '';
@@ -125,21 +134,22 @@ class LivingdocShortcodes
         $items = [];
         foreach ($instances as $item) {
             $target = $item->getTarget();
-            if($target instanceof CMSPreviewable) {
+            if ($target instanceof CMSPreviewable) {
                 $result['CMSLink'] = $target->CMSEditLink();
             }
             $link = $target && $target instanceof CMSPreviewable ? $target->CMSEditLink() :
                 "admin/workflows/WorkflowDefinition";
-            $items[] = '<li><a href="'.$link.'">' . Convert::raw2xml($item->Title) . '</a></li>';
+            $items[] = '<li><a href="' . $link . '">' . Convert::raw2xml($item->Title) . '</a></li>';
         }
-        return '<ul>' . implode($items).'</ul>';
+        return '<ul>' . implode($items) . '</ul>';
     }
 
 
-    public static function process_shortcode_template($templateId, $items) {
+    public static function process_shortcode_template($templateId, $items)
+    {
         if ($templateId) {
             $listing = ListingTemplate::get()->filter('Title', $templateId)->first();
-            if ($listing ){
+            if ($listing) {
                 $item = ArrayData::create(array('Items' => $items));
                 $view = SSViewer::fromString($listing->ItemTemplate);
                 return $view->process($item);
@@ -147,7 +157,8 @@ class LivingdocShortcodes
         }
     }
 
-    public static function random_item($arguments, $content = null, $parser = null) {
+    public static function random_item($arguments, $content = null, $parser = null)
+    {
         $items = Page::get()->sort('LastEdited DESC')->limit(50)->column();
 
         $key = array_rand($items);
@@ -157,7 +168,8 @@ class LivingdocShortcodes
         return $page->renderWith('RandomItem');
     }
 
-    public static function userform($arguments, $content = null, $parser = null) {
+    public static function userform($arguments, $content = null, $parser = null)
+    {
         $formId = isset($arguments['form_id']) ? $arguments['form_id'] : null;
         if (!$formId) {
             return "Please set form_id";
