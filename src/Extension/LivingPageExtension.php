@@ -12,7 +12,7 @@ use SilverStripe\Forms\ToggleCompositeField;
 use SilverStripe\ORM\DataExtension;
 use SilverStripe\Security\Permission;
 use SilverStripe\SiteConfig\SiteConfig;
-use Symbiote\Frontend\LivingPage\Model\LivingPageStructure;
+use Symbiote\Frontend\LivingPage\Model\ComponentPageStructure;
 use Symbiote\MultiValueField\Fields\KeyValueField;
 use \Wa72\HtmlPageDom\HtmlPageCrawler;
 
@@ -30,7 +30,7 @@ class LivingPageExtension extends DataExtension
     ];
 
     private static $has_one = [
-        'StructureTemplate' => LivingPageStructure::class,
+        'StructureTemplate' => ComponentPageStructure::class,
     ];
 
     private static $living_designs = [
@@ -56,7 +56,7 @@ class LivingPageExtension extends DataExtension
 
     public function updateCMSFields(FieldList $fields)
     {
-        $structures = LivingPageStructure::get()->map();
+        $structures = ComponentPageStructure::get()->map();
         if (!strlen($this->owner->PageStructure) && count($structures)) {
             $fields->removeByName('Root');
             $fields->push(new TabSet('Root'));
@@ -89,7 +89,7 @@ class LivingPageExtension extends DataExtension
         parent::onBeforeWrite();
 
         if (!$this->owner->PageStructure) {
-            $structures = LivingPageStructure::get()->toArray();
+            $structures = ComponentPageStructure::get()->toArray();
             if (count($structures)) {
                 $structure = $this->owner->StructureTemplate();
                 if ($structure && $structure->ID) {

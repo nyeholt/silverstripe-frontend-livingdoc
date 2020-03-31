@@ -7,7 +7,7 @@ use Symbiote\Frontend\LivingPage\Extension\LivingPageExtension;
 /**
  * @author marcus
  */
-class LivingPage extends Page
+class ComponentPage extends Page
 {
     private static $extensions = [
         LivingPageExtension::class

@@ -20,7 +20,7 @@
 	"extra": {
         "installer-name": "frontend-livingdoc",
 		"branch-alias": {
-			"dev-master": "2.0.x-dev"
+			"dev-master": "3.0.x-dev"
         },
         "expose": [
             "app/dist",

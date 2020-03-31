@@ -105,9 +105,14 @@ class LivingPageEditController extends Controller implements PermissionProvider
         }
 
         if (!strlen($page->PageStructure)) {
-            $page->PageStructure = json_encode([
-                'data' => LivingPageExtension::config()->default_page
-            ]);
+            $defaultStructure = LivingPageExtension::config()->default_page;
+            $configObject = SiteConfig::current_site_config();
+            
+            if ($configObject && strlen($configObject->DefaultStructure)) {
+                $defaultStructure = $configObject->DefaultStructure;
+            } 
+
+            $page->PageStructure = json_encode($defaultStructure);
         }
 
         Versioned::set_stage(Versioned::DRAFT);

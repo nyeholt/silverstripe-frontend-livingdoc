@@ -11,9 +11,9 @@ use SilverStripe\ORM\DataObject;
  *
  * @author marcus
  */
-class LivingPageStructure extends DataObject
+class ComponentPageStructure extends DataObject
 {
-    private static $table_name = 'LivingPageStructure';
+    private static $table_name = 'ComponentPageStructure';
     
     private static $db = [
         'Title'     => 'Varchar',
@@ -66,7 +66,7 @@ class LivingPageStructure extends DataObject
     {
         $fields = parent::getCMSFields();
 
-        $fields->replaceField('SourcePageID', TreeDropdownField::create('SourcePageID', 'Source page', 'SiteTree'));
+        $fields->replaceField('SourcePageID', TreeDropdownField::create('SourcePageID', 'Source page', SiteTree::class));
 
         return $fields;
     }
