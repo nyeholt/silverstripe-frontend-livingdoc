@@ -68,7 +68,7 @@ class FormContentSource {
             }).appendTo(parentForm);
         })
 
-        $(window).bind('beforeunload', function () {
+        $(window).bind('beforeunload', () => {
             if ($(this.TOOLBAR_FORM).attr('data-changed')) {
                 return "You may have unsaved changes, sure?";
             }
