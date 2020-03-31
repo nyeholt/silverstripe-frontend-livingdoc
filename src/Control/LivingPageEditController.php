@@ -529,7 +529,7 @@ class LivingPageEditController extends Controller implements PermissionProvider
     {
         return [
             self::EDIT_PAGES => [
-                'name' => 'Edit Living pages',
+                'name' => 'Edit Component Pages',
                 'category' => 'Content permissions',
                 'sort' => 2,
                 'help' => 'Allows users to edit pages on the frontend'

@@ -1341,8 +1341,11 @@ div.resize-cursor {
   [data-doc-embeditem]:hover::before {
     content: '\2699';
     position: absolute;
-    top: 10px;
+    top: 20px;
     right: 20px; }
+
+[data-doc-embeditem]:empty {
+  min-height: 3px; }
 
 [data-doc-container] {
   border: 4px dotted #ccc; }

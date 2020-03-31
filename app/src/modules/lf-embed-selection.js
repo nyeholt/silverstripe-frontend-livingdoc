@@ -18,21 +18,17 @@ $(document).on('livingfrontend.updateLivingDoc', function (e, livingdoc) {
 
         let currentHtml = component.$html.html();
 
-        var isEditing = component.$html.attr('data-is-editing');
-        if (isEditing) {
+        var isEditing = component.$html.find('.ld-embed-selection');
+        if (isEditing && isEditing.length > 0) {
             return;
         }
 
         let isShortcode = component.$html.attr('data-use-sc');
 
-        component.$html.attr('data-is-editing', 1);
-
         let holder = $('<div class="ld-embed-selection">');
         let propHolder = $('<div class="ld-embed-properties">');
         var attrInput = $("<input>").attr({ type: 'text', placeholder: 'Source url' });
         var attrlbl = $('<label>').text('Source');
-
-        const fields = {};
 
         if (embeds && isShortcode) {
             attrInput = $('<select class="with-button">');
@@ -44,37 +40,20 @@ $(document).on('livingfrontend.updateLivingDoc', function (e, livingdoc) {
 
             attrInput.change(function (e) {
                 let v = $(this).val();
-                let sc = extractShortcodeData(v);
-                if (sc && sc.attrs) {
-                    let fields = {};
-
-                    for (var fieldName in sc.attrs) {
-                        fields[fieldName] = new TextField({
-                            label: fieldName,
-                            value: sc.attrs[fieldName]
-                        })
-                    }
-
-                    openPrompt({
-                        title: "Options",
-                        fields: fields,
-                        showButtons: false,
-                        update: function () {
-                            console.log(arguments);
-                        }
-                    }, propHolder[0]);
-                }
+                showAttrEditor(v, propHolder[0], component, directiveName);
             })
         }
 
         if (attrInput && currentValue.url) {
             // let storedAttrs = JSON.parse(currentValue.attrs);
             attrInput.val(currentValue.url);
+            if (isShortcode) {
+                showAttrEditor(currentValue.url, propHolder[0], component, directiveName);
+            }
         }
 
         const cleanUp = function () {
-            attrlbl.remove();
-            component.$html.removeAttr('data-is-editing');
+            holder.remove();
         }
 
         var attrButton = $('<button>✔</button>');
@@ -83,7 +62,7 @@ $(document).on('livingfrontend.updateLivingDoc', function (e, livingdoc) {
             var selected = attrInput.val();
             attrButton.text("⏳").prop('disabled');
             if (selected) {
-                var componentAttrs = component.model.getData('data_attributes');
+                let componentAttrs = component.model.getData('data_attributes');
                 componentAttrs = componentAttrs || {};
 
                 var attrStr = '';
@@ -92,6 +71,14 @@ $(document).on('livingfrontend.updateLivingDoc', function (e, livingdoc) {
 
                 // do we have an actual URL to be embedded, or a shortcode style URL?
                 let shortcodeData = extractShortcodeData(selected); // SHORTCODE_MATCH_REGEX.exec(selected);
+
+                // if we've customised props, let's grab them
+                if (componentAttrs[directiveName]) {
+                    for (let name in componentAttrs[directiveName]) {
+                        shortcodeData.attrs[name] = componentAttrs[directiveName][name]
+                    }
+                }
+
                 if (shortcodeData && shortcodeData.shortcode) {
                     source = shortcodeData.shortcode;
                     attrStr = shortcodeData.attrs ? JSON.stringify(shortcodeData.attrs) : '';
@@ -111,6 +98,9 @@ $(document).on('livingfrontend.updateLivingDoc', function (e, livingdoc) {
                         url: selected
                     };
                     component.model.setContent(directiveName, toSave);
+                    if (component.model.componentTree) {
+                        component.model.componentTree.contentChanging(component.model);
+                    }
                 });
             } else {
                 cleanUp();
@@ -136,6 +126,58 @@ $(document).on('livingfrontend.updateLivingDoc', function (e, livingdoc) {
     })
 });
 
+function showAttrEditor(v, container, component, directiveName) {
+    let sc = extractShortcodeData(v);
+    if (!sc) {
+        return;
+    }
+
+    let componentAttrs = component.model.getData('data_attributes');
+
+    let props = sc.attrs || {};
+
+    if (componentAttrs && componentAttrs[directiveName]) {
+        for (let name in componentAttrs[directiveName]) {
+            props[name] = componentAttrs[directiveName][name]
+        }
+    }
+
+    if (sc && props) {
+        let fields = {};
+
+        for (var fieldName in props) {
+            fields[fieldName] = new TextField({
+                label: fieldName,
+                value: props[fieldName]
+            })
+        }
+
+        openPrompt({
+            title: "Options",
+            fields: fields,
+            hideButtons: true,
+            update: function (key, value) {
+                let newParams = props;
+                newParams[key] = value;
+                component.model.setDirectiveAttribute(directiveName, key, value);
+            },
+            callback: function () {
+
+            }
+        }, container);
+    }
+}
+
+function buildShortcode(name, props) {
+    let parts = [name];
+    if (props) {
+        for (let key in props) {
+            parts.push(key + '="' + props[key].replace('"', '\"') + '"');
+        }
+    }
+    return '[' + parts.join(' ') + ']';
+}
+
 function extractShortcodeData(shortcodeStr) {
     let shortcodeData = SHORTCODE_MATCH_REGEX.exec(shortcodeStr);
     if (shortcodeData) {
@@ -143,7 +185,6 @@ function extractShortcodeData(shortcodeStr) {
         var scAttrs = null;
 
         if (shortcodeData[2] && shortcodeData[2].length > 0) {
-
             scAttrs = {};
             for (let match of shortcodeData[2].matchAll(SHORTCODE_ATTRS_REGEX)) {
                 scAttrs[match[1]] = match[2];
