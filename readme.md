@@ -41,12 +41,39 @@ SiteConfig:
 ## Page templates
 
 By default the ComponentPage will render within the global page layout defined for
-your site. To take full control of rendering the whole site, define a top level
+your site. To take full control of rendering the whole page, define a top level
 `templates/ComponentPage.ss` file that removes everything from the body
 tag _except_ the $Layout keyword. 
 
+To make this futher configurable by users, set the `ComponentPage.allow_full_page_mode: true` config 
+property to allow editors to select to control the full page layout, 
+then change your `ComponentPage.ss` template to check whether the $FullPageMode variable
+is set when determining whether to only output the $Layout keyword. 
+
+```
+Symbiote\Frontend\LivingPage\Page\ComponentPage:
+  allow_full_page_mode: true
+```
+
+
+```
+<% if $FullPageMode %>
+$Layout
+<% else %>
+<header>
+    <nav><etc></nav>
+</header>
+<div class="container">
+$Layout
+</div>
+<div class="Footer">
+
+</div>
+<% end_if %>
+```
+
 Note: to properly make use of re-usable components, you'll likely want
-to define either some shortcodes to output repeatable parts of the site and
+to define either some shortcodes to output repeatable parts of the site (see the `ShortcodeMenu` example) and
 wrap them in PageComponent objects via the CMS, _or_ make use of the User Templates
 module and define these templates directly in the CMS too. See below for more
 on components
