@@ -7778,7 +7778,11 @@ module.exports = ComponentView = (function() {
             // updateElem(directiveName, {[directiveName]: {"style": styleString}});
         } else {
             for (let name in elementStyles) {
-                this.$html.css(name, elementStyles[name]);
+                if (name == 'extraClasses') {
+                    this.$html.addClass(elementStyles[name]);
+                } else {
+                    this.$html.css(name, elementStyles[name]);
+                }
             }
         }
     }

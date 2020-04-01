@@ -12,6 +12,10 @@ export function createStyleEditor(component, editContainer) {
     }
 
     let fields = {
+        "extraClasses": new TextField({
+            label: "Extra CSS classes",
+            value: customStyles['extraClasses'] || ''
+        }),
         "width": new TextField({
             label: 'Width',
             value: customStyles['width'] || '',
@@ -107,12 +111,24 @@ export function createStyleEditor(component, editContainer) {
                 currentStyles = {};
             }
 
+            if (name == 'extraClasses' && currentStyles['extraClasses']) {
+                for (var style of currentStyles['extraClasses'].split(' ')) {
+                    component.$html.removeClass(style);
+                }
+            }
+
             let newStyles = {
                 ...currentStyles,
             }
             newStyles[name] = value;
             component.model.setData(STYLES_PROP, newStyles);
-            updateComponentStyles(component, newStyles);
+            if (name == 'extraClasses') {
+                for (var style of value.split(' ')) {
+                    component.$html.addClass(style);
+                }
+            } else {
+                updateComponentStyles(component, newStyles);
+            }
         },
         callback: function callback(attrs) {
 
