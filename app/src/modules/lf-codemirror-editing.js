@@ -1,23 +1,28 @@
 import * as $ from 'jquery';
 
+import CodeMirror from 'codemirror';
+
+import 'codemirror/lib/codemirror.css';
+
+import 'codemirror/mode/htmlmixed/htmlmixed';
+import 'codemirror/mode/markdown/markdown';
+
 import * as showdown from 'showdown';
 
 $(document).on('livingfrontend.updateLivingDoc', function (e, livingdoc) {
     // HTML directive handling
     livingdoc.interactiveView.page.htmlElementClick.add(function (component, directiveName, event) {
-
-        var isEditing = component.$html.attr('data-is-editing');
+        
+        var isEditing = component.$html.find('.cm-editor').length > 0;
         component.$html.addClass('js-editor-block');
         if (isEditing) {
             return;
         }
-        component.$html.attr('data-is-editing', 1);
 
         var currentContent = component.model.getData(directiveName + '-raw');
 
-        var $edBlock = $('<textarea>').css({
+        var $edBlock = $('<textarea class="cm-editor">').css({
             'width': '100%',
-            'height': '100%', 
             'position': 'absolute',
             'top': 0,
             'right': 0,
@@ -27,8 +32,7 @@ $(document).on('livingfrontend.updateLivingDoc', function (e, livingdoc) {
 
         var $actions = $('<div>');
         var $save = $('<button>OK</button>');
-        var $cancel = $('<button>Cancel</button>');
-        $actions.css({ position: 'absolute', 'bottom': 0 }).append($save).append($cancel);
+        $actions.css({ position: 'absolute', 'bottom': 0 }).append($save);
 
         $edBlock.val(currentContent);
         const initialContent = component.$html.html();
@@ -38,19 +42,20 @@ $(document).on('livingfrontend.updateLivingDoc', function (e, livingdoc) {
 
         $edBlock.focus();
 
+        const cm = CodeMirror.fromTextArea($edBlock[0], {
+            lineNumbers: true,
+            mode: "htmlmixed"
+        });
+
         var cleanUp = function () {
+            cm.toTextArea();
             $edBlock.remove();
             $actions.remove();
-            component.$html.removeAttr('data-is-editing');
             component.$html.removeClass('js-editor-block');
         }
 
-        $cancel.click(function () {
-            cleanUp();
-            component.$html.html(initialContent);
-        });
-
         var saveEditorBlock = function () {
+            cm.toTextArea();
             var newContent = $edBlock.val();
             // if (aceeditor) {
             //     newContent = aceeditor.getValue();
@@ -93,6 +98,7 @@ $(document).on('livingfrontend.updateLivingDoc', function (e, livingdoc) {
             cleanUp();
         }
 
+        cm.on('blur', saveEditorBlock);
         $save.click(saveEditorBlock)
     });
 

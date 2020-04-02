@@ -50,6 +50,10 @@
 .ProseMirror-prompt {
     background-color: $toolbar-background !important;
 
+    top: 20px;
+    height: 70vh;
+    overflow: auto;
+
     input[type="text"],
     textarea,
     select {

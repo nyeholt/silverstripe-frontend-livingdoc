@@ -1,5 +1,10 @@
 import * as $ from 'jquery';
 
+import * as ace from 'ace-builds';
+
+import 'ace-builds/src-noconflict/mode-markdown';
+import 'ace-builds/src-noconflict/mode-html';
+
 import * as showdown from 'showdown';
 
 $(document).on('livingfrontend.updateLivingDoc', function (e, livingdoc) {
@@ -15,46 +20,56 @@ $(document).on('livingfrontend.updateLivingDoc', function (e, livingdoc) {
 
         var currentContent = component.model.getData(directiveName + '-raw');
 
-        var $edBlock = $('<textarea>').css({
+        var $edBlock = $('<div>').css({
             'width': '100%',
-            'height': '100%', 
             'position': 'absolute',
             'top': 0,
             'right': 0,
             'bottom': '20px',
             'left': 0,
         });
+        var aceeditor = null;
 
         var $actions = $('<div>');
         var $save = $('<button>OK</button>');
         var $cancel = $('<button>Cancel</button>');
         $actions.css({ position: 'absolute', 'bottom': 0 }).append($save).append($cancel);
 
-        $edBlock.val(currentContent);
-        const initialContent = component.$html.html();
-
+        $edBlock.text(currentContent);
         component.$html.html($edBlock);
         component.$html.append($actions);
 
+        
         $edBlock.focus();
 
+        var aceeditor = ace.edit($edBlock[0]);
+
+        aceeditor.session.setUseWorker(false);
+        aceeditor.session.setMode('ace/mode/html');
+
+        if (component.$html.hasClass('js-living-markdown')) {
+            aceeditor.session.setMode('ace/mode/markdown');
+        }
+
         var cleanUp = function () {
+            if (aceeditor) {
+                aceeditor.destroy();
+            }
             $edBlock.remove();
-            $actions.remove();
             component.$html.removeAttr('data-is-editing');
             component.$html.removeClass('js-editor-block');
         }
 
         $cancel.click(function () {
+            component.$html.html(component.model.get(directiveName));
             cleanUp();
-            component.$html.html(initialContent);
         });
 
         var saveEditorBlock = function () {
-            var newContent = $edBlock.val();
-            // if (aceeditor) {
-            //     newContent = aceeditor.getValue();
-            // }
+            var newContent = $edBlock.html();
+            if (aceeditor) {
+                newContent = aceeditor.getValue();
+            }
 
             // insert some markers for real &gt; and &lt;
             newContent = newContent.replace(/&gt;/g, '__RAW_GT_TAG').replace(/&lt;/g, '__RAW_LT_TAG');
@@ -92,6 +107,8 @@ $(document).on('livingfrontend.updateLivingDoc', function (e, livingdoc) {
 
             cleanUp();
         }
+
+        aceeditor.on('blur', saveEditorBlock);
 
         $save.click(saveEditorBlock)
     });
