@@ -10,6 +10,7 @@ import { initialise_property_editor } from './lib/ld-property-editor';
 import { initialise_keyboard } from './modules/lf-keyboard-handler';
 import { initialise_messages } from './modules/lf-messages';
 import { init_interface } from './editor-interface';
+import { Constants } from './constants';
 
 (function ($) {
 
@@ -57,7 +58,7 @@ import { init_interface } from './editor-interface';
     });
 
     $(function () {
-        $('#livingdocs-frame').on('load', function () {
+        $(Constants.EDITOR_FRAME).on('load', function () {
             initialise_editor($(this));
         });
 
