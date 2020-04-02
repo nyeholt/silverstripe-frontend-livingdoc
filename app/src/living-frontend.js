@@ -65,18 +65,6 @@ import { init_interface } from './editor-interface';
     });
 
     function initialise_editor(holderFrame) {
-        // let tools = $('#livingdocs-editor-holder').html();
-        // $('#livingdocs-editor-holder').remove();
-
-        // let holderFrame = $('<iframe src="about:config" style="height: 100%;">');
-        // let headContent = $('head').html();
-        // let pageContent = $('body').html();
-
-        // $('body').html(tools).append(holderFrame);
-
-        // holderFrame.contents().find('body').html(pageContent);
-        // holderFrame.contents().find('head').html(headContent);
-
 
         initialise_messages();
 
@@ -144,7 +132,6 @@ import { init_interface } from './editor-interface';
                 LivingDocState.notifyDocUpdate(true);
             });
 
-
             /** doc is declared in the global namespace */
             init_interface(doc, selectedDesign);
 
@@ -174,7 +161,7 @@ import { init_interface } from './editor-interface';
             // });
 
             initialise_property_editor();
-            initialise_keyboard(LivingDocState);
+            initialise_keyboard(LivingDocState, holderFrame.contents()[0]);
 
             $(document).trigger('livingfrontend.updateLivingDoc', [LivingDocState.livingdoc]);
         });

@@ -16,7 +16,6 @@ $(document).on('livingfrontend.updateLivingDoc', function (e, livingdoc) {
         if (isEditing) {
             return;
         }
-
         component.$html.attr('data-is-editing', 1);
 
         var currentContent = component.model.getData(directiveName + '-raw');
@@ -40,11 +39,12 @@ $(document).on('livingfrontend.updateLivingDoc', function (e, livingdoc) {
         component.$html.html($edBlock);
         component.$html.append($actions);
 
+        
         $edBlock.focus();
-
 
         var aceeditor = ace.edit($edBlock[0]);
 
+        aceeditor.session.setUseWorker(false);
         aceeditor.session.setMode('ace/mode/html');
 
         if (component.$html.hasClass('js-living-markdown')) {

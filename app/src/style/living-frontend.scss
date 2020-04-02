@@ -14,9 +14,8 @@ body.show-livingdocs-toolbar {
 
 #livingdocs-frame {
     width: 100%;
-    height: 100%;
     border: none;
-    min-height: calc(100vh + 60px);
+    height: calc(100vh - 65px);
     // margin-left: 280px;
 }
 
@@ -86,8 +85,6 @@ body.show-livingdocs-toolbar .livingdocs-toolbar {
     height: 40px;
     background: #fff;
     padding: 10px;
-
-    width: 100%;
 
     border-bottom: 1px solid #999;
 }

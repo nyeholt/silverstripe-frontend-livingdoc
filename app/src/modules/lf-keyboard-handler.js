@@ -8,8 +8,8 @@ const PROPS_HOLDER = 'livingdocs_EditorField_Toolbar_options';
  *
  * @param {LivingDocState} state
  */
-export function initialise_keyboard(state) {
-    document.addEventListener("keydown", function (e) {
+export function initialise_keyboard(state, editorDocument, rootDocument) {
+    editorDocument.addEventListener("keydown", function (e) {
         // we need ctrl for delete too
         if (!e.ctrlKey) {
             return;
@@ -26,7 +26,7 @@ export function initialise_keyboard(state) {
 
         if (e.keyCode == 67) {
             // check that what we have selected is copyable
-            const selection = document.getSelection();
+            const selection = editorDocument.getSelection();
 
             // we used to check for classes,
             // but this ignores having selected a text-based component, ie 'p' 
@@ -49,7 +49,7 @@ export function initialise_keyboard(state) {
         }
     });
 
-    document.addEventListener('paste', function (e) {
+    editorDocument.addEventListener('paste', function (e) {
         let clipboardData = e.clipboardData || window.clipboardData;
         let content = clipboardData.getData('Text');
 
@@ -78,19 +78,22 @@ export function initialise_keyboard(state) {
     })
 }
 
-export function copyTextToClipboard(text) {
+export function copyTextToClipboard(text, editorDocument) {
+    if (!editorDocument) {
+        editorDocument = document;
+    }
     const textArea = getTempField();
     textArea.value = text;
     textArea.focus();
     textArea.select();
 
     try {
-        var successful = document.execCommand('copy');
+        var successful = editorDocument.execCommand('copy');
         var msg = successful ? 'successful' : 'unsuccessful';
     } catch (err) {
         console.log('Unable to copy');
     }
-    document.body.removeChild(textArea);
+    editorDocument.body.removeChild(textArea);
 }
 
 
