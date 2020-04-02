@@ -1,5 +1,6 @@
 import LivingDocState from "./lib/LivingDocState";
 import createComponentList from './lib/createComponentList';
+import { Constants } from "./constants";
 
 const TOOLBAR = '.livingdocs-toolbar';
 const TOOLBAR_FORM = '#Form_LivingForm';
@@ -135,7 +136,7 @@ function init_toolbar_toggles() {
 
     $(PAGE_OPTIONS).append(enableGrid);
     gridToggle.click(function (e) {
-        $('body').toggleClass('no-grid-display');
+        $(Constants.EDITOR_FRAME).contents().find('body').toggleClass('no-grid-display');
     });
 
     const layoutToggle = $('<input type="checkbox" checked>');
