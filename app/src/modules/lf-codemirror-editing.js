@@ -8,6 +8,10 @@ import 'codemirror/mode/htmlmixed/htmlmixed';
 import 'codemirror/mode/markdown/markdown';
 
 import * as showdown from 'showdown';
+import hljs from 'highlight.js';
+
+import 'highlight.js/styles/github.css';
+
 
 $(document).on('livingfrontend.updateLivingDoc', function (e, livingdoc) {
     // HTML directive handling
