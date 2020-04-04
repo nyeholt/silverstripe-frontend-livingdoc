@@ -5916,6 +5916,7 @@ module.exports = ComponentDrag = (function() {
   ComponentDrag.prototype.findDropTarget = function(eventPosition) {
     var coords, elem, target, _ref, _ref1;
     _ref = this.getElemUnderCursor(eventPosition), eventPosition = _ref.eventPosition, elem = _ref.elem;
+
     if (elem == null) {
       return void 0;
     }
@@ -6045,13 +6046,17 @@ module.exports = ComponentDrag = (function() {
     });
   };
 
-  ComponentDrag.prototype.showMarker = function(_arg) {
-    var $body, left, top, width;
-    left = _arg.left, top = _arg.top, width = _arg.width;
+  ComponentDrag.prototype.showMarker = function(pos) {
+    var $iframeDoc, left, top, width;
+    left = pos.left, top = pos.top, width = pos.width;
     if (this.iframeBox != null) {
-      $body = $(this.iframeBox.window.document.body);
-      top -= $body.scrollTop();
-      left -= $body.scrollLeft();
+      $iframeDoc = $(this.iframeBox.window.document);
+
+    //   console.log("sdc" + $(this.iframeBox.window.document).scrollTop());
+    //   console.log("frame info " , $body.scrollTop(), $body.scrollLeft(), this.iframeBox.left, this.iframeBox.top);
+
+      top -= $iframeDoc.scrollTop();
+      left -= $iframeDoc.scrollLeft();
       left += this.iframeBox.left;
       top += this.iframeBox.top;
       this.$dropMarker.css({

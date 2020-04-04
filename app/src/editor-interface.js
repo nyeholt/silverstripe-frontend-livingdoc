@@ -111,6 +111,8 @@ function init_component_list(doc, selectedDesign) {
                 newComponent = LivingDocState.livingdoc.createComponent(name);
             }
 
+            event.editorFrame = $(Constants.EDITOR_FRAME)[0];
+
             doc.startDrag({
                 componentModel: newComponent,
                 event: event,

@@ -8,10 +8,6 @@ body {
     margin: 0px;
 }
 
-body.show-livingdocs-toolbar {
-    padding-left: 280px !important;
-}
-
 #livingdocs-frame {
     width: 100%;
     border: none;
@@ -19,27 +15,34 @@ body.show-livingdocs-toolbar {
     // margin-left: 280px;
 }
 
+
+.livingdocs-bottom-bar {
+    display: flex;
+    z-index: 3001;
+    height: 40px;
+    background: $toolbar-background;
+    color: $toolbar-font-color;
+    padding: 10px;
+    width: 100%;
+}
+
 .livingdocs-toolbar {
-    display: none;
     z-index: 3000;
-    width: 280px;
-    position: fixed;
     left: 0px;
     top: 0px;
     background-color: $toolbar-background;
     padding: 5px;
     font-size: 16px;
+    color: $toolbar-font-color;
     overflow-y: auto;
     overflow-x: hidden;
 
-    height: calc(100% - 60px);
+    height: calc(100vh - 60px);
 
     box-shadow: 0 0 3px rgba(0, 0, 0, 0.25);
     padding: 0;
-    color: #000;
 
     .toolbar-tabs {
-        position: fixed;
         background-color: $toolbar-background;
         z-index: 3;
     }
@@ -75,19 +78,6 @@ body.show-livingdocs-toolbar {
     }
 }
 
-body.show-livingdocs-toolbar .livingdocs-toolbar {
-    display: block;
-}
-
-.livingdocs-bottom-bar {
-    display: flex;
-    z-index: 3001;
-    height: 40px;
-    background: #fff;
-    padding: 10px;
-
-    border-bottom: 1px solid #999;
-}
 
 .livingdocs-bottom-bar .livingdocs-toolbar-controls {
     width: 30%;
@@ -203,6 +193,7 @@ body.show-livingdocs-toolbar .livingdocs-toolbar {
 .livingdocs-toolbar .toolbar-entry {
     padding: 5px;
     border: 1px solid #ccc;
+
     border-radius: 3px;
     width: 90px;
     height: 90px;
@@ -213,6 +204,10 @@ body.show-livingdocs-toolbar .livingdocs-toolbar {
     margin: 0px auto;
     cursor: move;
     font-size: 10px;
+
+    svg path:first-child {
+        fill: $toolbar-font-color !important;
+    }
 }
 
 .livingdocs-toolbar .toolbar-entry svg {
@@ -288,7 +283,6 @@ body.doc-no-selection .livingdocs-toolbar iframe {
 
 #livingdocs-components h2 {
     font-size: 14px;
-    color: #000;
     line-height: 24px;
     font-weight: bold;
     letter-spacing: 1px;

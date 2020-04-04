@@ -16,7 +16,7 @@
 </head>
 
 <body>
-    <div id="livingdocs-editor-holder">
+    <div id="livingdocs-editor-holder container-fluid">
         <div class="livingdocs-bottom-bar">
             <div class="livingdocs-toolbar-controls">
             </div>
@@ -26,28 +26,36 @@
             <div class="livingdocs-toolbar-messages">
             </div>
         </div>
+        <div class="row m-0">
+            <div class="col-2 p-0 mr-0">
+                <div class="livingdocs-toolbar">
+                    <div class="toolbar-tabs">
+                        <div class="ld-tab" href="#livingdocs-components">Components</div>
+                        <div class="ld-tab" href="#livingdocs-property-tab">Properties</div>
+                        <div class="ld-tab" href="#livingdocs-page-options">Options</div>
+                    </div>
+                    <div class="toolbar-items">
+                        <div id="livingdocs-components" class="ld-tab-panel ld-tab-default">
+                            <div class="component-list"></div>
+                        </div>
 
-        <div class="livingdocs-toolbar">
-            <div class="toolbar-tabs">
-                <div class="ld-tab" href="#livingdocs-components">Components</div>
-                <div class="ld-tab" href="#livingdocs-property-tab">Properties</div>
-                <div class="ld-tab" href="#livingdocs-page-options">Options</div>
+                        <div id="livingdocs-property-tab" class="ld-tab-panel">
+                            <div class="livingdocs-item-properties"></div>
+                        </div>
+
+                        <div id="livingdocs-page-options" class="ld-tab-panel"></div>
+
+                    </div>
+                </div>
             </div>
-            <div class="toolbar-items">
-                <div id="livingdocs-components" class="ld-tab-panel ld-tab-default">
-                    <div class="component-list"></div>
-                </div>
-
-                <div id="livingdocs-property-tab" class="ld-tab-panel">
-                    <div class="livingdocs-item-properties"></div>
-                </div>
-
-                <div id="livingdocs-page-options" class="ld-tab-panel"></div>
-
+            <div class="col-10 p-0 m-0">
+                <iframe src="$PageLink" id="livingdocs-frame"></iframe>
             </div>
         </div>
     </div>
-    <iframe src="$PageLink" id="livingdocs-frame"></iframe>
+
+
+    
     <div id="livingdocs-editor" data-config="$LivingDocsConfig.ATT"></div>
 </body>
 
