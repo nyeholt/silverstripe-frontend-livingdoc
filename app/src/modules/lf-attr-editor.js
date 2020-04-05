@@ -1,5 +1,6 @@
 import * as $ from 'jquery';
 import LivingDocState from '../lib/LivingDocState';
+import { Constants } from '../constants';
 
 var PROPS_HOLDER = 'livingdocs_EditorField_Toolbar_options';
 
@@ -8,26 +9,26 @@ export function initialise_attribute_editor(holder, component) {
 
     if (componentAttrs) {
         holder.append("<h4>Component Attributes</h4>");
-        var changeAttribute = function (componentName, name) {
+        var changeAttribute = function (directiveName, name) {
             return function () {
-                componentAttrs[componentName][name] = $(this).val();
+                component.model.setDirectiveAttribute(directiveName, name, $(this).val());
                 if (component.model.componentTree) {
-                    component.model.componentTree.contentChanging(component.model, componentName);
+                    component.model.componentTree.contentChanging(component.model, directiveName);
                 }
             }
         };
 
-        for (var componentName in componentAttrs) {
-            var itemAttrs = componentAttrs[componentName];
+        for (var directiveName in componentAttrs) {
+            var itemAttrs = componentAttrs[directiveName];
             if (!itemAttrs) {
                 continue;
             }
-            holder.append('<h5>' + componentName + '</h5>');
+            holder.append('<h5>' + directiveName + '</h5>');
             for (var key in itemAttrs) {
                 var attrInput = null;
                 var attrlbl = $('<label>').text(key);
                 attrInput = $("<input>").attr({ type: 'text' }).val(itemAttrs[key]);
-                attrInput.on("change", changeAttribute(componentName, key));
+                attrInput.on("change", changeAttribute(directiveName, key));
                 attrlbl.append(attrInput);
                 holder.append(attrlbl);
             }
@@ -35,7 +36,7 @@ export function initialise_attribute_editor(holder, component) {
     }
 
 
-    var newAttr = $('<button class="alert">New Attribute</button>').prependTo(holder.find('.component-actions'));
+    var newAttr = $('<button class="' + Constants.btnCls('btn-info') + '">New Attribute</button>').prependTo(holder.find('.component-actions'));
     newAttr.click(function (e) {
         var names = [];
 

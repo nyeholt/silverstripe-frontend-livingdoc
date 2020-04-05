@@ -4,34 +4,49 @@
 
 body {
     height: auto !important;
-    padding-bottom: 60px;
+    padding: 0px;
+    margin: 0px;
 }
 
-body.show-livingdocs-toolbar {
-    padding-left: 280px !important;
+#livingdocs-frame {
+    width: 100%;
+    border: none;
+    height: calc(100vh - 60px);
+    margin: 0px auto;
+    display: block;
+}
+
+
+.ld-editor-frame {
+    background-color: lighten($toolbar-background, 2);
+}
+
+.livingdocs-bottom-bar {
+    display: flex;
+    z-index: 3001;
+    height: 45px;
+    background: $toolbar-background;
+    color: $toolbar-font-color;
+    padding: 10px;
+    width: 100%;
 }
 
 .livingdocs-toolbar {
-    display: none;
     z-index: 3000;
-    width: 280px;
-    position: fixed;
     left: 0px;
     top: 0px;
     background-color: $toolbar-background;
-    padding: 5px;
+    padding: 15px;
     font-size: 16px;
+    color: $toolbar-font-color;
     overflow-y: auto;
     overflow-x: hidden;
 
-    height: calc(100% - 60px);
+    height: calc(100vh - 60px);
 
     box-shadow: 0 0 3px rgba(0, 0, 0, 0.25);
-    padding: 0;
-    color: #000;
 
     .toolbar-tabs {
-        position: fixed;
         background-color: $toolbar-background;
         z-index: 3;
     }
@@ -48,7 +63,15 @@ body.show-livingdocs-toolbar {
         padding: 2px;
 
         &--active {
-            background-color: #efefff;
+            background-color: darken($toolbar-background, 10);
+        }
+    }
+
+    .ld-tab-panel {
+        display: none;
+
+        &.ld-tab-default {
+            display: block;
         }
     }
 
@@ -67,32 +90,13 @@ body.show-livingdocs-toolbar {
     }
 }
 
-body.show-livingdocs-toolbar .livingdocs-toolbar {
-    display: block;
-}
-
-.livingdocs-bottom-bar {
-    display: flex;
-    z-index: 3001;
-    height: 60px;
-    background: #fff;
-    padding: 10px;
-
-    width: 100%;
-
-    border-top: 1px solid #999;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-}
-
-.livingdocs-bottom-bar .livingdocs-toolbar-controls {
-    width: 30%;
-}
-
 .livingdocs-bottom-bar .livingdocs-actions {
     width: 40%;
     text-align: right;
+
+    fieldset {
+        display: none;
+    }
 }
 
 .livingdocs-bottom-bar .livingdocs-toolbar-messages {
@@ -114,7 +118,7 @@ body.show-livingdocs-toolbar .livingdocs-toolbar {
 .livingdocs-toolbar .component-actions button {
     width: 90%;
     display: block;
-    margin: 0px auto;
+    margin: 2px auto;
 }
 
 .livingdocs-toolbar #livingdocs-page-options {
@@ -149,24 +153,24 @@ body.show-livingdocs-toolbar .livingdocs-toolbar {
 .livingdocs-toolbar input[type="submit"],
 .livingdocs-toolbar input[type="reset"],
 .livingdocs-toolbar .Actions .action {
-    background: #dad9d9;
-    border: 1px solid #dad9d9;
-    border-radius: 3px;
-    float: none;
-    font-size: 12px;
-    padding: 4px;
-    color: #000;
+    // background: #dad9d9;
+    // border: 1px solid #dad9d9;
+    // border-radius: 3px;
+    // float: none;
+    // font-size: 12px;
+    // padding: 4px;
+    // color: #000;
 
-    display: inline-block;
-    margin: 2px;
+    // display: inline-block;
+    // margin: 2px;
 
-    &:hover {
-        border: 1px solid #777;
-    }
+    // &:hover {
+    //     border: 1px solid #777;
+    // }
 
-    &:disabled {
-        color: #fff;
-    }
+    // &:disabled {
+    //     color: #fff;
+    // }
 }
 
 
@@ -196,6 +200,7 @@ body.show-livingdocs-toolbar .livingdocs-toolbar {
 .livingdocs-toolbar .toolbar-entry {
     padding: 5px;
     border: 1px solid #ccc;
+
     border-radius: 3px;
     width: 90px;
     height: 90px;
@@ -206,6 +211,10 @@ body.show-livingdocs-toolbar .livingdocs-toolbar {
     margin: 0px auto;
     cursor: move;
     font-size: 10px;
+
+    svg path:first-child {
+        fill: $toolbar-font-color !important;
+    }
 }
 
 .livingdocs-toolbar .toolbar-entry svg {
@@ -281,7 +290,6 @@ body.doc-no-selection .livingdocs-toolbar iframe {
 
 #livingdocs-components h2 {
     font-size: 14px;
-    color: #000;
     line-height: 24px;
     font-weight: bold;
     letter-spacing: 1px;
@@ -301,13 +309,13 @@ table.doc-component:hover {
 
 table.doc-component tr {
     padding: 5px;
-    background-color: #ffc;
     margin: 4px 0;
 }
 
 table.doc-component tr:empty {
     display: block;
     height: 15px;
+    background-color: #ffc;
 }
 
 table.doc-component td:empty,

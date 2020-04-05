@@ -8,12 +8,13 @@ import 'jquery-form';
  */
 class FormContentSource {
     TOOLBAR_FORM = '#Form_LivingForm';
-    DOC_HOLDER = '#livingdocs-editor';
+    CONFIG_HOLDER = '#livingdocs-editor';
+    DOC_HOLDER = '#livingdocs-container';
 
     config = {};
 
     init() {
-        let config = $(this.DOC_HOLDER).data('config');
+        let config = $(this.CONFIG_HOLDER).data('config');
         config.editorHost = this.DOC_HOLDER;
 
         if (config.pageStructure) {
@@ -46,14 +47,7 @@ class FormContentSource {
         });
 
         $(document).on('mousedown', this.TOOLBAR_FORM + ' button.action', function (e) {
-            // catuch the "live" click and redirect instead
-            if ($(this).attr('name') == 'action_live') {
-                e.preventDefault();
-                location.href = location.href + '?edit=stop&stage=Live';
-                return false;
-            }
-
-            if ($(this).hasClass('link-action')) {
+            if ($(this).hasClass('link-action')  && e.which == 1) {
                 e.preventDefault();
                 location.href = $(this).attr('data-link');
                 return false;

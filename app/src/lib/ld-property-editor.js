@@ -7,6 +7,7 @@ import { linkSelectorDialog } from "../../../../../symbiote/silverstripe-prose-e
 import createComponentList from "./createComponentList";
 import { select_tab } from "../editor-interface";
 import { initialise_attribute_editor } from "../modules/lf-attr-editor";
+import { Constants } from "../constants";
 
 var PROPS_HOLDER = 'livingdocs_EditorField_Toolbar_options';
 var BOTTOM_BAR = '.livingdocs-bottom-bar';
@@ -14,7 +15,7 @@ var BOTTOM_BAR = '.livingdocs-bottom-bar';
 var ITEM_PROPERTIES_HOLDER = '.livingdocs-item-properties';
 
 $(document).on('click', function (e) {
-    if ($(e.target).parents('#livingdocs-editor').length <= 0 &&
+    if ($(e.target).parents('#livingdocs-container').length <= 0 &&
         $(e.target).parents('.livingdocs-toolbar').length <= 0 &&
         $(e.target).parents(ITEM_PROPERTIES_HOLDER).length <= 0 &&
         $(e.target).parents(BOTTOM_BAR).length <= 0) {
@@ -27,7 +28,7 @@ $(document).on('click', function (e) {
 export function initialise_property_editor() {
     LivingDocState.livingdoc.interactiveView.page.focus.componentFocus.add(function (component) {
         $("." + PROPS_HOLDER).remove();
-        $(".livingdocs_EditorField_Toolbar_textopts").remove();
+        $(Constants.EDITOR_FRAME).contents().find(Constants.BUTTON_BAR).remove();
 
         var options = $("<div>").addClass(PROPS_HOLDER);
         var $properties = $(ITEM_PROPERTIES_HOLDER);
@@ -116,7 +117,7 @@ export function initialise_property_editor() {
         if (component.model.directives.image && component.model.directives.image.length) {
             for (var directive_id in component.model.directives.image) {
                 var curr_img = component.model.directives.image[directive_id];
-                var $image_button = $("<button class='ld-item-selector'>").text("Select \"" + curr_img.name + '"');
+                var $image_button = $("<button class='ld-item-selector " + Constants.btnCls('btn-primary') + "'>").text("Select \"" + curr_img.name + '"');
                 $image_button.on("click", function (comp, img, did) {
                     return function () {
                         selectImage(comp, img, did);
@@ -130,7 +131,7 @@ export function initialise_property_editor() {
             for (var linkIndex in component.model.directives.link) {
                 var updateLink = component.model.directives.link[linkIndex];
 
-                var $link_button = $("<button class='ld-item-selector'>").text('Select "' + updateLink.name + '"').on("click", function (comp, link) {
+                var $link_button = $("<button class='ld-item-selector " + Constants.btnCls('btn-primary') + "'>").text('Select "' + updateLink.name + '"').on("click", function (comp, link) {
                     return function () {
                         const linkAttrs = {
                             href: comp.get(link.name),
@@ -150,62 +151,14 @@ export function initialise_property_editor() {
             }
         }
 
-        if (component.model.componentName === 'table') {
-            // add row and add column
-
-            var tableNode = component.$html[0];
-            if (tableNode) {
-
-                LivingDocState.showButtonBar([
-                    {
-                        label: 'Add row',
-                        click: function () {
-                            alert("NEW");
-                            var currentRow = component.$html.find('tr:first');
-                            var numCells = 0;
-                            if (currentRow.length) {
-                                numCells = currentRow.find('th').length ?
-                                    currentRow.find('th').length :
-                                    currentRow.find('td').length;
-                            }
-
-                            var newComponent = LivingDocState.livingdoc.componentTree.getComponent(TABLE_ROW_COMPONENT);
-                            component.model.append('tablebody', newComponent);
-
-                            //create cells
-                            for (var i = 0; i < numCells; i++) {
-                                var newCell = LivingDocState.livingdoc.componentTree.getComponent(TABLE_CELL_COMPONENT);
-                                newComponent.append('rowcells', newCell);
-
-                                var newP = LivingDocState.livingdoc.componentTree.getComponent("p");
-                                newCell.append("cellitems", newP);
-                            }
-                        }
-                    },
-                    {
-                        label: 'Add col',
-                        click: function () {
-                            var headerRow = component.model.containers.tablehead.first;
-                            addCellToRows(headerRow, HEADER_CELL_COMPONENT);
-
-                            var bodyRow = component.model.containers.tablebody.first;
-                            addCellToRows(bodyRow, TABLE_CELL_COMPONENT);
-                        }
-                    }
-
-                ], tableNode);
-
-            }
-        }
-
-        var $delete_button = $("<button class='alert alert-danger'>").text("Remove").on("click", function () {
+        var $delete_button = $("<button class='" + Constants.btnCls('btn-danger') + "'>").text("Remove").on("click", function () {
             if (confirm("Remove this?")) {
                 component.model.remove();
                 $("." + PROPS_HOLDER).remove();
             }
         });
 
-        var $dupe_button = $("<button class='alert alert-warning'>").text("Duplicate").on("click", function () {
+        var $dupe_button = $("<button class='" + Constants.btnCls('btn-info') + "'>").text("Duplicate").on("click", function () {
             var tmpTree = new doc.ComponentTree({ design: LivingDocState.livingdoc.componentTree.design });
 
             // need to swap out 'next' for the moment otherwise the serialize walker
@@ -219,7 +172,7 @@ export function initialise_property_editor() {
 
         });
 
-        var exportButton = $('<button>Export</button>');
+        var exportButton = $('<button>Export</button>').addClass(Constants.btnCls());
 
         exportButton.click(function (e) {
             componentExportForm(component);

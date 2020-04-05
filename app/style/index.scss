@@ -1,10 +1,7 @@
 @import './vendor/auto-complete.css';
 
-// @import '../node_modules/jstree/dist/themes/default/style.css';
+@import "~bootstrap/scss/bootstrap";
 
-.Button {
-    &--Primary {
-        background-color: #007700;
-        color: #fff;
-    }
-}
+
+
+// @import '../node_modules/jstree/dist/themes/default/style.css';

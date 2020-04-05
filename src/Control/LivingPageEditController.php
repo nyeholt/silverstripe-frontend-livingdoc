@@ -107,10 +107,10 @@ class LivingPageEditController extends Controller implements PermissionProvider
         if (!strlen($page->PageStructure)) {
             $defaultStructure = LivingPageExtension::config()->default_page;
             $configObject = SiteConfig::current_site_config();
-            
+
             if ($configObject && strlen($configObject->DefaultStructure)) {
                 $defaultStructure = $configObject->DefaultStructure;
-            } 
+            }
 
             $page->PageStructure = json_encode($defaultStructure);
         }
@@ -118,6 +118,11 @@ class LivingPageEditController extends Controller implements PermissionProvider
         Versioned::set_stage(Versioned::DRAFT);
 
         $this->includeEditingRequirements();
+
+        return $this->customise([
+            'LivingDocsConfig' => json_encode($this->getLivingDocsConfig()),
+            'PageLink' => $page->Link(),
+        ])->renderWith('LivingPage_editor');
 
         $ctrl = ModelAsController::controller_for($page);
 
@@ -414,12 +419,16 @@ class LivingPageEditController extends Controller implements PermissionProvider
             HiddenField::create('EmbedLink', 'Embed link', '/__prose/rendershortcode')
         ]);
 
+        $btnCls = function ($extra = 'btn-secondary') {
+            return 'btn btn-sm ' . $extra;
+        };
+
         $actions = FieldList::create([
-            FormAction::create('save', 'Save')->setUseButtonTag(true),
+            FormAction::create('save', 'Save')->setUseButtonTag(true)->addExtraClass($btnCls('btn-primary')),
         ]);
 
         if ($record->canPublish()) {
-            $actions->push(FormAction::create('publish', 'Publist')->setUseButtonTag(true));
+            $actions->push(FormAction::create('publish', 'Publish')->setUseButtonTag(true)->addExtraClass($btnCls()));
         }
 
         if ($record->hasExtension('WorkflowApplicable')) {
@@ -428,7 +437,7 @@ class LivingPageEditController extends Controller implements PermissionProvider
                 $actions->push(
                     FormAction::create('workflow', 'Workflow')
                         ->setUseButtonTag(true)
-                        ->addExtraClass('link-action')
+                        ->addExtraClass('link-action ' . $btnCls())
                         ->setAttribute('data-link', $record->CMSEditLink())
                 );
             }
@@ -437,10 +446,15 @@ class LivingPageEditController extends Controller implements PermissionProvider
         $actions->push(
             FormAction::create('preview', 'View')
                 ->setUseButtonTag(true)
-                ->addExtraClass('link-action')
+                ->addExtraClass('link-action ' . $btnCls())
                 ->setAttribute('data-link', $record->Link() . '&preview=1')
         );
-        $actions->push(FormAction::create('live', 'Done')->setUseButtonTag(true));
+        $actions->push(
+            FormAction::create('live', 'Done')
+                ->setUseButtonTag(true)
+                ->addExtraClass('link-action ' . $btnCls())
+                ->setAttribute('data-link', str_replace('stage=Stage', '', $record->Link()))
+        );
 
         $form = Form::create($this->owner, 'LivingForm', $fields, $actions);
         // $form->setFormAction(substr($form->FormAction(), 0, strpos($form->FormAction(), "?")));

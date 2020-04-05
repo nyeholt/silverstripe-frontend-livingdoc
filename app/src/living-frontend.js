@@ -10,6 +10,7 @@ import { initialise_property_editor } from './lib/ld-property-editor';
 import { initialise_keyboard } from './modules/lf-keyboard-handler';
 import { initialise_messages } from './modules/lf-messages';
 import { init_interface } from './editor-interface';
+import { Constants } from './constants';
 
 (function ($) {
 
@@ -45,10 +46,6 @@ import { init_interface } from './editor-interface';
     }, PING_TIME * 1000);
 
 
-    var TABLE_ROW_COMPONENT = 'tablerow';
-
-    initialise_messages();
-
     $(document).on('mousedown', '#clicker', function (e) {
         e.preventDefault();
     })
@@ -60,6 +57,17 @@ import { init_interface } from './editor-interface';
     });
 
     $(function () {
+        $(Constants.EDITOR_FRAME).on('load', function () {
+            initialise_editor($(this));
+        });
+
+
+    });
+
+    function initialise_editor(holderFrame) {
+
+        initialise_messages();
+
         var structure = ContentSource.getPageStructure();
 
         // relies on a design file having been loaded earlier
@@ -114,7 +122,7 @@ import { init_interface } from './editor-interface';
         var ready = LivingDocState.livingdoc.createView({
             interactive: true,
             iframe: false,
-            host: ContentSource.getConfig().editorHost,
+            host: holderFrame.contents().find(ContentSource.getConfig().editorHost),
             wrapper: LivingDocState.activeDesign.wrapper
         });
 
@@ -123,7 +131,6 @@ import { init_interface } from './editor-interface';
             LivingDocState.livingdoc.model.changed.add(function () {
                 LivingDocState.notifyDocUpdate(true);
             });
-
 
             /** doc is declared in the global namespace */
             init_interface(doc, selectedDesign);
@@ -154,7 +161,7 @@ import { init_interface } from './editor-interface';
             // });
 
             initialise_property_editor();
-            initialise_keyboard(LivingDocState);
+            initialise_keyboard(LivingDocState, holderFrame.contents()[0]);
 
             $(document).trigger('livingfrontend.updateLivingDoc', [LivingDocState.livingdoc]);
         });
@@ -170,8 +177,8 @@ import { init_interface } from './editor-interface';
          * @returns void
          */
         LivingDocState.showButtonBar = function (buttons, loc) {
-            $(".livingdocs_EditorField_Toolbar_textopts").remove()
-            var outer_el = $("<div>").addClass("livingdocs_EditorField_Toolbar_textopts");
+            $(Constants.EDITOR_FRAME).contents().find(Constants.BUTTON_BAR).remove();
+            var outer_el = $("<div>").addClass(Constants.BUTTON_BAR_CLS);
 
             for (var i = 0; i < buttons.length; i++) {
                 var b = buttons[i];
@@ -235,27 +242,6 @@ import { init_interface } from './editor-interface';
         });
 
 
-
-        /**
-         * Iteratively add cells to all the rows in a given table container
-         *
-         * @param {type} firstRow
-         * @param {type} cellType
-         * @returns {.firstRow.next.next}
-         */
-        function addCellToRows(firstRow, cellType) {
-            if (firstRow) {
-                while (firstRow && firstRow.componentName == TABLE_ROW_COMPONENT) {
-                    var newCell = LivingDocState.livingdoc.componentTree.getComponent(cellType);
-                    firstRow.append('rowcells', newCell);
-                    firstRow = firstRow.next;
-
-                    var newP = LivingDocState.livingdoc.componentTree.getComponent("p");
-                    newCell.append("cellitems", newP);
-                }
-            }
-            return firstRow;
-        }
-    });
+    };
 
 })(jQuery);

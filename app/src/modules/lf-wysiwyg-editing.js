@@ -1,9 +1,10 @@
 import * as $ from 'jquery';
 
 import { setupEditor } from "../../../../../symbiote/silverstripe-prose-editor/editor/src/setup.js";
-import "../../../../../symbiote/silverstripe-prose-editor/editor/style/index.scss" ;
+import "../../../../../symbiote/silverstripe-prose-editor/editor/style/index.scss";
 import ContentSource from '../lib/FormContentSource.js';
 import { renderProseShortcode } from '../../../../../symbiote/silverstripe-prose-editor/editor/src/plugins/shortcodes.js';
+import { Constants } from '../constants.js';
 
 
 function replaceShortcodesIn(elem) {
@@ -14,7 +15,7 @@ function replaceShortcodesIn(elem) {
         }
         $shortcodeHolder.attr('data-rendered-shortcode', 1);
         let rawShortcode = $shortcodeHolder.attr('data-shortcode');
-        if(!rawShortcode) {
+        if (!rawShortcode) {
             return;
         }
         let shortcodeData = JSON.parse(rawShortcode);
@@ -33,12 +34,14 @@ function replaceShortcodesIn(elem) {
 $(document).on('livingfrontend.updateLivingDoc', function (e, livingdoc) {
     // initial render
     setTimeout(function () {
-        replaceShortcodesIn($('#livingdocs-editor'));
+        // TODO
+        replaceShortcodesIn($('#livingdocs-container'));
     }, 500);
 
     // subsequent content changes
     livingdoc.model.changed.add(function () {
-        replaceShortcodesIn($('#livingdocs-editor'));
+        // TODO
+        replaceShortcodesIn($('#livingdocs-container'));
     });
 
     livingdoc.interactiveView.page.componentWasDropped.add(function (component) {
@@ -76,22 +79,22 @@ $(document).on('livingfrontend.updateLivingDoc', function (e, livingdoc) {
         proseNode.attr('data-upload-path', config.pageLink);
         proseNode.attr('data-prose-config', JSON.stringify({
             "menu": {
-              "insertlink": true,
-              "insertimage": true,
-              "bulletlist": true,
-              "orderedlist": true,
-              "quote": true,
-              "paragraph": true,
-              "pre": true,
-              "hr": true,
-              "table": true,
-              "shortcode": true,
-              "viewsource": true
+                "insertlink": true,
+                "insertimage": true,
+                "bulletlist": true,
+                "orderedlist": true,
+                "quote": true,
+                "paragraph": true,
+                "pre": true,
+                "hr": true,
+                "table": true,
+                "shortcode": true,
+                "viewsource": true
             },
             "linkSelector": {
-              "internal": true
+                "internal": true
             }
-          }));
+        }));
 
         var editorNode = $('<div class="ProseEditorFieldEditor" data-prose-config="">');
         var valueNode = $('<div class="ProseEditorFieldValue" style="display: none">');
@@ -103,15 +106,30 @@ $(document).on('livingfrontend.updateLivingDoc', function (e, livingdoc) {
         valueNode.html(currentContent);
 
         var $actions = $('<div>');
-        var $save = $('<button class="Button--Primary">OK</button>');
-        var $cancel = $('<button>Cancel</button>');
+        var $save = $('<button class="Button Button--Primary">OK</button>');
+        var $cancel = $('<button class="Button">Cancel</button>');
         $save.css('display', 'inline'); $cancel.css('display', 'inline');
         $actions.append($save).append($cancel);
 
         $elem.empty();
         $elem.append(proseNode).append($actions);
 
+        
+
         const thisEditor = setupEditor(editorNode[0], valueNode[0], storageNode[0]);
+
+        setTimeout(function () {
+            if ($(Constants.EDITOR_FRAME).contents().find('#ProseMirror-icon-collection').length == 0) {
+                $(Constants.EDITOR_FRAME).contents().find('body').prepend($('#ProseMirror-icon-collection'));
+            }
+
+            let icons = $(Constants.EDITOR_FRAME).contents().find('div.ProseMirror-icon svg use').each(function () {
+                let href = $(this).attr('href');
+                href = href.replace(location.href, '');
+                $(this).attr('href', href);
+            });
+        }, 100);
+        
 
         var cleanUp = function () {
             thisEditor.destroy();
@@ -170,6 +188,4 @@ $(document).on('livingfrontend.updateLivingDoc', function (e, livingdoc) {
             cleanUp();
         });
     });
-
-
 });
