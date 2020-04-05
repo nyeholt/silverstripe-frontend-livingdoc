@@ -143,7 +143,16 @@ class LivingPageExtension extends DataExtension
 
     public function shortcodeFor($label, $shortcodeParams = null) {
         $items = $this->availableShortcodes();
-        if (!isset($items[$label]) && $label != 'embed') {
+
+        $found = false;
+        foreach ($items as $itemLabel => $code) {
+            if (strpos($code, "[$label") === 0) {
+                $found = true;
+                break;
+            }
+        }
+        
+        if (!$found) {
             return null;
         }
 

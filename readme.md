@@ -32,7 +32,7 @@ configuration (depending on whether you're using multisites or not)
 ---
 Name: componentpage_config
 ---
-SiteConfig:
+SilverStripe\SiteConfig\SiteConfig:
   extensions:
     - Symbiote\Frontend\LivingPage\Extension\LivingPageSettingsExtension
 

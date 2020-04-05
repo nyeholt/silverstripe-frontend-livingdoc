@@ -1,6 +1,7 @@
 import * as $ from 'jquery';
 import { TextField } from '../../../../../symbiote/silverstripe-prose-editor/editor/src/fields/TextField';
 import { openPrompt } from '../../../../../symbiote/silverstripe-prose-editor/editor/src/proseutil/prose-prompt';
+import ContentSource from '../lib/FormContentSource';
 
 var PROPS_HOLDER = 'livingdocs_EditorField_Toolbar_options';
 
@@ -81,7 +82,10 @@ $(document).on('livingfrontend.updateLivingDoc', function (e, livingdoc) {
 
                 if (shortcodeData && shortcodeData.shortcode) {
                     source = shortcodeData.shortcode;
-                    attrStr = shortcodeData.attrs ? JSON.stringify(shortcodeData.attrs) : '';
+                    if (shortcodeData.attrs) {
+                        shortcodeData.attrs.context_id = ContentSource.getConfig().contextId;
+                        attrStr = JSON.stringify(shortcodeData.attrs);
+                    }
                 } else {
                     attrStr = JSON.stringify({
                         url: selected

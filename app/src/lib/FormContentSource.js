@@ -21,6 +21,8 @@ class FormContentSource {
             this.config = config;
         }
 
+        this.config.contextId = $(this.TOOLBAR_FORM).find('input[name="ID"]').val();
+
         $(document).on('submit', this.TOOLBAR_FORM, function () {
             var _this = $(this);
 

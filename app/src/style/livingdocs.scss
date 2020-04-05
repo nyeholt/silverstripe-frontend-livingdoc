@@ -90,9 +90,8 @@
 
         &::before {
             content: '⚙';
-            position: absolute;
-            top: 20px;
-            right: 20px;
+            float: right;
+            margin-right: -10px;
         }
     }
     &:empty {
