@@ -309,13 +309,13 @@ table.doc-component:hover {
 
 table.doc-component tr {
     padding: 5px;
-    background-color: #ffc;
     margin: 4px 0;
 }
 
 table.doc-component tr:empty {
     display: block;
     height: 15px;
+    background-color: #ffc;
 }
 
 table.doc-component td:empty,

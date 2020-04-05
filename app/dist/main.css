@@ -2174,7 +2174,7 @@ div.resize-cursor {
   padding: 0px; }
 
 .ProseMirror-prompt {
-  background-color: #232E40 !important;
+  background-color: #3a235d !important;
   color: #fff;
   top: 20px; }
   .ProseMirror-prompt input[type="text"],
@@ -2223,7 +2223,7 @@ div.resize-cursor {
 .infinite-tree-content .infinite-tree-selected.infinite-tree-item,
 .infinite-tree-content .infinite-tree-selected.infinite-tree-item:hover,
 .infinite-tree-content .infinite-tree-item:hover {
-  background: #1e2736 !important;
+  background: #331f52 !important;
   border: 1px solid #06c; }
 
 .Button {
@@ -2258,13 +2258,13 @@ body {
   display: block; }
 
 .ld-editor-frame {
-  background-color: #273347; }
+  background-color: #3f2665; }
 
 .livingdocs-bottom-bar {
   display: flex;
   z-index: 3001;
   height: 45px;
-  background: #232E40;
+  background: #3a235d;
   color: #fff;
   padding: 10px;
   width: 100%; }
@@ -2273,7 +2273,7 @@ body {
   z-index: 3000;
   left: 0px;
   top: 0px;
-  background-color: #232E40;
+  background-color: #3a235d;
   padding: 15px;
   font-size: 16px;
   color: #fff;
@@ -2282,7 +2282,7 @@ body {
   height: calc(100vh - 60px);
   box-shadow: 0 0 3px rgba(0, 0, 0, 0.25); }
   .livingdocs-toolbar .toolbar-tabs {
-    background-color: #232E40;
+    background-color: #3a235d;
     z-index: 3; }
   .livingdocs-toolbar .toolbar-items {
     padding-top: 30px; }
@@ -2291,7 +2291,7 @@ body {
     cursor: pointer;
     padding: 2px; }
     .livingdocs-toolbar .ld-tab--active {
-      background-color: #11161f; }
+      background-color: #231538; }
   .livingdocs-toolbar .ld-tab-panel {
     display: none; }
     .livingdocs-toolbar .ld-tab-panel.ld-tab-default {
@@ -2389,7 +2389,7 @@ body {
   font-size: 12px; }
 
 iframe.living-dialog {
-  background-color: #232E40;
+  background-color: #3a235d;
   width: 50%;
   height: 80%;
   position: fixed;
@@ -2407,7 +2407,7 @@ a.dialog-close {
   z-index: 20002;
   top: 80px;
   right: 24%;
-  background-color: #232E40;
+  background-color: #3a235d;
   font-size: 20px;
   font-weight: bold;
   color: #222;
@@ -2453,12 +2453,12 @@ table.doc-component:hover {
 
 table.doc-component tr {
   padding: 5px;
-  background-color: #ffc;
   margin: 4px 0; }
 
 table.doc-component tr:empty {
   display: block;
-  height: 15px; }
+  height: 15px;
+  background-color: #ffc; }
 
 table.doc-component td:empty,
 table.doc-component th:empty {

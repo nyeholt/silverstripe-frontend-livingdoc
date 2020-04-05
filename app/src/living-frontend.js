@@ -45,7 +45,6 @@ import { Constants } from './constants';
         editingTime += PING_TIME;
     }, PING_TIME * 1000);
 
-    var TABLE_ROW_COMPONENT = 'tablerow';
 
     $(document).on('mousedown', '#clicker', function (e) {
         e.preventDefault();
@@ -178,8 +177,8 @@ import { Constants } from './constants';
          * @returns void
          */
         LivingDocState.showButtonBar = function (buttons, loc) {
-            $(".livingdocs_EditorField_Toolbar_textopts").remove()
-            var outer_el = $("<div>").addClass("livingdocs_EditorField_Toolbar_textopts");
+            $(Constants.EDITOR_FRAME).contents().find(Constants.BUTTON_BAR).remove();
+            var outer_el = $("<div>").addClass(Constants.BUTTON_BAR_CLS);
 
             for (var i = 0; i < buttons.length; i++) {
                 var b = buttons[i];
@@ -243,27 +242,6 @@ import { Constants } from './constants';
         });
 
 
-
-        /**
-         * Iteratively add cells to all the rows in a given table container
-         *
-         * @param {type} firstRow
-         * @param {type} cellType
-         * @returns {.firstRow.next.next}
-         */
-        function addCellToRows(firstRow, cellType) {
-            if (firstRow) {
-                while (firstRow && firstRow.componentName == TABLE_ROW_COMPONENT) {
-                    var newCell = LivingDocState.livingdoc.componentTree.getComponent(cellType);
-                    firstRow.append('rowcells', newCell);
-                    firstRow = firstRow.next;
-
-                    var newP = LivingDocState.livingdoc.componentTree.getComponent("p");
-                    newCell.append("cellitems", newP);
-                }
-            }
-            return firstRow;
-        }
     };
 
 })(jQuery);

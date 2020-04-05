@@ -1,5 +1,10 @@
 
-$toolbar-background: #232E40;
+$brand-purple: #5D3895;
+
+$toolbar-background-blue: #232E40;
+
+$toolbar-background: darken($brand-purple, 15); 
+
 $toolbar-font-color: #fff;
 
 $toolbar-button-color-light: #f8f9fa;

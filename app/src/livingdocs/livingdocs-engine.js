@@ -7746,7 +7746,7 @@ module.exports = ComponentView = (function() {
   ComponentView.prototype.updateContent = function(directiveName) {
     var dataAttrs, name, _ref, $elem, elementStyles;
 
-    if (directiveName) {
+    if (directiveName && this.model.content) {
       this.set(directiveName, this.model.content[directiveName]);
     } else {
       this.setAll();

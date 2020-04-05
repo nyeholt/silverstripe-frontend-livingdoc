@@ -11,6 +11,7 @@ import './modules/lf-paste-image';
 import './modules/lf-text-actions';
 import './modules/lf-wysiwyg-editing';
 import './modules/lf-size-picker';
+import './modules/lf-table-editor';
 
 import './style/livingdocs.scss';
 import './style/living-frontend.scss';

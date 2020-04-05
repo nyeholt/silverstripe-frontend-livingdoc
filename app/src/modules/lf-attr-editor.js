@@ -36,7 +36,7 @@ export function initialise_attribute_editor(holder, component) {
     }
 
 
-    var newAttr = $('<button class="' + Constants.btnCls('btn-primary') + '">New Attribute</button>').prependTo(holder.find('.component-actions'));
+    var newAttr = $('<button class="' + Constants.btnCls('btn-info') + '">New Attribute</button>').prependTo(holder.find('.component-actions'));
     newAttr.click(function (e) {
         var names = [];
 
