@@ -2198,6 +2198,8 @@ div.resize-cursor {
   .ProseMirror-prompt h5,
   .ProseMirror-prompt label {
     color: #fff; }
+  .ProseMirror-prompt .filepond--drop-label label {
+    color: #000; }
   .ProseMirror-prompt .fieldgroup-fieldwrapper {
     margin-bottom: 15px; }
   .ProseMirror-prompt-buttons {
