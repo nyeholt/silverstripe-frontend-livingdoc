@@ -10,6 +10,7 @@ import './modules/lf-links-buttons';
 import './modules/lf-paste-image';
 import './modules/lf-text-actions';
 import './modules/lf-wysiwyg-editing';
+import './modules/lf-size-picker';
 
 import './style/livingdocs.scss';
 import './style/living-frontend.scss';

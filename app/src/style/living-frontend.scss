@@ -11,15 +11,20 @@ body {
 #livingdocs-frame {
     width: 100%;
     border: none;
-    height: calc(100vh - 65px);
-    // margin-left: 280px;
+    height: calc(100vh - 60px);
+    margin: 0px auto;
+    display: block;
 }
 
+
+.ld-editor-frame {
+    background-color: lighten($toolbar-background, 2);
+}
 
 .livingdocs-bottom-bar {
     display: flex;
     z-index: 3001;
-    height: 40px;
+    height: 45px;
     background: $toolbar-background;
     color: $toolbar-font-color;
     padding: 10px;

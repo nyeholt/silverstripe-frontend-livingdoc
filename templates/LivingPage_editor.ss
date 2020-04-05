@@ -18,11 +18,12 @@
 <body>
     <div id="livingdocs-editor-holder container-fluid">
         <div class="livingdocs-bottom-bar">
-            <div class="livingdocs-toolbar-controls">
-            </div>
             <div class="livingdocs-actions">
                 $LivingForm
             </div>
+            <div id="livingdocs-toolbar-controls">
+            </div>
+            
             <div class="livingdocs-toolbar-messages">
             </div>
         </div>
@@ -48,7 +49,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-10 p-0 m-0">
+            <div class="ld-editor-frame col-10 p-0 m-0">
                 <iframe src="$PageLink" id="livingdocs-frame"></iframe>
             </div>
         </div>

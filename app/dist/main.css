@@ -1819,7 +1819,7 @@ div.resize-cursor {
 } */
 [data-doc-container]:empty {
   min-height: 100px;
-  width: 100%;
+  min-width: 100%;
   /* outline: 2px dashed rgba(0, 0, 0, 0.2); */
   position: relative; }
 
@@ -2253,12 +2253,17 @@ body {
 #livingdocs-frame {
   width: 100%;
   border: none;
-  height: calc(100vh - 65px); }
+  height: calc(100vh - 60px);
+  margin: 0px auto;
+  display: block; }
+
+.ld-editor-frame {
+  background-color: #273347; }
 
 .livingdocs-bottom-bar {
   display: flex;
   z-index: 3001;
-  height: 40px;
+  height: 45px;
   background: #232E40;
   color: #fff;
   padding: 10px;

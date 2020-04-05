@@ -43,11 +43,11 @@
                     },
                     {
                         "caption": "Screen reader only",
-                        "value": ".sr-only"
+                        "value": "sr-only"
                     },
                     {
                         "caption": "Screen reader focused",
-                        "value": ".sr-only-focusable"
+                        "value": "sr-only-focusable"
                     }
                 ]
             },
