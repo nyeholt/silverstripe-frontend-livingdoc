@@ -188,6 +188,7 @@ class LivingPageEditController extends Controller implements PermissionProvider
         Requirements::block(THIRDPARTY_DIR . '/jquery/jquery.js');
 
         Requirements::javascript('nyeholt/silverstripe-frontend-livingdoc: app/dist/main.js');
+        Requirements::css('nyeholt/silverstripe-frontend-livingdoc: app/dist/styles.css');
         Requirements::css('nyeholt/silverstripe-frontend-livingdoc: app/dist/main.css');
 
         Requirements::javascript($config['designFile']);

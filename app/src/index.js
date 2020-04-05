@@ -15,6 +15,7 @@ import './modules/lf-table-editor';
 
 import './style/livingdocs.scss';
 import './style/living-frontend.scss';
+import './style/components.scss';
 
 
 const editors = [];

@@ -1,0 +1,45 @@
+@import './common.scss';
+
+table.doc-component {
+    border-spacing: 5px;
+    border-collapse: separate;
+}
+
+table.doc-component:hover {
+    outline: 1px dashed #888;
+}
+
+table.doc-component tr {
+    padding: 5px;
+    margin: 4px 0;
+}
+
+table.doc-component tr:empty {
+    display: block;
+    height: 15px;
+    background-color: #ffc;
+}
+
+table.doc-component td:empty,
+table.doc-component th:empty {
+    padding: 1em;
+    background-color: #ffc;
+}
+
+table.doc-component thead:empty,
+table.doc-component tbody:empty {
+    min-height: 100px;
+    min-width: 50%;
+    display: block;
+    padding: 5rem;
+}
+
+
+.Button {
+    @include button();
+
+    &--Primary {
+        background-color: #007700;
+        color: #fff;
+    }
+}
