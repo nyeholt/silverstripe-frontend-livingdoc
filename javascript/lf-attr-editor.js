@@ -1,3 +1,4 @@
+import { Constants } from "../app/src/constants";
 
 ;(function ($) {
     var PROPS_HOLDER = 'livingdocs_EditorField_Toolbar_options';
@@ -35,7 +36,7 @@
                 }
             }
 
-            var newAttr = $('<button class="alert">New Attr</button>').prependTo(options.find('.component-actions'));
+            var newAttr = $('<button class="' + Constants.btnCls()  + '">New Attr</button>').prependTo(options.find('.component-actions'));
             newAttr.click(function (e) {
                 var names = [];
 

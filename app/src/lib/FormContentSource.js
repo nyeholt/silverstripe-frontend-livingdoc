@@ -47,14 +47,7 @@ class FormContentSource {
         });
 
         $(document).on('mousedown', this.TOOLBAR_FORM + ' button.action', function (e) {
-            // catuch the "live" click and redirect instead
-            if ($(this).attr('name') == 'action_live') {
-                e.preventDefault();
-                location.href = location.href + '?edit=stop&stage=Live';
-                return false;
-            }
-
-            if ($(this).hasClass('link-action')) {
+            if ($(this).hasClass('link-action')  && e.which == 1) {
                 e.preventDefault();
                 location.href = $(this).attr('data-link');
                 return false;

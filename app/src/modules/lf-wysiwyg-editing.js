@@ -106,8 +106,8 @@ $(document).on('livingfrontend.updateLivingDoc', function (e, livingdoc) {
         valueNode.html(currentContent);
 
         var $actions = $('<div>');
-        var $save = $('<button class="Button--Primary">OK</button>');
-        var $cancel = $('<button>Cancel</button>');
+        var $save = $('<button class="Button Button--Primary">OK</button>');
+        var $cancel = $('<button class="Button">Cancel</button>');
         $save.css('display', 'inline'); $cancel.css('display', 'inline');
         $actions.append($save).append($cancel);
 

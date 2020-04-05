@@ -2170,11 +2170,13 @@ div.resize-cursor {
 .livingdocs-bottom-bar form {
   width: auto; }
 
+.livingdocs-item-properties .ProseMirror-prompt {
+  padding: 0px; }
+
 .ProseMirror-prompt {
   background-color: #232E40 !important;
-  top: 20px;
-  height: 70vh;
-  overflow: auto; }
+  color: #fff;
+  top: 20px; }
   .ProseMirror-prompt input[type="text"],
   .ProseMirror-prompt textarea,
   .ProseMirror-prompt select {
@@ -2194,6 +2196,54 @@ div.resize-cursor {
     .ProseMirror-prompt textarea:focus,
     .ProseMirror-prompt select:focus {
       border-color: #6666ff; }
+  .ProseMirror-prompt h5,
+  .ProseMirror-prompt label {
+    color: #fff; }
+  .ProseMirror-prompt .fieldgroup-fieldwrapper {
+    margin-bottom: 15px; }
+  .ProseMirror-prompt-buttons {
+    margin-top: 5px;
+    /* display: none; */ }
+    .ProseMirror-prompt-buttons button {
+      display: inline-block;
+      font-weight: 400;
+      color: #212529;
+      background-color: #f8f9fa;
+      text-align: center;
+      vertical-align: middle;
+      cursor: pointer;
+      user-select: none;
+      border: 1px solid transparent;
+      padding: 0.375rem 0.75rem;
+      font-size: 1rem;
+      line-height: 1.5;
+      border-radius: 0.25rem;
+      transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out; }
+
+.infinite-tree-content .infinite-tree-selected.infinite-tree-item,
+.infinite-tree-content .infinite-tree-selected.infinite-tree-item:hover,
+.infinite-tree-content .infinite-tree-item:hover {
+  background: #1e2736 !important;
+  border: 1px solid #06c; }
+
+.Button {
+  display: inline-block;
+  font-weight: 400;
+  color: #212529;
+  background-color: #f8f9fa;
+  text-align: center;
+  vertical-align: middle;
+  cursor: pointer;
+  user-select: none;
+  border: 1px solid transparent;
+  padding: 0.375rem 0.75rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  border-radius: 0.25rem;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out; }
+  .Button--Primary {
+    background-color: #007700;
+    color: #fff; }
 
 body {
   height: auto !important;
@@ -2219,14 +2269,13 @@ body {
   left: 0px;
   top: 0px;
   background-color: #232E40;
-  padding: 5px;
+  padding: 15px;
   font-size: 16px;
   color: #fff;
   overflow-y: auto;
   overflow-x: hidden;
   height: calc(100vh - 60px);
-  box-shadow: 0 0 3px rgba(0, 0, 0, 0.25);
-  padding: 0; }
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.25); }
   .livingdocs-toolbar .toolbar-tabs {
     background-color: #232E40;
     z-index: 3; }
@@ -2237,7 +2286,11 @@ body {
     cursor: pointer;
     padding: 2px; }
     .livingdocs-toolbar .ld-tab--active {
-      background-color: #efefff; }
+      background-color: #11161f; }
+  .livingdocs-toolbar .ld-tab-panel {
+    display: none; }
+    .livingdocs-toolbar .ld-tab-panel.ld-tab-default {
+      display: block; }
   .livingdocs-toolbar .ld-toggle {
     display: block; }
     .livingdocs-toolbar .ld-toggle input {
@@ -2246,9 +2299,6 @@ body {
     width: 90%;
     display: block;
     margin: 0px auto; }
-
-.livingdocs-bottom-bar .livingdocs-toolbar-controls {
-  width: 30%; }
 
 .livingdocs-bottom-bar .livingdocs-actions {
   width: 40%;
@@ -2272,7 +2322,7 @@ body {
 .livingdocs-toolbar .component-actions button {
   width: 90%;
   display: block;
-  margin: 0px auto; }
+  margin: 2px auto; }
 
 .livingdocs-toolbar #livingdocs-page-options {
   padding: 3px; }
@@ -2286,63 +2336,6 @@ body {
   padding: 10px;
   position: relative;
   margin: 0; }
-
-.livingdocs-item-properties a.btn,
-.livingdocs-item-properties button,
-.livingdocs-item-properties input[type="submit"],
-.livingdocs-item-properties input[type="reset"],
-.livingdocs-item-properties .Actions .action,
-.livingdocs-bottom-bar a.btn,
-.livingdocs-bottom-bar button,
-.livingdocs-bottom-bar input[type="submit"],
-.livingdocs-bottom-bar input[type="reset"],
-.livingdocs-bottom-bar .Actions .action,
-.livingdocs-toolbar a.btn,
-.livingdocs-toolbar button,
-.livingdocs-toolbar input[type="submit"],
-.livingdocs-toolbar input[type="reset"],
-.livingdocs-toolbar .Actions .action {
-  background: #dad9d9;
-  border: 1px solid #dad9d9;
-  border-radius: 3px;
-  float: none;
-  font-size: 12px;
-  padding: 4px;
-  color: #000;
-  display: inline-block;
-  margin: 2px; }
-  .livingdocs-item-properties a.btn:hover,
-  .livingdocs-item-properties button:hover,
-  .livingdocs-item-properties input[type="submit"]:hover,
-  .livingdocs-item-properties input[type="reset"]:hover,
-  .livingdocs-item-properties .Actions .action:hover,
-  .livingdocs-bottom-bar a.btn:hover,
-  .livingdocs-bottom-bar button:hover,
-  .livingdocs-bottom-bar input[type="submit"]:hover,
-  .livingdocs-bottom-bar input[type="reset"]:hover,
-  .livingdocs-bottom-bar .Actions .action:hover,
-  .livingdocs-toolbar a.btn:hover,
-  .livingdocs-toolbar button:hover,
-  .livingdocs-toolbar input[type="submit"]:hover,
-  .livingdocs-toolbar input[type="reset"]:hover,
-  .livingdocs-toolbar .Actions .action:hover {
-    border: 1px solid #777; }
-  .livingdocs-item-properties a.btn:disabled,
-  .livingdocs-item-properties button:disabled,
-  .livingdocs-item-properties input[type="submit"]:disabled,
-  .livingdocs-item-properties input[type="reset"]:disabled,
-  .livingdocs-item-properties .Actions .action:disabled,
-  .livingdocs-bottom-bar a.btn:disabled,
-  .livingdocs-bottom-bar button:disabled,
-  .livingdocs-bottom-bar input[type="submit"]:disabled,
-  .livingdocs-bottom-bar input[type="reset"]:disabled,
-  .livingdocs-bottom-bar .Actions .action:disabled,
-  .livingdocs-toolbar a.btn:disabled,
-  .livingdocs-toolbar button:disabled,
-  .livingdocs-toolbar input[type="submit"]:disabled,
-  .livingdocs-toolbar input[type="reset"]:disabled,
-  .livingdocs-toolbar .Actions .action:disabled {
-    color: #fff; }
 
 .livingdocs-toolbar .component-list {
   padding-bottom: 100px; }
@@ -9682,8 +9675,4 @@ a.text-dark:hover, a.text-dark:focus {
   .table .thead-dark th {
     color: inherit;
     border-color: #dee2e6; } }
-
-.Button--Primary {
-  background-color: #007700;
-  color: #fff; }
 

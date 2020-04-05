@@ -7,6 +7,7 @@ import { linkSelectorDialog } from "../../../../../symbiote/silverstripe-prose-e
 import createComponentList from "./createComponentList";
 import { select_tab } from "../editor-interface";
 import { initialise_attribute_editor } from "../modules/lf-attr-editor";
+import { Constants } from "../constants";
 
 var PROPS_HOLDER = 'livingdocs_EditorField_Toolbar_options';
 var BOTTOM_BAR = '.livingdocs-bottom-bar';
@@ -198,14 +199,14 @@ export function initialise_property_editor() {
             }
         }
 
-        var $delete_button = $("<button class='alert alert-danger'>").text("Remove").on("click", function () {
+        var $delete_button = $("<button class='" + Constants.btnCls('btn-danger') + "'>").text("Remove").on("click", function () {
             if (confirm("Remove this?")) {
                 component.model.remove();
                 $("." + PROPS_HOLDER).remove();
             }
         });
 
-        var $dupe_button = $("<button class='alert alert-warning'>").text("Duplicate").on("click", function () {
+        var $dupe_button = $("<button class='" + Constants.btnCls('btn-info') + "'>").text("Duplicate").on("click", function () {
             var tmpTree = new doc.ComponentTree({ design: LivingDocState.livingdoc.componentTree.design });
 
             // need to swap out 'next' for the moment otherwise the serialize walker
@@ -219,7 +220,7 @@ export function initialise_property_editor() {
 
         });
 
-        var exportButton = $('<button>Export</button>');
+        var exportButton = $('<button>Export</button>').addClass(Constants.btnCls());
 
         exportButton.click(function (e) {
             componentExportForm(component);

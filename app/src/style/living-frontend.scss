@@ -31,7 +31,7 @@ body {
     left: 0px;
     top: 0px;
     background-color: $toolbar-background;
-    padding: 5px;
+    padding: 15px;
     font-size: 16px;
     color: $toolbar-font-color;
     overflow-y: auto;
@@ -40,7 +40,6 @@ body {
     height: calc(100vh - 60px);
 
     box-shadow: 0 0 3px rgba(0, 0, 0, 0.25);
-    padding: 0;
 
     .toolbar-tabs {
         background-color: $toolbar-background;
@@ -59,7 +58,15 @@ body {
         padding: 2px;
 
         &--active {
-            background-color: #efefff;
+            background-color: darken($toolbar-background, 10);
+        }
+    }
+
+    .ld-tab-panel {
+        display: none;
+
+        &.ld-tab-default {
+            display: block;
         }
     }
 
@@ -76,11 +83,6 @@ body {
         display: block;
         margin: 0px auto;
     }
-}
-
-
-.livingdocs-bottom-bar .livingdocs-toolbar-controls {
-    width: 30%;
 }
 
 .livingdocs-bottom-bar .livingdocs-actions {
@@ -111,7 +113,7 @@ body {
 .livingdocs-toolbar .component-actions button {
     width: 90%;
     display: block;
-    margin: 0px auto;
+    margin: 2px auto;
 }
 
 .livingdocs-toolbar #livingdocs-page-options {
@@ -146,24 +148,24 @@ body {
 .livingdocs-toolbar input[type="submit"],
 .livingdocs-toolbar input[type="reset"],
 .livingdocs-toolbar .Actions .action {
-    background: #dad9d9;
-    border: 1px solid #dad9d9;
-    border-radius: 3px;
-    float: none;
-    font-size: 12px;
-    padding: 4px;
-    color: #000;
+    // background: #dad9d9;
+    // border: 1px solid #dad9d9;
+    // border-radius: 3px;
+    // float: none;
+    // font-size: 12px;
+    // padding: 4px;
+    // color: #000;
 
-    display: inline-block;
-    margin: 2px;
+    // display: inline-block;
+    // margin: 2px;
 
-    &:hover {
-        border: 1px solid #777;
-    }
+    // &:hover {
+    //     border: 1px solid #777;
+    // }
 
-    &:disabled {
-        color: #fff;
-    }
+    // &:disabled {
+    //     color: #fff;
+    // }
 }
 
 

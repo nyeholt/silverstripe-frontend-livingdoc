@@ -1,5 +1,6 @@
 import * as $ from 'jquery';
 import LivingDocState from '../lib/LivingDocState';
+import { Constants } from '../constants';
 
 var PROPS_HOLDER = 'livingdocs_EditorField_Toolbar_options';
 
@@ -35,7 +36,7 @@ export function initialise_attribute_editor(holder, component) {
     }
 
 
-    var newAttr = $('<button class="alert">New Attribute</button>').prependTo(holder.find('.component-actions'));
+    var newAttr = $('<button class="' + Constants.btnCls('btn-primary') + '">New Attribute</button>').prependTo(holder.find('.component-actions'));
     newAttr.click(function (e) {
         var names = [];
 

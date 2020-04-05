@@ -127,11 +127,11 @@ function init_component_list(doc, selectedDesign) {
 
 function init_toolbar_toggles() {
 
-    let toolbarToggle = $('<button>').text("Toggle toolbar");
-    $(BOTTOM_BAR).find('.livingdocs-toolbar-controls').append(toolbarToggle);
-    toolbarToggle.click(function (e) {
-        $('body').toggleClass('show-livingdocs-toolbar');
-    });
+    // let toolbarToggle = $('<button>').text("Toggle toolbar");
+    // $(BOTTOM_BAR).find('.livingdocs-toolbar-controls').append(toolbarToggle);
+    // toolbarToggle.click(function (e) {
+    //     $('body').toggleClass('show-livingdocs-toolbar');
+    // });
 
     const gridToggle = $('<input type="checkbox" checked>');
     const enableGrid = $('<label class="ld-toggle">').append(gridToggle).append('Enable grid');
@@ -152,9 +152,6 @@ function init_toolbar_toggles() {
             $(this).attr('data-layout-editing', 1);
         }
     });
-
-    // and start with the toolbar shown
-    toolbarToggle.click();
 
     LivingDocState.livingdoc.interactiveView.page.componentWillBeDragged.add(function (option) {
         if (layoutToggle.attr('data-layout-editing') == 1) {
