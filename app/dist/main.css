@@ -2190,7 +2190,6 @@ div.resize-cursor {
     height: auto;
     color: #000;
     max-width: none;
-    width: 90%;
     display: block; }
     .ProseMirror-prompt input[type="text"]:focus,
     .ProseMirror-prompt textarea:focus,
@@ -2230,6 +2229,11 @@ body {
   height: auto !important;
   padding: 0px;
   margin: 0px; }
+
+#ld-toolbar-holder {
+  min-width: 290px;
+  max-width: 290px;
+  width: 290px; }
 
 #livingdocs-frame {
   width: 100%;

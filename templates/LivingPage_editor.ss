@@ -28,7 +28,7 @@
             </div>
         </div>
         <div class="row m-0">
-            <div class="col-2 p-0 mr-0">
+            <div id="ld-toolbar-holder" class="col p-0 mr-0">
                 <div class="livingdocs-toolbar">
                     <div class="toolbar-tabs">
                         <div class="ld-tab" href="#livingdocs-components">Components</div>
@@ -49,7 +49,7 @@
                     </div>
                 </div>
             </div>
-            <div class="ld-editor-frame col-10 p-0 m-0">
+            <div class="ld-editor-frame col p-0 m-0">
                 <iframe src="$PageLink" id="livingdocs-frame"></iframe>
             </div>
         </div>

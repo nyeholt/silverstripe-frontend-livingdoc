@@ -29,6 +29,7 @@ export function initialise_property_editor() {
     LivingDocState.livingdoc.interactiveView.page.focus.componentFocus.add(function (component) {
         $("." + PROPS_HOLDER).remove();
         $(Constants.EDITOR_FRAME).contents().find(Constants.BUTTON_BAR).remove();
+        $(Constants.BUTTON_BAR).remove();
 
         var options = $("<div>").addClass(PROPS_HOLDER);
         var $properties = $(ITEM_PROPERTIES_HOLDER);

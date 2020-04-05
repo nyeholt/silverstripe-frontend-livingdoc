@@ -177,7 +177,8 @@ import { Constants } from './constants';
          * @returns void
          */
         LivingDocState.showButtonBar = function (buttons, loc) {
-            $(Constants.EDITOR_FRAME).contents().find(Constants.BUTTON_BAR).remove();
+            $(Constants.EDITOR_FRAME).contents().find(Constants.BUTTON_BAR).remove()
+            $(Constants.BUTTON_BAR).remove();
             var outer_el = $("<div>").addClass(Constants.BUTTON_BAR_CLS);
 
             for (var i = 0; i < buttons.length; i++) {
