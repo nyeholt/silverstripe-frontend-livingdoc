@@ -455,6 +455,9 @@
             {
                 "label": "Lists",
                 "components": [
+                    "unordered-list",
+                    "ordered-list",
+                    "list-item",
                     "list-group",
                     'numbered-list-group',
                     "list-group-item"

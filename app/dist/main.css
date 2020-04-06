@@ -1819,7 +1819,6 @@ div.resize-cursor {
 } */
 [data-doc-container]:empty {
   min-height: 100px;
-  min-width: 100%;
   /* outline: 2px dashed rgba(0, 0, 0, 0.2); */
   position: relative; }
 
