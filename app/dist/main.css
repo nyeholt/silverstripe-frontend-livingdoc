@@ -2319,11 +2319,6 @@ body {
 .livingdocs-toolbar #livingdocs-page-options {
   padding: 3px; }
 
-.livingdocs-toolbar .livingdocs-history-list {
-  height: 200px;
-  overflow-y: auto;
-  overflow-x: hidden; }
-
 .livingdocs-item-properties > div {
   padding: 10px;
   position: relative;

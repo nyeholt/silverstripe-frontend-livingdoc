@@ -147,7 +147,7 @@ class LivingPageExtension extends DataExtension
 
         $found = false;
         foreach ($items as $itemLabel => $code) {
-            if (strpos($code, "[$label") === 0) {
+            if (strpos($code, "[$label") === 0 || $label == 'embed') {
                 $found = true;
                 break;
             }
