@@ -41,7 +41,7 @@ body {
     left: 0px;
     top: 0px;
     background-color: $toolbar-background;
-    padding: 15px;
+    padding: 0px 15px;
     font-size: 16px;
     color: $toolbar-font-color;
     overflow-y: auto;
@@ -54,10 +54,12 @@ body {
     .toolbar-tabs {
         background-color: $toolbar-background;
         z-index: 3;
+        position: fixed;
+        padding-top: 10px;
     }
 
     .toolbar-items {
-        padding-top: 30px;
+        padding-top: 50px;
     }
 
 
