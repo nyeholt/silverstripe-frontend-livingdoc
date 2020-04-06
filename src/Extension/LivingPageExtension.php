@@ -2,6 +2,7 @@
 namespace Symbiote\Frontend\LivingPage\Extension;
 
 use SilverStripe\Core\Config\Configurable;
+use SilverStripe\Core\Manifest\ModuleResourceLoader;
 use SilverStripe\Forms\DropdownField;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\LiteralField;
@@ -34,7 +35,7 @@ class LivingPageExtension extends DataExtension
     ];
 
     private static $living_designs = [
-        'bootstrap4'        => 'resources/nyeholt/silverstripe-frontend-livingdoc/app/dist/designs/bootstrap4-design.js',
+        'bootstrap4'        => 'nyeholt/silverstripe-frontend-livingdoc: app/dist/designs/bootstrap4-design.js',
     ];
 
     private static $default_design_css = '';

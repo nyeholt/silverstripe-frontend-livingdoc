@@ -10,6 +10,7 @@ use SilverStripe\Control\Controller;
 use SilverStripe\Control\Director;
 use SilverStripe\Control\HTTPRequest;
 use SilverStripe\Core\Injector\Injector;
+use SilverStripe\Core\Manifest\ModuleResourceLoader;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\Form;
 use SilverStripe\Forms\FormAction;
@@ -17,11 +18,9 @@ use SilverStripe\Forms\HiddenField;
 use SilverStripe\Forms\HTMLEditor\HTMLEditorField;
 use SilverStripe\Security\PermissionFailureException;
 use SilverStripe\Security\PermissionProvider;
-use SilverStripe\Security\Security;
 use SilverStripe\Security\SecurityToken;
 use SilverStripe\SiteConfig\SiteConfig;
 use SilverStripe\Versioned\Versioned;
-use SilverStripe\View\ArrayData;
 use SilverStripe\View\Parsers\ShortcodeParser;
 use SilverStripe\View\Requirements;
 use Symbiote\Frontend\LivingPage\Extension\FakeUploadValidator;
@@ -257,6 +256,8 @@ class LivingPageEditController extends Controller implements PermissionProvider
         if (!$designFile) {
             throw new Exception("Missing design for $designName");
         }
+
+        $designFile = ModuleResourceLoader::singleton()->resolvePath($designFile);
 
         $components = Versioned::get_by_stage(PageComponent::class, Versioned::LIVE)->filter([
             'IsActive' => 1,
