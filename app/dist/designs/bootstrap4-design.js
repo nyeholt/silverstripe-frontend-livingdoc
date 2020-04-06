@@ -520,7 +520,7 @@
             },
             {
                 "name": "buttonlink",
-                "html": "<a doc-link=\"Link\" class=\"btn\">Link</a>",
+                "html": "<a doc-link=\"Link\" class=\"btn\" doc-editable=\"buttontext\">Link</a>",
                 "label": "Button",
                 "properties": [
                     'button-styles'
@@ -789,7 +789,7 @@
             },
             {
                 "name": "cardlink",
-                "html": "<a doc-link=\"Link\" class=\"card-link\" href=\"#\">\nLink</a>",
+                "html": "<a doc-link=\"Link\" class=\"card-link\" doc-editable=\"linktext\" href=\"#\">\nLink</a>",
                 "label": "Card link",
                 "allowedParents": [
                     "cardbody"
