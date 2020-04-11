@@ -63,6 +63,10 @@ class LivingPageEditController extends Controller implements PermissionProvider
                     throw new PermissionFailureException("Cannot edit this page");
                 }
             }
+        } 
+            
+        if (!$this->page) {
+            return $this->httpError(404, "Page not found");
         }
 
         return $this->page;

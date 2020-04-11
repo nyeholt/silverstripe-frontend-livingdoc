@@ -74,7 +74,7 @@ $(document).on('livingfrontend.updateLivingDoc', function (e, livingdoc) {
                 let shortcodeData = extractShortcodeData(selected); // SHORTCODE_MATCH_REGEX.exec(selected);
 
                 // if we've customised props, let's grab them
-                if (componentAttrs[directiveName]) {
+                if (componentAttrs[directiveName] && shortcodeData) {
                     for (let name in componentAttrs[directiveName]) {
                         shortcodeData.attrs[name] = componentAttrs[directiveName][name]
                     }
