@@ -20,7 +20,7 @@ class PageComponent extends DataObject
     private static $groups = [
         'Headers',
         'Text',
-        'Modules',
+        'Compounds',
         'Images',
         'Embeds',
         'Lists',

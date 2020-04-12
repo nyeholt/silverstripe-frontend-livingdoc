@@ -379,10 +379,51 @@
                     },
                 ]
             },
+            "alert-styles": {
+                "label": "Alert styles",
+                "type": "select",
+                "options": [
+                    {
+                        "caption": "None"
+                    },
+                    {
+                        'caption': 'Primary',
+                        'value': "alert-primary"
+                    },
+                    {
+                        'caption': 'Secondary',
+                        'value': "alert-secondary"
+                    },
+                    {
+                        'caption': 'Success',
+                        'value': "alert-success"
+                    },
+                    {
+                        'caption': 'Danger',
+                        'value': "alert-danger"
+                    },
+                    {
+                        'caption': 'Warning',
+                        'value': "alert-warning"
+                    },
+                    {
+                        'caption': 'Info',
+                        'value': "alert-info"
+                    },
+                    {
+                        'caption': 'Light',
+                        'value': "alert-light"
+                    },
+                    {
+                        'caption': 'Dark',
+                        'value': "alert-dark"
+                    }
+                ]
+            }
         },
         "groups": [
             {
-                "label": "Modules",
+                "label": "Compounds",
                 "components": [
                     "content_section",
                     "hero_banner"
@@ -393,6 +434,7 @@
                 "components": [
                     "p",
                     "buttonlink",
+                    "alert",
                     "quote",
                     "markdown",
                     "customhtml",
@@ -512,6 +554,14 @@
                 "name": "shortcodeitem",
                 "html": "<div doc-embeditem=\"object\" data-use-sc='1'>Select component\n</div>",
                 "label": "Global component"
+            },
+            {
+                "name": "alert",
+                "html": "<div doc-editable=\"alerttext\" class=\"alert\">Alert text</div>",
+                "label": "Alert",
+                "properties": [
+                    'alert-styles',
+                ]
             },
             {
                 "name": "p",

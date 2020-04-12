@@ -143,6 +143,9 @@ class LivingPageExtension extends DataExtension
     }
 
     public function shortcodeFor($label, $shortcodeParams = null) {
+        if (!strlen($label)) {
+            return null;
+        }
         $items = $this->availableShortcodes();
 
         $found = false;
