@@ -8,8 +8,6 @@ use Symbiote\Frontend\LivingPage\Model\ComponentPageStructure;
 use Symbiote\Frontend\LivingPage\Model\PageComponent;
 
 /**
- *
- *
  * @author marcus
  */
 class LivingPageModelAdmin extends ModelAdmin
@@ -17,5 +15,9 @@ class LivingPageModelAdmin extends ModelAdmin
     private static $url_segment = 'componentpage';
     private static $menu_title = 'Component pages';
 
-    private static $managed_models = [PageComponent::class, CompoundComponent::class, ComponentPageStructure::class];
+    private static $managed_models = [
+        ComponentPageStructure::class, 
+        CompoundComponent::class, 
+        PageComponent::class,
+    ];
 }

@@ -4,7 +4,9 @@ namespace Symbiote\Frontend\LivingPage\Model;
 
 use SilverStripe\Assets\Image;
 use SilverStripe\Forms\DropdownField;
+use SilverStripe\Forms\LiteralField;
 use SilverStripe\Forms\ReadonlyField;
+use SilverStripe\Forms\TextareaField;
 use SilverStripe\ORM\ArrayLib;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\Versioned\Versioned;
@@ -19,7 +21,7 @@ class PageComponent extends DataObject
 
     private static $groups = [
         'Headers',
-        'Text',
+        'Content',
         'Compounds',
         'Images',
         'Embeds',
@@ -30,15 +32,19 @@ class PageComponent extends DataObject
 
     private static $db = [
         'Title' => 'Varchar',
+        'Themes'    => 'MultiValueField',
         'Name' => 'Varchar',
         'ComponentGroup' => 'Varchar',
         'IsActive' => 'Boolean',
-        'Themes'    => 'MultiValueField',
         'Markup' => 'Text',
     ];
 
     private static $has_one = [
         'Icon' => Image::class
+    ];
+
+    private static $many_many = [
+        'StyleOptions' => ComponentStyleGroup::class
     ];
 
     private static $owns = [
@@ -54,16 +60,23 @@ class PageComponent extends DataObject
         parent::onBeforeWrite();
 
         if ($this->isChanged('Title', self::CHANGE_VALUE)) {
-            $name = URLSegmentFilter::create()->filter($this->Title);
-            $filter = ['Name' => $name];
-            if ($this->ID) {
-                $filter['ID:not'] = $this->ID;
-            }
-            if (PageComponent::get()->filter($filter)->first()) {
-                $name .= '_' . date('ymdHis');
-            }
+            $name = self::unique_name_for($this->Title, $this->ID);
             $this->Name = $name;
         }
+    }
+
+    public static function unique_name_for($title, $id)
+    {
+        $name = URLSegmentFilter::create()->filter($title);
+        $filter = ['Name' => $name];
+        if ($id) {
+            $filter['ID:not'] = $id;
+        }
+        $class = get_called_class();
+        if ($class::get()->filter($filter)->first()) {
+            $name .= '_' . date('ymdHis');
+        }
+        return $name;
     }
 
     public function getCMSFields()
@@ -86,10 +99,47 @@ class PageComponent extends DataObject
             $fields->removeByName('Themes');
         }
 
+        $message = LiteralField::create('msg', '<div class="form-group field form__field-label">Use this to create a new
+        component that can be used in a page. The raw JSON declaration can be found on the "export" tab</div>');
+        $fields->insertBefore('Title', $message);
+
+        $data = $this->forDesign();
+        if ($data) {
+            $fields->addFieldToTab(
+                'Root.Main',
+                TextareaField::create('Exported', 'Export', json_encode($data, JSON_PRETTY_PRINT))->setDisabled(true)
+            );
+        }
+
         return $fields;
     }
 
-    public function asComponent($theme = null) {
+    public function forDesign()
+    {
+        $data = [];
+
+        $component = $this->asComponent();
+
+        $props = [];
+        if (count($this->StyleOptions())) {
+            $component['properties'] = [];
+            foreach ($this->StyleOptions() as $style) {
+                $s = $style->forDesign();
+                $props[$style->Name] = $s;
+                $component['properties'][] = $style->Name;
+            }
+        }
+
+        $data['componentProperties'] = $props;
+        $data['components'] = [
+            $component
+        ];
+
+        return $data;
+    }
+
+    public function asComponent($theme = null)
+    {
         $component = [
             'name' => $this->Name,
             'html' => $this->Markup,

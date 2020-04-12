@@ -2,9 +2,12 @@
 
 namespace Symbiote\Frontend\LivingPage\Model;
 
+use SilverStripe\Forms\LiteralField;
+
 /**
  * A group of components defined by JSON, typically
- * extracted from an existing design somewhere.
+ * extracted from an existing design somewhere or copy pasted
+ * from the frontend. 
  */
 class CompoundComponent extends PageComponent
 {
@@ -23,6 +26,10 @@ class CompoundComponent extends PageComponent
     public function getCMSFields()
     {
         $fields = parent::getCMSFields();
+
+        $message = LiteralField::create('msg', '<div class="form-group field form__field-label">Use this to paste a 
+            set of components that you copy (ctrl+c) from the editor</div>');
+        $fields->insertBefore('Title', $message);
 
         $fields->dataFieldByName('Markup')->setRows(50);
 

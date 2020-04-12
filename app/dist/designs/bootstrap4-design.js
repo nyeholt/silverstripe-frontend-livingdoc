@@ -338,6 +338,10 @@
                         'value': "text-muted"
                     },
                     {
+                        'caption': 'Lead',
+                        'value': "lead"
+                    },
+                    {
                         'caption': 'Centered',
                         'value': "text-center"
                     },
@@ -430,7 +434,7 @@
                 ]
             },
             {
-                "label": "Text",
+                "label": "Content",
                 "components": [
                     "p",
                     "buttonlink",
