@@ -70,6 +70,7 @@ class ComponentStyleGroup extends DataObject
             ];
 
             if ($this->Type === 'multiselect') {
+                $data['type'] = 'select';
                 $opts[] = [
                     'caption' => 'Multiple',
                     'value' => 'yes',

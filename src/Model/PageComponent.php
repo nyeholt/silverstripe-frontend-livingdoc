@@ -114,11 +114,11 @@ class PageComponent extends DataObject
         return $fields;
     }
 
-    public function forDesign()
+    public function forDesign($theme = null)
     {
         $data = [];
 
-        $component = $this->asComponent();
+        $component = $this->asComponent($theme);
 
         $props = [];
         if (count($this->StyleOptions())) {
@@ -128,12 +128,10 @@ class PageComponent extends DataObject
                 $props[$style->Name] = $s;
                 $component['properties'][] = $style->Name;
             }
+            $data['componentProperties'] = $props;
         }
 
-        $data['componentProperties'] = $props;
-        $data['components'] = [
-            $component
-        ];
+        $data['component'] = $component;
 
         return $data;
     }

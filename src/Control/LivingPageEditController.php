@@ -263,12 +263,12 @@ class LivingPageEditController extends Controller implements PermissionProvider
 
         $designFile = ModuleResourceLoader::singleton()->resolvePath($designFile);
 
-        $components = Versioned::get_by_stage(PageComponent::class, Versioned::LIVE)->filter([
+        $pageComponents = Versioned::get_by_stage(PageComponent::class, Versioned::LIVE)->filter([
             'IsActive' => 1,
             'ClassName' => PageComponent::class,
         ])->toArray();
 
-        $components = array_filter($components, function ($item) use ($designName) {
+        $pageComponents = array_filter($pageComponents, function ($item) use ($designName) {
             $themes = $item->Themes->getValues();
             if ($themes && count($themes)) {
                 $has = array_search($designName, $themes);
@@ -276,9 +276,16 @@ class LivingPageEditController extends Controller implements PermissionProvider
             }
         });
 
-        $components = array_map(function ($item) use ($designName) {
-            return $item->asComponent($designName);
-        }, $components);
+        $components = [];
+        $componentProperties = [];
+
+        foreach ($pageComponents as $component) {
+            $componentData = $component->forDesign($designName);
+            $components[] = $componentData['component'];
+            if (isset($componentData['componentProperties'])) {
+                $componentProperties[] = $componentData['componentProperties'];
+            }
+        }
 
 
         $compounds = Versioned::get_by_stage(CompoundComponent::class, Versioned::LIVE)->filter([
@@ -300,6 +307,7 @@ class LivingPageEditController extends Controller implements PermissionProvider
             'pageLink' => $record->hasMethod('RelativeLink') ? $record->RelativeLink() : '',
             'pageStructure' => $design,
             'extraComponents' => $components,
+            'extraProperties' => $componentProperties,
             'compounds' => $compounds,
             'designFile' => $designFile,
             'endpoints' => [

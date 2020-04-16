@@ -88,6 +88,14 @@ class FormContentSource {
                 }
             }
 
+            if (config.extraProperties) {
+                for (let i in config.extraProperties) {
+                    for (let propname in config.extraProperties[i]) {
+                        selectedDesign.componentProperties[propname] = config.extraProperties[i][propname];
+                    }
+                }
+            }
+
             if (config.compounds) {
                 for (let i in config.compounds) {
                     let newComponent = config.compounds[i];
