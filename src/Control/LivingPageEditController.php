@@ -311,8 +311,8 @@ class LivingPageEditController extends Controller implements PermissionProvider
             'compounds' => $compounds,
             'designFile' => $designFile,
             'endpoints' => [
-                'paste' => $this->Link('pastefile'),
-                'upload' => $this->Link('uploadfile'),
+                'paste' => $this->Link('pastefile/' . $record->ID),
+                'upload' => $this->Link('uploadfile/' . $record->ID),
                 // the following aren't used at present, instead we're using a ContentSource that hooks back to the
                 // SilverStripe form
                 'save' => $this->Link('save'),

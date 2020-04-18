@@ -61,7 +61,9 @@ import { Constants } from './constants';
             initialise_editor($(this));
         });
 
-
+        // fixes issue with frame and JS being out of sync
+        let pageLink = $(Constants.EDITOR_FRAME).attr('data-pagelink');
+        $(Constants.EDITOR_FRAME).attr('src', pageLink);
     });
 
     function initialise_editor(holderFrame) {

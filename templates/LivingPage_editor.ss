@@ -50,7 +50,7 @@
                 </div>
             </div>
             <div class="ld-editor-frame col p-0 m-0">
-                <iframe src="$PageLink" id="livingdocs-frame"></iframe>
+                <iframe src="about:blank" data-pagelink="$PageLink.ATT" id="livingdocs-frame"></iframe>
             </div>
         </div>
     </div>
