@@ -5718,7 +5718,10 @@ module.exports = {
     return $elem.attr('src', value);
   },
   setBackgroundImage: function($elem, value) {
-    return $elem.css('background-image', "url(" + (this.escapeCssUri(value)) + ")");
+      if (value) {
+        return $elem.css('background-image', "url(" + (this.escapeCssUri(value)) + ")");
+      }
+      return $elem.css('background-image', '');
   },
   escapeCssUri: function(uri) {
     if (/[()]/.test(uri)) {
@@ -8093,7 +8096,7 @@ module.exports = ComponentView = (function() {
     // NOTE(Marcus) 2019-10-21 - only set placeholders for image components
     // _not_ backgrounds.
     if (imageService.isBackgroundImage($elem)) {
-        return;
+        return imageService.set($elem, '');
     }
     return imageService.set($elem, config.imagePlaceholder);
   };
