@@ -13,10 +13,11 @@ use SilverStripe\Versioned\Versioned;
 use SilverStripe\View\Parsers\URLSegmentFilter;
 use Symbiote\Frontend\LivingPage\Extension\LivingPageExtension;
 use Symbiote\MultiValueField\Fields\MultiValueCheckboxField;
-use Symbiote\MultiValueField\ORM\FieldType\MultiValueField;
 
 class PageComponent extends DataObject
 {
+    use ComponentTrait;
+
     private static $table_name = 'PageComponent';
 
     private static $groups = [

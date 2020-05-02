@@ -8,6 +8,8 @@ use Symbiote\MultiValueField\Fields\KeyValueField;
 
 class ComponentStyleGroup extends DataObject
 {
+    use ComponentTrait;
+
     private static $table_name = 'ComponentStyleGroup';
 
     private static $db = [
@@ -89,8 +91,4 @@ class ComponentStyleGroup extends DataObject
         return $data;
     }
 
-    public function canView($member = null)
-    {
-        return true;
-    }
 }

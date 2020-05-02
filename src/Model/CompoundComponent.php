@@ -11,6 +11,8 @@ use SilverStripe\Forms\LiteralField;
  */
 class CompoundComponent extends PageComponent
 {
+    use ComponentTrait;
+
     private static $table_name = 'CompoundComponent';
 
     protected function onBeforeWrite()

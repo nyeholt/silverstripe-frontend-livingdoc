@@ -92,7 +92,7 @@ $(document).on('livingfrontend.updateLivingDoc', function (e, livingdoc) {
                     });
                 }
 
-                $.get(EMBED_LINK, { shortcode: source, attrs: attrStr }).then(function (data) {
+                $.get(EMBED_LINK, { shortcode: source, attrs: attrStr, stage: 'Stage' }).then(function (data) {
                     cleanUp();
 
                     const toSave = {

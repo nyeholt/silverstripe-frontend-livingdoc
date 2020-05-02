@@ -13,6 +13,8 @@ use SilverStripe\ORM\DataObject;
  */
 class ComponentPageStructure extends DataObject
 {
+    use ComponentTrait;
+
     private static $table_name = 'ComponentPageStructure';
     
     private static $db = [
