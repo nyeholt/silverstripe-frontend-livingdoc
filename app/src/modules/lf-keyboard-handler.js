@@ -65,7 +65,6 @@ export function initialise_keyboard(state, editorDocument, rootDocument) {
                     } else {
                         if (state.activeComponent) {
                             alert("Cannot paste into this component");
-                            e.preventDefault();
                         } else {
                             createComponentList([newComponent], null, null, true);
                         }

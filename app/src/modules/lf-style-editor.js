@@ -2,6 +2,7 @@ import * as $ from 'jquery';
 import LivingDocState from '../lib/LivingDocState';
 import { TextField } from '../../../../../symbiote/silverstripe-prose-editor/editor/src/fields/TextField';
 import { openPrompt } from '../../../../../symbiote/silverstripe-prose-editor/editor/src/proseutil/prose-prompt';
+import { SelectField } from '../../../../../symbiote/silverstripe-prose-editor/editor/src/fields/SelectField';
 
 var STYLES_PROP = 'element_styles';
 
@@ -15,6 +16,17 @@ export function createStyleEditor(component, editContainer) {
         "extraClasses": new TextField({
             label: "Extra CSS classes",
             value: customStyles['extraClasses'] || ''
+        }),
+        "display": new SelectField({
+            label: "Display",
+            value: customStyles['display'] || '',
+            options: [
+                {value: "", label: "Default"},
+                {value: 'block', label: 'Block'},
+                {value: 'inline-block', label: 'Inline Block'},
+                {value: 'inline', label: 'Inline'},
+                {value: 'flex', label: "Flex"}
+            ]
         }),
         "width": new TextField({
             label: 'Width',
@@ -100,6 +112,86 @@ export function createStyleEditor(component, editContainer) {
         });
     }
 
+    if (customStyles['display'] == 'flex') {
+        fields["flex-direction"] = new SelectField({
+            label: "Flex direction",
+            value: customStyles['flex-direction'] || '',
+            options: [
+                {value: "", label: "Default"},
+                {value: 'row', label: 'row'},
+                {value: 'row-reverse', label: 'row-reverse'},
+                {value: 'column', label: 'column'},
+                {value: 'column-reverse', label: "column-reverse"}
+            ]
+        });
+        fields["flex-wrap"] = new SelectField({
+            label: "Flex wrap",
+            value: customStyles['flex-wrap'] || '',
+            options: [
+                {value: "", label: "Default"},
+                {value: 'nowrap', label: 'nowrap'},
+                {value: 'wrap', label: 'wrap'},
+                {value: 'wrap-reverse', label: 'wrap-reverse'}
+            ]
+        });
+        fields["justify-content"] = new SelectField({
+            label: "Justify content",
+            value: customStyles['justify-content'] || '',
+            options: [
+                {value: "", label: "Default"},
+                {value: 'flex-start', label: 'flex-start'},
+                {value: 'flex-end', label: 'flex-end'},
+                {value: 'center', label: 'center'},
+                {value: 'space-between', label: 'space-between'},
+                {value: 'space-around', label: 'space-around'},
+                {value: 'space-evenly', label: 'space-evenly'},
+                {value: 'start', label: 'start'},
+                {value: 'end', label: 'end'},
+                {value: 'left', label: 'left'},
+                {value: 'right', label: 'right'},
+            ]
+        });
+
+        fields["align-items"] = new SelectField({
+            label: "Align Items",
+            value: customStyles['align-items'] || '',
+            options: [
+                {value: "", label: "Default"},
+                {value: 'flex-start', label: 'flex-start'},
+                {value: 'flex-end', label: 'flex-end'},
+                {value: 'center', label: 'center'},
+                {value: 'stretch', label: 'stretch'},
+                {value: 'baseline', label: 'baseline'},
+                {value: 'first baseline', label: 'first baseline'},
+                {value: 'last baseline', label: 'last baseline'},
+                {value: 'start', label: 'start'},
+                {value: 'end', label: 'end'},
+                {value: 'self-start', label: 'self-start'},
+                {value: 'self-end', label: 'self-end'},
+            ]
+        });
+
+        fields["align-content"] = new SelectField({
+            label: "Align content",
+            value: customStyles['align-content'] || '',
+            options: [
+                {value: "", label: "Default"},
+                {value: 'flex-start', label: 'flex-start'},
+                {value: 'flex-end', label: 'flex-end'},
+                {value: 'center', label: 'center'},
+                {value: 'stretch', label: 'stretch'},
+                {value: 'space-between', label: 'space-between'},
+                {value: 'space-around', label: 'space-around'},
+                {value: 'space-evenly', label: 'space-evenly'},
+                {value: 'start', label: 'start'},
+                {value: 'end', label: 'end'},
+                {value: 'baseline', label: 'baseline'},
+                {value: 'first baseline', label: 'first baseline'},
+                {value: 'last baseline', label: 'last baseline'},
+            ]
+        });
+    }
+
     if (!editContainer) {
         editContainer = $('.livingdocs-item-properties')[0];
     }
@@ -130,6 +222,8 @@ export function createStyleEditor(component, editContainer) {
             // } else {
             //     newStyles[name] = value;
             // }
+
+            newStyles[name] = value;
             
             component.model.setData(STYLES_PROP, newStyles);
             if (name == 'extraClasses') {
