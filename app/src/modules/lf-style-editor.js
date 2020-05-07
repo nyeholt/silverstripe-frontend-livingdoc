@@ -40,6 +40,10 @@ export function createStyleEditor(component, editContainer) {
             label: 'Margin',
             value: customStyles['margin'] || '',
         }),
+        "background": new TextField({
+            label: 'Background',
+            value: customStyles['background'] || '',
+        }),
         "background-color": new TextField({
             label: 'Background Colour',
             value: customStyles['background-color'] || '',
@@ -120,7 +124,13 @@ export function createStyleEditor(component, editContainer) {
             let newStyles = {
                 ...currentStyles,
             }
-            newStyles[name] = value;
+
+            // if (!value || value.length == 0) {
+            //     delete newStyles[name];
+            // } else {
+            //     newStyles[name] = value;
+            // }
+            
             component.model.setData(STYLES_PROP, newStyles);
             if (name == 'extraClasses') {
                 for (var style of value.split(' ')) {
@@ -141,6 +151,7 @@ export function createStyleEditor(component, editContainer) {
 }
 
 function updateComponentStyles(component, styleset) {
+    // component.$html.attr('style', '');
     for (let name in styleset) {
         component.$html.css(name, styleset[name]);
     }
