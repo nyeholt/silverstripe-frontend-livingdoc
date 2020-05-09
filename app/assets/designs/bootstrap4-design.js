@@ -605,7 +605,7 @@
             },
             {
                 "name": "block",
-                "html": "<div class=\"\" doc-container=\"layout\">\n</div>",
+                "html": "<div class=\"\" doc-container=\"layout\" doc-image=\"BackgroundImage\">\n</div>",
                 "label": "Empty block",
                 // "allowedParents": [
                 // "row"
