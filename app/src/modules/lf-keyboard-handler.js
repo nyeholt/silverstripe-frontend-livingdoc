@@ -57,6 +57,7 @@ export function initialise_keyboard(state, editorDocument, rootDocument) {
             try {
                 const newComponent = JSON.parse(content);
                 if (newComponent && newComponent.identifier) {
+                    e.preventDefault();
                     // we use the first available container on the target component
                     if (state.activeComponent && state.activeComponent.directives.container && state.activeComponent.directives.container.length > 0) {
                         const targetContainerName = state.activeComponent.directives.container[0].name;

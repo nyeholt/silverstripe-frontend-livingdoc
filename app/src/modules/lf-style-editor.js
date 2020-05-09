@@ -28,6 +28,10 @@ export function createStyleEditor(component, editContainer) {
                 {value: 'flex', label: "Flex"}
             ]
         }),
+        "flex": new TextField({
+            label: "Flex",
+            value: customStyles['flex'] || '',
+        }),
         "width": new TextField({
             label: 'Width',
             value: customStyles['width'] || '',
