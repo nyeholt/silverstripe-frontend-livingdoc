@@ -148,14 +148,16 @@ class LivingPageExtension extends DataExtension
         }
         $items = $this->availableShortcodes();
 
-        $found = false;
-        foreach ($items as $itemLabel => $code) {
-            if (strpos($code, "[$label") === 0 || $label == 'embed') {
-                $found = true;
-                break;
+        $found = $label == 'embed';
+        if (!$found) {
+            foreach ($items as $itemLabel => $code) {
+                if (strpos($code, "[$label") === 0) {
+                    $found = true;
+                    break;
+                }
             }
         }
-        
+
         if (!$found) {
             return null;
         }
