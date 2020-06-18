@@ -7,6 +7,8 @@ import { Constants } from '../constants.js';
 
 import "../../../../../symbiote/silverstripe-prose-editor/editor/style/index.scss";
 
+import "./lf-wysiwyg-editing.scss";
+
 
 function replaceShortcodesIn(elem) {
     $(elem).find('.prose-shortcode').each(function () {
@@ -79,6 +81,7 @@ $(document).on('livingfrontend.updateLivingDoc', function (e, livingdoc) {
         proseNode.attr('data-context-id', config.pageId);
         proseNode.attr('data-upload-path', config.pageLink);
         proseNode.attr('data-prose-config', JSON.stringify({
+            "floatingMenu": true,
             "menu": {
                 "insertlink": true,
                 "insertimage": true,

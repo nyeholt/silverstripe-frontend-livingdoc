@@ -1663,7 +1663,7 @@ github.com style (c) Vasily Polovnyov <vast@whiteants.net>
       overflow-y: auto;
   }
 
-  .ProseMirror p:first-child,
+  /* .ProseMirror p:first-child, */
   .ProseMirror h1:first-child,
   .ProseMirror h2:first-child,
   .ProseMirror h3:first-child,
@@ -1674,8 +1674,6 @@ github.com style (c) Vasily Polovnyov <vast@whiteants.net>
   }
 
   .ProseMirror {
-    padding: 4px 8px 4px 14px;
-    line-height: 1.2;
     outline: none;
   }
 
@@ -1769,6 +1767,10 @@ div.resize-cursor {
 .autocomplete-suggestion.selected { background: #f0f0f0; }
 .ProseEditorField {
   background-color: #fefefe; }
+
+.ProseMirror-menubar {
+  position: absolute;
+  transform: translateY(-100%); }
 
 @charset "UTF-8";
 /**
