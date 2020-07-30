@@ -37,6 +37,9 @@
     /* Webkit */
     /*outline: 5px auto -webkit-focus-ring-color;*/
     /*outline-offset: 1px;*/
+    &.js-wysiwyg-editor-block {
+        box-shadow: none;
+    }
 }
 
 
@@ -127,9 +130,9 @@
     padding-bottom: 5px;*/
 }
 
-[data-doc-container="row"] {
-    overflow: auto;
-}
+// [data-doc-container="row"] {
+//     overflow: auto;
+// }
 
 
 

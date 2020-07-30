@@ -1770,7 +1770,8 @@ div.resize-cursor {
 
 .ProseMirror-menubar {
   position: absolute;
-  transform: translateY(-100%); }
+  transform: translateY(-100%);
+  z-index: 2000; }
 
 @charset "UTF-8";
 /**
@@ -1805,6 +1806,9 @@ div.resize-cursor {
   /* Webkit */
   /*outline: 5px auto -webkit-focus-ring-color;*/
   /*outline-offset: 1px;*/ }
+  .doc-editable.doc-component-highlight.js-wysiwyg-editor-block,
+  .doc-component-highlight.js-wysiwyg-editor-block {
+    box-shadow: none; }
 
 /**
  * Container Highlighting
@@ -1871,9 +1875,6 @@ div.resize-cursor {
   border: none;
   /*    padding-top: 5px;
     padding-bottom: 5px;*/ }
-
-[data-doc-container="row"] {
-  overflow: auto; }
 
 /**
  * Content Editable
