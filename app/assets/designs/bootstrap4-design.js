@@ -821,7 +821,7 @@
             },
             {
                 "name": "cardbody",
-                "html": "<div class=\"\" doc-container=\"bodyitems\">\n</div>",
+                "html": "<div class=\"card-body\" doc-container=\"bodyitems\">\n</div>",
                 "label": "Card body",
                 "allowedParents": [
                     "card"

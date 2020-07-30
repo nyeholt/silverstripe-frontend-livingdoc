@@ -208,6 +208,18 @@ import { Constants } from './constants';
                     left: loc.offsetLeft + 20
                 };
                 loc = newloc;
+            } else {
+                // we're going to instead be added into the outer iframe, so need to figure out the offset based
+                // on scroll position
+                // let $iframeDoc = $(this.iframeBox.window.document);
+                let iframeDoc = $(Constants.EDITOR_FRAME).contents();
+                let framePos = $(Constants.EDITOR_FRAME).offset();
+
+                var newloc = {
+                    top: loc.top - iframeDoc.scrollTop() + framePos.top,
+                    left: loc.left + framePos.left
+                };
+                loc = newloc;
             }
 
             outer_el.css({ position: "absolute", left: loc.left, top: loc.top - 40, background: "transparent", "z-index": 4000 });
