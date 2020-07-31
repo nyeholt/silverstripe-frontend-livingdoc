@@ -552,16 +552,19 @@
         "components": [
             {
                 "name": "embeddeditem",
+                "icon": '<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-exposure" width="52" height="52" viewBox="0 0 24 24" stroke-width="1.5" stroke="#ffffff" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2" /><line x1="4.6" y1="19.4" x2="19.4" y2="4.6" /><path d="M7 9h4m-2 -2v4" /><path d="M13 16h4" /></svg>',
                 "html": "<div doc-embeditem=\"object\">Select an item...\n</div>",
                 "label": "Embed URL"
             },
             {
                 "name": "shortcodeitem",
+                "icon": '<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-exposure" width="52" height="52" viewBox="0 0 24 24" stroke-width="1.5" stroke="#ffffff" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2" /><line x1="4.6" y1="19.4" x2="19.4" y2="4.6" /><path d="M7 9h4m-2 -2v4" /><path d="M13 16h4" /></svg>',
                 "html": "<div doc-embeditem=\"object\" data-use-sc='1'>Select component\n</div>",
                 "label": "Global component"
             },
             {
                 "name": "alert",
+                "icon": '<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-alert-triangle" width="52" height="52" viewBox="0 0 24 24" stroke-width="1.5" stroke="#ffffff" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v2m0 4v.01" /><path d="M5.07 19H19a2 2 0 0 0 1.75 -2.75L13.75 4a2 2 0 0 0 -3.5 0L3.25 16.25a2 2 0 0 0 1.75 2.75" /></svg>',
                 "html": "<div doc-editable=\"alerttext\" class=\"alert\">Alert text</div>",
                 "label": "Alert",
                 "properties": [
@@ -570,6 +573,7 @@
             },
             {
                 "name": "p",
+                "icon": '<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-minus" width="52" height="52" viewBox="0 0 24 24" stroke-width="1.5" stroke="#ffffff" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12" /></svg>',
                 "html": "<p doc-editable=\"text\">Paragraph</p>",
                 "label": "Paragraph",
                 "properties": [
@@ -578,6 +582,7 @@
             },
             {
                 "name": "buttonlink",
+                "icon": '<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-square-minus" width="52" height="52" viewBox="0 0 24 24" stroke-width="1.5" stroke="#ffffff" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2" /><line x1="9" y1="12" x2="15" y2="12" /></svg>',
                 "html": "<a doc-link=\"Link\" class=\"btn\" doc-editable=\"buttontext\">Link</a>",
                 "label": "Button",
                 "properties": [
@@ -586,11 +591,13 @@
             },
             {
                 "name": "wysiwyg",
+                "icon": '<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-columns" width="52" height="52" viewBox="0 0 24 24" stroke-width="1.5" stroke="#ffffff" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="6" x2="9.5" y2="6" /><line x1="4" y1="10" x2="9.5" y2="10" /><line x1="4" y1="14" x2="9.5" y2="14" /><line x1="4" y1="18" x2="9.5" y2="18" /><line x1="14.5" y1="6" x2="20" y2="6" /><line x1="14.5" y1="10" x2="20" y2="10" /><line x1="14.5" y1="14" x2="20" y2="14" /><line x1="14.5" y1="18" x2="20" y2="18" /></svg>',
                 "html": "<div doc-wysiwyg=\"html\">Wyswiyg content</div>",
                 "label": "WYSIWYG"
             },
             {
                 "name": "quote",
+                "icon": '<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-message-2" width="52" height="52" viewBox="0 0 24 24" stroke-width="1.5" stroke="#ffffff" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20l-3 -3h-2a3 3 0 0 1 -3 -3v-6a3 3 0 0 1 3 -3h10a3 3 0 0 1 3 3v6a3 3 0 0 1 -3 3h-2l-3 3" /><line x1="8" y1="9" x2="16" y2="9" /><line x1="8" y1="13" x2="14" y2="13" /></svg>',
                 "html": "<blockquote>\n  <p>\n    <span class=\"quotation-mark\">&#x201C;</span><span class=\"quote\" doc-editable=\"text\">Quotation</span>\n  </p>\n  <div class=\"caption\" doc-editable=\"author\">Author</div>\n</blockquote>",
                 "label": "Quote"
             },
@@ -608,9 +615,7 @@
                 "name": "block",
                 "html": "<div class=\"\" doc-container=\"layout\" doc-image=\"BackgroundImage\">\n</div>",
                 "label": "Empty block",
-                // "allowedParents": [
-                // "row"
-                // ],
+                "icon": '<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-square" width="52" height="52" viewBox="0 0 24 24" stroke-width="1.5" stroke="#ffffff" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2" /></svg>',
                 "properties": [
                     "display",
                     "position-relative",
@@ -623,6 +628,7 @@
             },
             {
                 "name": "section",
+                "icon": '<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-new-section" width="52" height="52" viewBox="0 0 24 24" stroke-width="1.5" stroke="#ffffff" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="9" y1="12" x2="15" y2="12" /><line x1="12" y1="9" x2="12" y2="15" /><path d="M4 6v-1a1 1 0 0 1 1 -1h1m5 0h2m5 0h1a1 1 0 0 1 1 1v1m0 5v2m0 5v1a1 1 0 0 1 -1 1h-1m-5 0h-2m-5 0h-1a1 1 0 0 1 -1 -1v-1m0 -5v-2m0 -5" /></svg>',
                 "html": "<section class=\"page-section container\" doc-container=\"section\">\n</section>",
                 "label": "Section",
                 "properties": [
@@ -634,6 +640,7 @@
             {
                 "name": "row",
                 "html": "<div class=\"row\" doc-container=\"row\" doc-image=\"bgimage\">\n</div>",
+                "icon": '<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-layout-rows" width="52" height="52" viewBox="0 0 24 24" stroke-width="1.5" stroke="#ffffff" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2" /><line x1="4" y1="12" x2="20" y2="12" /></svg>',
                 "label": "Row",
                 "properties": [
                     "display",
@@ -653,6 +660,7 @@
                 "name": "column",
                 "html": "<div class=\"col\" doc-container=\"column\">\n</div>",
                 "label": "Column",
+                "icon": '<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-layout-columns" width="52" height="52" viewBox="0 0 24 24" stroke-width="1.5" stroke="#ffffff" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"></rect><line x1="12" y1="4" x2="12" y2="20"></line></svg>',
                 "allowedParents": [
                     "row",
                     "block"
@@ -804,6 +812,7 @@
             },
             {
                 "name": "cardlayout",
+                "icon": '<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-layout-cards" width="52" height="52" viewBox="0 0 24 24" stroke-width="1.5" stroke="#ffffff" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="6" height="16" rx="2" /><rect x="14" y="4" width="6" height="10" rx="2" /></svg>',
                 "html": "<div class=\"card-layout\" doc-container=\"cards\">\n</div>",
                 "label": "Card layout",
                 "properties": [
@@ -813,6 +822,7 @@
             },
             {
                 "name": "card",
+                "icon": '<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-layout-bottombar" width="52" height="52" viewBox="0 0 24 24" stroke-width="1.5" stroke="#ffffff" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2" /><line x1="4" y1="15" x2="20" y2="15" /></svg>',
                 "html": "<div class=\"card\" doc-container=\"carditems\">\n</div>",
                 "label": "Card",
                 "properties": [
@@ -835,6 +845,7 @@
             },
             {
                 "name": "cardtext",
+                "icon": '<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-minus" width="52" height="52" viewBox="0 0 24 24" stroke-width="1.5" stroke="#ffffff" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12" /></svg>',
                 "html": "<p class=\"card-text\" doc-editable=\"cardtext\">\nCard text</p>",
                 "label": "Card text",
                 "allowedParents": [
@@ -847,6 +858,7 @@
             },
             {
                 "name": "cardlink",
+                "icon": '<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="52" height="52" viewBox="0 0 24 24" stroke-width="1.5" stroke="#ffffff" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" /><path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" /></svg>',
                 "html": "<a doc-link=\"Link\" class=\"card-link\" doc-editable=\"linktext\" href=\"#\">\nLink</a>",
                 "label": "Card link",
                 "allowedParents": [
@@ -859,6 +871,7 @@
             },
             {
                 "name": "cardimage",
+                "icon": '<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 7v2.99s-1.99.01-2 0V7h-3s.01-1.99 0-2h3V2h2v3h3v2h-3zm-3 4V8h-3V5H5c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-8h-3zM5 19l3-4 2 3 3-4 4 5H5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>',
                 "html": "<img doc-image=\"Image\" class=\"\" />",
                 "label": "Card image",
                 "allowedParents": [
