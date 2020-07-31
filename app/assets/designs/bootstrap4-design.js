@@ -503,6 +503,7 @@
                 "components": [
                     "unordered-list",
                     "ordered-list",
+                    "numbered-list", 
                     "list-item",
                     "list-group",
                     'numbered-list-group',

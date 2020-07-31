@@ -6,6 +6,7 @@ const TOOLBAR = '.livingdocs-toolbar';
 const TOOLBAR_FORM = '#Form_LivingForm';
 const BOTTOM_BAR = '.livingdocs-bottom-bar';
 const PAGE_OPTIONS = '#livingdocs-page-options';
+const COOKIE_NAME = 'editor_settings';
 
 
 export const init_interface = function (doc, selectedDesign) {
@@ -49,8 +50,9 @@ function init_component_list(doc, selectedDesign) {
 
     var addGroup = function (label, num) {
         var $group = $('<div>');
-        $group.append('<h2>' + label + '</h2>');
-        $group.append('<div class="group-component-holder" id="gch-' + num + '"></div>');
+        let componentSetId = "gch-" + num;
+        $group.append('<h2 class="component-set-label" data-target="' + componentSetId + '">' + label + '</h2>');
+        $group.append('<div class="group-component-holder" id="' + componentSetId + '"></div>');
 
         $componentsList.append($group);
     }
@@ -123,6 +125,12 @@ function init_component_list(doc, selectedDesign) {
             });
         });
     }
+
+    $(document).on('click', ".component-set-label", function (e) {
+        toggle_component_group($(this).attr('data-target'));
+    })
+
+    display_component_groups();
 }
 
 function init_toolbar_toggles() {
@@ -191,6 +199,45 @@ function init_toolbar_form() {
 }
 
 
+export function toggle_component_group(id) {
+    const settings = load_settings();
+    const groupState = settings['groups'] || {};
+
+    let displayState = groupState[id];
+    
+    if (displayState == undefined) {
+        // figure out initial state
+        displayState = $('#' + id).is(':visible');
+    }
+
+    if (displayState) {
+        groupState[id] = false;
+    } else {
+        groupState[id] = true;
+    }
+
+    settings['groups'] = groupState;
+
+    save_setings(settings);
+
+    display_component_groups();
+}
+
+function display_component_groups() {
+    const settings = load_settings();
+    const groupState = settings['groups'] || {};
+
+    for (let groupId in groupState) {
+        if (groupState[groupId]) {
+            $('#' + groupId).show();
+        } else {
+            $('#' + groupId).hide();
+        }
+    }
+}
+
+window.toggleCg = toggle_component_group;
+
 export function select_tab(name) {
     if (name == 'default') {
         name = '#livingdocs-components';
@@ -207,4 +254,20 @@ export function select_tab(name) {
     $(TOOLBAR).scrollTop(0, 0);
 
     $(name).show();
+}
+
+function load_settings() {
+    let existing = localStorage.getItem(COOKIE_NAME);
+    if (!existing) {
+        existing = "{}";
+    }
+    return JSON.parse(existing);
+}
+
+function save_setings(settings) {
+    if (!settings) {
+        return;
+    }
+
+    localStorage.setItem(COOKIE_NAME, JSON.stringify(settings));
 }
