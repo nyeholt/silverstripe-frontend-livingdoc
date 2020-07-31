@@ -1773,6 +1773,12 @@ div.resize-cursor {
   transform: translateY(-100%);
   z-index: 2000; }
 
+.ProseMirror-menubar-spacer {
+  height: 0px !important; }
+
+.ProseMirror-menubar-spacer + .ProseMirror-menubar {
+  transform: none; }
+
 @charset "UTF-8";
 /**
  * Set a min height on doc-section so it does not disappear when emtpy

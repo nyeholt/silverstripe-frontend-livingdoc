@@ -3,3 +3,11 @@
     transform: translateY(-100%);
     z-index:2000;
 }
+
+.ProseMirror-menubar-spacer {
+    height: 0px !important;
+}
+
+.ProseMirror-menubar-spacer + .ProseMirror-menubar {
+    transform: none;
+}
