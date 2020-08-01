@@ -8,6 +8,7 @@ import { Constants } from '../constants.js';
 import "../../../../../symbiote/silverstripe-prose-editor/editor/style/index.scss";
 
 import "./lf-wysiwyg-editing.scss";
+import { trigger_on_click_outside } from '../lib/element-focus.js';
 
 
 function replaceShortcodesIn(elem) {
@@ -118,8 +119,6 @@ $(document).on('livingfrontend.updateLivingDoc', function (e, livingdoc) {
         $elem.empty();
         $elem.append(proseNode).append($actions);
 
-        
-
         const thisEditor = setupEditor(editorNode[0], valueNode[0], storageNode[0]);
 
         setTimeout(function () {
@@ -133,7 +132,7 @@ $(document).on('livingfrontend.updateLivingDoc', function (e, livingdoc) {
                 $(this).attr('href', href);
             });
         }, 100);
-        
+
 
         var cleanUp = function () {
             thisEditor.destroy();
@@ -170,12 +169,6 @@ $(document).on('livingfrontend.updateLivingDoc', function (e, livingdoc) {
 
             rawContent = catcher.html();
 
-            // component.model.setData(directiveName + '-raw', rawContent);
-
-            // let displayDom = editorNode.find('div.ProseMirror').first();
-            // displayDom.find('svg').remove
-
-
             if (!component.model.setContent(directiveName, rawContent)) {
                 // we need to force this as the content set by rawContent may not
                 // be different and trigger the HTML update
@@ -191,5 +184,11 @@ $(document).on('livingfrontend.updateLivingDoc', function (e, livingdoc) {
             saveEditorBlock();
             cleanUp();
         });
+
+        trigger_on_click_outside($elem[0], function (element, target) {
+            console.log(target);
+            saveEditorBlock();
+            cleanUp();
+        })
     });
 });
