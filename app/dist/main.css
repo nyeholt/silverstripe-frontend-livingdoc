@@ -825,6 +825,19 @@ svg {
 .infinite-tree-no-data {
   text-align: center; }
 
+.ld-embed-selection {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  width: 100%; }
+  .ld-embed-selection .ld-group-input {
+    flex: 1 1 auto; }
+  .ld-embed-selection .ld-embed-buttons {
+    display: flex; }
+    .ld-embed-selection .ld-embed-buttons button {
+      width: 100%; }
+
 /* BASICS */
 .CodeMirror {
   /* Set height, width, borders, and global font properties here */

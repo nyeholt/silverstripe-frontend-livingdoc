@@ -52,6 +52,9 @@ export function initialise_property_editor() {
                 case "select":
                     el = $("<select>");
                     var multi = false;
+                    // some options will have spaces so
+                    // need to detect along the way
+                    var selectOpts = [];
                     for (var op_id in curr_style.options) {
                         var curr_op = curr_style.options[op_id];
 
@@ -61,16 +64,24 @@ export function initialise_property_editor() {
                             continue;
                         }
 
+                        if (currentVal && currentVal.length > 0 && currentVal.indexOf(curr_op.value) >= 0) {
+                            selectOpts.push(curr_op.value);
+                        }
+
+                        if (!currentVal || currentVal.length == 0 && curr_op.value == '') {
+                            selectOpts.push('');
+                        }
+
                         el.append($("<option>").val(curr_op.value).text(curr_op.caption))
                     }
 
                     if (multi) {
                         el.attr('size', 3).prop('multiple', true);
-                        if (currentVal) {
-                            currentVal = currentVal.split(' ');
-                        }
+                        // if (currentVal) {
+                        //     currentVal = currentVal.split(' ');
+                        // }
                     }
-                    el.val(currentVal);
+                    el.val(selectOpts);
 
                     el.on("change", function (styleId) {
                         return function () {

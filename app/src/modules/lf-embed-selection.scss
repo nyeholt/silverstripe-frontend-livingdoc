@@ -1,0 +1,19 @@
+
+.ld-embed-selection {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+    width: 100%;
+
+    .ld-group-input {
+        flex: 1 1 auto;
+    }
+
+    .ld-embed-buttons {
+        display: flex;
+        button {
+            width: 100%;
+        }
+    }
+}

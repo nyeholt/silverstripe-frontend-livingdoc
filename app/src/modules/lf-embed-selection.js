@@ -3,9 +3,11 @@ import { TextField } from '../../../../../symbiote/silverstripe-prose-editor/edi
 import { openPrompt } from '../../../../../symbiote/silverstripe-prose-editor/editor/src/proseutil/prose-prompt';
 import ContentSource from '../lib/FormContentSource';
 
+import './lf-embed-selection.scss';
+
 var PROPS_HOLDER = 'livingdocs_EditorField_Toolbar_options';
 
-// TODO : Move this hardcoded crap to the contentsource.config 
+// TODO : Move this hardcoded crap to the contentsource.config
 var embeds = JSON.parse($('input[name=Embeds]').val());
 var EMBED_LINK = $('input[name=EmbedLink]').val();
 
@@ -26,10 +28,12 @@ $(document).on('livingfrontend.updateLivingDoc', function (e, livingdoc) {
 
         let isShortcode = component.$html.attr('data-use-sc');
 
+
         let holder = $('<div class="ld-embed-selection">');
         let propHolder = $('<div class="ld-embed-properties">');
-        var attrInput = $("<input>").attr({ type: 'text', placeholder: 'Source url' });
-        var attrlbl = $('<label>').text('Source');
+        let buttonHolder = $('<div class="ld-embed-buttons">');
+        var attrInput = $("<input class='ld-group-input'>").attr({ type: 'text', placeholder: 'Source url' });
+        var attrlbl = $('<label>').append('<span class="d-none">Source</span>');
 
         if (embeds && isShortcode) {
             attrInput = $('<select class="with-button">');
@@ -57,8 +61,8 @@ $(document).on('livingfrontend.updateLivingDoc', function (e, livingdoc) {
             holder.remove();
         }
 
-        var attrButton = $('<button>✔</button>');
-        var cancelButton = $('<button>X</button>');
+        var attrButton = $('<button class="lf-embed-button">✔</button>');
+        var cancelButton = $('<button class="lf-embed-button">X</button>');
         attrButton.on("click", function () {
             var selected = attrInput.val();
             attrButton.text("⏳").prop('disabled');
@@ -123,7 +127,9 @@ $(document).on('livingfrontend.updateLivingDoc', function (e, livingdoc) {
             component.$html.html(currentValue.content ? currentValue.content : currentHtml);
         })
 
-        holder.append(attrlbl.append(attrInput)).append(attrButton).append(cancelButton).append(propHolder);
+        buttonHolder.append(attrButton).append(cancelButton);
+
+        holder.append(attrlbl.append(attrInput)).append(buttonHolder).append(propHolder);
 
         component.$html.empty();
         component.$html.append(holder);
