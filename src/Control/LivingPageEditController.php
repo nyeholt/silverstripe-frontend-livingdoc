@@ -63,8 +63,8 @@ class LivingPageEditController extends Controller implements PermissionProvider
                     throw new PermissionFailureException("Cannot edit this page");
                 }
             }
-        } 
-            
+        }
+
         if (!$this->page) {
             return $this->httpError(404, "Page not found");
         }
@@ -318,7 +318,9 @@ class LivingPageEditController extends Controller implements PermissionProvider
                 'save' => $this->Link('save'),
                 'publish' => $this->Link('publish'),
                 'workflow' => '',
-            ]
+            ],
+            'showGrid' => $record->ShowGrid ? true : false,
+            'allowLayoutEditing' => $record->AllowLayoutEditing ? true : false,
         ];
 
         $record->PageStructure = json_encode($design);

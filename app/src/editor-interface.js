@@ -1,6 +1,7 @@
 import LivingDocState from "./lib/LivingDocState";
 import createComponentList from './lib/createComponentList';
 import { Constants } from "./constants";
+import ContentSource from './lib/FormContentSource';
 
 const TOOLBAR = '.livingdocs-toolbar';
 const TOOLBAR_FORM = '#Form_LivingForm';
@@ -140,32 +141,43 @@ function init_toolbar_toggles() {
     // toolbarToggle.click(function (e) {
     //     $('body').toggleClass('show-livingdocs-toolbar');
     // });
-
-    const gridToggle = $('<input type="checkbox" checked>');
+    const gridToggle = $('<input type="checkbox">');
     const enableGrid = $('<label class="ld-toggle">').append(gridToggle).append('Enable grid');
+
+    var evalGrid = function () {
+        if (gridToggle.is(':checked')) {
+            $(Constants.EDITOR_FRAME).contents().find('body').removeClass('no-grid-display');
+        } else {
+            $(Constants.EDITOR_FRAME).contents().find('body').addClass('no-grid-display');
+        }
+    }
+
 
     $(PAGE_OPTIONS).append(enableGrid);
     gridToggle.click(function (e) {
-        $(Constants.EDITOR_FRAME).contents().find('body').toggleClass('no-grid-display');
+        evalGrid();
     });
 
-    const layoutToggle = $('<input type="checkbox" checked>');
+    if (ContentSource.getConfig().showGrid) {
+        gridToggle.click();
+    } else {
+        evalGrid();
+    }
+
+
+    const layoutToggle = $('<input type="checkbox">');
     const enableLayout = $('<label class="ld-toggle">').append(layoutToggle).append('Enable layout editing');
     $(PAGE_OPTIONS).append(enableLayout);
-    layoutToggle.click(function (e) {
-        var state = $(this).attr('data-layout-editing');
-        if (state == 1) {
-            $(this).attr('data-layout-editing', 0);
-        } else {
-            $(this).attr('data-layout-editing', 1);
-        }
-    });
+
+    if (ContentSource.getConfig().allowLayoutEditing) {
+        layoutToggle.click();
+    }
 
     LivingDocState.livingdoc.interactiveView.page.componentWillBeDragged.add(function (option) {
-        if (layoutToggle.attr('data-layout-editing') == 1) {
-            option.enable = false;
-        } else {
+        if (layoutToggle.is(':checked')) {
             option.enable = true;
+        } else {
+            option.enable = false;
         }
     })
 }
@@ -204,7 +216,7 @@ export function toggle_component_group(id) {
     const groupState = settings['groups'] || {};
 
     let displayState = groupState[id];
-    
+
     if (displayState == undefined) {
         // figure out initial state
         displayState = $('#' + id).is(':visible');
@@ -250,7 +262,7 @@ export function select_tab(name) {
     $('.ld-tab').removeClass('ld-tab--active');
 
     $('.ld-tab[href="' + name +'"]').addClass('ld-tab--active');
-    
+
     $(TOOLBAR).scrollTop(0, 0);
 
     $(name).show();

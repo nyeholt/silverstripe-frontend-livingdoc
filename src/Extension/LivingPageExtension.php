@@ -3,6 +3,7 @@ namespace Symbiote\Frontend\LivingPage\Extension;
 
 use SilverStripe\Core\Config\Configurable;
 use SilverStripe\Core\Manifest\ModuleResourceLoader;
+use SilverStripe\Forms\CheckboxField;
 use SilverStripe\Forms\DropdownField;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\LiteralField;
@@ -28,6 +29,15 @@ class LivingPageExtension extends DataExtension
     private static $db = [
         'PageStructure'     => 'Text',
         'Shortcodes'        => 'MultiValueField',
+
+        'FullPageMode'  => 'Boolean',
+        'AllowLayoutEditing' => 'Boolean',
+        'ShowGrid'          => 'Boolean',
+    ];
+
+    private static $defaults = [
+        'AllowLayoutEditing' => true,
+        'ShowGrid'  => true
     ];
 
     private static $has_one = [
@@ -39,6 +49,8 @@ class LivingPageExtension extends DataExtension
     ];
 
     private static $default_design_css = '';
+
+    private static $allow_full_page_mode = false;
 
     private static $default_page = array(
         'content' => [
@@ -57,6 +69,8 @@ class LivingPageExtension extends DataExtension
 
     public function updateCMSFields(FieldList $fields)
     {
+
+
         $structures = ComponentPageStructure::get()->map();
         if (!strlen($this->owner->PageStructure) && count($structures)) {
             $fields->removeByName('Root');
@@ -72,14 +86,22 @@ class LivingPageExtension extends DataExtension
         $fields->replaceField('Content', $literalContent);
 
         $pageOptions = [
-            KeyValueField::create('Shortcodes', 'Available shorcodes')
+            CheckboxField::create('AllowLayoutEditing', "Allow editing of the layout"),
+            CheckboxField::create('ShowGrid', "Show the layout grid"),
+            KeyValueField::create('Shortcodes', 'Available embed shortcodes')
         ];
+
+        if ($this->owner->config()->allow_full_page_mode) {
+            $pageOptions[] = CheckboxField::create('FullPageMode', 'Control the full page, ignoring layout');
+        }
+
         if (Permission::check('ADMIN')) {
             $pageOptions[] = TextareaField::create('PageStructure', 'Raw structure');
         }
 
         $toggle = ToggleCompositeField::create('LivingPageContent', 'Page options', $pageOptions);
-        $fields->addFieldToTab('Root.Main', $toggle);
+
+        $fields->addFieldToTab('Root.Main', $toggle, 'URLSegment');
 
         return $fields;
     }
