@@ -23,7 +23,7 @@
             </div>
             <div id="livingdocs-toolbar-controls">
             </div>
-            
+
             <div class="livingdocs-toolbar-messages">
             </div>
         </div>
@@ -33,7 +33,7 @@
                     <div class="toolbar-tabs">
                         <div class="ld-tab" href="#livingdocs-components">Components</div>
                         <div class="ld-tab" href="#livingdocs-property-tab">Properties</div>
-                        <div class="ld-tab" href="#livingdocs-page-options">Options</div>
+                        <div class="ld-tab" href="#livingdocs-page-options" id="ld-options-tab">Options</div>
                     </div>
                     <div class="toolbar-items">
                         <div id="livingdocs-components" class="ld-tab-panel ld-tab-default">
@@ -56,7 +56,7 @@
     </div>
 
 
-    
+
     <div id="livingdocs-editor" data-config="$LivingDocsConfig.ATT"></div>
 </body>
 

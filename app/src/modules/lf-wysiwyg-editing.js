@@ -186,7 +186,6 @@ $(document).on('livingfrontend.updateLivingDoc', function (e, livingdoc) {
         });
 
         trigger_on_click_outside($elem[0], function (element, target) {
-            console.log(target);
             saveEditorBlock();
             cleanUp();
         })

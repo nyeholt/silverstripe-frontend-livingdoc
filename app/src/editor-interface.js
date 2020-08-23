@@ -2,6 +2,7 @@ import LivingDocState from "./lib/LivingDocState";
 import createComponentList from './lib/createComponentList';
 import { Constants } from "./constants";
 import ContentSource from './lib/FormContentSource';
+import { ComponentTree } from "./modules/lf-component-tree";
 
 const TOOLBAR = '.livingdocs-toolbar';
 const TOOLBAR_FORM = '#Form_LivingForm';
@@ -13,6 +14,8 @@ const COOKIE_NAME = 'editor_settings';
 export const init_interface = function (doc, selectedDesign) {
 
     init_toolbar_tabs();
+
+    init_tree();
 
     init_toolbar_toggles();
     init_toolbar_form();
@@ -132,6 +135,19 @@ function init_component_list(doc, selectedDesign) {
     })
 
     display_component_groups();
+}
+
+function init_tree() {
+    let tree = new ComponentTree(LivingDocState.livingdoc);
+
+    let treeHolder = $('<div class="ld-component-tree">');
+    $(PAGE_OPTIONS).append(treeHolder);
+    tree.render(treeHolder[0]);
+
+    $(document).on('click', '#ld-options-tab', function () {
+        treeHolder.empty();
+        tree.render(treeHolder[0]);
+    });
 }
 
 function init_toolbar_toggles() {
@@ -261,7 +277,7 @@ export function select_tab(name) {
     $('.ld-tab-panel').hide();
     $('.ld-tab').removeClass('ld-tab--active');
 
-    $('.ld-tab[href="' + name +'"]').addClass('ld-tab--active');
+    $('.ld-tab[href="' + name + '"]').addClass('ld-tab--active');
 
     $(TOOLBAR).scrollTop(0, 0);
 
