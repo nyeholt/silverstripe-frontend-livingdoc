@@ -2157,6 +2157,9 @@ div.resize-cursor {
   -ms-user-select: none;
   user-select: none; }
 
+#livingdocs-editor-holder {
+  font-size: 12px; }
+
 .livingdocs-toolbar .ld-component-tree {
   font-size: 12px; }
 
