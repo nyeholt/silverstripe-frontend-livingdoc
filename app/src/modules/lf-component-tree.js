@@ -9,10 +9,25 @@ export class ComponentTree {
 
     livingdoc;
 
+    activeComponentId;
+
+    tree;
+
     constructor(livingdoc) {
         this.livingdoc = livingdoc;
 
-        console.log(livingdoc);
+        livingdoc.interactiveView.page.focus.componentFocus.add((componentView, page, directives, event) => {
+            this.activeComponentId = componentView.model.id;
+            if (this.tree) {
+                const node = this.tree.getNodeById(this.activeComponentId);
+                // → Node { id: 'fruit', ... }
+                this.tree.selectNode(node);
+            }
+
+        });
+        livingdoc.interactiveView.page.focus.componentBlur.add((componentView, page, directives, event) => {
+            this.activeComponentId = 0;
+        });
     }
 
     buildNode(component) {
@@ -67,7 +82,6 @@ export class ComponentTree {
     }
 
     render(parentNode) {
-
         let div = document.createElement('div');
         div.className = 'TreeField';
         let treeDiv = document.createElement('div');
@@ -75,13 +89,11 @@ export class ComponentTree {
 
         div.appendChild(treeDiv);
 
-        this.tree = treeDiv;
-
         parentNode.appendChild(div);
 
         const childNodes = this.buildTree(this.livingdoc.componentTree.root);
 
-        const tree = new InfiniteTree({
+        this.tree = new InfiniteTree({
             el: treeDiv,
             data: childNodes,
             autoOpen: true,
@@ -91,7 +103,7 @@ export class ComponentTree {
             rowRenderer: customRowRenderer,
         });
 
-        tree.on('selectNode', function (node) {
+        this.tree.on('selectNode', function (node) {
             if (!node || !node.id) {
                 return;
             }
@@ -107,8 +119,15 @@ export class ComponentTree {
             if (view) {
                 this.livingdoc.interactiveView.page.handleClickedComponent(fakeEvent, view);
             }
-
         }.bind(this));
+
+        if (this.activeComponentId) {
+            const node = this.tree.getNodeById(this.activeComponentId);
+            console.log(node);
+            // → Node { id: 'fruit', ... }
+            this.tree.selectNode(node);
+        }
+
     }
 }
 
@@ -157,7 +176,7 @@ const customRowRenderer = (node, treeOptions) => {
 
 
     const iconHolder = icon ? tag('span', {
-        'style' : 'width: 32px; display: inline-block;',
+        'style': 'width: 32px; display: inline-block;',
     }, iconTag) : '';
 
     const title = tag('span', {

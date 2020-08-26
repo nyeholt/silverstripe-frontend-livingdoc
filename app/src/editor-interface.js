@@ -140,11 +140,12 @@ function init_component_list(doc, selectedDesign) {
 function init_tree() {
     let tree = new ComponentTree(LivingDocState.livingdoc);
 
-    let treeHolder = $('<div class="ld-component-tree">');
-    $(PAGE_OPTIONS).append(treeHolder);
+    let label = $('<h2 class="component-set-label" data-target="ld-component-tree">Page items</h2>')
+    let treeHolder = $('<div class="ld-component-tree" id="ld-component-tree">');
+    $('#livingdocs-property-tab').prepend(treeHolder).prepend(label);
     tree.render(treeHolder[0]);
 
-    $(document).on('click', '#ld-options-tab', function () {
+    $(document).on('click', '#ld-properties-tab', function () {
         treeHolder.empty();
         tree.render(treeHolder[0]);
     });

@@ -1821,7 +1821,7 @@ div.resize-cursor {
 .doc-component-highlight {
   /* Default */
   /* outline: thin dotted #333; */
-  box-shadow: inset 0 0 1px 2px rgba(23, 42, 42, 0.5);
+  box-shadow: 0 0 1px 2px rgba(168, 217, 217, 0.5);
   /* Webkit */
   /*outline: 5px auto -webkit-focus-ring-color;*/
   /*outline-offset: 1px;*/ }
@@ -2288,12 +2288,13 @@ body {
   top: 0px;
   background-color: #3a235d;
   padding: 0px 15px;
-  font-size: 16px;
+  font-size: 14px;
   color: #fff;
   overflow-y: auto;
   overflow-x: hidden;
   height: calc(100vh - 60px);
-  box-shadow: 0 0 3px rgba(0, 0, 0, 0.25); }
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.25);
+  font-family: Arial, Helvetica, sans-serif; }
   .livingdocs-toolbar .toolbar-tabs {
     background-color: #3a235d;
     z-index: 3;
@@ -2319,6 +2320,15 @@ body {
     width: 90%;
     display: block;
     margin: 0px auto; }
+  .livingdocs-toolbar h2 {
+    font-size: 14px;
+    line-height: 24px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    display: block;
+    margin: 2px; }
+  .livingdocs-toolbar .infinite-tree-scroll {
+    max-height: 150px; }
 
 .livingdocs-bottom-bar .livingdocs-actions {
   width: 40%;
@@ -2448,14 +2458,6 @@ body.doc-no-selection .livingdocs-toolbar iframe {
 
 .livingdocs_EditorField_Toolbar_options > h5 {
   font-size: 1rem; }
-
-#livingdocs-components h2 {
-  font-size: 14px;
-  line-height: 24px;
-  font-weight: bold;
-  letter-spacing: 1px;
-  display: block;
-  margin: 2px; }
 
 .js-editor-block {
   min-height: 400px;

@@ -32,7 +32,7 @@
                 <div class="livingdocs-toolbar">
                     <div class="toolbar-tabs">
                         <div class="ld-tab" href="#livingdocs-components">Components</div>
-                        <div class="ld-tab" href="#livingdocs-property-tab">Properties</div>
+                        <div class="ld-tab" href="#livingdocs-property-tab" id="ld-properties-tab">Properties</div>
                         <div class="ld-tab" href="#livingdocs-page-options" id="ld-options-tab">Options</div>
                     </div>
                     <div class="toolbar-items">
