@@ -17,4 +17,9 @@ class ComponentPageController extends PageController
             Requirements::css('nyeholt/silverstripe-frontend-livingdoc: app/dist/main.css');
         }
     }
+
+    public function isEditMode()
+    {
+        return $this->getRequest()->getVar('page-edit');
+    }
 }

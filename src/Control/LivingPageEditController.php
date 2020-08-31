@@ -124,7 +124,7 @@ class LivingPageEditController extends Controller implements PermissionProvider
 
         return $this->customise([
             'LivingDocsConfig' => json_encode($this->getLivingDocsConfig()),
-            'PageLink' => $page->Link(),
+            'PageLink' => Controller::join_links($page->Link(), "?page-edit=1"),
         ])->renderWith('LivingPage_editor');
 
         $ctrl = ModelAsController::controller_for($page);
