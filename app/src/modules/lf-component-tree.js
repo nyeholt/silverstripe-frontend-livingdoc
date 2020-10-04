@@ -21,6 +21,7 @@ export class ComponentTree {
             if (this.tree) {
                 const node = this.tree.getNodeById(this.activeComponentId);
                 // → Node { id: 'fruit', ... }
+                node.fromFocus = true;
                 this.tree.selectNode(node);
             }
 
@@ -116,14 +117,13 @@ export class ComponentTree {
                 which: 0
             }
 
-            if (view) {
+            if (view && !node.fromFocus) {
                 this.livingdoc.interactiveView.page.handleClickedComponent(fakeEvent, view);
             }
         }.bind(this));
 
         if (this.activeComponentId) {
             const node = this.tree.getNodeById(this.activeComponentId);
-            console.log(node);
             // → Node { id: 'fruit', ... }
             this.tree.selectNode(node);
         }
