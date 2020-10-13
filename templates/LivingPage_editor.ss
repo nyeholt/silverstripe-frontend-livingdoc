@@ -32,8 +32,9 @@
                 <div class="livingdocs-toolbar">
                     <div class="toolbar-tabs">
                         <div class="ld-tab" href="#livingdocs-components">Components</div>
-                        <div class="ld-tab" href="#livingdocs-property-tab" id="ld-properties-tab">Properties</div>
                         <div class="ld-tab" href="#livingdocs-page-options" id="ld-options-tab">Options</div>
+                        <div class="ld-tab" href="#livingdocs-property-tab" id="ld-properties-tab">Settings</div>
+                        <div class="ld-tab" href="#livingdocs-style-tab" id="ld-style-tab">Style</div>
                     </div>
                     <div class="toolbar-items">
                         <div id="livingdocs-components" class="ld-tab-panel ld-tab-default">
@@ -42,6 +43,10 @@
 
                         <div id="livingdocs-property-tab" class="ld-tab-panel">
                             <div class="livingdocs-item-properties"></div>
+                        </div>
+
+                        <div id="livingdocs-style-tab" class="ld-tab-panel">
+                            <div class="livingdocs-item-styles"></div>
                         </div>
 
                         <div id="livingdocs-page-options" class="ld-tab-panel"></div>

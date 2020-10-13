@@ -4,8 +4,9 @@ import { openPrompt } from '../../../../../symbiote/silverstripe-prose-editor/ed
 import ContentSource from '../lib/FormContentSource';
 
 import './lf-embed-selection.scss';
-
-var PROPS_HOLDER = 'livingdocs_EditorField_Toolbar_options';
+import { SelectField } from '../../../../../symbiote/silverstripe-prose-editor/editor/src/fields/SelectField';
+import { FieldGroup } from '../../../../../symbiote/silverstripe-prose-editor/editor/src/fields/FieldGroup';
+import { Constants } from '../constants';
 
 // TODO : Move this hardcoded crap to the contentsource.config
 var embeds = JSON.parse($('input[name=Embeds]').val());
@@ -14,7 +15,13 @@ var EMBED_LINK = $('input[name=EmbedLink]').val();
 const SHORTCODE_MATCH_REGEX = /\[(\w+)(.*?)\]/;
 const SHORTCODE_ATTRS_REGEX = /(\w+)=['"]{1}(.*?)['"]{1}/g;
 
+
 $(document).on('livingfrontend.updateLivingDoc', function (e, livingdoc) {
+
+    $(Constants.EDITOR_FRAME).contents().on('click', '[data-doc-embeditem] a', function (e) {
+        e.preventDefault();
+    });
+
     livingdoc.interactiveView.page.embedItemClick.add(function (component, directiveName, event) {
         var currentValue = component.model.get(directiveName);
         currentValue = currentValue || { source: '', attrs: '', content: null, url: '' };
@@ -28,165 +35,146 @@ $(document).on('livingfrontend.updateLivingDoc', function (e, livingdoc) {
 
         let isShortcode = component.$html.attr('data-use-sc');
 
+        let fields = {};
 
-        let holder = $('<div class="ld-embed-selection">');
-        let propHolder = $('<div class="ld-embed-properties">');
-        let buttonHolder = $('<div class="ld-embed-buttons">');
-        var attrInput = $("<input class='ld-group-input'>").attr({ type: 'text', placeholder: 'Source url' });
-        var attrlbl = $('<label>').append('<span class="d-none">Source</span>');
+        let subgroup = null;
+        
+        const handleSourceUpdate = (key, value, form) => {
+            // let newParams = props;
+            // newParams[key] = value;
+            // component.model.setDirectiveAttribute(directiveName, key, value);
+            if (subgroup) {
+                subgroup.removeFields();
+            }
+            if (key == 'source' && isShortcode) {
+                let sc = extractShortcodeData(value);
+                if (sc) {
+                    let componentAttrs = component.model.getData('data_attributes');
+
+                    let props = sc.attrs || {};
+
+                    if (componentAttrs && componentAttrs[directiveName]) {
+                        for (let name in componentAttrs[directiveName]) {
+                            props[name] = componentAttrs[directiveName][name]
+                        }
+                    }
+
+                    let subFields = [];
+                    for (var fieldName in props) {
+                        subFields[fieldName] = new TextField({
+                            label: fieldName,
+                            value: props[fieldName]
+                        })
+                    }
+
+
+                    subgroup = new FieldGroup({
+                        name: "shortcodeData",
+                        fields: subFields
+                    });
+
+                    subgroup.updateCallback = (compKey, compValue) => {
+                        component.model.setDirectiveAttribute(directiveName, compKey, compValue);
+                    };
+
+                    subgroup.renderFields(form);
+                }
+            }
+        };
 
         if (embeds && isShortcode) {
-            attrInput = $('<select class="with-button">');
-            attrInput.append('<option>-- select item --</option>');
+            let opts = [{ label: "-- choose --", value: "" }];
             for (var label in embeds) {
-                var opt = $('<option>').appendTo(attrInput);
-                opt.attr('value', embeds[label]).text(label);
+                opts.push({
+                    label: label,
+                    value: embeds[label]
+                })
             }
 
-            attrInput.change(function (e) {
-                let v = $(this).val();
-                showAttrEditor(v, propHolder[0], component, directiveName);
-            })
+            fields["source"] = new SelectField({
+                label: "Source",
+                value: currentValue.url,
+                options: opts
+            });
+            
+        } else {
+            fields["source"] = new TextField({
+                label: "Source",
+                placeholder: "Source URL",
+                value: currentValue.url || "",
+            });
         }
 
-        if (attrInput && currentValue.url) {
-            // let storedAttrs = JSON.parse(currentValue.attrs);
-            attrInput.val(currentValue.url);
-            if (isShortcode) {
-                showAttrEditor(currentValue.url, propHolder[0], component, directiveName);
-            }
-        }
+        const form = openPrompt({
+            title: "Options",
+            fields: fields,
+            update: function (key, value, container) {
+                handleSourceUpdate(key, value, form);
+            },
+            callback: function (values) {
+                if (values.source && values.source.length > 0) {
+                    let selected = values.source;
+                    let componentAttrs = component.model.getData('data_attributes');
+                    componentAttrs = componentAttrs || {};
 
-        const cleanUp = function () {
-            holder.remove();
-        }
+                    var attrStr = '';
 
-        var attrButton = $('<button class="lf-embed-button">✔</button>');
-        var cancelButton = $('<button class="lf-embed-button">X</button>');
-        attrButton.on("click", function () {
-            var selected = attrInput.val();
-            attrButton.text("⏳").prop('disabled');
-            if (selected) {
-                let componentAttrs = component.model.getData('data_attributes');
-                componentAttrs = componentAttrs || {};
+                    let source = 'embed';
 
-                var attrStr = '';
+                    // do we have an actual URL to be embedded, or a shortcode style URL?
+                    let shortcodeData = extractShortcodeData(selected); // SHORTCODE_MATCH_REGEX.exec(selected);
 
-                let source = 'embed';
-
-                // do we have an actual URL to be embedded, or a shortcode style URL?
-                let shortcodeData = extractShortcodeData(selected); // SHORTCODE_MATCH_REGEX.exec(selected);
-
-                // if we've customised props, let's grab them
-                if (componentAttrs[directiveName] && shortcodeData) {
-                    for (let name in componentAttrs[directiveName]) {
-                        shortcodeData.attrs[name] = componentAttrs[directiveName][name]
+                    // if we've customised props, let's grab them
+                    if (componentAttrs[directiveName] && shortcodeData) {
+                        for (let name in componentAttrs[directiveName]) {
+                            shortcodeData.attrs[name] = componentAttrs[directiveName][name]
+                        }
                     }
-                }
 
-                if (shortcodeData && shortcodeData.shortcode) {
-                    source = shortcodeData.shortcode;
-                    if (shortcodeData.attrs) {
-                        shortcodeData.attrs.context_id = ContentSource.getConfig().contextId;
-                        attrStr = JSON.stringify(shortcodeData.attrs);
+                    if (shortcodeData && shortcodeData.shortcode) {
+                        source = shortcodeData.shortcode;
+                        if (shortcodeData.attrs) {
+                            shortcodeData.attrs.context_id = ContentSource.getConfig().contextId;
+                            attrStr = JSON.stringify(shortcodeData.attrs);
+                        }
+                    } else {
+                        attrStr = JSON.stringify({
+                            url: selected
+                        });
                     }
+
+                    $.get(EMBED_LINK, { shortcode: source, attrs: attrStr, stage: 'Stage' }).then(function (data) {
+                        const toSave = {
+                            attrs: attrStr,
+                            source: source,
+                            content: data,
+                            url: selected
+                        };
+                        component.model.setContent(directiveName, toSave);
+                        if (component.model.componentTree) {
+                            component.model.componentTree.contentChanging(component.model);
+                        }
+                    });
                 } else {
-                    attrStr = JSON.stringify({
-                        url: selected
+                    component.$html.html(currentValue.content ? currentValue.content : currentHtml);
+                    component.model.setContent(directiveName, {
+                        source: '',
+                        attrs: '',
+                        content: ''
                     });
                 }
-
-                $.get(EMBED_LINK, { shortcode: source, attrs: attrStr, stage: 'Stage' }).then(function (data) {
-                    cleanUp();
-
-                    const toSave = {
-                        attrs: attrStr,
-                        source: source,
-                        content: data,
-                        url: selected
-                    };
-                    component.model.setContent(directiveName, toSave);
-                    if (component.model.componentTree) {
-                        component.model.componentTree.contentChanging(component.model);
-                    }
-                });
-            } else {
-                cleanUp();
+            },
+            cancel: function () {
                 component.$html.html(currentValue.content ? currentValue.content : currentHtml);
-                component.model.setContent(directiveName, {
-                    source: '',
-                    attrs: '',
-                    content: ''
-                });
             }
         });
 
-        cancelButton.on('click', function () {
-            // component.model.setContent(directiveName, currentValue);
-            cleanUp();
-            component.$html.html(currentValue.content ? currentValue.content : currentHtml);
-        })
-
-        buttonHolder.append(attrButton).append(cancelButton);
-
-        holder.append(attrlbl.append(attrInput)).append(buttonHolder).append(propHolder);
-
-        component.$html.empty();
-        component.$html.append(holder);
+        if (isShortcode && currentValue.url) {
+            handleSourceUpdate('source', currentValue.url, form);
+        }
     })
 });
 
-function showAttrEditor(v, container, component, directiveName) {
-    let sc = extractShortcodeData(v);
-    if (!sc) {
-        return;
-    }
-
-    let componentAttrs = component.model.getData('data_attributes');
-
-    let props = sc.attrs || {};
-
-    if (componentAttrs && componentAttrs[directiveName]) {
-        for (let name in componentAttrs[directiveName]) {
-            props[name] = componentAttrs[directiveName][name]
-        }
-    }
-
-    if (sc && props) {
-        let fields = {};
-
-        for (var fieldName in props) {
-            fields[fieldName] = new TextField({
-                label: fieldName,
-                value: props[fieldName]
-            })
-        }
-
-        openPrompt({
-            title: "Options",
-            fields: fields,
-            hideButtons: true,
-            update: function (key, value) {
-                let newParams = props;
-                newParams[key] = value;
-                component.model.setDirectiveAttribute(directiveName, key, value);
-            },
-            callback: function () {
-
-            }
-        }, container);
-    }
-}
-
-function buildShortcode(name, props) {
-    let parts = [name];
-    if (props) {
-        for (let key in props) {
-            parts.push(key + '="' + props[key].replace('"', '\"') + '"');
-        }
-    }
-    return '[' + parts.join(' ') + ']';
-}
 
 function extractShortcodeData(shortcodeStr) {
     let shortcodeData = SHORTCODE_MATCH_REGEX.exec(shortcodeStr);

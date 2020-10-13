@@ -10,9 +10,11 @@ import { initialise_attribute_editor } from "../modules/lf-attr-editor";
 import { Constants } from "../constants";
 
 var PROPS_HOLDER = 'livingdocs_EditorField_Toolbar_options';
+var STYLE_HOLDER = 'livingdocs-style-holder';
 var BOTTOM_BAR = '.livingdocs-bottom-bar';
 
 var ITEM_PROPERTIES_HOLDER = '.livingdocs-item-properties';
+var ITEM_STYLES_HOLDER = '.livingdocs-item-styles';
 
 $(document).on('click', function (e) {
     if ($(e.target).parents('#livingdocs-container').length <= 0 &&
@@ -22,17 +24,21 @@ $(document).on('click', function (e) {
         // remove the properties editing
         select_tab('default');
         $('.' + PROPS_HOLDER).remove();
+        $('.' + STYLE_HOLDER).remove();
     }
 })
 
 export function initialise_property_editor() {
     LivingDocState.livingdoc.interactiveView.page.focus.componentFocus.add(function (component) {
         $("." + PROPS_HOLDER).remove();
+        $('.' + STYLE_HOLDER).remove();
         $(Constants.EDITOR_FRAME).contents().find(Constants.BUTTON_BAR).remove();
         $(Constants.BUTTON_BAR).remove();
 
         var options = $("<div>").addClass(PROPS_HOLDER);
+        var styles = $('<div>').addClass(STYLE_HOLDER);
         var $properties = $(ITEM_PROPERTIES_HOLDER);
+        var $styleHolder = $(ITEM_STYLES_HOLDER);
 
         LivingDocState.focusOn(component);
 
@@ -122,7 +128,7 @@ export function initialise_property_editor() {
             }
             if (el) {
                 $('<div>').append(el).appendTo(lbl);
-                options.append('<div>').append(lbl);
+                styles.append('<div>').append(lbl);
             }
         }
 
@@ -167,6 +173,7 @@ export function initialise_property_editor() {
             if (confirm("Remove this?")) {
                 component.model.remove();
                 $("." + PROPS_HOLDER).remove();
+                $("." + STYLE_HOLDER).remove();
             }
         });
 
@@ -195,9 +202,10 @@ export function initialise_property_editor() {
         // TODO Re-evaluate whether we need access to the raw attribute values
         initialise_attribute_editor(options, component);
 
-        let styleDiv = $('<div>').appendTo(options);
+        let styleDiv = $('<div>').appendTo(styles);
 
         $properties.html(options);
+        $styleHolder.html(styles);
 
         createStyleEditor(component, styleDiv[0]);
 
