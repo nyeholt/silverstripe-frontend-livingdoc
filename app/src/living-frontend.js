@@ -18,6 +18,8 @@ import { Constants } from './constants';
         window.$ = $;
     }
 
+    let INITIALISED = false;
+
     var PING_TIME = 300;
     var MAX_TIME = 86400;
 
@@ -58,7 +60,17 @@ import { Constants } from './constants';
 
     $(function () {
         $(Constants.EDITOR_FRAME).on('load', function () {
-            initialise_editor($(this));
+            if (!INITIALISED) {
+                INITIALISED = true;
+                initialise_editor($(this));
+            }
+
+            $(this)[0].contentWindow.onbeforeunload = function () {
+                if ($(Constants.TOOLBAR_FORM).attr('data-changed')) {
+                    return "You may have unsaved changes, sure?";
+                }
+                location.href = location.href;
+            }
         });
 
         // fixes issue with frame and JS being out of sync
@@ -90,34 +102,8 @@ import { Constants } from './constants';
         // provides 3rd party hooks
         $(document).trigger('updateLivingdocsDesign', selectedDesign);
 
-        // hard coded against the design for now??
-        // selectedDesign.assets.basePath = "frontend-livingdoc/javascript/livingdocs/";
-
-        // doc.design.load(selectedDesign);
-
-        // doc.config({
-        //     livingdocsCssFile: "frontend-livingdoc/javascript/livingdocs/css/livingdocs.css",
-        //     editable: {
-        //         browserSpellcheck: true,
-        //         changeDelay: 50
-        //     }
-        //     // ,
-        //     // // really not sure if this matters here, but we'll run with it for now.
-        //     // directives: {
-        //     //     dataobject: {
-        //     //         attr: 'doc-dataobject',
-        //     //         renderedAttr: 'calculated in augment_config',
-        //     //         overwritesContent: true
-        //     //     }
-        //     // }
-        // });
-
-        // livingdoc = doc.new(structure);
-
         LivingDocState.loadLivingdoc(doc, selectedDesign, structure, ContentSource);
 
-        // bind it into the bridge
-        // ContentBridge.setLivingDoc(livingdoc);
 
         LivingDocState.notifyDocUpdate();
 

@@ -1,5 +1,6 @@
 import * as $ from 'jquery';
 import 'jquery-form';
+import { Constants } from '../constants';
 
 /**
  * Represents a SilverStripe based form as being
@@ -7,7 +8,6 @@ import 'jquery-form';
  * an API instead...
  */
 class FormContentSource {
-    TOOLBAR_FORM = '#Form_LivingForm';
     CONFIG_HOLDER = '#livingdocs-editor';
     DOC_HOLDER = '#livingdocs-container';
 
@@ -21,9 +21,9 @@ class FormContentSource {
             this.config = config;
         }
 
-        this.config.contextId = $(this.TOOLBAR_FORM).find('input[name="ID"]').val();
+        this.config.contextId = $(Constants.TOOLBAR_FORM).find('input[name="ID"]').val();
 
-        $(document).on('submit', this.TOOLBAR_FORM, function () {
+        $(document).on('submit', Constants.TOOLBAR_FORM, function () {
             var _this = $(this);
 
             _this.removeAttr('data-changed');
@@ -48,7 +48,7 @@ class FormContentSource {
             return false;
         });
 
-        $(document).on('mousedown', this.TOOLBAR_FORM + ' button.action', function (e) {
+        $(document).on('mousedown', Constants.TOOLBAR_FORM + ' button.action', function (e) {
             if ($(this).hasClass('link-action')  && e.which == 1) {
                 e.preventDefault();
                 location.href = $(this).attr('data-link');
@@ -65,7 +65,7 @@ class FormContentSource {
         })
 
         $(window).bind('beforeunload', () => {
-            if ($(this.TOOLBAR_FORM).attr('data-changed')) {
+            if ($(Constants.TOOLBAR_FORM).attr('data-changed')) {
                 return "You may have unsaved changes, sure?";
             }
         });
@@ -132,12 +132,12 @@ class FormContentSource {
     }
 
     updatePageContent(docStructure, docHtml, realchange) {
-        $(this.TOOLBAR_FORM).find('[name=PageStructure]').val(docStructure);
-        $(this.TOOLBAR_FORM).find('[name=Content]').val(docHtml);
+        $(Constants.TOOLBAR_FORM).find('[name=PageStructure]').val(docStructure);
+        $(Constants.TOOLBAR_FORM).find('[name=Content]').val(docHtml);
 
         if (realchange) {
-            $(this.TOOLBAR_FORM).attr('data-changed', 1);
-            $(this.TOOLBAR_FORM).find('[name=action_publish]').prop('disabled', true);
+            $(Constants.TOOLBAR_FORM).attr('data-changed', 1);
+            $(Constants.TOOLBAR_FORM).find('[name=action_publish]').prop('disabled', true);
         }
     }
 }
