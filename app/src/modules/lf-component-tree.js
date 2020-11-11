@@ -21,10 +21,11 @@ export class ComponentTree {
             if (this.tree) {
                 const node = this.tree.getNodeById(this.activeComponentId);
                 // → Node { id: 'fruit', ... }
-                node.fromFocus = true;
-                this.tree.selectNode(node);
+                if (node) {
+                    node.fromFocus = true;
+                    this.tree.selectNode(node);
+                }
             }
-
         });
         livingdoc.interactiveView.page.focus.componentBlur.add((componentView, page, directives, event) => {
             this.activeComponentId = 0;

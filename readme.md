@@ -236,6 +236,14 @@ all based on a specific implementation that _I_ needed at the time.
 You can hook into the updateLivingdocsDesign JS event and change things there 
 prior to it being loaded. 
 
+## Key API parts
+
+**Get the current selected component**
+
+`LivingDocState.activeComponent`
+
+
+
 ## Future work
 
 * Better migration of changed component structures

@@ -7,6 +7,7 @@ import './lf-embed-selection.scss';
 import { SelectField } from '../../../../../symbiote/silverstripe-prose-editor/editor/src/fields/SelectField';
 import { FieldGroup } from '../../../../../symbiote/silverstripe-prose-editor/editor/src/fields/FieldGroup';
 import { Constants } from '../constants';
+import LivingDocState from '../lib/LivingDocState';
 
 // TODO : Move this hardcoded crap to the contentsource.config
 var embeds = JSON.parse($('input[name=Embeds]').val());
@@ -22,7 +23,12 @@ $(document).on('livingfrontend.updateLivingDoc', function (e, livingdoc) {
         e.preventDefault();
     });
 
+    livingdoc.interactiveView.page.focus.componentBlur.add((componentView, page, directives, event) => {
+        $(Constants.EDITOR_FRAME).contents().find('.ld-embed-selected').removeClass('ld-embed-selected');
+    });
+
     livingdoc.interactiveView.page.embedItemClick.add(function (component, directiveName, event) {
+        
         var currentValue = component.model.get(directiveName);
         currentValue = currentValue || { source: '', attrs: '', content: null, url: '' };
 
@@ -30,6 +36,12 @@ $(document).on('livingfrontend.updateLivingDoc', function (e, livingdoc) {
 
         var isEditing = component.$html.find('.ld-embed-selection');
         if (isEditing && isEditing.length > 0) {
+            return;
+        }
+
+        var isSelected = component.$html.hasClass('ld-embed-selected');
+        if (!isSelected) {
+            component.$html.addClass('ld-embed-selected');
             return;
         }
 
