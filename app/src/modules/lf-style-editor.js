@@ -92,6 +92,10 @@ export function createStyleEditor(component, editContainer) {
             label: "Text alignment",
             value: customStyles['text-align'] || '',
         }),
+        "line-height": new TextField({
+            label: "Line height",
+            value: customStyles['line-height'] || '',
+        })
     };
 
     // fields['background-color'].textType = 'color';
@@ -228,7 +232,7 @@ export function createStyleEditor(component, editContainer) {
             // }
 
             newStyles[name] = value;
-            
+
             component.model.setData(STYLES_PROP, newStyles);
             if (name == 'extraClasses') {
                 for (var style of value.split(' ')) {
