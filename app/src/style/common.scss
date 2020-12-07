@@ -3,7 +3,7 @@ $brand-purple: #5D3895;
 
 $toolbar-background-blue: #232E40;
 
-$toolbar-background: darken($brand-purple, 15); 
+$toolbar-background: darken($brand-purple, 15);
 
 $toolbar-font-color: #fff;
 
@@ -12,8 +12,8 @@ $toolbar-button-color-light: #f8f9fa;
 @mixin form-field() {
     width: 100%;
     max-width: 400px;
-    padding: 10px 5px;
-    font-size: 14px;
+    padding: 5px 5px;
+    font-size: 12px;
     background-color: #fff;
     border: 1px solid #dad9d9;
     box-sizing: border-box;
