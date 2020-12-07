@@ -1842,6 +1842,10 @@ div.resize-cursor {
 [data-doc-container] {
     padding: 3px;
 } */
+.doc-no-selection [data-doc-container] {
+  padding-top: 5px;
+  padding-bottom: 5px; }
+
 [data-doc-container]:empty {
   min-height: 100px;
   /* outline: 2px dashed rgba(0, 0, 0, 0.2); */

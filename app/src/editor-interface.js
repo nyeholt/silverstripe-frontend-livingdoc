@@ -196,7 +196,8 @@ function init_toolbar_toggles() {
         } else {
             option.enable = false;
         }
-    })
+    });
+
 }
 
 
