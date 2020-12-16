@@ -277,9 +277,9 @@ export function select_tab(name) {
     }
 
     $('.ld-tab-panel').hide();
-    $('.ld-tab').removeClass('ld-tab--active');
+    $('.ld-tab').removeClass('active');
 
-    $('.ld-tab[href="' + name + '"]').addClass('ld-tab--active');
+    $('.ld-tab[href="' + name + '"]').addClass('active');
 
     $(TOOLBAR).scrollTop(0, 0);
 

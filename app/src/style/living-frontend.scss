@@ -1,5 +1,6 @@
 @import './common.scss';
 @import './toolbar-form';
+@import './livingdocs';
 
 body {
     height: auto !important;
@@ -11,6 +12,14 @@ body {
     min-width: 290px;
     max-width: 290px;
     width: 290px;
+    background-color: $toolbar-background;
+
+    .toolbar-tabs {
+        background-color: $toolbar-background;
+        z-index: 3;
+        padding-top: 10px;
+        width: 100%;
+    }
 }
 
 #livingdocs-frame {
@@ -53,15 +62,10 @@ body {
 
     font-family: Arial, Helvetica, sans-serif;
 
-    .toolbar-tabs {
-        background-color: $toolbar-background;
-        z-index: 3;
-        position: fixed;
-        padding-top: 10px;
-    }
+
 
     .toolbar-items {
-        padding-top: 50px;
+        padding-top: 10px;
     }
 
 
@@ -72,7 +76,7 @@ body {
         padding: 2px;
 
         &--active {
-            background-color: darken($toolbar-background, 10);
+            // background-color: darken($toolbar-background, 10);
         }
     }
 

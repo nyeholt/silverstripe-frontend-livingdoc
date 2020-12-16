@@ -29,13 +29,15 @@
         </div>
         <div class="row m-0">
             <div id="ld-toolbar-holder" class="col p-0 mr-0">
+                <div class="toolbar-tabs btn-group">
+                    <div class="ld-tab btn btn-sm btn-primary" href="#livingdocs-style-tab" id="ld-style-tab">Style</div>
+                    <div class="ld-tab btn btn-sm btn-primary" href="#livingdocs-components">Components</div>
+                    <div class="ld-tab btn btn-sm btn-primary" href="#livingdocs-page-options" id="ld-options-tab">Options</div>
+                    <div class="ld-tab btn btn-sm btn-primary" href="#livingdocs-property-tab" id="ld-properties-tab">Settings</div>
+
+                </div>
                 <div class="livingdocs-toolbar">
-                    <div class="toolbar-tabs">
-                        <div class="ld-tab" href="#livingdocs-components">Components</div>
-                        <div class="ld-tab" href="#livingdocs-page-options" id="ld-options-tab">Options</div>
-                        <div class="ld-tab" href="#livingdocs-property-tab" id="ld-properties-tab">Settings</div>
-                        <div class="ld-tab" href="#livingdocs-style-tab" id="ld-style-tab">Style</div>
-                    </div>
+
                     <div class="toolbar-items">
                         <div id="livingdocs-components" class="ld-tab-panel ld-tab-default">
                             <div class="component-list"></div>
