@@ -209,7 +209,7 @@ export function initialise_property_editor() {
 
         createStyleEditor(component, styleDiv[0]);
 
-        select_tab('livingdocs-style-tab');
+        // select_tab('livingdocs-style-tab');
     });
 }
 
