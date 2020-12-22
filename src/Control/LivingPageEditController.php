@@ -164,18 +164,6 @@ class LivingPageEditController extends Controller implements PermissionProvider
             ];
         }
 
-        $designName    = $design['data']['design']['name'];
-        // explicit binding because I'm too lazy right now to add yet another extension
-        // if (class_exists(Multisites::class) && Multisites::inst()->getCurrentSite()->LivingPageTheme) {
-        //     $siteThemeName = Multisites::inst()->getCurrentSite()->LivingPageTheme;
-        //     if ($siteThemeName != $designName) {
-        //         // go through _all_ components and update the design name
-        //         $design['data']['content'] = $record->updateDesignName($designName, $siteThemeName, $design['data']['content']);
-        //     }
-        //     $designName = $siteThemeName;
-        //     $design['data']['design']['name'] = $siteThemeName;
-        // }
-
         // converts all nodes to current content state where necessary (in particular, embed items)
         $newContent = [];
         foreach ($design['data']['content'] as $component) {
@@ -231,15 +219,16 @@ class LivingPageEditController extends Controller implements PermissionProvider
 
         $designName = isset($design['data']['design']['name']) ? $design['data']['design']['name'] : '';
 
+        $theme = $record->ThemeOverride ? $record->ThemeOverride : SiteConfig::current_site_config()->LivingPageTheme;
+
         // explicit binding because I'm too lazy right now to add yet another extension
-        if (SiteConfig::current_site_config()->LivingPageTheme) {
-            $siteThemeName = SiteConfig::current_site_config()->LivingPageTheme;
-            if ($siteThemeName != $designName) {
+        if ($theme) {
+            if ($theme != $designName) {
                 // go through _all_ components and update the design name
-                $design['data']['content'] = $record->updateDesignName($designName, $siteThemeName, $design['data']['content']);
+                $design['data']['content'] = $record->updateDesignName($designName, $theme, $design['data']['content']);
             }
-            $designName = $siteThemeName;
-            $design['data']['design']['name'] = $siteThemeName;
+            $designName = $theme;
+            $design['data']['design']['name'] = $theme;
         }
 
         // converts all nodes to current content state where necessary (in particular, embed items)

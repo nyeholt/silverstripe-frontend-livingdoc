@@ -29,6 +29,7 @@ class LivingPageExtension extends DataExtension
     private static $db = [
         'PageStructure'     => 'Text',
         'Shortcodes'        => 'MultiValueField',
+        'ThemeOverride'     => 'Varchar(128)',
 
         'FullPageMode'  => 'Boolean',
         'AllowLayoutEditing' => 'Boolean',
@@ -94,6 +95,11 @@ class LivingPageExtension extends DataExtension
         if ($this->owner->config()->allow_full_page_mode) {
             $pageOptions[] = CheckboxField::create('FullPageMode', 'Control the full page, ignoring layout');
         }
+
+        $opts = self::config()->living_designs;
+        $opts = array_combine(array_keys($opts), array_keys($opts));
+
+        $pageOptions[] = DropdownField::create('ThemeOverride', 'Override theme for this page', $opts)->setEmptyString('-- none --');
 
         if (Permission::check('ADMIN')) {
             $pageOptions[] = TextareaField::create('PageStructure', 'Raw structure');
