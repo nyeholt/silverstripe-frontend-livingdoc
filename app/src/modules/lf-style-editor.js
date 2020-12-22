@@ -205,7 +205,7 @@ export function createStyleEditor(component, editContainer) {
     }
 
     openPrompt({
-        title: "Component Styles",
+        title: component.model.componentName + " styles",
         fields: fields,
         forceRemainOpen: true,
         hideButtons: true,
