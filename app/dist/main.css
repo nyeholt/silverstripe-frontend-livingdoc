@@ -1762,10 +1762,7 @@ li.ProseMirror-selectednode:after {
  * Set a min height on doc-section so it does not disappear when emtpy
  */
 .doc-section:empty {
-  min-height: 100px; }
-
-.doc-section {
-  /* Allow for some space at the end of the document to drop components in */
+  min-height: 100px;
   padding-bottom: 150px; }
 
 /*
@@ -2229,10 +2226,7 @@ li.ProseMirror-selectednode:after {
  * Set a min height on doc-section so it does not disappear when emtpy
  */
 .doc-section:empty {
-  min-height: 100px; }
-
-.doc-section {
-  /* Allow for some space at the end of the document to drop components in */
+  min-height: 100px;
   padding-bottom: 150px; }
 
 /*
@@ -2274,6 +2268,10 @@ li.ProseMirror-selectednode:after {
 [data-doc-container] {
     padding: 3px;
 } */
+.doc-no-selection [data-doc-container] {
+  padding-top: 5px;
+  padding-bottom: 5px; }
+
 [data-doc-container]:empty {
   min-height: 100px;
   /* outline: 2px dashed rgba(0, 0, 0, 0.2); */
