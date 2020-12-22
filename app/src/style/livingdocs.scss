@@ -3,10 +3,6 @@
  */
 .doc-section:empty {
     min-height: 100px;
-}
-
-.doc-section {
-    /* Allow for some space at the end of the document to drop components in */
     padding-bottom: 150px;
 }
 
