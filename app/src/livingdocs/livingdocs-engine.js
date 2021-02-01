@@ -6379,7 +6379,9 @@ module.exports = (function() {
             top: top,
             left: left
           });
-          if (closestComponentData != null) {
+
+          // TODO: Do we want to highlight components or containers?
+          if (closestComponentData != null) { // && (closestComponentData.$elem && !closestComponentData.$elem.attr(containerAttr))) {
             return this.getClosestComponentTarget(closestComponentData);
           } else {
             return this.getContainerTarget(node);
