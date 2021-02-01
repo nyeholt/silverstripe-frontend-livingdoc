@@ -2647,7 +2647,7 @@ body {
 #livingdocs-frame {
   width: 100%;
   border: none;
-  height: calc(100vh - 60px);
+  height: calc(100vh - 45px);
   margin: 0px auto;
   display: block; }
 
@@ -2673,7 +2673,6 @@ body {
   color: #fff;
   overflow-y: auto;
   overflow-x: hidden;
-  height: calc(100vh - 60px);
   box-shadow: 0 0 3px rgba(0, 0, 0, 0.25);
   font-family: Arial, Helvetica, sans-serif; }
   .livingdocs-toolbar .toolbar-items {
