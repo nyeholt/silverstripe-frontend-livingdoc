@@ -159,6 +159,19 @@ class LivingPageExtension extends DataExtension
 
             $convertedHtml = $c->saveHTML();
 
+
+            $c = HtmlPageCrawler::create($convertedHtml);
+            $toreplace = $c->filter('img[data-imageid]');
+            foreach ($toreplace as $replaceNode) {
+                $cnode = HtmlPageCrawler::create($replaceNode);
+                $id = $cnode->attr('data-imageid');
+                $replaceWith = "[file_link,id=" . ((int) $id) . "]";
+                $cnode->attr('src', $replaceWith);
+                $text = $cnode->text();
+            }
+            $convertedHtml = $c->saveHTML();
+
+
             // back-convert link shortcodes
             $convertedHtml = preg_replace('/%5B(.+?)%5D/','[\\1]', $convertedHtml);
 
