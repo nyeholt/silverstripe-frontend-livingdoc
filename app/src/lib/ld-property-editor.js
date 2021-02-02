@@ -20,9 +20,11 @@ $(document).on('click', function (e) {
     if ($(e.target).parents('#livingdocs-container').length <= 0 &&
         $(e.target).parents('.livingdocs-toolbar').length <= 0 &&
         $(e.target).parents(ITEM_PROPERTIES_HOLDER).length <= 0 &&
+        $(e.target).parents('.ProseMirror-prompt').length <= 0 &&
         $(e.target).parents(BOTTOM_BAR).length <= 0) {
         // remove the properties editing
         select_tab('default');
+        console.log("Removing props holder");
         $('.' + PROPS_HOLDER).remove();
         $('.' + STYLE_HOLDER).remove();
     }
@@ -35,7 +37,8 @@ export function initialise_property_editor() {
         $(Constants.EDITOR_FRAME).contents().find(Constants.BUTTON_BAR).remove();
         $(Constants.BUTTON_BAR).remove();
 
-        var options = $("<div>").addClass(PROPS_HOLDER);
+
+        var options = $("<div>").addClass(PROPS_HOLDER).attr('data-component-id', component.model.id);
         var styles = $('<div>').addClass(STYLE_HOLDER);
         var $properties = $(ITEM_PROPERTIES_HOLDER);
         var $styleHolder = $(ITEM_STYLES_HOLDER);

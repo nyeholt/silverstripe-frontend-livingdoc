@@ -28,7 +28,7 @@ $(document).on('livingfrontend.updateLivingDoc', function (e, livingdoc) {
     });
 
     livingdoc.interactiveView.page.embedItemClick.add(function (component, directiveName, event) {
-        
+
         var currentValue = component.model.get(directiveName);
         currentValue = currentValue || { source: '', attrs: '', content: null, url: '' };
 
@@ -50,7 +50,7 @@ $(document).on('livingfrontend.updateLivingDoc', function (e, livingdoc) {
         let fields = {};
 
         let subgroup = null;
-        
+
         const handleSourceUpdate = (key, value, form) => {
             // let newParams = props;
             // newParams[key] = value;
@@ -108,7 +108,7 @@ $(document).on('livingfrontend.updateLivingDoc', function (e, livingdoc) {
                 value: currentValue.url,
                 options: opts
             });
-            
+
         } else {
             fields["source"] = new TextField({
                 label: "Source",
@@ -117,11 +117,11 @@ $(document).on('livingfrontend.updateLivingDoc', function (e, livingdoc) {
             });
         }
 
-        const form = openPrompt({
+        const prompt = openPrompt({
             title: "Options",
             fields: fields,
             update: function (key, value, container) {
-                handleSourceUpdate(key, value, form);
+                handleSourceUpdate(key, value, prompt.form);
             },
             callback: function (values) {
                 if (values.source && values.source.length > 0) {
@@ -182,7 +182,7 @@ $(document).on('livingfrontend.updateLivingDoc', function (e, livingdoc) {
         });
 
         if (isShortcode && currentValue.url) {
-            handleSourceUpdate('source', currentValue.url, form);
+            handleSourceUpdate('source', currentValue.url, prompt.form);
         }
     })
 });

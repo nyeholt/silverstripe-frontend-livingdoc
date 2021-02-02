@@ -2,8 +2,6 @@ import * as $ from 'jquery';
 import LivingDocState from '../lib/LivingDocState';
 import { Constants } from '../constants';
 
-var PROPS_HOLDER = 'livingdocs_EditorField_Toolbar_options';
-
 export function initialise_attribute_editor(holder, component) {
     var componentAttrs = component.model.getData('data_attributes');
 
