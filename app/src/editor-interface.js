@@ -142,10 +142,10 @@ function init_tree() {
 
     let label = $('<h2 class="component-set-label" data-target="ld-component-tree">Page items</h2>')
     let treeHolder = $('<div class="ld-component-tree" id="ld-component-tree">');
-    $('#livingdocs-property-tab').prepend(treeHolder).prepend(label);
+    $('#livingdocs-page-options').prepend(treeHolder).prepend(label);
     tree.render(treeHolder[0]);
 
-    $(document).on('click', '#ld-properties-tab', function () {
+    $(document).on('click', '#ld-options-tab', function () {
         treeHolder.empty();
         tree.render(treeHolder[0]);
     });
@@ -169,8 +169,10 @@ function init_toolbar_toggles() {
         }
     }
 
+    const toggleHolder = $('<div class="ld-options-toggles">');
 
-    $(PAGE_OPTIONS).append(enableGrid);
+
+    $(toggleHolder).append(enableGrid);
     gridToggle.click(function (e) {
         evalGrid();
     });
@@ -184,7 +186,9 @@ function init_toolbar_toggles() {
 
     const layoutToggle = $('<input type="checkbox">');
     const enableLayout = $('<label class="ld-toggle">').append(layoutToggle).append('Enable layout editing');
-    $(PAGE_OPTIONS).append(enableLayout);
+    $(toggleHolder).append(enableLayout);
+
+    $(PAGE_OPTIONS).append(toggleHolder);
 
     if (ContentSource.getConfig().allowLayoutEditing) {
         layoutToggle.click();

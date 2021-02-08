@@ -33,7 +33,7 @@
                     <div class="ld-tab btn btn-sm btn-primary" href="#livingdocs-style-tab" id="ld-style-tab">Style</div>
                     <div class="ld-tab btn btn-sm btn-primary" href="#livingdocs-components">Components</div>
                     <div class="ld-tab btn btn-sm btn-primary" href="#livingdocs-page-options" id="ld-options-tab">Options</div>
-                    <div class="ld-tab btn btn-sm btn-primary" href="#livingdocs-property-tab" id="ld-properties-tab">Settings</div>
+                    <!-- <div class="ld-tab btn btn-sm btn-primary" href="#livingdocs-property-tab" id="ld-properties-tab">Settings</div> -->
 
                 </div>
                 <div class="livingdocs-toolbar">
@@ -43,11 +43,12 @@
                             <div class="component-list"></div>
                         </div>
 
-                        <div id="livingdocs-property-tab" class="ld-tab-panel">
-                            <div class="livingdocs-item-properties"></div>
-                        </div>
+                        <!-- <div id="livingdocs-property-tab" class="ld-tab-panel">
+
+                        </div> -->
 
                         <div id="livingdocs-style-tab" class="ld-tab-panel">
+                            <div class="livingdocs-item-properties"></div>
                             <div class="livingdocs-item-styles"></div>
                         </div>
 

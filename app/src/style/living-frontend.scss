@@ -160,7 +160,9 @@ body {
 }
 
 .livingdocs-toolbar #livingdocs-page-options {
-    padding: 3px 15px;
+    .ld-options-toggles {
+        padding: 15px 15px;
+    }
 }
 
 

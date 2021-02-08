@@ -2704,8 +2704,8 @@ body {
   display: block;
   margin: 2px auto; }
 
-.livingdocs-toolbar #livingdocs-page-options {
-  padding: 3px 15px; }
+.livingdocs-toolbar #livingdocs-page-options .ld-options-toggles {
+  padding: 15px 15px; }
 
 .livingdocs-item-properties > div {
   padding: 10px;
