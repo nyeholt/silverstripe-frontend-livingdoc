@@ -50,7 +50,7 @@ body {
     left: 0px;
     top: 0px;
     background-color: $toolbar-background;
-    padding: 0px 15px;
+    padding: 0px;
     font-size: 14px;
     color: $toolbar-font-color;
     overflow-y: auto;
@@ -102,17 +102,29 @@ body {
         margin: 0px auto;
     }
 
-    h2 {
+
+    .component-set-label {
+        cursor: pointer;
+        padding: 5px 15px;
+        margin: 0px;
         font-size: 14px;
         line-height: 24px;
         font-weight: bold;
         letter-spacing: 1px;
         display: block;
-        margin: 2px;
+
+        border: 1px solid darken($brand-purple, 15);
+
+        background-color: darken($brand-purple, 10);
+
     }
 
     .infinite-tree-scroll {
         max-height: 150px;
+    }
+
+    .livingdocs-style-holder {
+        padding: 0px 15px;
     }
 }
 
@@ -148,7 +160,7 @@ body {
 }
 
 .livingdocs-toolbar #livingdocs-page-options {
-    padding: 3px;
+    padding: 3px 15px;
 }
 
 
@@ -162,9 +174,6 @@ body {
     padding-bottom: 100px;
 }
 
-.component-set-label {
-    cursor: pointer;
-}
 
 #livingdocs-components div.group-component-holder {
     font-size: 14px;

@@ -2176,7 +2176,7 @@ li.ProseMirror-selectednode:after {
   padding: 0px; }
 
 .ProseMirror-prompt {
-  background-color: #3a235d !important;
+  background-color: #774abb !important;
   color: #fff;
   top: 20px; }
   .ProseMirror-prompt input[type="text"],
@@ -2226,7 +2226,7 @@ li.ProseMirror-selectednode:after {
 .infinite-tree-content .infinite-tree-selected.infinite-tree-item,
 .infinite-tree-content .infinite-tree-selected.infinite-tree-item:hover,
 .infinite-tree-content .infinite-tree-item:hover {
-  background: #331f52 !important;
+  background: #7043b3 !important;
   border: 1px solid #06c; }
 
 /**
@@ -2607,9 +2607,9 @@ body {
   min-width: 290px;
   max-width: 290px;
   width: 290px;
-  background-color: #3a235d; }
+  background-color: #774abb; }
   #ld-toolbar-holder .toolbar-tabs {
-    background-color: #3a235d;
+    background-color: #774abb;
     z-index: 3;
     padding-top: 10px;
     width: 100%; }
@@ -2622,13 +2622,13 @@ body {
   display: block; }
 
 .ld-editor-frame {
-  background-color: #3f2665; }
+  background-color: #7d52be; }
 
 .livingdocs-bottom-bar {
   display: flex;
   z-index: 3001;
   height: 45px;
-  background: #3a235d;
+  background: #774abb;
   color: #fff;
   padding: 10px;
   width: 100%; }
@@ -2637,8 +2637,8 @@ body {
   z-index: 3000;
   left: 0px;
   top: 0px;
-  background-color: #3a235d;
-  padding: 0px 15px;
+  background-color: #774abb;
+  padding: 0px;
   font-size: 14px;
   color: #fff;
   overflow-y: auto;
@@ -2664,15 +2664,21 @@ body {
     width: 90%;
     display: block;
     margin: 0px auto; }
-  .livingdocs-toolbar h2 {
+  .livingdocs-toolbar .component-set-label {
+    cursor: pointer;
+    padding: 5px 15px;
+    margin: 0px;
     font-size: 14px;
     line-height: 24px;
     font-weight: bold;
     letter-spacing: 1px;
     display: block;
-    margin: 2px; }
+    border: 1px solid #3a235d;
+    background-color: #462a70; }
   .livingdocs-toolbar .infinite-tree-scroll {
     max-height: 150px; }
+  .livingdocs-toolbar .livingdocs-style-holder {
+    padding: 0px 15px; }
 
 .livingdocs-bottom-bar .livingdocs-actions {
   width: 40%;
@@ -2699,7 +2705,7 @@ body {
   margin: 2px auto; }
 
 .livingdocs-toolbar #livingdocs-page-options {
-  padding: 3px; }
+  padding: 3px 15px; }
 
 .livingdocs-item-properties > div {
   padding: 10px;
@@ -2708,9 +2714,6 @@ body {
 
 .livingdocs-toolbar .component-list {
   padding-bottom: 100px; }
-
-.component-set-label {
-  cursor: pointer; }
 
 #livingdocs-components div.group-component-holder {
   font-size: 14px;
@@ -2756,7 +2759,7 @@ body {
   font-size: 12px; }
 
 iframe.living-dialog {
-  background-color: #3a235d;
+  background-color: #774abb;
   width: 50%;
   height: 80%;
   position: fixed;
@@ -2774,7 +2777,7 @@ a.dialog-close {
   z-index: 20002;
   top: 80px;
   right: 24%;
-  background-color: #3a235d;
+  background-color: #774abb;
   font-size: 20px;
   font-weight: bold;
   color: #222;
