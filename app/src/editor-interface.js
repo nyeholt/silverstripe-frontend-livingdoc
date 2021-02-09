@@ -72,7 +72,7 @@ function init_component_list(doc, selectedDesign) {
 
     addGroup('Misc', 'misc');
 
-    let addMenuComponent = function (icon, label, name) {
+    let addMenuComponent = function (icon, label, name, groupName) {
         var $entryWrap = $('<div class="toolbar-entry-wrapper">');
         var $entry = $('<div class="toolbar-entry">');
         var $entryLabel = $('<div class="toolbar-entry-title" data-name="' + name + '">');
@@ -84,6 +84,7 @@ function init_component_list(doc, selectedDesign) {
 
         var groupId = componentGroupMap[name];
         if (!groupId) {
+
             groupId = 'gch-misc';
         }
 

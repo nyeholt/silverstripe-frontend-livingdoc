@@ -23,6 +23,7 @@ class PageComponent extends DataObject
     private static $groups = [
         'Headers',
         'Content',
+        'Text',
         'Compounds',
         'Images',
         'Embeds',
@@ -36,6 +37,7 @@ class PageComponent extends DataObject
         'Themes'    => 'MultiValueField',
         'Name' => 'Varchar',
         'ComponentGroup' => 'Varchar',
+        'CustomComponentGroup' => 'Varchar',
         'IsActive' => 'Boolean',
         'Markup' => 'Text',
     ];
@@ -64,6 +66,11 @@ class PageComponent extends DataObject
             $name = self::unique_name_for($this->Title, $this->ID);
             $this->Name = $name;
         }
+
+        if ($this->CustomComponentGroup) {
+            $this->ComponentGroup = $this->CustomComponentGroup;
+            $this->CustomComponentGroup = '';
+        }
     }
 
     public static function unique_name_for($title, $id)
@@ -88,7 +95,13 @@ class PageComponent extends DataObject
 
         $fields->dataFieldByName('Markup')->setRows(20);
 
-        $dropdown = DropdownField::create('ComponentGroup', 'Group', ArrayLib::valuekey(self::config()->groups));
+        $defaults = ArrayLib::valuekey(self::config()->groups);
+
+        $customGroups = PageComponent::get()->columnUnique('ComponentGroup');
+
+        $defaults = array_merge($defaults, ArrayLib::valuekey($customGroups));
+
+        $dropdown = DropdownField::create('ComponentGroup', 'Group', $defaults);
         $fields->replaceField('ComponentGroup', $dropdown);
 
         $designOptions = LivingPageExtension::config()->living_designs;

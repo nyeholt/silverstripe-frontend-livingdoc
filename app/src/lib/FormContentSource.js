@@ -75,13 +75,18 @@ class FormContentSource {
                 for (let i in config.extraComponents) {
                     let newComponent = config.extraComponents[i];
                     let group = newComponent.group;
-                    delete newComponent.group;
+                    delete newComponent.group; // livingdocs-engine fails otherwise
                     if (group && selectedDesign.groups) {
                         let existingIndex = selectedDesign.groups.findIndex(function (item) {
                             return item.label == group;
                         });
                         if (existingIndex >= 0) {
                             selectedDesign.groups[existingIndex].components.push(newComponent.name);
+                        } else {
+                            selectedDesign.groups.push({
+                                label: group,
+                                components: [newComponent.name]
+                            });
                         }
                     }
                     selectedDesign.components.push(newComponent);
@@ -107,6 +112,11 @@ class FormContentSource {
                         });
                         if (existingIndex >= 0) {
                             selectedDesign.groups[existingIndex].components.push(newComponent.name);
+                        } else {
+                            selectedDesign.groups.push({
+                                label: group,
+                                components: [newComponent.name]
+                            });
                         }
                     }
 
