@@ -2176,7 +2176,7 @@ li.ProseMirror-selectednode:after {
   padding: 0px; }
 
 .ProseMirror-prompt {
-  background-color: #774abb !important;
+  background-color: #5b4e70 !important;
   color: #fff;
   top: 20px; }
   .ProseMirror-prompt input[type="text"],
@@ -2226,7 +2226,7 @@ li.ProseMirror-selectednode:after {
 .infinite-tree-content .infinite-tree-selected.infinite-tree-item,
 .infinite-tree-content .infinite-tree-selected.infinite-tree-item:hover,
 .infinite-tree-content .infinite-tree-item:hover {
-  background: #7043b3 !important;
+  background: #544867 !important;
   border: 1px solid #06c; }
 
 /**
@@ -2607,9 +2607,9 @@ body {
   min-width: 290px;
   max-width: 290px;
   width: 290px;
-  background-color: #774abb; }
+  background-color: #5b4e70; }
   #ld-toolbar-holder .toolbar-tabs {
-    background-color: #774abb;
+    background-color: #5b4e70;
     z-index: 3;
     padding-top: 10px;
     width: 100%; }
@@ -2622,13 +2622,13 @@ body {
   display: block; }
 
 .ld-editor-frame {
-  background-color: #7d52be; }
+  background-color: #605276; }
 
 .livingdocs-bottom-bar {
   display: flex;
   z-index: 3001;
   height: 45px;
-  background: #774abb;
+  background: #5b4e70;
   color: #fff;
   padding: 10px;
   width: 100%; }
@@ -2637,7 +2637,7 @@ body {
   z-index: 3000;
   left: 0px;
   top: 0px;
-  background-color: #774abb;
+  background-color: #5b4e70;
   padding: 0px;
   font-size: 14px;
   color: #fff;
@@ -2759,7 +2759,7 @@ body {
   font-size: 12px; }
 
 iframe.living-dialog {
-  background-color: #774abb;
+  background-color: #5b4e70;
   width: 50%;
   height: 80%;
   position: fixed;
@@ -2777,7 +2777,7 @@ a.dialog-close {
   z-index: 20002;
   top: 80px;
   right: 24%;
-  background-color: #774abb;
+  background-color: #5b4e70;
   font-size: 20px;
   font-weight: bold;
   color: #222;

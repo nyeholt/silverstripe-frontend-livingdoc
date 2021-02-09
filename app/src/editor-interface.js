@@ -285,7 +285,10 @@ export function select_tab(name) {
 
     $('.ld-tab[href="' + name + '"]').addClass('active');
 
-    $(TOOLBAR).scrollTop(0, 0);
+    setTimeout(function () {
+        // $(TOOLBAR).scrollTop(0, 0);
+    }, 250);
+
 
     $(name).show();
 }
