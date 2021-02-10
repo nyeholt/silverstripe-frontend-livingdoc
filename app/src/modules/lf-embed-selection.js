@@ -32,6 +32,8 @@ $(document).on('livingfrontend.updateLivingDoc', function (e, livingdoc) {
         var currentValue = component.model.get(directiveName);
         currentValue = currentValue || { source: '', attrs: '', content: null, url: '' };
 
+        let componentAttrs = component.model.getData('data_attributes');
+
         let currentHtml = component.$html.html();
 
         var isEditing = component.$html.find('.ld-embed-selection');
@@ -61,7 +63,7 @@ $(document).on('livingfrontend.updateLivingDoc', function (e, livingdoc) {
             if (key == 'source' && isShortcode) {
                 let sc = extractShortcodeData(value);
                 if (sc) {
-                    let componentAttrs = component.model.getData('data_attributes');
+                    componentAttrs = component.model.getData('data_attributes');
 
                     let props = sc.attrs || {};
 
@@ -115,6 +117,17 @@ $(document).on('livingfrontend.updateLivingDoc', function (e, livingdoc) {
                 placeholder: "Source URL",
                 value: currentValue.url || "",
             });
+
+            fields["width"] = new TextField({
+                label: "Width",
+                placeholder: "width",
+                value: componentAttrs && componentAttrs[directiveName] && componentAttrs[directiveName].width || "",
+            });
+            fields["caption"] = new TextField({
+                label: "Caption",
+                placeholder: "Caption",
+                value: componentAttrs && componentAttrs[directiveName] && componentAttrs[directiveName].caption || "",
+            });
         }
 
         const prompt = openPrompt({
@@ -150,8 +163,12 @@ $(document).on('livingfrontend.updateLivingDoc', function (e, livingdoc) {
                             attrStr = JSON.stringify(shortcodeData.attrs);
                         }
                     } else {
+                        // we've just stuck a URL in place so use that
+
                         attrStr = JSON.stringify({
-                            url: selected
+                            url: selected,
+                            width: values.width,
+                            caption: values.caption
                         });
                     }
 
@@ -163,6 +180,10 @@ $(document).on('livingfrontend.updateLivingDoc', function (e, livingdoc) {
                             url: selected
                         };
                         component.model.setContent(directiveName, toSave);
+                        if (values.width || values.caption) {
+                            component.model.setDirectiveAttribute(directiveName, "width", values.width);
+                            component.model.setDirectiveAttribute(directiveName, "caption", values.caption);
+                        }
                         if (component.model.componentTree) {
                             component.model.componentTree.contentChanging(component.model);
                         }

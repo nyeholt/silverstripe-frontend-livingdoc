@@ -96,6 +96,14 @@ class LivingPageEditController extends Controller implements PermissionProvider
     {
         $page = $this->getPage();
 
+        if (!$page) {
+            return $this->httpError(404);
+        }
+
+        if (!$page->canEdit()) {
+            return $this->httpError(403);
+        }
+
         // at the top so it can be overridden by user css
         // Requirements::css('nyeholt/silverstripe-frontend-livingdoc: app/dist/css/base.css');
 
