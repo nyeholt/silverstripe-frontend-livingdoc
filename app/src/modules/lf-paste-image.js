@@ -18,8 +18,6 @@ $(document).on('livingfrontend.updateLivingDoc', function (e, livingdoc) {
         // LivingFrontendHelper.activeComponent.model.parentContainer.insertAfter
         var clipboardData;
 
-        console.log("Spasd");
-
         if (PASTING) {
             return;
         }
@@ -59,6 +57,7 @@ $(document).on('livingfrontend.updateLivingDoc', function (e, livingdoc) {
                         var updateDirective = null;
 
                         if (!selectedComponent) {
+                            console.log("no selected component");
                             return;
                         }
 

@@ -120,7 +120,7 @@ $(document).on('livingfrontend.updateLivingDoc', function (e, livingdoc) {
 
             fields["width"] = new TextField({
                 label: "Width",
-                placeholder: "width",
+                placeholder: "Leave empty for responsive sizing",
                 value: componentAttrs && componentAttrs[directiveName] && componentAttrs[directiveName].width || "",
             });
             fields["caption"] = new TextField({
