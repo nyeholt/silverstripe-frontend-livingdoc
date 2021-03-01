@@ -7797,6 +7797,22 @@ module.exports = ComponentView = (function() {
         }
     }
 
+    var setAttributeToId = function ($elem, attributes) {
+        for (var i = 0; i < attributes.length; i++) {
+            var curVal = $elem.attr(attributes[i]);
+            if (curVal) {
+                $elem.attr(attributes[i], curVal.replace("{id}", _ref.model.id));
+            }
+        }
+    }
+    // lastly, check whether to set the ID for any contained element attributes
+    if (this.$html.attr('data-id-attrs')) {
+        setAttributeToId(this.$html, this.$html.attr('data-id-attrs').split(','));
+    }
+    this.$html.find('[data-id-attrs]').each(function () {
+        setAttributeToId($(this), $(this).attr('data-id-attrs').split(','));
+    })
+
     return this.stripHtmlIfReadOnly();
   };
 
