@@ -1762,6 +1762,16 @@ li.ProseMirror-selectednode:after {
 .ProseMirror-menubar-spacer + .ProseMirror-menubar {
   transform: none; }
 
+.ld-select-component .infinite-tree-scroll {
+  max-height: 150px;
+  font-size: 12px; }
+
+.ld-select-component .infinite-tree-content .infinite-tree-selected.infinite-tree-item,
+.ld-select-component .infinite-tree-content .infinite-tree-selected.infinite-tree-item:hover,
+.ld-select-component .infinite-tree-content .infinite-tree-item:hover {
+  background: #c4a8d7 !important;
+  border: 1px solid #06c; }
+
 @charset "UTF-8";
 /**
  * Set a min height on doc-section so it does not disappear when emtpy

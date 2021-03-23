@@ -1,0 +1,13 @@
+.ld-select-component {
+  .infinite-tree-scroll {
+    max-height: 150px;
+    font-size: 12px;
+  }
+
+  .infinite-tree-content .infinite-tree-selected.infinite-tree-item,
+  .infinite-tree-content .infinite-tree-selected.infinite-tree-item:hover,
+  .infinite-tree-content .infinite-tree-item:hover {
+    background: #c4a8d7 !important;
+    border: 1px solid #06c;
+  }
+}

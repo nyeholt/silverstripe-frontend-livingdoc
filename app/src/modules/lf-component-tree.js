@@ -13,23 +13,28 @@ export class ComponentTree {
 
     tree;
 
-    constructor(livingdoc) {
-        this.livingdoc = livingdoc;
+    nodeClickHandler;
 
-        livingdoc.interactiveView.page.focus.componentFocus.add((componentView, page, directives, event) => {
-            this.activeComponentId = componentView.model.id;
-            if (this.tree) {
-                const node = this.tree.getNodeById(this.activeComponentId);
-                // → Node { id: 'fruit', ... }
-                if (node) {
-                    node.fromFocus = true;
-                    this.tree.selectNode(node);
+    constructor(livingdoc, nodeClickHandler, ignoreLivingdocs) {
+        this.livingdoc = livingdoc;
+        this.nodeClickHandler = nodeClickHandler;
+
+        if (!ignoreLivingdocs) {
+            livingdoc.interactiveView.page.focus.componentFocus.add((componentView, page, directives, event) => {
+                this.activeComponentId = componentView.model.id;
+                if (this.tree) {
+                    const node = this.tree.getNodeById(this.activeComponentId);
+                    // → Node { id: 'fruit', ... }
+                    if (node) {
+                        node.fromFocus = true;
+                        this.tree.selectNode(node);
+                    }
                 }
-            }
-        });
-        livingdoc.interactiveView.page.focus.componentBlur.add((componentView, page, directives, event) => {
-            this.activeComponentId = 0;
-        });
+            });
+            livingdoc.interactiveView.page.focus.componentBlur.add((componentView, page, directives, event) => {
+                this.activeComponentId = 0;
+            });
+        }
     }
 
     buildNode(component) {
@@ -105,9 +110,13 @@ export class ComponentTree {
             rowRenderer: customRowRenderer,
         });
 
-        this.tree.on('selectNode', function (node) {
+        const clickHandler = this.nodeClickHandler;
+        this.tree.on('selectNode',  function (node) {
             if (!node || !node.id) {
                 return;
+            }
+            if (clickHandler) {
+                return clickHandler.call(this, node);
             }
 
             // console.log(arguments);
