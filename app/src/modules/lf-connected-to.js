@@ -13,13 +13,15 @@ import { Constants } from '../constants';
 $(document).on('livingfrontend.updateLivingDoc', function (e, livingdoc) {
 
     livingdoc.interactiveView.page.connectedToClick.add(function (component, directiveName, event) {
-        if (!component.model.setContent(directiveName, 'doc-1evf0gjfl0.notification')) {
-            // we need to force this as the content set by rawContent may not
-            // be different and trigger the HTML update
-            if (component.model.componentTree) {
-                component.model.componentTree.contentChanging(component.model, directiveName);
-            }
-        }
+        
+        
+        // if (!component.model.setContent(directiveName, 'doc-1evf0gjfl0.notification')) {
+        //     // we need to force this as the content set by rawContent may not
+        //     // be different and trigger the HTML update
+        //     if (component.model.componentTree) {
+        //         component.model.componentTree.contentChanging(component.model, directiveName);
+        //     }
+        // }
     });
 
 
