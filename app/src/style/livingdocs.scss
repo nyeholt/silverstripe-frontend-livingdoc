@@ -70,6 +70,10 @@
     position: relative;
 }
 
+.doc-connectedto:empty {
+    min-height: 30px;
+}
+
 [data-doc-container]:before {
     position: absolute;
     top: 0;

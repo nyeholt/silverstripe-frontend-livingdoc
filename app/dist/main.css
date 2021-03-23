@@ -1820,6 +1820,9 @@ li.ProseMirror-selectednode:after {
   /* outline: 2px dashed rgba(0, 0, 0, 0.2); */
   position: relative; }
 
+.doc-connectedto:empty {
+  min-height: 30px; }
+
 [data-doc-container]:before {
   position: absolute;
   top: 0;
@@ -2285,6 +2288,9 @@ li.ProseMirror-selectednode:after {
   min-height: 100px;
   /* outline: 2px dashed rgba(0, 0, 0, 0.2); */
   position: relative; }
+
+.doc-connectedto:empty {
+  min-height: 30px; }
 
 [data-doc-container]:before {
   position: absolute;

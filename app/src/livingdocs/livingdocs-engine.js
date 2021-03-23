@@ -2947,7 +2947,7 @@ module.exports = ComponentDirective = (function() {
 
 
 },{}],16:[function(require,module,exports){
-var ComponentDirective, EditableDirective, HtmlDirective, ImageDirective, LinkDirective, EmbedItemDirective, WysiwygDirective, assert, imageService;
+var ComponentDirective, EditableDirective, HtmlDirective, ImageDirective, LinkDirective, ConnectedToDirective, EmbedItemDirective, WysiwygDirective, assert, imageService;
 
 assert = require('../modules/logging/assert');
 
@@ -2981,6 +2981,19 @@ EmbedItemDirective = (function(_super) {
   return EmbedItemDirective;
 
 })(ComponentDirective);
+
+ConnectedToDirective = (function(_super) {
+    __extends(ConnectedToDirective, _super);
+  
+    function ConnectedToDirective() {
+      return ConnectedToDirective.__super__.constructor.apply(this, arguments);
+    }
+  
+    ConnectedToDirective.prototype.isConnectedTo = true;
+  
+    return ConnectedToDirective;
+  
+  })(ComponentDirective);
 
 // todo(Marcus) need to re-compile from coffee script really...
 WysiwygDirective = (function(_super) {
@@ -3017,10 +3030,12 @@ module.exports = {
         return HtmlDirective;
       case 'link':
         return LinkDirective;
-    case 'embeditem':
+      case 'embeditem':
         return EmbedItemDirective;
-    case 'wysiwyg':
-                return WysiwygDirective;
+      case 'wysiwyg':
+        return WysiwygDirective;
+      case 'connectedto':
+        return ConnectedToDirective;
       default:
         return assert(false, "Unsupported component directive: " + directiveType);
     }
@@ -3085,6 +3100,7 @@ module.exports = ComponentModel = (function() {
         case 'link':
         case 'embeditem':
         case 'wysiwyg':
+        case 'connectedto':
           this.createComponentDirective(directive);
           this.content || (this.content = {});
           _results.push(this.content[directive.name] = void 0);
@@ -4610,6 +4626,7 @@ module.exports = augmentConfig({
     section: 'doc-section',
     component: 'doc-component',
     htmlcontent: 'doc-htmlcontent',
+    connectedTo: 'doc-connectedto',
     editable: 'doc-editable',
     noPlaceholder: 'doc-no-placeholder',
     emptyContent: 'doc-content-empty',
@@ -4647,6 +4664,11 @@ module.exports = augmentConfig({
     },
     wysiwyg: {
         attr: 'doc-wysiwyg',
+        renderedAttr: 'calculated in augment_config',
+        overwritesContent: true
+    },
+    connectedto: {
+        attr: 'doc-connectedto',
         renderedAttr: 'calculated in augment_config',
         overwritesContent: true
     },
@@ -7932,6 +7954,8 @@ module.exports = ComponentView = (function() {
         return this.setHtml(name, value);
       case 'link':
         return this.setLink(name, value);
+      case 'connectedto':
+          return this.setConnectedTo(name, value);
     }
   };
 
@@ -7947,6 +7971,8 @@ module.exports = ComponentView = (function() {
         return this.getHtml(name);
       case 'link':
         return this.getLink(name);
+      case 'connectedto': 
+        return this.getConnectedTo(name)
     }
   };
 
@@ -8059,6 +8085,27 @@ module.exports = ComponentView = (function() {
     } else {
       return $elem.removeAttr('href');
     }
+  };
+
+  ComponentView.prototype.getConnectedTo = function(name) {
+    var $elem;
+    $elem = this.directives.$getElem(name);
+    return $elem.attr('data-connected-to');
+  };
+
+  ComponentView.prototype.setConnectedTo = function(name, value) {
+    var $elem, otherModel;
+    $elem = this.directives.$getElem(name);
+
+    if (value) {
+        var [id, directive] = value.split(".");
+
+        otherModel = this.model.componentTree.findById(id);
+        if (otherModel) {
+            return $elem.html(otherModel.get(directive));  
+        }
+    }
+    return $elem.removeAttr('data-connected-to');
   };
 
   ComponentView.prototype.getLink = function(name) {
@@ -9397,6 +9444,7 @@ module.exports = InteractivePage = (function(_super) {
     this.htmlElementClick = $.Callbacks();
     this.linkClick = $.Callbacks();
     this.embedItemClick = $.Callbacks();
+    this.connectedToClick = $.Callbacks();
     this.wysiwygClick = $.Callbacks();
     this.componentWillBeDragged = $.Callbacks();
     this.componentWasDropped = $.Callbacks();
@@ -9503,6 +9551,8 @@ module.exports = InteractivePage = (function(_super) {
             return this.embedItemClick.fire(componentView, directives['embeditem'].name, event);
         } else if (directives['wysiwyg']) {
             return this.wysiwygClick.fire(componentView, directives['wysiwyg'].name, event);
+        } else if (directives['connectedto']) {
+            return this.connectedToClick.fire(componentView, directives['connectedto'].name, event);
         }
       }
     } else {
@@ -10318,11 +10368,13 @@ module.exports = Template = (function() {
             return _this.formatContainer(directive.name, directive.elem);
           case 'html':
             return _this.formatHtml(directive.name, directive.elem);
-        case 'wysiwyg':
+          case 'wysiwyg':
             return _this.formatHtml(directive.name, directive.elem);
           case 'embeditem':
               // just doing the same for now
             return _this.formatHtml(directive.name, directive.elem);
+          case 'connectedto':
+            return _this.formatConnectedTo(directive.name, directive.elem);
         }
       };
     })(this));
@@ -10362,6 +10414,16 @@ module.exports = Template = (function() {
   };
 
   Template.prototype.formatContainer = function(name, elem) {
+    return elem.innerHTML = '';
+  };
+
+  Template.prototype.formatConnectedTo = function(name, elem) {
+    var defaultValue;
+    defaultValue = words.trim(elem.innerHTML);
+    $(elem).addClass(config.css.connectedTo);
+    if (defaultValue) {
+      this.defaults[name] = defaultValue;
+    }
     return elem.innerHTML = '';
   };
 
