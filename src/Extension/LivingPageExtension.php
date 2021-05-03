@@ -85,6 +85,7 @@ class LivingPageExtension extends DataExtension
         $link = '<div class="field"><a href="page-editor/edit/' . $this->owner->ID . '?stage=Stage" target="_blank">Edit this page in-place</a></div>';
         $literalContent = LiteralField::create('Content', $link);
         $fields->replaceField('Content', $literalContent);
+        // $fields->replaceField('Content', TextareaField::create('Content'));
 
         $pageOptions = [
             CheckboxField::create('AllowLayoutEditing', "Allow editing of the layout"),
@@ -159,7 +160,7 @@ class LivingPageExtension extends DataExtension
 
             $convertedHtml = $c->saveHTML();
 
-
+            // images inserted by livingdocs
             $c = HtmlPageCrawler::create($convertedHtml);
             $toreplace = $c->filter('img[data-imageid]');
             foreach ($toreplace as $replaceNode) {
@@ -171,6 +172,19 @@ class LivingPageExtension extends DataExtension
             }
             $convertedHtml = $c->saveHTML();
 
+            // handle those inserted by prosemirror
+            $c = HtmlPageCrawler::create($convertedHtml);
+            $toreplace = $c->filter('img[data-id]');
+            foreach ($toreplace as $replaceNode) {
+                $cnode = HtmlPageCrawler::create($replaceNode);
+                $id = $cnode->attr('data-id');
+                $replaceWith = "[file_link,id=" . ((int) $id) . "]";
+                $cnode->attr('src', $replaceWith);
+                $text = $cnode->text();
+            }
+            $convertedHtml = $c->saveHTML();
+
+            // bgimages inserted by livingdocs
             $c = HtmlPageCrawler::create($convertedHtml);
             $toreplace = $c->filter('div[data-imageid]');
             foreach ($toreplace as $replaceNode) {
