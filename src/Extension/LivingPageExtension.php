@@ -171,6 +171,21 @@ class LivingPageExtension extends DataExtension
             }
             $convertedHtml = $c->saveHTML();
 
+            $c = HtmlPageCrawler::create($convertedHtml);
+            $toreplace = $c->filter('div[data-imageid]');
+            foreach ($toreplace as $replaceNode) {
+                $cnode = HtmlPageCrawler::create($replaceNode);
+                $id = $cnode->attr('data-imageid');
+                $style = $cnode->attr('style');
+                $replaceWith = "[file_link,id=" . ((int) $id) . "]";
+
+                $style = preg_replace('/background-image: url\("(.*?)"\)/', "background-image: url('$replaceWith')", $style);
+
+                $cnode->attr('style', $style);
+                $text = $cnode->text();
+            }
+            $convertedHtml = $c->saveHTML();
+
 
             // back-convert link shortcodes
             $convertedHtml = preg_replace('/%5B(.+?)%5D/','[\\1]', $convertedHtml);
@@ -267,9 +282,9 @@ class LivingPageExtension extends DataExtension
     /**
      * Call this to update the design name used for the doc
      *
-     * @param type $oldName
-     * @param type $newName
-     * @param type $components
+     * @param string $oldName
+     * @param string $newName
+     * @param array $components
      */
     public function updateDesignName($oldName, $newName, $components) {
         $newComponents = [];
