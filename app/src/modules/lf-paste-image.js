@@ -97,6 +97,7 @@ $(document).on('livingfrontend.updateLivingDoc', function (e, livingdoc) {
                         $.post(UPLOAD_ENDPOINT, { SecurityID: secId, rawData: evt.target.result }).then(function (res) {
                             PASTING = false;
                             if (res && res.success) {
+                                updateModel.setDirectiveAttribute(updateDirective, 'data-imageid', res.id);
                                 updateModel.setContent(updateDirective, { url: res.url });
                             }
                         }).done(function (done) {

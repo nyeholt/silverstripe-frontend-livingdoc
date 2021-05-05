@@ -2185,9 +2185,6 @@ li.ProseMirror-selectednode:after {
 .livingdocs-bottom-bar form {
   width: auto; }
 
-.livingdocs-item-properties .ProseMirror-prompt {
-  padding: 0px; }
-
 .ProseMirror-prompt {
   background-color: #5b4e70 !important;
   color: #fff;
@@ -2712,21 +2709,8 @@ body {
 .livingdocs-bottom-bar .Actions {
   margin: 0; }
 
-.livingdocs-toolbar .component-actions {
-  padding: 5px; }
-
-.livingdocs-toolbar .component-actions button {
-  width: 90%;
-  display: block;
-  margin: 2px auto; }
-
 .livingdocs-toolbar #livingdocs-page-options .ld-options-toggles {
   padding: 15px 15px; }
-
-.livingdocs-item-properties > div {
-  padding: 10px;
-  position: relative;
-  margin: 0; }
 
 .livingdocs-toolbar .component-list {
   padding-bottom: 100px; }
@@ -2769,7 +2753,38 @@ body {
 
 .livingdocs-item-properties {
   margin-bottom: 10px;
-  position: relative; }
+  position: relative;
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  z-index: 1000;
+  color: #fff;
+  width: 210px;
+  background-color: #5b4e70; }
+  .livingdocs-item-properties label {
+    display: block; }
+  .livingdocs-item-properties h4 {
+    padding: 0;
+    margin: 0; }
+  .livingdocs-item-properties input {
+    max-width: 90%; }
+  .livingdocs-item-properties > div {
+    padding: 10px;
+    position: relative;
+    margin: 0; }
+  .livingdocs-item-properties .ProseMirror-prompt {
+    padding: 0px; }
+  .livingdocs-item-properties .component-actions {
+    padding: 5px; }
+  .livingdocs-item-properties .component-actions button {
+    width: 90%;
+    display: block;
+    margin: 2px auto; }
+  .livingdocs-item-properties-toggle {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    cursor: pointer; }
 
 .structure-options {
   font-size: 12px; }

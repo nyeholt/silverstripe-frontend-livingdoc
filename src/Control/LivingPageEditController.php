@@ -3,6 +3,7 @@
 namespace Symbiote\Frontend\LivingPage\Control;
 
 use Exception;
+use SilverStripe\Assets\File;
 use SilverStripe\Assets\Upload;
 use SilverStripe\CMS\Controllers\ModelAsController;
 use SilverStripe\CMS\Model\SiteTree;
@@ -493,6 +494,8 @@ class LivingPageEditController extends Controller implements PermissionProvider
 
     public function pastefile(HTTPRequest $request)
     {
+        Versioned::set_stage(Versioned::DRAFT);
+        
         $page = $this->getPage();
 
         if (class_exists(ProseController::class)) {
@@ -531,11 +534,12 @@ class LivingPageEditController extends Controller implements PermissionProvider
                 $response['url'] = $file->getAbsoluteURL();
                 $response['name'] = $file->Title;
                 $response['success'] = true;
+                $response['id'] = $file->ID;
             } else {
                 error_log("Failed uploading pasted image: " . print_r($upload->getErrors(), true));
             }
             if (file_exists($tempFilePath)) {
-                @unlink($tempFile);
+                @unlink($tempFilePath);
             }
         }
 
@@ -551,7 +555,27 @@ class LivingPageEditController extends Controller implements PermissionProvider
             return $this->httpError(403);
         }
 
-        $success = $record->doPublish();
+        // we're not recursive publish, because not all the images
+        // get picked up as being part of the changeset
+        $success = $record->publishRecursive();
+
+        $content = $record->Content;
+
+        $toPublish = [];
+        if (preg_match_all('/\[file_link([^\]]+?)id=(["])?(?<id>\d+)\D/i', $content, $matches)) {
+            foreach ($matches['id'] as $id) {
+                $toPublish[] = (int) $id;
+            }
+        }
+
+        if ($toPublish) {
+            $files = File::get()->byIDs($toPublish);
+            foreach ($files as $file) {
+                $file->publishRecursive();
+            }
+        }
+
+
         $this->getResponse()->addHeader('Content-type', 'application/json');
         return json_encode(['status' => $success ? 'success' : 'fail']);
     }

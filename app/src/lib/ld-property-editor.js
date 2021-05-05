@@ -45,7 +45,17 @@ export function initialise_property_editor() {
 
         LivingDocState.focusOn(component);
 
+        var toggle = $('<span class="livingdocs-item-properties-toggle">v</span>');
+        var container = $('<div class="livingdocs-item-properties-container">');
+        toggle.click(function (e) {
+            container.toggle();
+        });
+
+        options.append(toggle);
+
         options.append("<h4>" + component.model.componentName + " properties</h4>");
+        options.append(container);
+
 
         // handles all the 'styles' ie css classes that this
         // component can have
@@ -144,7 +154,7 @@ export function initialise_property_editor() {
                         selectImage(comp, img, did);
                     }
                 }(component, curr_img, directive_id));
-                options.append($image_button)
+                container.append($image_button)
             }
         }
 
@@ -168,7 +178,7 @@ export function initialise_property_editor() {
                     }
 
                 }(component, updateLink))
-                options.append($link_button)
+                container.append($link_button)
             }
         }
 
@@ -200,10 +210,10 @@ export function initialise_property_editor() {
             componentExportForm(component);
         })
 
-        $('<div class="Actions component-actions">').appendTo(options).append($dupe_button).append($delete_button).append(exportButton);
+        $('<div class="Actions component-actions">').appendTo(container).append($dupe_button).append($delete_button).append(exportButton);
 
         // TODO Re-evaluate whether we need access to the raw attribute values
-        initialise_attribute_editor(options, component);
+        initialise_attribute_editor(container, component);
 
         let styleDiv = $('<div>').appendTo(styles);
 

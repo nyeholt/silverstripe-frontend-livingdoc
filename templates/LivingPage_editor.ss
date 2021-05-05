@@ -17,6 +17,7 @@
 
 <body>
     <div id="livingdocs-editor-holder container-fluid">
+        <div class="livingdocs-item-properties"></div>
         <div class="livingdocs-bottom-bar">
             <div class="livingdocs-actions">
                 $LivingForm
@@ -29,6 +30,7 @@
         </div>
         <div class="row m-0">
             <div id="ld-toolbar-holder" class="col p-0 mr-0">
+                
                 <div class="toolbar-tabs btn-group">
                     <div class="ld-tab btn btn-sm btn-primary" href="#livingdocs-style-tab" id="ld-style-tab">Style</div>
                     <div class="ld-tab btn btn-sm btn-primary" href="#livingdocs-components">Components</div>
@@ -37,8 +39,9 @@
 
                 </div>
                 <div class="livingdocs-toolbar">
-
+                    
                     <div class="toolbar-items">
+                        
                         <div id="livingdocs-components" class="ld-tab-panel ld-tab-default">
                             <div class="component-list"></div>
                         </div>
@@ -48,7 +51,6 @@
                         </div> -->
 
                         <div id="livingdocs-style-tab" class="ld-tab-panel">
-                            <div class="livingdocs-item-properties"></div>
                             <div class="livingdocs-item-styles"></div>
                         </div>
 

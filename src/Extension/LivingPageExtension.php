@@ -70,8 +70,6 @@ class LivingPageExtension extends DataExtension
 
     public function updateCMSFields(FieldList $fields)
     {
-
-
         $structures = ComponentPageStructure::get()->map();
         if (!strlen($this->owner->PageStructure) && count($structures)) {
             $fields->removeByName('Root');
@@ -113,6 +111,9 @@ class LivingPageExtension extends DataExtension
         return $fields;
     }
 
+    public function onAfterPublish() {
+        
+    }
 
     public function onBeforeWrite()
     {
