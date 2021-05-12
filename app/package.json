@@ -22,7 +22,7 @@
     "@babel/preset-env": "^7.1.6",
     "autoprefixer": "^9.4.0",
     "babel-loader": "^8.0.4",
-    "codemirror": "^5.52.2",
+    "codemirror": "^5.58.2",
     "copy-webpack-plugin": "^5.0.4",
     "css-loader": "^1.0.1",
     "highlight.js": "^10.4.1",
