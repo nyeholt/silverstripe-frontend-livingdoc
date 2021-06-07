@@ -1062,11 +1062,11 @@ div.CodeMirror span.CodeMirror-nonmatchingbracket {
 .CodeMirror-scroll {
   overflow: scroll !important;
   /* Things will break if this is overridden */
-  /* 30px is the magic margin used to hide the element's real scrollbars */
+  /* 50px is the magic margin used to hide the element's real scrollbars */
   /* See overflow: hidden in .CodeMirror */
-  margin-bottom: -30px;
-  margin-right: -30px;
-  padding-bottom: 30px;
+  margin-bottom: -50px;
+  margin-right: -50px;
+  padding-bottom: 50px;
   height: 100%;
   outline: none;
   /* Prevent dragging from highlighting the element */
@@ -1074,7 +1074,7 @@ div.CodeMirror span.CodeMirror-nonmatchingbracket {
 
 .CodeMirror-sizer {
   position: relative;
-  border-right: 30px solid transparent; }
+  border-right: 50px solid transparent; }
 
 /* The fake, visible scrollbars. Used to force redraw during scrolling
    before actual scrolling happens, thus preventing shaking and
@@ -1082,7 +1082,8 @@ div.CodeMirror span.CodeMirror-nonmatchingbracket {
 .CodeMirror-vscrollbar, .CodeMirror-hscrollbar, .CodeMirror-scrollbar-filler, .CodeMirror-gutter-filler {
   position: absolute;
   z-index: 6;
-  display: none; }
+  display: none;
+  outline: none; }
 
 .CodeMirror-vscrollbar {
   right: 0;
@@ -1116,7 +1117,7 @@ div.CodeMirror span.CodeMirror-nonmatchingbracket {
   height: 100%;
   display: inline-block;
   vertical-align: top;
-  margin-bottom: -30px; }
+  margin-bottom: -50px; }
 
 .CodeMirror-gutter-wrapper {
   position: absolute;
@@ -2838,15 +2839,14 @@ body.doc-no-selection .livingdocs-toolbar iframe {
   font-size: 1rem; }
 
 .js-editor-block {
-  min-height: 400px;
+  min-height: 325px;
   position: relative; }
-
-.js-editor-block button {
-  border: 1px outset #efefef;
-  font-size: small; }
-
-.js-editor-block button:hover {
-  background-color: #dcdcdc; }
+  .js-editor-block button {
+    border: 1px outset #efefef;
+    font-size: small;
+    height: 25px; }
+    .js-editor-block button:hover {
+      background-color: #dcdcdc; }
 
 .lf-overlay {
   position: fixed;
