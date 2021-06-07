@@ -212,7 +212,7 @@ body {
     position: relative;
 
     position:absolute;
-    top: 0px; 
+    top: 0px;
     right: 0px;
     z-index:1000;
 
@@ -257,7 +257,7 @@ body {
 
     &-toggle {
         position: absolute;
-        top: 5px; 
+        top: 5px;
         right: 5px;
         cursor: pointer;
     }
@@ -329,19 +329,21 @@ body.doc-no-selection .livingdocs-toolbar iframe {
 
 
 .js-editor-block {
-    min-height: 400px;
+    min-height: 325px;
     position: relative;
+
+    button {
+        border: 1px outset #efefef;
+        font-size: small;
+        height: 25px;
+
+        &:hover {
+            background-color: #dcdcdc;
+        }
+    }
 }
 
 
-.js-editor-block button {
-    border: 1px outset #efefef;
-    font-size: small;
-}
-
-.js-editor-block button:hover {
-    background-color: #dcdcdc;
-}
 
 .lf-overlay {
     position: fixed;

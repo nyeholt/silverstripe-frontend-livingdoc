@@ -14,9 +14,8 @@ import 'highlight.js/styles/github.css';
 
 
 $(document).on('livingfrontend.updateLivingDoc', function (e, livingdoc) {
-    // HTML directive handling
     livingdoc.interactiveView.page.htmlElementClick.add(function (component, directiveName, event) {
-        
+
         var isEditing = component.$html.find('.cm-editor').length > 0;
         component.$html.addClass('js-editor-block');
         if (isEditing) {
@@ -36,7 +35,8 @@ $(document).on('livingfrontend.updateLivingDoc', function (e, livingdoc) {
 
         var $actions = $('<div>');
         var $save = $('<button>OK</button>');
-        $actions.css({ position: 'absolute', 'bottom': 0 }).append($save);
+        var $cancel = $('<button>Cancel</button>');
+        $actions.css({ position: 'absolute', 'bottom': 0 }).append($save).append($cancel);
 
         $edBlock.val(currentContent);
         const initialContent = component.$html.html();
@@ -58,9 +58,11 @@ $(document).on('livingfrontend.updateLivingDoc', function (e, livingdoc) {
             component.$html.removeClass('js-editor-block');
         }
 
-        var saveEditorBlock = function () {
+        var saveEditorBlock = function (newContent) {
             cm.toTextArea();
-            var newContent = $edBlock.val();
+            if (!newContent) {
+                newContent = $edBlock.val();
+            }
             // if (aceeditor) {
             //     newContent = aceeditor.getValue();
             // }
@@ -102,8 +104,12 @@ $(document).on('livingfrontend.updateLivingDoc', function (e, livingdoc) {
             cleanUp();
         }
 
-        cm.on('blur', saveEditorBlock);
-        $save.click(saveEditorBlock)
+        $cancel.click(function () {
+            saveEditorBlock(currentContent);
+        });
+        $save.click(function () {
+            saveEditorBlock();
+        });
     });
 
 });

@@ -1,6 +1,6 @@
 import { imageSelectorDialog } from "../../../../../symbiote/silverstripe-prose-editor/editor/src/plugins/ss-image-selector";
 
-export function selectImage(component, img, directiveId) {
+export function selectImage(component, img, directiveId, path) {
     let params = {};
     params.src = component.model.get(img.name);
     params.width = component.model.getDirectiveAttribute(img.name, "width");
@@ -8,6 +8,8 @@ export function selectImage(component, img, directiveId) {
     params.alt = component.model.getDirectiveAttribute(img.name, "alt");
     params.title = component.model.getDirectiveAttribute(img.name, "title");
     params.id = component.model.getDirectiveAttribute(img.name, "data-id");
+
+    params.uploadPath = path;
 
     imageSelectorDialog(params, function (newAttrs) {
         component.model.setDirectiveAttribute(img.name, 'alt', newAttrs.alt);

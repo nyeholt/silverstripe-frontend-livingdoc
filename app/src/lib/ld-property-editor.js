@@ -151,7 +151,11 @@ export function initialise_property_editor() {
                 var $image_button = $("<button class='ld-item-selector " + Constants.btnCls('btn-primary') + "'>").text("Select \"" + curr_img.name + '"');
                 $image_button.on("click", function (comp, img, did) {
                     return function () {
-                        selectImage(comp, img, did);
+                        let uploadLink = $(Constants.EDITOR_FRAME).attr('data-pagelink');
+                        if (uploadLink && uploadLink.indexOf("?") >= 0) {
+                            uploadLink = uploadLink.substring(0, uploadLink.indexOf("?"));
+                        }
+                        selectImage(comp, img, did, uploadLink);
                     }
                 }(component, curr_img, directive_id));
                 container.append($image_button)
