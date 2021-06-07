@@ -56,10 +56,7 @@ class LivingPageExtension extends DataExtension
     private static $default_page = array(
         'content' => [
             [
-                'component' => 'wysiwyg',
-                'content' => [
-                    'html' => "Edit away"
-                ]
+                'component' => 'block',
             ],
         ],
         'design' => [
@@ -112,7 +109,7 @@ class LivingPageExtension extends DataExtension
     }
 
     public function onAfterPublish() {
-        
+
     }
 
     public function onBeforeWrite()
