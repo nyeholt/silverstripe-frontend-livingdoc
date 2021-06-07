@@ -4,6 +4,7 @@ namespace Symbiote\Frontend\LivingPage\Control;
 
 use Exception;
 use SilverStripe\Assets\File;
+use SilverStripe\Assets\Storage\AssetStore;
 use SilverStripe\Assets\Upload;
 use SilverStripe\CMS\Controllers\ModelAsController;
 use SilverStripe\CMS\Model\SiteTree;
@@ -176,7 +177,7 @@ class LivingPageEditController extends Controller implements PermissionProvider
         // converts all nodes to current content state where necessary (in particular, embed items)
         $newContent = [];
         foreach ($design['data']['content'] as $component) {
-            $newContent[] = $this->convertEmbedNodes($component);
+            $newContent[] = $this->convertShortcodeNodes($component);
         }
 
         $design['data']['content'] = $newContent;
@@ -243,7 +244,7 @@ class LivingPageEditController extends Controller implements PermissionProvider
         // converts all nodes to current content state where necessary (in particular, embed items)
         $newContent = [];
         foreach ($design['data']['content'] as $component) {
-            $newContent[] = $this->convertEmbedNodes($component);
+            $newContent[] = $this->convertShortcodeNodes($component);
         }
 
         $design['data']['content'] = $newContent;
@@ -331,7 +332,7 @@ class LivingPageEditController extends Controller implements PermissionProvider
      *
      * @param array $component
      */
-    protected function convertEmbedNodes(&$component)
+    protected function convertShortcodeNodes(&$component)
     {
         $page = $this->getPage();
 
@@ -353,15 +354,30 @@ class LivingPageEditController extends Controller implements PermissionProvider
                 $component['content'][$name] = $props;
             }
         }
+
+        if (isset($component['data']['data_attributes'])) {
+            foreach ($component['data']['data_attributes'] as $attr => $vals) {
+                if (isset($vals['data-imageid']) && $vals['data-imageid'] > 0) {
+                    // lookup the file and grant
+                    $file = File::get()->byID($vals['data-imageid']);
+                    if ($file && $file->canView()) {
+                        $file->grantFile();
+                    }
+                }
+            }
+        }
+
         if (isset($component['containers'])) {
             foreach ($component['containers'] as $name => $items) {
                 $newItems = [];
                 foreach ($component['containers'][$name] as $subComponent) {
-                    $newItems[] = $this->convertEmbedNodes($subComponent);
+                    $newItems[] = $this->convertShortcodeNodes($subComponent);
                 }
                 $component['containers'][$name] = $newItems;
             }
         }
+
+
 
         return $component;
     }
@@ -495,7 +511,7 @@ class LivingPageEditController extends Controller implements PermissionProvider
     public function pastefile(HTTPRequest $request)
     {
         Versioned::set_stage(Versioned::DRAFT);
-        
+
         $page = $this->getPage();
 
         if (class_exists(ProseController::class)) {
