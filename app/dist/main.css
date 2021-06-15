@@ -2761,14 +2761,19 @@ body {
   z-index: 1000;
   color: #fff;
   width: 210px;
+  font-size: 12px;
   background-color: #5b4e70; }
   .livingdocs-item-properties label {
     display: block; }
-  .livingdocs-item-properties h4 {
+  .livingdocs-item-properties h4, .livingdocs-item-properties h5 {
+    font-size: 14px;
     padding: 0;
     margin: 0; }
+  .livingdocs-item-properties h5 {
+    font-size: 13px; }
   .livingdocs-item-properties input {
-    max-width: 90%; }
+    max-width: 90%;
+    display: block; }
   .livingdocs-item-properties > div {
     padding: 10px;
     position: relative;
