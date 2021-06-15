@@ -10,6 +10,8 @@ const BOTTOM_BAR = '.livingdocs-bottom-bar';
 const PAGE_OPTIONS = '#livingdocs-page-options';
 const COOKIE_NAME = 'editor_settings';
 
+let DRAGGING = false;
+
 
 export const init_interface = function (doc, selectedDesign) {
 
@@ -111,6 +113,9 @@ function init_component_list(doc, selectedDesign) {
     // Binds the drag behaviour when a menu item is dragged
     function draggableComponent(doc, name, $elem) {
         $elem.on('mousedown', function (event) {
+            if (DRAGGING) {
+                return;
+            }
             let newComponent;
             if (selectedDesign.compounds && selectedDesign.compounds[name]) {
                 newComponent = createComponentList(selectedDesign.compounds[name].components);
@@ -120,7 +125,9 @@ function init_component_list(doc, selectedDesign) {
 
             event.editorFrame = $(Constants.EDITOR_FRAME)[0];
 
-            doc.startDrag({
+            DRAGGING = true;
+            // doc.startDrag({
+            LivingDocState.livingdoc.interactiveView.page.startDrag({
                 componentModel: newComponent,
                 event: event,
                 config: {
@@ -130,6 +137,19 @@ function init_component_list(doc, selectedDesign) {
             });
         });
     }
+
+    $(document).on('mouseup', function (e) {
+        if (DRAGGING) {
+            DRAGGING = false;
+            LivingDocState.livingdoc.interactiveView.page.cancelDrag();
+        }
+    })
+
+    $(Constants.EDITOR_FRAME).contents().on("mouseup", function (e) {
+        if (DRAGGING) {
+            DRAGGING = false;
+        }
+    })
 
     $(document).on('click', ".component-set-label", function (e) {
         toggle_component_group($(this).attr('data-target'));

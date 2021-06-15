@@ -2984,15 +2984,15 @@ EmbedItemDirective = (function(_super) {
 
 ConnectedToDirective = (function(_super) {
     __extends(ConnectedToDirective, _super);
-  
+
     function ConnectedToDirective() {
       return ConnectedToDirective.__super__.constructor.apply(this, arguments);
     }
-  
+
     ConnectedToDirective.prototype.isConnectedTo = true;
-  
+
     return ConnectedToDirective;
-  
+
   })(ComponentDirective);
 
 // todo(Marcus) need to re-compile from coffee script really...
@@ -7971,7 +7971,7 @@ module.exports = ComponentView = (function() {
         return this.getHtml(name);
       case 'link':
         return this.getLink(name);
-      case 'connectedto': 
+      case 'connectedto':
         return this.getConnectedTo(name)
     }
   };
@@ -8102,7 +8102,7 @@ module.exports = ComponentView = (function() {
 
         otherModel = this.model.componentTree.findById(id);
         if (otherModel) {
-            return $elem.html(otherModel.get(directive));  
+            return $elem.html(otherModel.get(directive));
         }
     }
     return $elem.removeAttr('data-connected-to');
