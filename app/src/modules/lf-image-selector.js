@@ -7,7 +7,8 @@ export function selectImage(component, img, directiveId, path) {
     params.height = component.model.getDirectiveAttribute(img.name, "height");
     params.alt = component.model.getDirectiveAttribute(img.name, "alt");
     params.title = component.model.getDirectiveAttribute(img.name, "title");
-    params.id = component.model.getDirectiveAttribute(img.name, "data-id");
+    const imageId = component.model.getDirectiveAttribute(img.name, "data-id") ? component.model.getDirectiveAttribute(img.name, "data-id") : component.model.getDirectiveAttribute(img.name, "data-imageid");
+    params.id = imageId;
 
     params.uploadPath = path;
 
@@ -16,7 +17,10 @@ export function selectImage(component, img, directiveId, path) {
         component.model.setDirectiveAttribute(img.name, 'title', newAttrs.title);
         component.model.setDirectiveAttribute(img.name, 'width', newAttrs.width);
         component.model.setDirectiveAttribute(img.name, 'height', newAttrs.height);
-        component.model.setDirectiveAttribute(img.name, 'data-imageid', newAttrs.imageSel.id);
+        if (newAttrs.imageSel.id) {
+            component.model.setDirectiveAttribute(img.name, 'data-imageid', newAttrs.imageSel.id);
+        }
+
         component.model.setContent(img.name, { url: newAttrs.src ? newAttrs.src : '' });
     });
 }
