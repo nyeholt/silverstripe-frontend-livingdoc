@@ -24,7 +24,6 @@ $(document).on('click', function (e) {
         $(e.target).parents(BOTTOM_BAR).length <= 0) {
         // remove the properties editing
         select_tab('default');
-        console.log("Removing props holder");
         $('.' + PROPS_HOLDER).remove();
         $('.' + STYLE_HOLDER).remove();
     }

@@ -4693,7 +4693,7 @@ module.exports = augmentConfig({
     optional: {
       attr: 'doc-optional',
       renderedAttr: 'calculated in augment_config',
-      modifies: ['editable']
+      modifies: ['editable', 'wysiwyg', 'link', 'image', 'html', 'connectedto']
     }
   },
   animations: {
