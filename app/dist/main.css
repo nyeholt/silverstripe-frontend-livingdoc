@@ -1,3 +1,10 @@
+.FourSideEditorField_Row {
+  display: flex !important;
+  justify-content: center; }
+  .FourSideEditorField_Row input[type="text"] {
+    width: 70px !important;
+    margin: 2px; }
+
 .ItemFilterField__Display {
   height: 200px;
   display: flex;

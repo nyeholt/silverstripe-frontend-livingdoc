@@ -1,0 +1,11 @@
+.FourSideEditorField {
+  &_Row {
+    display: flex !important;
+    justify-content: center;
+
+    input[type="text"] {
+      width: 70px !important;
+      margin: 2px;
+    }
+  }
+}

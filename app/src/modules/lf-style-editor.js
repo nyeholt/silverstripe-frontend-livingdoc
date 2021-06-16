@@ -3,6 +3,7 @@ import LivingDocState from '../lib/LivingDocState';
 import { TextField } from '../../../../../symbiote/silverstripe-prose-editor/editor/src/fields/TextField';
 import { openPrompt } from '../../../../../symbiote/silverstripe-prose-editor/editor/src/proseutil/prose-prompt';
 import { SelectField } from '../../../../../symbiote/silverstripe-prose-editor/editor/src/fields/SelectField';
+import { FourSideEditorField } from './fields/FourSideEditorField';
 
 var STYLES_PROP = 'element_styles';
 
@@ -21,11 +22,11 @@ export function createStyleEditor(component, editContainer) {
             label: "Display",
             value: customStyles['display'] || '',
             options: [
-                {value: "", label: "Default"},
-                {value: 'block', label: 'Block'},
-                {value: 'inline-block', label: 'Inline Block'},
-                {value: 'inline', label: 'Inline'},
-                {value: 'flex', label: "Flex"}
+                { value: "", label: "Default" },
+                { value: 'block', label: 'Block' },
+                { value: 'inline-block', label: 'Inline Block' },
+                { value: 'inline', label: 'Inline' },
+                { value: 'flex', label: "Flex" }
             ]
         }),
         "flex": new TextField({
@@ -95,6 +96,10 @@ export function createStyleEditor(component, editContainer) {
         "line-height": new TextField({
             label: "Line height",
             value: customStyles['line-height'] || '',
+        }),
+        'border': new FourSideEditorField({
+            name: "border",
+            value: customStyles['border_values'] || {}
         })
     };
 
@@ -125,38 +130,38 @@ export function createStyleEditor(component, editContainer) {
             label: "Flex direction",
             value: customStyles['flex-direction'] || '',
             options: [
-                {value: "", label: "Default"},
-                {value: 'row', label: 'row'},
-                {value: 'row-reverse', label: 'row-reverse'},
-                {value: 'column', label: 'column'},
-                {value: 'column-reverse', label: "column-reverse"}
+                { value: "", label: "Default" },
+                { value: 'row', label: 'row' },
+                { value: 'row-reverse', label: 'row-reverse' },
+                { value: 'column', label: 'column' },
+                { value: 'column-reverse', label: "column-reverse" }
             ]
         });
         fields["flex-wrap"] = new SelectField({
             label: "Flex wrap",
             value: customStyles['flex-wrap'] || '',
             options: [
-                {value: "", label: "Default"},
-                {value: 'nowrap', label: 'nowrap'},
-                {value: 'wrap', label: 'wrap'},
-                {value: 'wrap-reverse', label: 'wrap-reverse'}
+                { value: "", label: "Default" },
+                { value: 'nowrap', label: 'nowrap' },
+                { value: 'wrap', label: 'wrap' },
+                { value: 'wrap-reverse', label: 'wrap-reverse' }
             ]
         });
         fields["justify-content"] = new SelectField({
             label: "Justify content",
             value: customStyles['justify-content'] || '',
             options: [
-                {value: "", label: "Default"},
-                {value: 'flex-start', label: 'flex-start'},
-                {value: 'flex-end', label: 'flex-end'},
-                {value: 'center', label: 'center'},
-                {value: 'space-between', label: 'space-between'},
-                {value: 'space-around', label: 'space-around'},
-                {value: 'space-evenly', label: 'space-evenly'},
-                {value: 'start', label: 'start'},
-                {value: 'end', label: 'end'},
-                {value: 'left', label: 'left'},
-                {value: 'right', label: 'right'},
+                { value: "", label: "Default" },
+                { value: 'flex-start', label: 'flex-start' },
+                { value: 'flex-end', label: 'flex-end' },
+                { value: 'center', label: 'center' },
+                { value: 'space-between', label: 'space-between' },
+                { value: 'space-around', label: 'space-around' },
+                { value: 'space-evenly', label: 'space-evenly' },
+                { value: 'start', label: 'start' },
+                { value: 'end', label: 'end' },
+                { value: 'left', label: 'left' },
+                { value: 'right', label: 'right' },
             ]
         });
 
@@ -164,18 +169,18 @@ export function createStyleEditor(component, editContainer) {
             label: "Align Items",
             value: customStyles['align-items'] || '',
             options: [
-                {value: "", label: "Default"},
-                {value: 'flex-start', label: 'flex-start'},
-                {value: 'flex-end', label: 'flex-end'},
-                {value: 'center', label: 'center'},
-                {value: 'stretch', label: 'stretch'},
-                {value: 'baseline', label: 'baseline'},
-                {value: 'first baseline', label: 'first baseline'},
-                {value: 'last baseline', label: 'last baseline'},
-                {value: 'start', label: 'start'},
-                {value: 'end', label: 'end'},
-                {value: 'self-start', label: 'self-start'},
-                {value: 'self-end', label: 'self-end'},
+                { value: "", label: "Default" },
+                { value: 'flex-start', label: 'flex-start' },
+                { value: 'flex-end', label: 'flex-end' },
+                { value: 'center', label: 'center' },
+                { value: 'stretch', label: 'stretch' },
+                { value: 'baseline', label: 'baseline' },
+                { value: 'first baseline', label: 'first baseline' },
+                { value: 'last baseline', label: 'last baseline' },
+                { value: 'start', label: 'start' },
+                { value: 'end', label: 'end' },
+                { value: 'self-start', label: 'self-start' },
+                { value: 'self-end', label: 'self-end' },
             ]
         });
 
@@ -183,19 +188,19 @@ export function createStyleEditor(component, editContainer) {
             label: "Align content",
             value: customStyles['align-content'] || '',
             options: [
-                {value: "", label: "Default"},
-                {value: 'flex-start', label: 'flex-start'},
-                {value: 'flex-end', label: 'flex-end'},
-                {value: 'center', label: 'center'},
-                {value: 'stretch', label: 'stretch'},
-                {value: 'space-between', label: 'space-between'},
-                {value: 'space-around', label: 'space-around'},
-                {value: 'space-evenly', label: 'space-evenly'},
-                {value: 'start', label: 'start'},
-                {value: 'end', label: 'end'},
-                {value: 'baseline', label: 'baseline'},
-                {value: 'first baseline', label: 'first baseline'},
-                {value: 'last baseline', label: 'last baseline'},
+                { value: "", label: "Default" },
+                { value: 'flex-start', label: 'flex-start' },
+                { value: 'flex-end', label: 'flex-end' },
+                { value: 'center', label: 'center' },
+                { value: 'stretch', label: 'stretch' },
+                { value: 'space-between', label: 'space-between' },
+                { value: 'space-around', label: 'space-around' },
+                { value: 'space-evenly', label: 'space-evenly' },
+                { value: 'start', label: 'start' },
+                { value: 'end', label: 'end' },
+                { value: 'baseline', label: 'baseline' },
+                { value: 'first baseline', label: 'first baseline' },
+                { value: 'last baseline', label: 'last baseline' },
             ]
         });
     }
@@ -232,6 +237,18 @@ export function createStyleEditor(component, editContainer) {
             // }
 
             newStyles[name] = value;
+            if (fields[name] && fields[name].constructor.name == 'FourSideEditorField') {
+                newStyles[name + '_values'] = value;
+                const fieldNames = ['base', 'top', 'left', 'bottom', 'right'];
+                fieldNames.forEach((f) => {
+                    const fname = (f == 'base') ? name : name + '-' + f;
+                    if (value[f]) {
+                        newStyles[fname] = value[f];
+                    } else {
+                        delete newStyles[fname];
+                    }
+                })
+            }
 
             component.model.setData(STYLES_PROP, newStyles);
             if (name == 'extraClasses') {
@@ -253,8 +270,10 @@ export function createStyleEditor(component, editContainer) {
 }
 
 function updateComponentStyles(component, styleset) {
-    // component.$html.attr('style', '');
     for (let name in styleset) {
+        if (typeof styleset[name] == "object") {
+            continue;
+        }
         component.$html.css(name, styleset[name]);
     }
 }
