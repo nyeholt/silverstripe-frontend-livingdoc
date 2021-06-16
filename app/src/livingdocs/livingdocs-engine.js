@@ -7809,11 +7809,23 @@ module.exports = ComponentView = (function() {
         if (directiveName) {
             // updateElem(directiveName, {[directiveName]: {"style": styleString}});
         } else {
-            for (let name in elementStyles) {
-                if (name == 'extraClasses') {
-                    this.$html.addClass(elementStyles[name]);
-                } else {
-                    this.$html.css(name, elementStyles[name]);
+            if (Array.isArray(elementStyles)) {
+                elementStyles.forEach((styleitem) => {
+                    if (styleitem.name == 'extraClasses') {
+                        this.$html.addClass(styleitem.style);
+                    } else {
+                        this.$html.css(styleitem.name, styleitem.style);
+                    }
+                })
+            }
+            else {
+                // support legacy
+                for (let name in elementStyles) {
+                    if (name == 'extraClasses') {
+                        this.$html.addClass(elementStyles[name]);
+                    } else {
+                        this.$html.css(name, elementStyles[name]);
+                    }
                 }
             }
         }

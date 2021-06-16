@@ -7,11 +7,71 @@ import { FourSideEditorField } from './fields/FourSideEditorField';
 
 var STYLES_PROP = 'element_styles';
 
-export function createStyleEditor(component, editContainer) {
-    let customStyles = component.model.getData(STYLES_PROP);
-    if (!customStyles) {
-        customStyles = {};
+class StyleList {
+    styles = [];
+
+    constructor(styles) {
+        if (Array.isArray(styles)) {
+            this.styles = [ ... styles];
+        } else {
+            this.fromMap(styles);
+        }
     }
+
+    removeStyle(name) {
+        let index = this.styles.findIndex((item) => {
+            if (item.name == name) {
+                return true;
+            }
+        })
+        if (index >= 0) {
+            this.styles.splice(index, 1);
+        }
+    }
+
+    addStyle(name, value) {
+        let update = false;
+        this.styles.forEach((item) => {
+            if (item.name == name) {
+                update = true;
+                if (!value || value.length === 0) {
+                    item.style = 'inherit';
+                } else {
+                    item.style = value;
+                }
+            }
+        })
+        if (!update) {
+            this.styles.push({
+                name: name,
+                style: value,
+            });
+        }
+    }
+
+    fromMap(map) {
+        if (!map) {
+            return;
+        }
+        this.styles = Object.keys(map).map((key) => { return { name: key, style: map[key] } });
+    }
+
+    toMap() {
+        const map = {};
+        this.styles.forEach((item) => {
+            map[item.name] = item.style;
+        });
+        return map;
+    }
+}
+
+export function createStyleEditor(component, editContainer) {
+
+    let styleList = component.model.getData(STYLES_PROP);
+
+    let appliedStyles = new StyleList(styleList);
+
+    const customStyles = appliedStyles.toMap();
 
     let fields = {
         "extraClasses": new TextField({
@@ -215,19 +275,16 @@ export function createStyleEditor(component, editContainer) {
         forceRemainOpen: true,
         hideButtons: true,
         update: function (name, value) {
-            let currentStyles = component.model.getData(STYLES_PROP);
-            if (!currentStyles) {
-                currentStyles = {};
-            }
+            let currentStyleData = component.model.getData(STYLES_PROP);
 
-            if (name == 'extraClasses' && currentStyles['extraClasses']) {
-                for (var style of currentStyles['extraClasses'].split(' ')) {
+            let currentStyles = new StyleList(currentStyleData);
+
+            const newStyleMap = currentStyles.toMap();
+
+            if (name == 'extraClasses' && newStyleMap['extraClasses']) {
+                for (var style of newStyleMap['extraClasses'].split(' ')) {
                     component.$html.removeClass(style);
                 }
-            }
-
-            let newStyles = {
-                ...currentStyles,
             }
 
             // if (!value || value.length == 0) {
@@ -236,44 +293,49 @@ export function createStyleEditor(component, editContainer) {
             //     newStyles[name] = value;
             // }
 
-            newStyles[name] = value;
             if (fields[name] && fields[name].constructor.name == 'FourSideEditorField') {
-                newStyles[name + '_values'] = value;
+                currentStyles.addStyle(name + '_values', value);
                 const fieldNames = ['base', 'top', 'left', 'bottom', 'right'];
                 fieldNames.forEach((f) => {
                     const fname = (f == 'base') ? name : name + '-' + f;
+                    currentStyles.removeStyle(fname);
+                    component.$html.css(fname, '');
+                });
+
+                fieldNames.forEach((f) => {
+                    const fname = (f == 'base') ? name : name + '-' + f;
                     if (value[f]) {
-                        newStyles[fname] = value[f];
-                    } else {
-                        delete newStyles[fname];
+                        currentStyles.addStyle(fname, value[f]);
                     }
                 })
+            } else {
+                currentStyles.addStyle(name, value);
             }
 
-            component.model.setData(STYLES_PROP, newStyles);
+            component.model.setData(STYLES_PROP, currentStyles.styles);
             if (name == 'extraClasses') {
                 for (var style of value.split(' ')) {
                     component.$html.addClass(style);
                 }
             } else {
-                updateComponentStyles(component, newStyles);
+                updateComponentStyles(component, currentStyles.styles);
             }
         },
         callback: function callback(attrs) {
 
         },
         cancel: function () {
-            component.model.setData(STYLES_PROP, customStyles);
-            updateComponentStyles(component, customStyles);
+            component.model.setData(STYLES_PROP, appliedStyles.styles);
+            updateComponentStyles(component, appliedStyles.styles);
         }
     }, editContainer);
 }
 
 function updateComponentStyles(component, styleset) {
-    for (let name in styleset) {
-        if (typeof styleset[name] == "object") {
-            continue;
+    styleset.forEach((styleitem) => {
+        if (typeof styleitem.style == "object") {
+            return;
         }
-        component.$html.css(name, styleset[name]);
-    }
+        component.$html.css(styleitem.name, styleitem.style);
+    })
 }
