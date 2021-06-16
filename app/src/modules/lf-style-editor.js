@@ -19,14 +19,9 @@ class StyleList {
     }
 
     removeStyle(name) {
-        let index = this.styles.findIndex((item) => {
-            if (item.name == name) {
-                return true;
-            }
+        this.styles = this.styles.filter((item) => {
+            return item.name !== name;
         })
-        if (index >= 0) {
-            this.styles.splice(index, 1);
-        }
     }
 
     addStyle(name, value) {
@@ -109,13 +104,15 @@ export function createStyleEditor(component, editContainer) {
             label: 'Minumum Height',
             value: customStyles['min-height'] || '',
         }),
-        "padding": new TextField({
-            label: 'Padding',
-            value: customStyles['padding'] || '',
+        'padding': new FourSideEditorField({
+            name: "padding",
+            label: "Padding",
+            value: customStyles['padding_values'] || {}
         }),
-        "margin": new TextField({
-            label: 'Margin',
-            value: customStyles['margin'] || '',
+        'margin': new FourSideEditorField({
+            name: "margin",
+            label: "Margin",
+            value: customStyles['margin_values'] || {}
         }),
         "background": new TextField({
             label: 'Background',
@@ -167,21 +164,12 @@ export function createStyleEditor(component, editContainer) {
     fields.color.textType = 'color';
 
     if (component.model.styles['position-absolute']) {
-        fields["top"] = new TextField({
-            label: 'Top',
-            value: customStyles['top'] || '',
-        });
-        fields["left"] = new TextField({
-            label: 'Left',
-            value: customStyles['left'] || '',
-        });
-        fields["bottom"] = new TextField({
-            label: 'Bottom',
-            value: customStyles['bottom'] || '',
-        });
-        fields["right"] = new TextField({
-            label: 'Right',
-            value: customStyles['right'] || '',
+        fields['layout-position'] = new FourSideEditorField({
+            name: "layout-position",
+            label: "Position",
+            value: customStyles['layout-position_values'] || {},
+            nobase: true,
+            noprefix: true,
         });
     }
 
@@ -296,14 +284,17 @@ export function createStyleEditor(component, editContainer) {
             if (fields[name] && fields[name].constructor.name == 'FourSideEditorField') {
                 currentStyles.addStyle(name + '_values', value);
                 const fieldNames = ['base', 'top', 'left', 'bottom', 'right'];
+
+                const prefix = fields[name].options.noprefix ? '' : name + '-';
+
                 fieldNames.forEach((f) => {
-                    const fname = (f == 'base') ? name : name + '-' + f;
+                    const fname = f == 'base' ? name : prefix + f;
                     currentStyles.removeStyle(fname);
                     component.$html.css(fname, '');
                 });
 
                 fieldNames.forEach((f) => {
-                    const fname = (f == 'base') ? name : name + '-' + f;
+                    const fname = f == 'base' ? name : prefix + f;
                     if (value[f]) {
                         currentStyles.addStyle(fname, value[f]);
                     }

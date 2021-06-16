@@ -12,8 +12,12 @@ export class FourSideEditorField extends Field {
         const myname = this.options.name ? this.options.name : this.options.label;
 
         fieldNames.forEach((value) => {
+            if (this.options.nobase && value === 'base') {
+                return;
+            }
             const fieldName = myname + "-" + value;
-            fieldMap[value] = dom.querySelector('input[name="' + fieldName + '"]').value;
+            const domfield = dom.querySelector('input[name="' + fieldName + '"]');
+            fieldMap[value] = domfield ? domfield.value : null;
         });
 
         return fieldMap;
@@ -38,6 +42,9 @@ export class FourSideEditorField extends Field {
 
         fieldNames.forEach((value) => {
             const fieldName = myname + "-" + value;
+            if (this.options.nobase && value === 'base') {
+                return;
+            }
             fieldMap[value] = new TextField({
                 label: "",
                 name: fieldName,
@@ -48,14 +55,14 @@ export class FourSideEditorField extends Field {
 
         topRow.append(fieldMap['top'].render());
         midRow.append(fieldMap['left'].render())
-        midRow.append(fieldMap['base'].render())
+        fieldMap['base'] && midRow.append(fieldMap['base'].render())
         midRow.append(fieldMap['right'].render());
         botRow.append(fieldMap['bottom'].render());
         container.append(topRow)
         container.append(midRow)
         container.append(botRow);
 
-        container.name = this.myname;
+        container.name = myname;
 
         return container;
     }
