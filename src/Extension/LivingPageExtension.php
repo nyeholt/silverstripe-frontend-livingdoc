@@ -77,10 +77,11 @@ class LivingPageExtension extends DataExtension
             return $fields;
         }
 
-        $link = '<div class="field"><a href="page-editor/edit/' . $this->owner->ID . '?stage=Stage" target="_blank">Edit this page in-place</a></div>';
-        $literalContent = LiteralField::create('Content', $link);
-        $fields->replaceField('Content', $literalContent);
-        // $fields->replaceField('Content', TextareaField::create('Content'));
+        $link = '<div class="field"><a href="page-editor/edit/' . $this->owner->ID . '?stage=Stage" class="btn btn-primary target="_blank">Edit this page in-place</a></div>';
+        $literalContent = LiteralField::create('EditLink', $link);
+        $fields->insertAfter('Title', $literalContent);
+        
+        $fields->replaceField('Content', LiteralField::create('Content', '')); 
 
         $pageOptions = [
             CheckboxField::create('AllowLayoutEditing', "Allow editing of the layout"),

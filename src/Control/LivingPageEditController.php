@@ -130,6 +130,8 @@ class LivingPageEditController extends Controller implements PermissionProvider
 
         Versioned::set_stage(Versioned::DRAFT);
 
+        Requirements::clear();
+
         $this->includeEditingRequirements();
 
         return $this->customise([
