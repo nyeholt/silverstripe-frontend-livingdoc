@@ -126,7 +126,6 @@ function init_component_list(doc, selectedDesign) {
             event.editorFrame = $(Constants.EDITOR_FRAME)[0];
 
             DRAGGING = true;
-            // doc.startDrag({
             LivingDocState.livingdoc.interactiveView.page.startDrag({
                 componentModel: newComponent,
                 event: event,
