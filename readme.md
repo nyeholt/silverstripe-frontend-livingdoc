@@ -136,7 +136,7 @@ You can paste clipboard images in a few different contexts;
 * When a container is selected, a new image is inserted at the end of that container
 
 
-## Components
+## Custom designs
 
 The module comes with a base "design" which is a set of components defined in JavaScript 
 that define the HTML structure of those components, as well as which parts of those components are
@@ -168,6 +168,32 @@ The key points are that
 * The `html` for the component can use nested elements and directives
 
 
+### Creating a new design
+
+Assuming the default base bootstrap-design.js file is used, you can simply update
+those definitions by iterating the design object;
+
+```js
+
+$(document).on('updateLivingdocsDesign', function (e, design) { });
+
+```
+
+The `design.components` collection can then be iterated to change the existing definitions, or 
+have new definitions pushed onto its list. 
+
+To specify your own custom design, you may like to start with the bootstrap design and update it,
+then bind it into configuration via
+
+```
+---
+Name: custom_designs
+---
+Symbiote\Frontend\LivingPage\Extension\LivingPageExtension:
+  living_designs:
+    my_theme_name: 'path/to/my/design.js'
+
+```
 
 ### Directives
 
@@ -204,20 +230,6 @@ There are two mechanisms for defining these, both of which use the same internal
 * `structures`: Creates a new dropdown in the UI that allows the selection of a named custom structure. For example, a
   `Content section` structure, in a bootstrap design, is a `section` component filled with a `row` component, filled with 
   `column` component, filled with a `p` component. 
-
-### Customising the component definitions
-
-Assuming the default base bootstrap-design.js file is used, the quickest approach is to have your own .js file
-that defines
-
-```js
-
-$(document).on('updateLivingdocsDesign', function (e, design) { });
-
-```
-
-The `design.components` collection can then be iterated to change the existing definitions, or 
-have new definitions pushed onto its list. 
 
 
 ## Building new bundles
