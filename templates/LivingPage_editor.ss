@@ -20,7 +20,35 @@
         <div class="livingdocs-item-properties"></div>
         <div class="livingdocs-bottom-bar">
             <div class="livingdocs-actions">
-                $LivingForm
+                <% with $LivingForm %>
+                    <form $AttributesHTML>
+                        <% if $Message %>
+                            <p id="{$FormName}_error" class="message $MessageType">$Message</p>
+                            <% else %>
+                                <p id="{$FormName}_error" class="message $MessageType" style="display: none"></p>
+                                <% end_if %>
+
+                                    <fieldset>
+                                        <% if $Legend %>
+                                            <legend>$Legend</legend>
+                                            <% end_if %>
+                                                <% loop $Fields %>
+                                                    $FieldHolder
+                                                    <% end_loop %>
+                                                        <div class="clear">
+                                                            <!-- -->
+                                                        </div>
+                                    </fieldset>
+
+                                    <% if $Actions %>
+                                        <div class="btn-toolbar">
+                                            <% loop $Actions %>
+                                                $Field
+                                                <% end_loop %>
+                                        </div>
+                                        <% end_if %>
+                    </form>
+                    <% end_with %>
             </div>
             <div id="livingdocs-toolbar-controls">
             </div>
@@ -30,7 +58,7 @@
         </div>
         <div class="row m-0">
             <div id="ld-toolbar-holder" class="col p-0 mr-0">
-                
+
                 <div class="toolbar-tabs btn-group">
                     <div class="ld-tab btn btn-sm btn-primary" href="#livingdocs-style-tab" id="ld-style-tab">Style</div>
                     <div class="ld-tab btn btn-sm btn-primary" href="#livingdocs-components">Components</div>
@@ -39,9 +67,9 @@
 
                 </div>
                 <div class="livingdocs-toolbar">
-                    
+
                     <div class="toolbar-items">
-                        
+
                         <div id="livingdocs-components" class="ld-tab-panel ld-tab-default">
                             <div class="component-list"></div>
                         </div>
