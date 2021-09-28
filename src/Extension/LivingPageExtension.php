@@ -165,9 +165,11 @@ class LivingPageExtension extends DataExtension
             foreach ($toreplace as $replaceNode) {
                 $cnode = HtmlPageCrawler::create($replaceNode);
                 $id = $cnode->attr('data-imageid');
-                $replaceWith = "[file_link,id=" . ((int) $id) . "]";
-                $cnode->attr('src', $replaceWith);
-                $text = $cnode->text();
+                if ($id) {
+                    $replaceWith = "[file_link,id=" . ((int) $id) . "]";
+                    $cnode->attr('src', $replaceWith);
+                }
+                
             }
             $convertedHtml = $c->saveHTML();
 
@@ -177,8 +179,10 @@ class LivingPageExtension extends DataExtension
             foreach ($toreplace as $replaceNode) {
                 $cnode = HtmlPageCrawler::create($replaceNode);
                 $id = $cnode->attr('data-id');
-                $replaceWith = "[file_link,id=" . ((int) $id) . "]";
-                $cnode->attr('src', $replaceWith);
+                if ($id) {
+                    $replaceWith = "[file_link,id=" . ((int) $id) . "]";
+                    $cnode->attr('src', $replaceWith);
+                }
                 $text = $cnode->text();
             }
             $convertedHtml = $c->saveHTML();
