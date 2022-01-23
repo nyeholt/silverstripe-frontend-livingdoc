@@ -2,7 +2,7 @@ import * as $ from 'jquery';
 import { Constants } from '../constants';
 
 $(document).on('livingfrontend.updateLivingDoc', function (e, livingdoc) {
-    var $pageOptions = $(Constants.SIZE_CONTROLS);
+    var $pageOptions = $(Constants.TOOLBAR_CONTROLS);
 
     let select = $('<select></select>');
 

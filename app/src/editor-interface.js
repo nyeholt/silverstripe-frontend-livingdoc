@@ -12,6 +12,10 @@ const COOKIE_NAME = 'editor_settings';
 
 let DRAGGING = false;
 
+let ENABLE_GRID = true;
+let ENABLE_LAYOUT = true;
+let gridToggle;
+let layoutToggle;
 
 export const init_interface = function (doc, selectedDesign) {
 
@@ -171,57 +175,73 @@ function init_tree() {
     });
 }
 
-function init_toolbar_toggles() {
+function init_toolbar_toggles() 
+{
+    gridToggle = $('<button class="btn btn-sm btn-secondary">Show Grid</button>');
+    layoutToggle = $('<button class="btn btn-sm btn-secondary">Layout Mode</button>');
 
-    // let toolbarToggle = $('<button>').text("Toggle toolbar");
-    // $(BOTTOM_BAR).find('.livingdocs-toolbar-controls').append(toolbarToggle);
-    // toolbarToggle.click(function (e) {
-    //     $('body').toggleClass('show-livingdocs-toolbar');
-    // });
-    const gridToggle = $('<input type="checkbox">');
-    const enableGrid = $('<label class="ld-toggle">').append(gridToggle).append('Enable grid');
-
-    var evalGrid = function () {
-        if (gridToggle.is(':checked')) {
-            $(Constants.EDITOR_FRAME).contents().find('body').removeClass('no-grid-display');
+    var evalGridDisplay = function () {
+        if (ENABLE_GRID) {
+            disable_grid_display();
         } else {
-            $(Constants.EDITOR_FRAME).contents().find('body').addClass('no-grid-display');
+            enable_grid_display();
+        }
+    }
+    var evalLayoutToggle = function () {
+        if (ENABLE_LAYOUT) {
+            disable_layout_mode();
+        } else {
+            enable_layout_mode();
         }
     }
 
     const toggleHolder = $('<div class="ld-options-toggles">');
+    toggleHolder.append(gridToggle);
+    toggleHolder.append(layoutToggle);
 
-
-    $(toggleHolder).append(enableGrid);
-    gridToggle.click(function (e) {
-        evalGrid();
-    });
+    gridToggle.click(evalGridDisplay);
+    toggleHolder.click(evalLayoutToggle);
 
     if (ContentSource.getConfig().showGrid) {
-        gridToggle.click();
-    } else {
-        evalGrid();
-    }
-
-
-    const layoutToggle = $('<input type="checkbox">');
-    const enableLayout = $('<label class="ld-toggle">').append(layoutToggle).append('Enable layout editing');
-    $(toggleHolder).append(enableLayout);
-
-    $(PAGE_OPTIONS).append(toggleHolder);
+        enable_grid_display();
+    } 
 
     if (ContentSource.getConfig().allowLayoutEditing) {
-        layoutToggle.click();
+        enable_layout_mode();
     }
 
+    $(Constants.TOOLBAR_CONTROLS).append(toggleHolder);
+
     LivingDocState.livingdoc.interactiveView.page.componentWillBeDragged.add(function (option) {
-        if (layoutToggle.is(':checked')) {
+        if (ENABLE_LAYOUT) {
             option.enable = true;
         } else {
             option.enable = false;
         }
     });
 
+}
+
+function enable_layout_mode() {
+    ENABLE_LAYOUT = true;
+    layoutToggle.text('Stop Layout');
+}
+
+function disable_layout_mode() {
+    ENABLE_LAYOUT = false;
+    layoutToggle.text('Layout Mode');
+}
+
+function enable_grid_display() {
+    ENABLE_GRID = true;
+    $(Constants.EDITOR_FRAME).contents().find('body').removeClass('no-grid-display');
+    gridToggle.text('Disable Grid');
+}
+
+function disable_grid_display() {
+    ENABLE_GRID = false;
+    $(Constants.EDITOR_FRAME).contents().find('body').addClass('no-grid-display');
+    gridToggle.text('Enable Grid');
 }
 
 

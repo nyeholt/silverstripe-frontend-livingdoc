@@ -2728,7 +2728,7 @@ body {
     padding: 0px 15px; }
 
 .livingdocs-bottom-bar .livingdocs-actions {
-  width: 40%; }
+  width: 33%; }
   .livingdocs-bottom-bar .livingdocs-actions fieldset {
     display: none; }
 
@@ -2742,8 +2742,12 @@ body {
 .livingdocs-bottom-bar .Actions {
   margin: 0; }
 
-.livingdocs-toolbar #livingdocs-page-options .ld-options-toggles {
-  padding: 15px 15px; }
+.livingdocs-bottom-bar #livingdocs-toolbar-controls {
+  display: flex;
+  width: 33%;
+  min-width: 362px; }
+  .livingdocs-bottom-bar #livingdocs-toolbar-controls .ld-options-toggles {
+    margin-right: 1rem; }
 
 .livingdocs-toolbar .component-list {
   padding-bottom: 100px; }

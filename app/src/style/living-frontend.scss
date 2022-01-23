@@ -129,7 +129,7 @@ body {
 }
 
 .livingdocs-bottom-bar .livingdocs-actions {
-    width: 40%;
+    width: 33%;
 
     fieldset {
         display: none;
@@ -149,12 +149,15 @@ body {
 }
 
 
-.livingdocs-toolbar #livingdocs-page-options {
+.livingdocs-bottom-bar #livingdocs-toolbar-controls {
+    display: flex;
+    width: 33%;
+    min-width:362px;
+
     .ld-options-toggles {
-        padding: 15px 15px;
+        margin-right: 1rem;
     }
 }
-
 
 
 .livingdocs-toolbar .component-list {
