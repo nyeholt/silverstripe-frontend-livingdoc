@@ -270,10 +270,10 @@ class LivingPageEditController extends Controller implements PermissionProvider
         ])->toArray();
 
         $pageComponents = array_filter($pageComponents, function ($item) use ($designName) {
-            $themes = $item->Themes->getValues();
+            $themes = @json_decode($item->Themes);
             if ($themes && count($themes)) {
                 $has = array_search($designName, $themes);
-                return $has;
+                return $has !== false;
             }
         });
 
@@ -293,10 +293,10 @@ class LivingPageEditController extends Controller implements PermissionProvider
             'IsActive' => 1,
         ])->toArray();
         $compounds = array_filter($compounds, function ($item) use ($designName) {
-            $themes = $item->Themes->getValues();
+            $themes = @json_decode($item->Themes); 
             if ($themes && count($themes)) {
                 $has = array_search($designName, $themes);
-                return $has;
+                return $has !== false;
             }
         });
         $compounds = array_map(function ($item) use ($designName) {

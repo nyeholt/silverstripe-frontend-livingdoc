@@ -3,6 +3,7 @@
 namespace Symbiote\Frontend\LivingPage\Model;
 
 use SilverStripe\Assets\Image;
+use SilverStripe\Forms\CheckboxSetField;
 use SilverStripe\Forms\DropdownField;
 use SilverStripe\Forms\LiteralField;
 use SilverStripe\Forms\ReadonlyField;
@@ -34,7 +35,7 @@ class PageComponent extends DataObject
 
     private static $db = [
         'Title' => 'Varchar',
-        'Themes'    => 'MultiValueField',
+        'Themes'    => 'Text',
         'Name' => 'Varchar',
         'ComponentGroup' => 'Varchar',
         'CustomComponentGroup' => 'Varchar',
@@ -107,7 +108,7 @@ class PageComponent extends DataObject
         $designOptions = LivingPageExtension::config()->living_designs;
         if (count($designOptions)) {
             $themes = ArrayLib::valuekey(array_keys($designOptions));
-            $designField = MultiValueCheckboxField::create('Themes', 'Available in themes', $themes);
+            $designField = CheckboxSetField::create('Themes', 'Available in themes', $themes);
             $fields->replaceField('Themes', $designField);
         } else {
             $fields->removeByName('Themes');
