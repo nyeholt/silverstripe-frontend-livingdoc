@@ -60,11 +60,10 @@
             <div id="ld-toolbar-holder" class="col p-0 mr-0">
 
                 <div class="toolbar-tabs btn-group">
-                    <div class="ld-tab btn btn-sm btn-primary" href="#livingdocs-style-tab" id="ld-style-tab">Style</div>
                     <div class="ld-tab btn btn-sm btn-primary" href="#livingdocs-components">Components</div>
+                    <div class="ld-tab btn btn-sm btn-primary" href="#livingdocs-style-tab" id="ld-style-tab">Style</div>
                     <div class="ld-tab btn btn-sm btn-primary" href="#livingdocs-page-options" id="ld-options-tab">Options</div>
                     <!-- <div class="ld-tab btn btn-sm btn-primary" href="#livingdocs-property-tab" id="ld-properties-tab">Settings</div> -->
-
                 </div>
                 <div class="livingdocs-toolbar">
 
