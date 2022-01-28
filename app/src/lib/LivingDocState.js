@@ -52,7 +52,9 @@ const LivingDocState = {
         // not a true blur, we don't trigger on all blur occasions otherwise we lose context
         this.activeComponent = null;
     },
-
+    getActiveComponent: function () {
+        return this.activeComponent;
+    },
     saveState: function (currentState) {
         if (this.trackChanges) {
             var actionId = this.activeComponent ? this.activeComponent.model.id : null;

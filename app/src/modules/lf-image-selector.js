@@ -1,4 +1,5 @@
 import { imageSelectorDialog } from "../../../../../symbiote/silverstripe-prose-editor/editor/src/plugins/ss-image-selector";
+import { refresh_property_editor } from "../lib/ld-property-editor";
 
 export function selectImage(component, img, directiveId, path) {
     let params = {};
@@ -22,5 +23,7 @@ export function selectImage(component, img, directiveId, path) {
         }
 
         component.model.setContent(img.name, { url: newAttrs.src ? newAttrs.src : '' });
+
+        refresh_property_editor(component);
     });
 }

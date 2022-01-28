@@ -99,7 +99,7 @@ body {
     .ld-item-selector {
         width: 90%;
         display: block;
-        margin: 0px auto;
+        margin: 2px auto;
     }
 
 
@@ -325,6 +325,7 @@ body.doc-no-selection .livingdocs-toolbar iframe {
 
 .livingdocs_EditorField_Toolbar_options>h4 {
     font-size: 1rem;
+    margin-bottom: 0.5rem;
 }
 
 .livingdocs_EditorField_Toolbar_options>h4:first-child {
