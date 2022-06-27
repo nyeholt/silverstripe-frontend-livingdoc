@@ -44,7 +44,7 @@
 
 .ProseMirror-prompt {
     background-color: $toolbar-background !important;
-    color: #fff;
+    color: $toolbar-font-color;
 
     top: 20px;
 
@@ -58,7 +58,7 @@
 
     h5,
     label {
-        color: #fff;
+        color: $toolbar-font-color;
     }
 
     .filepond--drop-label {

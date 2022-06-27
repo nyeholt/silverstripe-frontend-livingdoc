@@ -1,11 +1,11 @@
 
-$brand-purple: #5D3895;
+$dark-background: #efefef;
 
 $toolbar-background-blue: #232E40;
 
-$toolbar-background: #5b4e70; // lighten($brand-purple, 11);
+$toolbar-background: #fafafa; // lighten($dark-background, 11);
 
-$toolbar-font-color: #fff;
+$toolbar-font-color: #010101;
 
 $toolbar-button-color-light: #f8f9fa;
 
@@ -21,7 +21,7 @@ $toolbar-button-color-light: #f8f9fa;
     color: #000;
 
     &:focus {
-        border-color: #6666ff;
+        border-color: #9fbdff;
     }
 }
 

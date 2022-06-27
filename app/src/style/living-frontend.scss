@@ -113,9 +113,9 @@ body {
         letter-spacing: 1px;
         display: block;
 
-        border: 1px solid darken($brand-purple, 15);
+        border: 1px solid darken($dark-background, 15);
 
-        background-color: darken($brand-purple, 10);
+        background-color: darken($dark-background, 10);
 
     }
 
@@ -175,6 +175,7 @@ body {
     z-index: 2;
 
     display: flex;
+    justify-content: center;
     flex-wrap: wrap;
 }
 
@@ -218,7 +219,7 @@ body {
     right: 0px;
     z-index:1000;
 
-    color: #fff;
+    color: $toolbar-font-color;
     width: 210px;
     font-size: 12px;
 
@@ -251,6 +252,10 @@ body {
 
     .ProseMirror-prompt {
         padding: 0px;
+
+        h5 {
+            color: $toolbar-font-color;
+        }
     }
 
 
@@ -385,7 +390,7 @@ body.doc-no-selection .livingdocs-toolbar iframe {
 
 .lf-popup h2 {
     margin-top: 0;
-    color: #333;
+    color: $toolbar-font-color;
 }
 
 .lf-popup .lf-dialog-close {
@@ -396,7 +401,7 @@ body.doc-no-selection .livingdocs-toolbar iframe {
     font-size: 30px;
     font-weight: bold;
     text-decoration: none;
-    color: #333;
+    color: $toolbar-font-color;
 }
 
 .lf-popup .lf-dialog-close:hover {
