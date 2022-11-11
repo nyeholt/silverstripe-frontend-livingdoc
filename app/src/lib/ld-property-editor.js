@@ -56,11 +56,14 @@ function component_property_editor(component) {
 
     LivingDocState.focusOn(component);
 
-    var toggle = $('<span class="livingdocs-item-properties-toggle">v</span>');
+    var toggle = $('<span class="livingdocs-item-properties-toggle ld-toggle-open"></span>');
     var container = $('<div class="livingdocs-item-properties-container">');
     toggle.click(function (e) {
         container.toggle();
+        $(this).toggleClass('ld-toggle-open');
     });
+
+    var directivesContainer = $('<div class="livingdocs-directives-actions component-actions"></div>').appendTo(container);
 
     options.append(toggle);
 
@@ -169,7 +172,7 @@ function component_property_editor(component) {
                     selectImage(comp, img, did, uploadLink);
                 }
             }(component, curr_img, directive_id));
-            container.append($image_button)
+            directivesContainer.append($image_button)
         }
     }
 
@@ -193,9 +196,11 @@ function component_property_editor(component) {
                 }
 
             }(component, updateLink))
-            container.append($link_button)
+            directivesContainer.append($link_button)
         }
     }
+
+    $(document).trigger('livingfrontend.updatePropertyEditor', [directivesContainer, component]);
 
     var $delete_button = $("<button class='" + Constants.btnCls('btn-danger') + "'>").text("Remove").on("click", function () {
         if (confirm("Remove this?")) {

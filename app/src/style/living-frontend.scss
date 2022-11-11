@@ -274,9 +274,25 @@ body {
         top: 5px;
         right: 5px;
         cursor: pointer;
+        border: 1px solid #000;
+        border-radius: 2px;
+        width:12px;
+        text-align: center;
+        line-height: 12px;
+
+        &::after {
+            content: "+";
+        }
+
+        &.ld-toggle-open {
+            &::after {
+                content: "-"
+            }
+        }
     }
 
 }
+
 
 
 

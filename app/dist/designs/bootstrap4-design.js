@@ -553,7 +553,7 @@
             {
                 "name": "embeddeditem",
                 "icon": '<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-exposure" width="52" height="52" viewBox="0 0 24 24" stroke-width="1.5" stroke="#010101" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2" /><line x1="4.6" y1="19.4" x2="19.4" y2="4.6" /><path d="M7 9h4m-2 -2v4" /><path d="M13 16h4" /></svg>',
-                "html": "<div doc-embeditem=\"object\">Set embed url...\n</div>",
+                "html": "<div doc-embeditem=\"embedded-object\">Set embed url...\n</div>",
                 "label": "Embed URL"
             },
             {
