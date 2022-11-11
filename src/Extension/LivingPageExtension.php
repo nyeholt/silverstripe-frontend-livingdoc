@@ -2,11 +2,13 @@
 namespace Symbiote\Frontend\LivingPage\Extension;
 
 use SilverStripe\Core\Config\Configurable;
+use SilverStripe\Core\Convert;
 use SilverStripe\Core\Manifest\ModuleResourceLoader;
 use SilverStripe\Forms\CheckboxField;
 use SilverStripe\Forms\DropdownField;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\LiteralField;
+use SilverStripe\Forms\OptionsetField;
 use SilverStripe\Forms\TabSet;
 use SilverStripe\Forms\TextareaField;
 use SilverStripe\Forms\TextField;
@@ -67,12 +69,28 @@ class LivingPageExtension extends DataExtension
 
     public function updateCMSFields(FieldList $fields)
     {
-        $structures = ComponentPageStructure::get()->map();
+        $structures = ComponentPageStructure::get();
         if (!strlen($this->owner->PageStructure) && count($structures)) {
+
+            $structureMap = [];
+            foreach ($structures as $structure) {
+                $data = '<strong>' . Convert::raw2xml($structure->Title) . '</strong>';
+                $ss = $structure->Screenshot();
+                if ($ss->ID) {
+                    $data .= '<br /><img src="' . $ss->FitMax(400,200)->getAbsoluteURL() . '" />';
+                }
+                $structureMap[$structure->ID] = $data;
+
+            }
             $fields->removeByName('Root');
             $fields->push(new TabSet('Root'));
             $fields->addFieldToTab('Root.Main', TextField::create('Title', 'Title'));
-            $fields->addFieldToTab('Root.Main', DropdownField::create('StructureTemplateID', 'Template', $structures)->setEmptyString('-- none --'));
+            $fields->addFieldToTab('Root.Main', OptionsetField::create(
+                'StructureTemplateID', 
+                'Template', 
+                $structureMap)
+                    ->setTemplate('ImageOptionSetField')
+            );
 
             return $fields;
         }
